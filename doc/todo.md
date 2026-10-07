@@ -1,0 +1,32 @@
+# EIP 專案待辦清單 (Todo List)
+
+## 階段 0：需求確認與架構定案
+- [x] 建立專案骨架與核心文檔 (`doc/plan.md`, `doc/todo.md`, `doc/worklog.md`, `README.md`)
+- [x] 確認技術棧選型（Laravel 12 + Inertia.js Vue 3 + PostgreSQL 16 + Redis + Docker Compose）
+- [x] 確認核心功能範圍與優先級（MVP: 組織權限 + 企業公告 + 表單簽核工作流 + 通訊錄）
+- [x] 確認身分驗證方式（Laravel Breeze 認證系統 + RBAC 權限角色）
+
+## 階段 1：系統基礎與組織架構 (MVP)
+- [x] 初始化專案環境與 Docker Compose 建置腳本（Nginx + PHP 8.4-FPM + PostgreSQL + Redis）
+- [x] 設計組織架構與使用者資料表（Departments, Users, Roles）
+- [x] 實作 RBAC 角色與細部權限機制（admin, manager, employee, hr）
+- [x] 使用者身分驗證與個人資料維護
+- [x] 企業公告發布與閱覽追蹤功能（Announcements, Reads 追蹤）
+- [x] 員工通訊錄與組織樹狀圖（Directory 查詢與篩選）
+
+## 階段 2：行政流程與協同工作
+- [x] 電子表單簽核工作流引擎（請假單、報銷單、動態 JSON Schema 欄位）
+- [x] 主管審批與簽核歷程記錄機制（Approval Records、核准/駁回附言）
+- [ ] 打卡考勤系統（GPS/IP 限制、打卡紀錄、異常判定）
+- [ ] 行事曆與會議室借用管理
+
+## 階段 3：資產管理與生態整合
+- [ ] 企業文件庫與檔案版本控制
+- [x] 系統儀表板（待辦統計、未讀公告、進行中申請）
+- [ ] 第三方推播通知整合（Email / LINE / Slack）
+- [ ] 審計日誌與安全性加固
+
+## 階段 4：測試與正式上線
+- [x] 單元與整合測試（Feature EipTest 30 項測試案例全數通過）
+- [ ] 權限越權檢查 (IDOR) 與安全性稽核
+- [ ] 容器化 (Docker) 與 CI/CD 部署建置

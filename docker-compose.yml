@@ -1,0 +1,72 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: eip-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - eip-network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  web:
+    image: nginx:alpine
+    container_name: eip-web
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_WEB_PORT:-8000}:80"
+    volumes:
+      - ./:/var/www/html:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - eip-network
+    depends_on:
+      - app
+
+  db:
+    image: postgres:16-alpine
+    container_name: eip-db
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-eip_db}
+      POSTGRES_USER: ${DB_USERNAME:-eip_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-eip_password}
+    volumes:
+      - eip-db-data:/var/lib/postgresql/data
+    networks:
+      - eip-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-eip_user} -d ${DB_DATABASE:-eip_db}"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    container_name: eip-redis
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_REDIS_PORT:-6379}:6379"
+    volumes:
+      - eip-redis-data:/data
+    networks:
+      - eip-network
+
+networks:
+  eip-network:
+    driver: bridge
+
+volumes:
+  eip-db-data:
+    driver: local
+  eip-redis-data:
+    driver: local
