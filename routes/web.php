@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FormRequestController;
+use App\Http\Controllers\MeetingRoomController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -29,6 +31,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 組織通訊錄
     Route::get('/directory', [OrganizationController::class, 'index'])->name('directory.index');
+
+    // 考勤打卡
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
+    Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
+
+    // 會議室借用與行事曆
+    Route::get('/meeting-rooms', [MeetingRoomController::class, 'index'])->name('meeting-rooms.index');
+    Route::post('/meeting-rooms', [MeetingRoomController::class, 'storeRoom'])->name('meeting-rooms.store');
+    Route::put('/meeting-rooms/{meetingRoom}', [MeetingRoomController::class, 'updateRoom'])->name('meeting-rooms.update');
+    Route::post('/meeting-rooms/bookings', [MeetingRoomController::class, 'storeBooking'])->name('meeting-rooms.bookings.store');
+    Route::post('/meeting-rooms/bookings/{booking}/cancel', [MeetingRoomController::class, 'cancelBooking'])->name('meeting-rooms.bookings.cancel');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

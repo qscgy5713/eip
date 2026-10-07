@@ -47,6 +47,16 @@ class User extends Authenticatable
         return $this->hasMany(ApprovalRecord::class, 'approver_id');
     }
 
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(RoomBooking::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

@@ -1,13 +1,24 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
     announcements: Array,
     pendingApprovals: Array,
     myRequests: Array,
     stats: Object,
+    todayAttendance: Object,
+    myUpcomingBookings: Array,
 });
+
+const clockInForm = useForm({});
+const clockOutForm = useForm({});
+const handleClockIn = () => {
+    clockInForm.post(route('attendance.clockIn'));
+};
+const handleClockOut = () => {
+    clockOutForm.post(route('attendance.clockOut'));
+};
 
 const priorityBadge = (priority) => {
     switch (priority) {
@@ -41,6 +52,44 @@ const statusBadge = (status) => {
 
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+                <!-- 今日快捷打卡區 -->
+                <div class="bg-gradient-to-r from-slate-900 to-indigo-950 rounded-xl p-5 text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs text-indigo-200">今日出勤狀態</p>
+                            <p class="text-base font-bold text-white">
+                                <span v-if="!todayAttendance" class="text-amber-400">尚未打卡簽到</span>
+                                <span v-else-if="todayAttendance.clock_in_at && !todayAttendance.clock_out_at" class="text-blue-300">上班簽到：{{ new Date(todayAttendance.clock_in_at).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) }} (工作中)</span>
+                                <span v-else class="text-emerald-300">今日已簽退 (工時 {{ todayAttendance.work_hours }}h)</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button
+                            v-if="!todayAttendance?.clock_in_at"
+                            @click="handleClockIn"
+                            :disabled="clockInForm.processing"
+                            class="px-5 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-md transition"
+                        >
+                            上班打卡
+                        </button>
+                        <button
+                            v-else
+                            @click="handleClockOut"
+                            :disabled="clockOutForm.processing"
+                            class="px-5 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition"
+                        >
+                            {{ todayAttendance?.clock_out_at ? '更新下班卡' : '下班打卡' }}
+                        </button>
+                        <Link :href="route('attendance.index')" class="px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-indigo-100 text-xs font-semibold border border-white/10 transition">
+                            查看考勤月報 &rarr;
+                        </Link>
+                    </div>
+                </div>
+
                 <!-- 數據統計看板 -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
@@ -148,6 +197,36 @@ const statusBadge = (status) => {
                                     </span>
                                 </div>
                                 <div v-if="myRequests.length === 0" class="py-4 text-center text-xs text-gray-400">尚未發起任何表單申請</div>
+                            </div>
+                        </div>
+
+                        <!-- 即將進行的會議 -->
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span>
+                                    <h3 class="font-bold text-gray-900 text-base">即將進行的會議</h3>
+                                </div>
+                                <Link :href="route('meeting-rooms.index')" class="text-xs text-blue-600 hover:underline">預約與借用 &rarr;</Link>
+                            </div>
+                            <div class="mt-3 space-y-2">
+                                <div v-for="b in myUpcomingBookings" :key="b.id" class="p-3 rounded-lg bg-blue-50/50 border border-blue-100 flex items-center justify-between text-xs">
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">{{ b.title }}</p>
+                                        <p class="text-gray-500 mt-0.5">
+                                            🏢 {{ b.room?.name }} ({{ b.room?.location }})
+                                        </p>
+                                        <p class="text-blue-700 mt-0.5 font-mono">
+                                            ⏰ {{ new Date(b.start_time).toLocaleDateString() }} {{ new Date(b.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }} ~ {{ new Date(b.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }}
+                                        </p>
+                                    </div>
+                                    <Link :href="route('meeting-rooms.index')" class="text-xs text-blue-600 font-medium px-2 py-1 bg-white border border-blue-200 rounded hover:bg-blue-50">
+                                        檢視
+                                    </Link>
+                                </div>
+                                <div v-if="!myUpcomingBookings || myUpcomingBookings.length === 0" class="py-4 text-center text-xs text-gray-400">
+                                    近期無預定會議
+                                </div>
                             </div>
                         </div>
                     </div>

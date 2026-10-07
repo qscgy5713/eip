@@ -3,11 +3,15 @@
 namespace Database\Seeders;
 
 use App\Models\Announcement;
+use App\Models\Attendance;
 use App\Models\Department;
 use App\Models\Form;
 use App\Models\FormRequest;
 use App\Models\ApprovalRecord;
+use App\Models\MeetingRoom;
+use App\Models\RoomBooking;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -148,6 +152,113 @@ class EipDatabaseSeeder extends Seeder
             'step' => 1,
             'approver_id' => $manager->id,
             'status' => 'pending',
+        ]);
+
+        // 6. 示範考勤打卡紀錄
+        $users = [$admin, $manager, $employee, $hrUser];
+        for ($i = 5; $i >= 1; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            foreach ($users as $u) {
+                Attendance::create([
+                    'user_id' => $u->id,
+                    'date' => $date,
+                    'clock_in_at' => Carbon::parse("{$date} 08:55:00"),
+                    'clock_in_ip' => '192.168.1.100',
+                    'clock_in_location' => '台北總部辦公室',
+                    'clock_out_at' => Carbon::parse("{$date} 18:10:00"),
+                    'clock_out_ip' => '192.168.1.100',
+                    'clock_out_location' => '台北總部辦公室',
+                    'status' => 'normal',
+                    'work_hours' => 8.5,
+                ]);
+            }
+        }
+
+        // 今日打卡示範 (陳同仁已打上班卡)
+        Attendance::create([
+            'user_id' => $employee->id,
+            'date' => now()->toDateString(),
+            'clock_in_at' => now()->setTime(8, 50),
+            'clock_in_ip' => '192.168.1.102',
+            'clock_in_location' => '台北總部辦公室',
+            'status' => 'normal',
+            'work_hours' => 0,
+        ]);
+
+        // 今日打卡示範 (張經理已結算)
+        Attendance::create([
+            'user_id' => $manager->id,
+            'date' => now()->toDateString(),
+            'clock_in_at' => now()->setTime(9, 10),
+            'clock_in_ip' => '192.168.1.101',
+            'clock_in_location' => '台北總部辦公室',
+            'clock_out_at' => now()->setTime(18, 15),
+            'clock_out_ip' => '192.168.1.101',
+            'clock_out_location' => '台北總部辦公室',
+            'status' => 'normal',
+            'work_hours' => 8.2,
+        ]);
+
+        // 7. 會議室資料
+        $room1 = MeetingRoom::create([
+            'name' => '101 創想會議室',
+            'location' => '台北總部 A棟 1F',
+            'capacity' => 8,
+            'equipment' => ['投影機', '視訊會議設備', '傳統白板'],
+            'is_active' => true,
+            'description' => '適合敏捷小組討論與日常站立會議。',
+        ]);
+
+        $room2 = MeetingRoom::create([
+            'name' => '201 研討與發表室',
+            'location' => '台北總部 A棟 2F',
+            'capacity' => 20,
+            'equipment' => ['投影機', '視訊會議設備', '電子白板', '獨立音響'],
+            'is_active' => true,
+            'description' => '大型多功能會議室，配備舞台投影與音響。',
+        ]);
+
+        $room3 = MeetingRoom::create([
+            'name' => 'VIP 戰略決策室',
+            'location' => '台北總部 B棟 6F',
+            'capacity' => 12,
+            'equipment' => ['視訊會議設備', '會議電話', '茶水設備'],
+            'is_active' => true,
+            'description' => '主管決策會議專用，隔音效果佳。',
+        ]);
+
+        // 8. 示範會議預約
+        RoomBooking::create([
+            'meeting_room_id' => $room1->id,
+            'user_id' => $manager->id,
+            'title' => '2026 Q4 技術架構評審',
+            'description' => '討論後端架構升級與 Docker Compose 部署方案',
+            'start_time' => now()->setTime(14, 0),
+            'end_time' => now()->setTime(15, 30),
+            'attendees_count' => 6,
+            'status' => 'confirmed',
+        ]);
+
+        RoomBooking::create([
+            'meeting_room_id' => $room1->id,
+            'user_id' => $employee->id,
+            'title' => '前端元件庫重構對齊會',
+            'description' => '對齊 Vue 3 + Tailwind CSS 設計規範',
+            'start_time' => now()->setTime(16, 0),
+            'end_time' => now()->setTime(17, 0),
+            'attendees_count' => 4,
+            'status' => 'confirmed',
+        ]);
+
+        RoomBooking::create([
+            'meeting_room_id' => $room2->id,
+            'user_id' => $hrUser->id,
+            'title' => '新進同仁職前培訓',
+            'description' => '企業文化與內部 EIP 系統操作指南教學',
+            'start_time' => now()->addDay()->setTime(10, 0),
+            'end_time' => now()->addDay()->setTime(11, 30),
+            'attendees_count' => 12,
+            'status' => 'confirmed',
         ]);
     }
 }

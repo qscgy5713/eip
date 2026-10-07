@@ -57,6 +57,18 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     組織通訊錄
                                 </NavLink>
+                                <NavLink
+                                    :href="route('attendance.index')"
+                                    :active="route().current('attendance.*')"
+                                >
+                                    考勤打卡
+                                </NavLink>
+                                <NavLink
+                                    :href="route('meeting-rooms.index')"
+                                    :active="route().current('meeting-rooms.*')"
+                                >
+                                    會議室借用
+                                </NavLink>
                             </div>
                         </div>
 
@@ -181,6 +193,18 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('directory.*')"
                         >
                             組織通訊錄
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('attendance.index')"
+                            :active="route().current('attendance.*')"
+                        >
+                            考勤打卡
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('meeting-rooms.index')"
+                            :active="route().current('meeting-rooms.*')"
+                        >
+                            會議室借用
                         </ResponsiveNavLink>
                     </div>
 

@@ -21,5 +21,20 @@
 - 在投入程式碼實作前，先確立清晰的階段性目標與架構邊界，有助於精確收斂 MVP 範圍，避免過度設計或需求發散。
 - 使用 Docker Compose 能使開發與生產環境高度一致，且 PostgreSQL 具備優異的 JSONB 支援，能輕量支援 EIP 各類動態表單與稽核記錄。
 
+- 依使用者需求擴充 Phase 2 考勤打卡模組（Attendance）：
+  - 建立打卡資料表遷移與 Attendance 模型，支援打卡時間戳、IP、GPS 地點、工時自動計算與遲到/早退異常標記。
+  - 實作 AttendanceController 提供個人打卡介面、月報彙總與主管團隊即時出勤監控。
+  - 完成前端考勤介面（Index.vue）與首頁 Dashboard 快捷打卡橫幅。
+  - 新增測試套件 `tests/Feature/AttendanceTest.php`，驗證 34 項測試全數通過。
+- 完成 Phase 2 行事曆與會議室借用管理模組（Meeting Room Booking）：
+  - 建立會議室資料表 `meeting_rooms`（設備 JSONB 儲存、容納人數、啟用狀態）與借用記錄表 `room_bookings`。
+  - 實作 `RoomBooking::hasConflict` 排他性演算邏輯，防止同會議室於重疊時間遭重複預約。
+  - 實作 `MeetingRoomController`，支援日曆日期篩選、同仁線上預約、本人/管理員取消預約、管理員維護會議室。
+  - 建立前端介面 `MeetingRooms/Index.vue`，具備日期快捷切換、即時空閒/佔用看板、我的近期預約橫幅與快速預約彈窗。
+  - 於首頁工作台 `Dashboard.vue` 與導覽列整合「即將進行的會議」與「會議室借用」快捷入口。
+  - 實作自動化測試 `tests/Feature/MeetingRoomTest.php`（共 10 項測試案例）。
+  - 主動 Code Review 與修復：在 `MeetingRoomController` 補強與會人數超出會議室容納上限之防呆阻擋，並補齊測試。
+  - 執行全套測試，全系統累積 44 項自動化測試 100% 通過（109 assertions）。
+
 ### 下一步
-- 依使用者需求擴充 Phase 2 考勤打卡功能（GPS/IP 限制打卡、出勤月報）及第三方通知整合。
+- 依使用者指示提交 Git（需取得授權），並可繼續推進 Phase 3「企業文件庫與檔案版本控制」或「推播通知」。
