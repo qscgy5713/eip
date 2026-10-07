@@ -8,12 +8,15 @@ use App\Models\Department;
 use App\Models\Form;
 use App\Models\FormRequest;
 use App\Models\ApprovalRecord;
+use App\Models\Document;
+use App\Models\DocumentVersion;
 use App\Models\MeetingRoom;
 use App\Models\RoomBooking;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class EipDatabaseSeeder extends Seeder
 {
@@ -259,6 +262,96 @@ class EipDatabaseSeeder extends Seeder
             'end_time' => now()->addDay()->setTime(11, 30),
             'attendees_count' => 12,
             'status' => 'confirmed',
+        ]);
+
+        // 9. 企業文件庫範例
+        Storage::disk('local')->put('documents/demo_leave_policy_v1.pdf', '%PDF-1.4 示範員工請假及考勤規章內容');
+        Storage::disk('local')->put('documents/demo_leave_policy_v2.pdf', '%PDF-1.4 示範員工請假及考勤規章最新修正版 (v2.0)');
+        Storage::disk('local')->put('documents/demo_expense_template.xlsx', '示範出差旅費報支單範本檔案內容');
+        Storage::disk('local')->put('documents/demo_security_spec.pdf', '%PDF-1.4 示範資安防護規格書機密內容');
+
+        // 文件 1: 員工請假及出勤管理辦法 (具雙版本歷程)
+        $doc1 = Document::create([
+            'title' => '2026 年度員工請假及出勤管理辦法',
+            'category' => 'policy',
+            'description' => '涵蓋特休計算標準、事病假請假規則、遲到早退工時扣抵規範。',
+            'department_id' => $hr->id,
+            'uploader_id' => $hrUser->id,
+            'current_version' => 2,
+            'download_count' => 18,
+            'restricted_roles' => null, // 全員公開
+        ]);
+
+        DocumentVersion::create([
+            'document_id' => $doc1->id,
+            'uploader_id' => $hrUser->id,
+            'version_number' => 1,
+            'version_label' => 'v1.0',
+            'file_path' => 'documents/demo_leave_policy_v1.pdf',
+            'file_name' => '2026_員工出勤管理要點_初版.pdf',
+            'file_size' => 1024 * 350, // 350 KB
+            'mime_type' => 'application/pdf',
+            'changelog' => '年初人事新規初版發布',
+        ]);
+
+        DocumentVersion::create([
+            'document_id' => $doc1->id,
+            'uploader_id' => $hrUser->id,
+            'version_number' => 2,
+            'version_label' => 'v2.0',
+            'file_path' => 'documents/demo_leave_policy_v2.pdf',
+            'file_name' => '2026_員工出勤管理要點_修訂版.pdf',
+            'file_size' => 1024 * 420, // 420 KB
+            'mime_type' => 'application/pdf',
+            'changelog' => '配合勞基法修訂第 4 條特休提前結算辦法',
+        ]);
+
+        // 文件 2: 差旅報銷標準 Excel 範本
+        $doc2 = Document::create([
+            'title' => '國內外出差旅費報銷標準範本',
+            'category' => 'template',
+            'description' => '含高鐵、住宿、膳雜費每日上限試算公式，填畢後請檢附單據送簽核。',
+            'department_id' => null, // 全公司共用
+            'uploader_id' => $admin->id,
+            'current_version' => 1,
+            'download_count' => 45,
+            'restricted_roles' => null,
+        ]);
+
+        DocumentVersion::create([
+            'document_id' => $doc2->id,
+            'uploader_id' => $admin->id,
+            'version_number' => 1,
+            'version_label' => 'v1.0',
+            'file_path' => 'documents/demo_expense_template.xlsx',
+            'file_name' => 'EIP_出差報銷申請單_v1.0.xlsx',
+            'file_size' => 1024 * 128, // 128 KB
+            'mime_type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'changelog' => '全公司適用初版 Excel 報支範本',
+        ]);
+
+        // 文件 3: 企業雲端架構資安合規手冊 (主管機密限定)
+        $doc3 = Document::create([
+            'title' => '雲端核心架構資安稽核與金鑰管理規範',
+            'category' => 'tech',
+            'description' => '機密等級：僅部門主管與系統管理員具備閱覽授權。含正式環境存取金鑰作業程序。',
+            'department_id' => $rd->id,
+            'uploader_id' => $manager->id,
+            'current_version' => 1,
+            'download_count' => 5,
+            'restricted_roles' => ['admin', 'manager'], // 機密限定
+        ]);
+
+        DocumentVersion::create([
+            'document_id' => $doc3->id,
+            'uploader_id' => $manager->id,
+            'version_number' => 1,
+            'version_label' => 'v1.0',
+            'file_path' => 'documents/demo_security_spec.pdf',
+            'file_name' => 'EIP_資安規範與金鑰管理規約_CONFIDENTIAL.pdf',
+            'file_size' => 1024 * 1024 * 2, // 2 MB
+            'mime_type' => 'application/pdf',
+            'changelog' => '研發主管制訂初版機密規範',
         ]);
     }
 }

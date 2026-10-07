@@ -69,6 +69,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     會議室借用
                                 </NavLink>
+                                <NavLink
+                                    :href="route('documents.index')"
+                                    :active="route().current('documents.*')"
+                                >
+                                    企業文件庫
+                                </NavLink>
                             </div>
                         </div>
 
@@ -205,6 +211,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('meeting-rooms.*')"
                         >
                             會議室借用
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('documents.index')"
+                            :active="route().current('documents.*')"
+                        >
+                            企業文件庫
                         </ResponsiveNavLink>
                     </div>
 
