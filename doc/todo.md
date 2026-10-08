@@ -38,6 +38,7 @@
 - [x] 休假管理中心與請假歷史對帳表系統 (Leave Balance Ledger & Apply Link：在休假額度中心 LeaveBalances/Index.vue 提供「發起請假申請」快捷按鈕與關聯表單，並於額度卡片下方建立「我的請假申請與扣抵明細對帳表」，完整列出近期請假單號、假別類型、請假期間、天數、事由、審批折抵狀態與單據詳情連結)
 - [x] 加班單核准結案自動折算補休額度引擎 (Overtime to Compensatory Leave Credit Engine：同仁提交「加班申請單 OVERTIME」選擇「換取補休時數」經多級簽核終審結案時，系統自動以法定 8 小時 = 1 天標準工時將加班時數精準折算為天數，自動在 leave_balances 累加補休 compensatory 額度、註記加班單號留痕、發送系統通知並記錄 AuditLog 審計日誌；休假中心整合「請假支出扣額」與「加班換補休入帳」雙頁籤對帳存摺)
 - [x] 表單申請主動撤回與作廢機制 (Form Request Withdrawal & Re-apply Engine：申請人本人或管理員於待審中一鍵撤回單據、請假額度自動 100% 釋放恢復、進行中待審記錄標記作廢、通知原審核主管、留存 AuditLog 與 Webhook 推播，並提供「複製重新申請」自動預填原單據欄位功能，全系統 182 項 Feature 測試 100% 通過)
+- [x] 表單簽核退回修改與補件重新送審閉環系統 (Form Revision & Resubmission Engine：主管審批支援「退回修改 revision_required」並強制輸入具體退回指示，申請人端呈現顯著警示橫幅與「修改表單並重新提交」Modal，支援動態欄位修改與補充證明附件上傳，天數變更智慧安全連鎖調校 pending 額度，重新送審恢復 pending 並即時通知原審主管複審，全系統 209 項 Feature 測試 100% 通過，1159 assertions)
 
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
@@ -51,7 +52,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest, MeetingRoomAttendeesAndEquipmentTest, DocumentUpdateAndIcsExportTest 等 202 項 Feature 測試 100% 通過，1133 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest, MeetingRoomAttendeesAndEquipmentTest, DocumentUpdateAndIcsExportTest, FormRevisionAndResubmitTest 等 209 項 Feature 測試 100% 通過，1159 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

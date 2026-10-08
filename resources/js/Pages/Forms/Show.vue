@@ -88,13 +88,53 @@ const submitWithdraw = () => {
     });
 };
 
+// 主管退回修改 Modal
+const showRevisionModal = ref(false);
+const openRevisionModal = () => {
+    showRevisionModal.value = true;
+};
+
+const submitRevision = () => {
+    handleAction('revision_required');
+    showRevisionModal.value = false;
+};
+
+// 申請人修改表單並重新提交 Modal
+const showResubmitModal = ref(false);
+const resubmitForm = useForm({
+    data: { ...(props.formRequest.data || {}) },
+    resubmit_note: '',
+    attachments: [],
+});
+
+const openResubmitModal = () => {
+    resubmitForm.data = { ...(props.formRequest.data || {}) };
+    resubmitForm.resubmit_note = '';
+    resubmitForm.attachments = [];
+    resubmitForm.clearErrors();
+    showResubmitModal.value = true;
+};
+
+const handleResubmitFileChange = (e) => {
+    resubmitForm.attachments = Array.from(e.target.files);
+};
+
+const submitResubmit = () => {
+    resubmitForm.post(route('forms.requests.resubmit', props.formRequest.id), {
+        onSuccess: () => {
+            showResubmitModal.value = false;
+        },
+    });
+};
+
 const statusBadge = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
         case 'rejected': return 'bg-rose-100 text-rose-800 border-rose-200';
         case 'transferred': return 'bg-purple-100 text-purple-800 border-purple-200';
         case 'withdrawn': return 'bg-gray-100 text-gray-700 border-gray-300';
-        default: return 'bg-amber-100 text-amber-800 border-amber-200';
+        case 'revision_required': return 'bg-amber-100 text-amber-800 border-amber-300';
+        default: return 'bg-blue-100 text-blue-800 border-blue-200';
     }
 };
 
@@ -139,6 +179,29 @@ const formatSize = (bytes) => {
                     >
                         複製內容重新申請 &rarr;
                     </Link>
+                </div>
+
+                <!-- 單據已被退回修改提示橫幅 -->
+                <div v-if="formRequest.status === 'revision_required'" class="p-4 sm:p-5 bg-amber-50 border border-amber-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-amber-900 shadow-sm text-sm">
+                    <div class="flex items-start space-x-3">
+                        <div class="p-2 bg-amber-100 rounded-lg text-amber-700 shrink-0 mt-0.5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-amber-900">審核主管退回修改通知</h4>
+                            <p class="text-xs text-amber-800 mt-0.5">
+                                此申請單已被主管退回修改。請檢視簽核歷程中的退回審核意見，修正表單內容或補充證明檔案後重新提交審查。
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        v-if="formRequest.user_id === $page.props.auth.user.id"
+                        @click="openResubmitModal"
+                        class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold shadow-sm transition shrink-0 flex items-center space-x-1.5 self-start sm:self-center"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        <span>修改表單並重新提交</span>
+                    </button>
                 </div>
 
                 <!-- 單據主要內容 -->
@@ -272,9 +335,11 @@ const formatSize = (bytes) => {
                                                 ? 'bg-emerald-600'
                                                 : (st.step === formRequest.current_step && formRequest.status === 'pending'
                                                     ? 'bg-blue-600 animate-pulse'
-                                                    : (st.step === formRequest.current_step && formRequest.status === 'rejected'
-                                                        ? 'bg-rose-600'
-                                                        : 'bg-gray-400'))
+                                                    : (st.step === formRequest.current_step && formRequest.status === 'revision_required'
+                                                        ? 'bg-amber-600 animate-pulse'
+                                                        : (st.step === formRequest.current_step && formRequest.status === 'rejected'
+                                                            ? 'bg-rose-600'
+                                                            : 'bg-gray-400')))
                                         ]"
                                     >
                                         {{ st.step }}
@@ -288,12 +353,14 @@ const formatSize = (bytes) => {
                                             ? 'bg-emerald-100 text-emerald-800'
                                             : (st.step === formRequest.current_step && formRequest.status === 'pending'
                                                 ? 'bg-blue-100 text-blue-800'
-                                                : (st.step === formRequest.current_step && formRequest.status === 'rejected'
-                                                    ? 'bg-rose-100 text-rose-800'
-                                                    : 'bg-gray-200 text-gray-600'))
+                                                : (st.step === formRequest.current_step && formRequest.status === 'revision_required'
+                                                    ? 'bg-amber-100 text-amber-800'
+                                                    : (st.step === formRequest.current_step && formRequest.status === 'rejected'
+                                                        ? 'bg-rose-100 text-rose-800'
+                                                        : 'bg-gray-200 text-gray-600')))
                                     ]"
                                 >
-                                    {{ st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved') ? '已核准' : (st.step === formRequest.current_step && formRequest.status === 'rejected' ? '已退件' : (st.step === formRequest.current_step ? '審核中' : '待流轉')) }}
+                                    {{ st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved') ? '已核准' : (st.step === formRequest.current_step && formRequest.status === 'revision_required' ? '退回補件中' : (st.step === formRequest.current_step && formRequest.status === 'rejected' ? '已退件' : (st.step === formRequest.current_step ? '審核中' : '待流轉'))) }}
                                 </span>
                             </div>
 
@@ -353,7 +420,20 @@ const formatSize = (bytes) => {
                             class="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-bold text-sm rounded-lg shadow-sm transition flex items-center space-x-1.5"
                         >
                             <svg v-if="approvalForm.processing && approvalForm.status === 'rejected'" class="animate-spin -ml-1 mr-1 h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            <span>{{ currentPendingRecord?.is_add_sign ? '簽署保留意見' : '退回駁回' }}</span>
+                            <span>{{ currentPendingRecord?.is_add_sign ? '簽署保留意見' : '退件駁回' }}</span>
+                        </button>
+
+                        <!-- 退回修改按鈕 (非加簽關卡時可使用) -->
+                        <button
+                            v-if="!currentPendingRecord?.is_add_sign"
+                            type="button"
+                            @click="openRevisionModal"
+                            :disabled="approvalForm.processing"
+                            class="px-4 py-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white font-bold text-sm rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                            title="退回申請人修改並補件重送"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                            <span>退回修改</span>
                         </button>
 
                         <!-- 協同加簽與轉簽按鈕 (非加簽關卡時可使用) -->
@@ -395,7 +475,7 @@ const formatSize = (bytes) => {
                             <span
                                 :class="[
                                     'absolute -left-[23px] top-1 w-3 h-3 rounded-full border-2 border-white',
-                                    rec.status === 'approved' ? 'bg-emerald-500' : (rec.status === 'rejected' ? 'bg-rose-500' : (rec.status === 'transferred' ? 'bg-purple-500' : 'bg-amber-400'))
+                                    rec.status === 'approved' ? 'bg-emerald-500' : (rec.status === 'rejected' ? 'bg-rose-500' : (rec.status === 'returned' ? 'bg-amber-500' : (rec.status === 'transferred' ? 'bg-purple-500' : 'bg-blue-500')))
                                 ]"
                             ></span>
                             <div class="flex items-center space-x-2 flex-wrap gap-y-1">
@@ -415,7 +495,7 @@ const formatSize = (bytes) => {
                                     </template>
                                 </p>
                                 <span :class="['px-2 py-0.5 text-xs rounded', statusBadge(rec.status)]">
-                                    {{ rec.status === 'approved' ? '核准/簽畢' : (rec.status === 'rejected' ? '駁回' : (rec.status === 'transferred' ? '已轉簽' : '待審批')) }}
+                                    {{ rec.status === 'approved' ? '核准/簽畢' : (rec.status === 'rejected' ? '退件駁回' : (rec.status === 'returned' ? '已退回修改' : (rec.status === 'transferred' ? '已轉簽' : '待審批'))) }}
                                 </span>
                                 <span v-if="rec.is_add_sign" class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-blue-700">
                                     會辦加簽
@@ -594,6 +674,130 @@ const formatSize = (bytes) => {
                                     class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold shadow-sm disabled:opacity-50"
                                 >
                                     {{ withdrawForm.processing ? '撤回中...' : '確定撤回單據' }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ================= 主管退回修改 Modal ================= -->
+                <div v-if="showRevisionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+                        <div class="flex items-center space-x-3 text-amber-600 border-b border-gray-100 pb-3">
+                            <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-gray-900">退回申請人修改補件</h3>
+                                <p class="text-xs text-gray-500">申請人修改完成後可重新提交此關卡審查</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50/70 p-3 rounded-lg border border-amber-200">
+                            退回修改不會直接終止或作廢單據。申請人將收到退回通知與指示，並可直接在此單據補齊資訊或重新上傳發票證明檔案後重新送審。
+                        </p>
+
+                        <form @submit.prevent="submitRevision" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">退回修改原因與補件指示 <span class="text-rose-500">*</span></label>
+                                <textarea
+                                    v-model="approvalForm.comment"
+                                    required
+                                    rows="3"
+                                    placeholder="請具體告知申請同仁需修改之欄位或需補充之證明文件（例如：請補附具統編之統一發票電子檔並載明餐敘對象）..."
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                                ></textarea>
+                            </div>
+
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    @click="showRevisionModal = false"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                >
+                                    取消
+                                </button>
+                                <button
+                                    type="submit"
+                                    :disabled="approvalForm.processing || !approvalForm.comment.trim()"
+                                    class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold shadow-sm disabled:opacity-50"
+                                >
+                                    {{ approvalForm.processing ? '處理中...' : '確認退回修改' }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ================= 申請人修改表單並重新提交 Modal ================= -->
+                <div v-if="showResubmitModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
+                    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 my-8">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                            <div class="flex items-center space-x-2 text-amber-700">
+                                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                <h3 class="text-base font-bold text-gray-900">修改表單內容並重新送審</h3>
+                            </div>
+                            <button @click="showResubmitModal = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                        </div>
+
+                        <!-- 主管退回意見提醒 -->
+                        <div v-if="formRequest.approval_records?.find(r => r.status === 'returned')" class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900">
+                            <span class="font-bold">主管退回意見：</span>
+                            {{ formRequest.approval_records.find(r => r.status === 'returned')?.comment }}
+                        </div>
+
+                        <form @submit.prevent="submitResubmit" class="space-y-4">
+                            <!-- 動態欄位編輯表單 -->
+                            <div class="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
+                                <div v-for="(val, key) in resubmitForm.data" :key="key" class="space-y-1">
+                                    <label class="block text-xs font-semibold text-gray-700 capitalize">{{ key }}</label>
+                                    <input
+                                        type="text"
+                                        v-model="resubmitForm.data[key]"
+                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- 補充上傳證明文件 -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">補充檢附證明文件 / 附件檔案 (選填，單檔 10MB 內)</label>
+                                <input
+                                    type="file"
+                                    multiple
+                                    @change="handleResubmitFileChange"
+                                    class="block w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100"
+                                />
+                                <p v-if="resubmitForm.attachments.length > 0" class="text-2xs text-amber-700 mt-1">
+                                    已選取 {{ resubmitForm.attachments.length }} 個新補充檔案
+                                </p>
+                            </div>
+
+                            <!-- 申請人重新送審說明 -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">修改與補件說明備註 (選填)</label>
+                                <textarea
+                                    v-model="resubmitForm.resubmit_note"
+                                    rows="2"
+                                    placeholder="例：已更正金額、補充檢附蓋章報價單電子檔..."
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                                ></textarea>
+                            </div>
+
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    @click="showResubmitModal = false"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                >
+                                    取消
+                                </button>
+                                <button
+                                    type="submit"
+                                    :disabled="resubmitForm.processing"
+                                    class="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold shadow-sm disabled:opacity-50"
+                                >
+                                    {{ resubmitForm.processing ? '提交中...' : '確認重新提交審查' }}
                                 </button>
                             </div>
                         </form>

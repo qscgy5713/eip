@@ -2,6 +2,34 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**表單簽核退回修改與補件重新送審閉環系統 (Form Revision & Resubmission Engine)**：
+  - **主管退回修改邏輯與審查意見強約束 (`WorkflowService::processAction` & `FormRequestController::action`)**：
+    - 簽核審批動作擴充支援 `revision_required`（退回修改）；會辦加簽關卡防呆阻擋，確保僅主審關卡可執行退回。
+    - 嚴格校驗：執行退回修改時，審查意見/修改指示 (`comment`) 為必填欄位，防止同仁無所適從。
+    - 單據狀態更新為 `revision_required`（退查修改中），當前關卡記錄標記為 `returned`（已退回修改），記錄退回時間與操作主管。
+    - 請假額度凍結延續：不終止流程、不扣抵也不釋放額度，保持 `pending_days` 凍結保護。
+    - 觸發審計日誌 `request_form_revision`、站內通知 `EipSystemNotification`（告知退回意見）與外部 Webhook 推播 (`form.revision_required`)。
+  - **申請人線上修改補件與重新提交審查 (`WorkflowService::resubmitFormRequest` & `FormRequestController::resubmit`)**：
+    - 路由：`POST /forms/requests/{formRequest}/resubmit`。
+    - 嚴格授權：僅限申請人本人且單據處於 `revision_required` 狀態允許操作。
+    - 支援動態修改表單欄位資料 (`data`)、補充上傳檢附證明檔案 (`attachments`，單檔 10MB 與安全副檔名白名單) 與重送附言 (`resubmit_note`)。
+    - 智慧假別額度動態調校：若為請假單且請假天數有調整，自動計算差額並比對剩餘額度，安全調整 `pending_days` 凍結天數，超額嚴格阻擋。
+    - 單據狀態重設為 `pending`，為當前退回之關卡建立全新之待審記錄，並連鎖通知原審查主管：「同仁已補件並重新送審」。
+    - 記錄 `resubmit_form_request` 審計留痕與 Webhook 推播 (`form.resubmitted`)。
+  - **前端視圖與互動體驗升級 (`Forms/Show.vue` & `Forms/Index.vue`)**：
+    - `Forms/Show.vue`：
+      - 頂部展示琥珀色「審核主管退回修改通知」警示卡片，展示主管退回原因與一鍵「修改表單並重新提交」按鈕。
+      - 主管審核操作區新增「退回修改」橙黃色按鈕與專屬彈窗 Modal（強約束退回理由）。
+      - 申請人點擊開啟「修改表單內容並重新送審」彈窗 Modal，直觀呈現欄位編輯、補充檔案上傳與說明備註。
+      - 多層級 Stepper 步進器：當前退回關卡標籤呈現「退回補件中」琥珀色脈衝光。
+      - 簽核歷程軌跡：清楚呈現「已退回修改」橙色徽章與主管退回意見。
+    - `Forms/Index.vue`：
+      - 我的申請歷史列表支援 `revision_required` 呈現「退回修改中」標籤與醒目徽章。
+  - **自動化測試與工程品質**：
+    - 新增 `tests/Feature/FormRevisionAndResubmitTest.php` 涵蓋 7 大 Feature 測試：主管退回修改、退回理由必填校驗、申請人修改重送與新附件上傳、非申請人越權阻擋 (403)、非退回狀態禁止重送、請假天數變更安全調校 pending 額度、重新送審後後續關卡順利核准結案。
+    - 全系統自動化測試套件擴充至 **209 項 Feature / Unit 測試 100% 全數通過 (1159 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.17s)。
+
 - 實作**企業文件知識庫中繼資料與密件權限配置管理 (Document Metadata & Restricted Roles Management)**：
   - **後端更新邏輯、密件權限配置與審計留痕 (`DocumentController::update`)**：
     - 支援文件上傳者本人、主管與系統管理員維護文件資料；非授權同仁嘗試編輯時嚴格 403 阻擋。

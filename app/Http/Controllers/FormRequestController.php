@@ -333,8 +333,10 @@ class FormRequestController extends Controller
     {
         $user = $request->user();
         $validated = $request->validate([
-            'status' => 'required|in:approved,rejected',
-            'comment' => 'nullable|string|max:500',
+            'status' => 'required|in:approved,rejected,revision_required',
+            'comment' => $request->input('status') === 'revision_required' ? 'required|string|max:500' : 'nullable|string|max:500',
+        ], [
+            'comment.required' => '退回修改時必須填寫退回原因與修改指示。',
         ]);
 
         $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
@@ -565,5 +567,57 @@ class FormRequestController extends Controller
 
         return redirect()->route('forms.show', $formRequest->id)
             ->with('success', $result['message']);
+    }
+
+    /**
+     * 申請人修改內容並重新提交審查 (Resubmit Form Request)
+     */
+    public function resubmit(Request $request, EipFormRequest $formRequest): RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($formRequest->user_id !== $user->id) {
+            abort(403, '您沒有權限重新提交此份申請單據。');
+        }
+
+        if ($formRequest->status !== 'revision_required') {
+            return back()->with('error', '僅限處於退回修改狀態之單據允許重新提交。');
+        }
+
+        $validated = $request->validate([
+            'data' => 'required|array',
+            'resubmit_note' => 'nullable|string|max:500',
+            'attachments' => 'nullable|array',
+            'attachments.*' => 'file|max:10240|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx,zip',
+        ]);
+
+        // 處理補充上傳之附件檔案
+        $newAttachments = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('form_attachments', 'public');
+                $newAttachments[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'size' => $file->getSize(),
+                    'mime_type' => $file->getMimeType(),
+                ];
+            }
+        }
+
+        try {
+            $result = $this->workflowService->resubmitFormRequest(
+                $formRequest,
+                $user,
+                $validated['data'],
+                $newAttachments,
+                $validated['resubmit_note'] ?? null
+            );
+
+            return redirect()->route('forms.show', $formRequest->id)
+                ->with('success', $result['message']);
+        } catch (\InvalidArgumentException $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

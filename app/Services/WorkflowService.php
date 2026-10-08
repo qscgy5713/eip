@@ -306,7 +306,61 @@ class WorkflowService
             ];
         }
 
-        // 1. 若駁回：立即終止流程
+        // 1. 若退回修改 (Revision Required / Send Back)
+        if ($status === 'revision_required') {
+            $record->update([
+                'status' => 'returned',
+                'comment' => $comment ?: '主管要求退回補件修改',
+                'delegated_from_id' => $delegatedFromId,
+                'actioned_at' => now(),
+            ]);
+
+            $formRequest->update(['status' => 'revision_required']);
+
+            AuditLog::log(
+                action: 'request_form_revision',
+                description: "{$signRoleText} 於「{$stepTitle}」退回了申請單「{$formRequest->title}」要求修改（指示：{$comment}）",
+                auditable: $formRequest,
+                details: [
+                    'step' => $record->step,
+                    'step_title' => $stepTitle,
+                    'status' => 'revision_required',
+                    'comment' => $comment,
+                    'delegated_from_id' => $delegatedFromId,
+                ]
+            );
+
+            $formRequest->user?->notify(new EipSystemNotification(
+                title: "【退回修改通知】您的申請單「{$formRequest->title}」已被審核主管退回修改",
+                message: "{$signRoleText} 在「{$stepTitle}」將您的申請單退回修改。" . (!empty($comment) ? " 指示：{$comment}" : '') . " 請儘速修正或補齊證明後重新提交審查。",
+                type: 'form_revision',
+                actionUrl: route('forms.show', $formRequest->id),
+                senderName: $actionUser->name,
+                extra: ['status' => 'revision_required', 'step' => $record->step]
+            ));
+
+            WebhookService::dispatch(
+                'form.revision_required',
+                [
+                    'form_request_id' => $formRequest->id,
+                    'title' => $formRequest->title,
+                    'status' => 'revision_required',
+                    'step' => $record->step,
+                    'step_title' => $stepTitle,
+                    'approver' => $actionUser->name,
+                    'comment' => $comment,
+                ],
+                "【退回修改】{$signRoleText} 在「{$stepTitle}」退回了「{$formRequest->title}」要求修改補件"
+            );
+
+            return [
+                'status' => 'revision_required',
+                'is_completed' => false,
+                'message' => '已將申請單退回申請人修改補件！',
+            ];
+        }
+
+        // 2. 若駁回：立即終止流程
         if ($status === 'rejected') {
             $formRequest->update(['status' => 'rejected']);
 
@@ -847,6 +901,124 @@ class WorkflowService
         return [
             'status' => 'withdrawn',
             'message' => '申請單已成功撤回並作廢。',
+        ];
+    }
+
+    /**
+     * 申請人修改內容並重新提交審查 (Resubmit Form Request)
+     */
+    public function resubmitFormRequest(
+        FormRequest $formRequest,
+        User $applicant,
+        array $updatedData,
+        ?array $newAttachments = null,
+        ?string $resubmitNote = null
+    ): array {
+        if ($formRequest->status !== 'revision_required') {
+            throw new \InvalidArgumentException('僅限處於退回修改狀態之申請單允許重新提交。');
+        }
+
+        if ($formRequest->user_id !== $applicant->id) {
+            throw new \InvalidArgumentException('您沒有權限重新提交此份申請單。');
+        }
+
+        // 處理休假天數變更 (若為休假單且天數有調整)
+        if ($formRequest->form?->code === 'LEAVE' || ($formRequest->data['leave_type'] ?? null)) {
+            $oldDays = floatval($formRequest->data['days'] ?? 0);
+            $newDays = floatval($updatedData['days'] ?? $oldDays);
+            $rawLeaveType = $updatedData['leave_type'] ?? ($formRequest->data['leave_type'] ?? 'annual');
+            $leaveType = \App\Models\LeaveBalance::normalizeType($rawLeaveType);
+
+            if ($newDays !== $oldDays) {
+                // 天數有變更，調校 pending_days
+                $balance = \App\Models\LeaveBalance::where('user_id', $applicant->id)
+                    ->where('leave_type', $leaveType)
+                    ->where('year', now()->year)
+                    ->first();
+
+                if ($balance) {
+                    $diff = $newDays - $oldDays;
+                    if ($diff > 0 && ($balance->remaining_days < $diff)) {
+                        throw new \InvalidArgumentException("可用額度不足，無法增加請假天數至 {$newDays} 天。");
+                    }
+                    $balance->increment('pending_days', $diff);
+                }
+            }
+        }
+
+        // 合併附件
+        $attachments = $formRequest->attachments ?? [];
+        if (!empty($newAttachments)) {
+            $attachments = array_merge($attachments, $newAttachments);
+        }
+
+        // 更新單據資料與狀態
+        $formRequest->update([
+            'data' => $updatedData,
+            'attachments' => $attachments,
+            'status' => 'pending',
+        ]);
+
+        // 取得當前關卡資訊
+        $currentStep = $formRequest->current_step ?: 1;
+        $workflowSnapshot = $formRequest->workflow_snapshot ?? [];
+        $currentStepData = $workflowSnapshot[$currentStep - 1] ?? null;
+        $targetApproverId = $currentStepData['approver_id'] ?? null;
+
+        // 若無明確 approver_id，嘗試從前一筆退回記錄找回原審核主管
+        if (!$targetApproverId) {
+            $lastReturnedRecord = ApprovalRecord::where('form_request_id', $formRequest->id)
+                ->where('step', $currentStep)
+                ->where('status', 'returned')
+                ->latest()
+                ->first();
+            $targetApproverId = $lastReturnedRecord?->approver_id ?? User::where('role', 'admin')->value('id');
+        }
+
+        $stepTitle = $currentStepData['title'] ?? "第 {$currentStep} 關審核";
+
+        // 為當前關卡建立新的待審批記錄
+        $newRecord = ApprovalRecord::create([
+            'form_request_id' => $formRequest->id,
+            'step' => $currentStep,
+            'step_title' => $stepTitle,
+            'approver_id' => $targetApproverId,
+            'status' => 'pending',
+            'comment' => $resubmitNote ? "【同仁補件重新送審】說明：{$resubmitNote}" : "【同仁補件重新送審】已更新內容",
+        ]);
+
+        // 通知審核主管
+        $this->notifyApproverAndDelegates($newRecord, $formRequest, $stepTitle);
+
+        AuditLog::log(
+            action: 'resubmit_form_request',
+            description: "同仁 {$applicant->name} 修改並重新提交了申請單「{$formRequest->title}」" . ($resubmitNote ? "（說明：{$resubmitNote}）" : ''),
+            auditable: $formRequest,
+            details: [
+                'form_request_id' => $formRequest->id,
+                'request_no' => $formRequest->request_no,
+                'applicant_id' => $applicant->id,
+                'current_step' => $currentStep,
+                'resubmit_note' => $resubmitNote,
+            ]
+        );
+
+        WebhookService::dispatch(
+            'form.resubmitted',
+            [
+                'form_request_id' => $formRequest->id,
+                'request_no' => $formRequest->request_no,
+                'title' => $formRequest->title,
+                'applicant' => $applicant->name,
+                'step' => $currentStep,
+                'resubmit_note' => $resubmitNote,
+            ],
+            "【補件重新送審】同仁 {$applicant->name} 已修改並重新提交「{$formRequest->title}」"
+        );
+
+        return [
+            'status' => 'pending',
+            'message' => '申請單已成功修改並重新提交主管審查！',
         ];
     }
 }
