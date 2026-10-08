@@ -94,6 +94,12 @@ class AttendanceController extends Controller
         $fieldNote = $request->input('field_work_note');
 
         $eval = $this->geofenceService->evaluateLocation($lat, $lng);
+
+        if (!empty($eval['requires_reason']) && empty(trim((string) $fieldNote))) {
+            $formattedDist = $this->geofenceService->formatDistance($eval['distance'] ?? 0);
+            return redirect()->back()->with('error', "您當前打卡位置超出公司允許範圍（距離總部 {$formattedDist}），必須填寫外勤/遠端事由方可完成打卡。");
+        }
+
         $locationDesc = ($eval['type'] === 'unverified' && $request->filled('location'))
             ? $request->input('location')
             : $eval['location_desc'];
@@ -169,6 +175,12 @@ class AttendanceController extends Controller
         $fieldNote = $request->input('field_work_note');
 
         $eval = $this->geofenceService->evaluateLocation($lat, $lng);
+
+        if (!empty($eval['requires_reason']) && empty(trim((string) $fieldNote))) {
+            $formattedDist = $this->geofenceService->formatDistance($eval['distance'] ?? 0);
+            return redirect()->back()->with('error', "您當前打卡位置超出公司允許範圍（距離總部 {$formattedDist}），必須填寫外勤/遠端事由方可完成打卡。");
+        }
+
         $locationDesc = ($eval['type'] === 'unverified' && $request->filled('location'))
             ? $request->input('location')
             : $eval['location_desc'];
@@ -201,5 +213,49 @@ class AttendanceController extends Controller
         );
 
         return redirect()->back()->with('success', '下班打卡成功！今日工時已結算。');
+    }
+
+    /**
+     * 考勤打卡地理圍欄與公司地址設定頁面
+     */
+    public function settings(Request $request): \Inertia\Response
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && $user->role !== 'hr') {
+            abort(403, '僅系統管理員或人資同仁可存取考勤圍欄設定。');
+        }
+
+        return Inertia::render('Attendance/Settings', [
+            'config' => $this->geofenceService->getOfficeConfig(),
+        ]);
+    }
+
+    /**
+     * 更新考勤打卡地理圍欄與公司地址設定
+     */
+    public function updateSettings(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && $user->role !== 'hr') {
+            abort(403, '僅系統管理員或人資同仁可設定考勤圍欄。');
+        }
+
+        $validated = $request->validate([
+            'office_name' => 'required|string|max:100',
+            'office_address' => 'nullable|string|max:255',
+            'office_lat' => 'nullable|numeric|between:-90,90',
+            'office_lng' => 'nullable|numeric|between:-180,180',
+            'allowed_radius' => 'nullable|integer|min:10|max:50000',
+        ]);
+
+        $newConfig = $this->geofenceService->updateOfficeConfig($validated);
+
+        AuditLog::log(
+            action: 'update_geofence_setting',
+            description: "管理同仁 {$user->name} 更新了考勤打卡設定（公司名稱：{$newConfig['name']}，半徑：{$newConfig['radius']}公尺，經緯度：{$newConfig['lat']}, {$newConfig['lng']}）",
+            details: $newConfig
+        );
+
+        return redirect()->back()->with('success', '公司地址與打卡半徑設定已成功更新！即刻生效。');
     }
 }

@@ -101,7 +101,7 @@ const showingNavigationDropdown = ref(false);
                                                 type="button"
                                                 :class="[
                                                     'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none whitespace-nowrap',
-                                                    route().current('audit-logs.*') || route().current('webhooks.*')
+                                                    route().current('audit-logs.*') || route().current('webhooks.*') || route().current('attendance.settings')
                                                         ? 'border-indigo-400 text-gray-900 font-bold'
                                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                                 ]"
@@ -113,6 +113,9 @@ const showingNavigationDropdown = ref(false);
                                             </button>
                                         </template>
                                         <template #content>
+                                            <DropdownLink :href="route('attendance.settings')">
+                                                考勤圍欄設定
+                                            </DropdownLink>
                                             <DropdownLink :href="route('audit-logs.index')">
                                                 系統日誌 (Audit)
                                             </DropdownLink>
@@ -388,6 +391,13 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('webhooks.*')"
                         >
                             整合設定
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="['admin', 'hr'].includes($page.props.auth.user.role)"
+                            :href="route('attendance.settings')"
+                            :active="route().current('attendance.settings')"
+                        >
+                            考勤圍欄設定
                         </ResponsiveNavLink>
                     </div>
 

@@ -21,6 +21,11 @@ const locationStatus = ref('pending'); // 'locating', 'in_fence', 'out_of_fence'
 const currentCoords = ref(null); // { latitude, longitude, accuracy }
 const detectedDistance = ref(null);
 const fieldWorkNote = ref('');
+const noteError = ref('');
+
+// 超出範圍未填事由時的彈出對話視窗
+const showReasonModal = ref(false);
+const pendingAction = ref(null); // 'clockIn' | 'clockOut'
 
 // Haversine 大圓距離計算
 const calcDistance = (lat1, lon1, lat2, lon2) => {
@@ -59,7 +64,7 @@ const requestGeolocation = () => {
                 accuracy: Math.round(position.coords.accuracy),
             };
 
-            if (props.geofenceConfig) {
+            if (props.geofenceConfig?.has_location) {
                 const dist = calcDistance(
                     position.coords.latitude,
                     position.coords.longitude,
@@ -69,7 +74,8 @@ const requestGeolocation = () => {
                 detectedDistance.value = dist;
                 locationStatus.value = dist <= (props.geofenceConfig.radius || 500) ? 'in_fence' : 'out_of_fence';
             } else {
-                locationStatus.value = 'in_fence';
+                locationStatus.value = 'all_remote';
+                detectedDistance.value = null;
             }
         },
         (error) => {
@@ -104,27 +110,66 @@ const clockOutForm = useForm({
 });
 
 const handleClockIn = () => {
+    noteError.value = '';
+    // 若超出圍欄且未填事由，主動跳出填寫對話框
+    if (locationStatus.value === 'out_of_fence' && !fieldWorkNote.value.trim()) {
+        pendingAction.value = 'clockIn';
+        showReasonModal.value = true;
+        return;
+    }
+
+    executeClockIn();
+};
+
+const executeClockIn = () => {
     clockInForm.latitude = currentCoords.value?.latitude ?? null;
     clockInForm.longitude = currentCoords.value?.longitude ?? null;
-    clockInForm.field_work_note = fieldWorkNote.value;
+    clockInForm.field_work_note = fieldWorkNote.value.trim();
     clockInForm.post(route('attendance.clockIn'), {
         preserveScroll: true,
         onSuccess: () => {
             fieldWorkNote.value = '';
+            showReasonModal.value = false;
         },
     });
 };
 
 const handleClockOut = () => {
+    noteError.value = '';
+    // 若超出圍欄且未填事由，主動跳出填寫對話框
+    if (locationStatus.value === 'out_of_fence' && !fieldWorkNote.value.trim()) {
+        pendingAction.value = 'clockOut';
+        showReasonModal.value = true;
+        return;
+    }
+
+    executeClockOut();
+};
+
+const executeClockOut = () => {
     clockOutForm.latitude = currentCoords.value?.latitude ?? null;
     clockOutForm.longitude = currentCoords.value?.longitude ?? null;
-    clockOutForm.field_work_note = fieldWorkNote.value;
+    clockOutForm.field_work_note = fieldWorkNote.value.trim();
     clockOutForm.post(route('attendance.clockOut'), {
         preserveScroll: true,
         onSuccess: () => {
             fieldWorkNote.value = '';
+            showReasonModal.value = false;
         },
     });
+};
+
+const confirmModalSubmit = () => {
+    if (!fieldWorkNote.value.trim()) {
+        noteError.value = '超出公司打卡範圍，必須填入外勤/遠端事由方可完成打卡！';
+        return;
+    }
+
+    if (pendingAction.value === 'clockIn') {
+        executeClockIn();
+    } else if (pendingAction.value === 'clockOut') {
+        executeClockOut();
+    }
 };
 
 const changeMonth = (e) => {
@@ -178,13 +223,22 @@ const typeLabel = (type) => {
                     <h2 class="text-xl font-bold leading-tight text-gray-800">考勤打卡管理</h2>
                     <span class="text-sm text-gray-500">智慧 GPS 圍欄打卡、工時記錄與出勤異常統計</span>
                 </div>
-                <div v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)">
+                <div class="flex items-center space-x-2">
                     <Link
+                        v-if="['hr', 'admin'].includes($page.props.auth.user.role)"
+                        :href="route('attendance.settings')"
+                        class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                    >
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <span>圍欄與半徑設定</span>
+                    </Link>
+                    <Link
+                        v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)"
                         :href="route('attendance.reports.index')"
                         class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition flex items-center space-x-1.5"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                        <span>考勤月報統計與工時結算</span>
+                        <span>考勤月報統計</span>
                     </Link>
                 </div>
             </div>
@@ -253,7 +307,11 @@ const typeLabel = (type) => {
                             </span>
                             <span v-else-if="locationStatus === 'out_of_fence'" class="flex items-center space-x-1.5 text-purple-200 font-semibold">
                                 <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <span>已定位：位於公司圍欄外（距總部 {{ formatDistance(detectedDistance) }}）— 自動標記為【外勤/遠端打卡】</span>
+                                <span>已定位：位於公司圍欄外（距總部 {{ formatDistance(detectedDistance) }}）— 外勤/遠端模式 (需填寫事由)</span>
+                            </span>
+                            <span v-else-if="locationStatus === 'all_remote'" class="flex items-center space-x-1.5 text-blue-200 font-semibold">
+                                <svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+                                <span>已定位：公司採【全遠端/自由地點】模式（未設固定打卡圍欄）— 遠端打卡模式</span>
                             </span>
                             <span v-else class="text-gray-300">
                                 尚未取得 GPS 定位（將以辦公室 IP 網段打卡）
@@ -270,20 +328,30 @@ const typeLabel = (type) => {
                                 <span>重新定位</span>
                             </button>
                             <span class="text-blue-200 text-[11px] font-mono">
-                                總部基準：{{ geofenceConfig?.lat }}, {{ geofenceConfig?.lng }}
+                                總部基準：{{ geofenceConfig?.has_location ? `${geofenceConfig?.lat}, ${geofenceConfig?.lng}` : '全遠端 (未設座標)' }}
                             </span>
                         </div>
                     </div>
 
-                    <!-- 外勤事由輸入 (僅外勤打卡時顯示或同仁可自願填寫) -->
-                    <div v-if="locationStatus === 'out_of_fence'" class="bg-purple-900/40 border border-purple-400/30 rounded-xl p-3 space-y-1">
-                        <label class="block text-xs font-semibold text-purple-200">外勤 / 出差遠端事由說明 (選填)</label>
+                    <!-- 外勤事由輸入 (僅外勤打卡時顯示，強制必填) -->
+                    <div v-if="locationStatus === 'out_of_fence'" class="bg-purple-900/40 border border-purple-400/40 rounded-xl p-3.5 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-xs font-bold text-purple-200">
+                                外勤 / 出差遠端事由說明 <span class="text-rose-300 font-bold">(超出範圍必填 *)</span>
+                            </label>
+                            <span class="text-[11px] text-purple-200/80">未填寫事由將無法打卡</span>
+                        </div>
                         <input
                             type="text"
                             v-model="fieldWorkNote"
-                            placeholder="如：拜訪內湖客戶展示產品、居家遠端辦公..."
-                            class="w-full text-xs rounded-lg bg-white/10 text-white placeholder-purple-200/60 border-purple-300/40 focus:border-purple-300 focus:ring-purple-300"
+                            @input="noteError = ''"
+                            placeholder="如：拜訪客戶展示產品、外部會議、居家遠端辦公..."
+                            class="w-full text-xs rounded-lg bg-white/10 text-white placeholder-purple-200/60 border-purple-300/40 focus:border-rose-400 focus:ring-rose-400"
                         />
+                        <p v-if="noteError" class="text-xs text-rose-300 font-semibold flex items-center pt-0.5">
+                            <svg class="w-3.5 h-3.5 mr-1 text-rose-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            {{ noteError }}
+                        </p>
                     </div>
                 </div>
 
@@ -398,6 +466,56 @@ const typeLabel = (type) => {
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 超出範圍強制填寫事由 Modal -->
+        <div v-if="showReasonModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-gray-100 overflow-hidden transform transition-all p-6 space-y-5">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-gray-900">超出打卡範圍提示</h3>
+                        <p class="text-xs text-gray-500">距總部 {{ formatDistance(detectedDistance) }}（超過限制 {{ geofenceConfig?.radius }}m）</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-gray-700">
+                        請說明外勤 / 遠端事由 <span class="text-rose-500">*</span>
+                    </label>
+                    <textarea
+                        v-model="fieldWorkNote"
+                        rows="3"
+                        required
+                        autofocus
+                        placeholder="請填寫外勤客戶拜訪、公出差旅或居家辦公事由（未填寫將無法完成打卡）..."
+                        class="w-full text-xs rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm placeholder-gray-400 p-3"
+                    ></textarea>
+                    <p v-if="noteError" class="text-xs text-rose-600 font-semibold">{{ noteError }}</p>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button
+                        type="button"
+                        @click="showReasonModal = false"
+                        class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                    >
+                        取消打卡
+                    </button>
+                    <button
+                        type="button"
+                        @click="confirmModalSubmit"
+                        :disabled="clockInForm.processing || clockOutForm.processing"
+                        class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition disabled:opacity-50"
+                    >
+                        填寫完成，確認打卡
+                    </button>
                 </div>
             </div>
         </div>

@@ -2,6 +2,31 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作「考勤打卡」模組之**考勤圍欄管理後台與超出半徑強制填寫事由機制 (Attendance Geofence Settings & Strict Reason Enforcement)**：
+  - **資料庫動態系統設定架構 (SystemSetting Engine)**：
+    - 建立遷移 `2026_10_08_070000_create_system_settings_table.php`，建立高彈性通用 `system_settings` 表（`key`, `value`, `description`）。
+    - 建立模型 `app/Models/SystemSetting.php`，提供 `get($key, $default)`、`set($key, $value)`、`forget($key)`，全面整合 Redis/Cache 記憶體快取（3600 秒），在資料更新時自動清除過期快取，杜絕資料庫反覆查詢負載。
+  - **服務層與動態設定整合 (GeofenceService)**：
+    - `GeofenceService::getOfficeConfig` 升級為優先讀取 `SystemSetting` 之公司名稱、地址、經度、緯度與打卡半徑，次之自動降級讀取 `config/eip.php`。
+    - 新增 `updateOfficeConfig` 方法，動態同步儲存管理員輸入之地址、中心點座標與打卡限制半徑。
+  - **超出範圍未填事由嚴格阻擋機制 (雙層前後端防護)**：
+    - **後端防護**：`AttendanceController::clockIn` 與 `clockOut` 嚴格檢驗，當同仁座標經計算判定為 `remote`（超出公司設定半徑），若 `field_work_note` 為空字串，直接中斷打卡流程並返回錯誤訊息：「您當前打卡位置超出公司允許範圍（距離總部 X 公尺），必須填寫外勤/遠端事由方可完成打卡。」
+    - **前端防護**：`Attendance/Index.vue` 當同仁定位在圍欄外時，點擊上班或下班打卡若未輸入事由，前端主動攔截並彈出「超出打卡範圍提示」對話框 (Modal)，提示填寫事由，若未填寫事由一律禁止打卡；首頁 `Dashboard.vue` 快捷打卡若遇超出範圍亦明確展示紅框警示並引導至考勤頁面。
+  - **視覺化管理後台介面 (Vue 3)**：
+    - 建立 `resources/js/Pages/Attendance/Settings.vue`：
+      - 支援設定公司名稱、詳細地址、中心點經緯度與打卡允許半徑。
+      - 內建「抓取我當前位置」一鍵定位按鈕（使用高精準度 Geolocation 自動帶入經緯度）。
+      - 提供 Google Maps 外部連結快速驗證座標正確性。
+      - 提供 100m, 200m, 300m, 500m, 800m, 1000m 等常用推薦半徑快速切換標籤。
+      - 限制僅管理員 (`admin`) 與人資 (`hr`) 可存取，更新時自動寫入 `AuditLog` 審計日誌。
+    - 導覽列：在 `AuthenticatedLayout.vue` 之「系統管理」下拉選單與手機選單增加「考勤圍欄設定」入口；在 `Attendance/Index.vue` 右上方對 Admin/HR 顯示「圍欄與半徑設定」捷徑。
+  - **未設定公司位置之全遠端模式支援 (Full Remote Mode Architecture)**：
+    - `GeofenceService` 與 `AttendanceController` 擴充支援：若公司未設定經緯度座標（`lat/lng` 為空或清空），系統自動切換為「全遠端自由打卡」模式。
+    - 無需設定打卡半徑，全員打卡自動標記為 `remote`（地點記錄為「遠端辦公 (公司未設定固定位置)」），且因為無圍欄基準，同仁打卡**無需強制填寫事由說明**，自由簽到簽退。
+    - `Settings.vue` 增設「清空座標 (全遠端模式)」按鈕與動態藍色提示橫幅，未設定座標時打卡半徑輸入自動鎖定停用。
+  - **自動化測試全數通過**：
+    - 建立 `tests/Feature/AttendanceSettingTest.php`，共 7 項 Feature 測試（管理員/HR 存取、一般員工 403 阻擋、公司地址與半徑更新、超出範圍未填事由上班打卡 100% 阻擋、超出範圍填事由成功打卡、超出範圍未填事由下班打卡 100% 阻擋、未設公司位置自動全遠端且免事由打卡）。
+    - 全系統所有 Feature 測試擴充至 **123 項測試 100% 全數通過 (511 assertions)**。
 - 實作「智慧考勤打卡」模組之**智慧 GPS 經緯度地理圍欄打卡與外勤/遠端判定 (Smart Geofencing Attendance Engine)**：
   - **地理圍欄配置**：
     - 建立 `config/eip.php`，集中管理企業總部 GPS 座標（預設台北企業總部大樓 25.033964, 121.564468）、允許打卡半徑（500m）與總部名稱，並支援 `.env` 動態覆寫。
