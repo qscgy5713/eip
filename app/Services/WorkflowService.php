@@ -276,6 +276,9 @@ class WorkflowService
         if ($status === 'rejected') {
             $formRequest->update(['status' => 'rejected']);
 
+            // 若為休假單，解除凍結扣留額度 (Pending 釋放)
+            app(\App\Services\LeaveBalanceService::class)->releaseBalance($formRequest, approved: false);
+
             AuditLog::log(
                 action: 'reject_form_request',
                 description: "{$signRoleText} 於「{$stepTitle}」駁回了申請單「{$formRequest->title}」",
@@ -401,6 +404,9 @@ class WorkflowService
         $formRequest->update([
             'status' => 'approved',
         ]);
+
+        // 若為休假單，將凍結扣留額度正式結轉為已使用額度 (Pending ➜ Used)
+        app(\App\Services\LeaveBalanceService::class)->releaseBalance($formRequest, approved: true);
 
         AuditLog::log(
             action: 'approve_form_request',

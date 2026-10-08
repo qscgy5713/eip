@@ -69,6 +69,13 @@ const showingNavigationDropdown = ref(false);
                                     考勤打卡
                                 </NavLink>
                                 <NavLink
+                                    :href="route('leave-balances.index')"
+                                    :active="route().current('leave-balances.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    休假額度
+                                </NavLink>
+                                <NavLink
                                     :href="route('meeting-rooms.index')"
                                     :active="route().current('meeting-rooms.*')"
                                     class="whitespace-nowrap"
@@ -359,6 +366,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('attendance.*')"
                         >
                             考勤打卡
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('leave-balances.index')"
+                            :active="route().current('leave-balances.*')"
+                        >
+                            休假額度
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('meeting-rooms.index')"

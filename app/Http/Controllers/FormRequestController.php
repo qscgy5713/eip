@@ -58,10 +58,16 @@ class FormRequestController extends Controller
         ]);
     }
 
-    public function create(Form $form): Response
+    public function create(Request $request, Form $form): Response
     {
+        $leaveBalances = null;
+        if ($form->code === 'LEAVE') {
+            $leaveBalances = app(\App\Services\LeaveBalanceService::class)->getUserBalances($request->user());
+        }
+
         return Inertia::render('Forms/Create', [
             'form' => $form,
+            'leaveBalances' => $leaveBalances,
         ]);
     }
 
@@ -74,6 +80,22 @@ class FormRequestController extends Controller
             'attachments' => 'nullable|array',
             'attachments.*' => 'nullable|file|max:10240|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx,csv,zip',
         ]);
+
+        // 若為休假申請單，校驗假別可用額度是否充足
+        if ($form->code === 'LEAVE') {
+            $leaveService = app(\App\Services\LeaveBalanceService::class);
+            $check = $leaveService->checkAvailability(
+                $user,
+                $validated['data']['leave_type'] ?? '',
+                (float) ($validated['data']['days'] ?? 0)
+            );
+
+            if (!$check['allowed']) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['data.days' => $check['message']]);
+            }
+        }
 
         $requestNo = 'REQ-' . date('Ymd') . '-' . str_pad((string) (EipFormRequest::count() + 1), 4, '0', STR_PAD_LEFT);
 
@@ -105,6 +127,11 @@ class FormRequestController extends Controller
             'status' => 'pending',
             'current_step' => 1,
         ]);
+
+        // 若為休假申請單，凍結扣留額度 (pending)
+        if ($form->code === 'LEAVE') {
+            app(\App\Services\LeaveBalanceService::class)->holdBalance($formRequest);
+        }
 
         // 動態計算並啟動多層級與條件簽核工作流
         $workflowSteps = $this->workflowService->determineWorkflow($form, $user, $validated['data']);

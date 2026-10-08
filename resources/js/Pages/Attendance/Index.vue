@@ -225,6 +225,13 @@ const typeLabel = (type) => {
                 </div>
                 <div class="flex items-center space-x-2">
                     <Link
+                        :href="route('leave-balances.index')"
+                        class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                    >
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <span>休假額度查詢</span>
+                    </Link>
+                    <Link
                         v-if="['hr', 'admin'].includes($page.props.auth.user.role)"
                         :href="route('attendance.settings')"
                         class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition flex items-center space-x-1.5"

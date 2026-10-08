@@ -96,9 +96,19 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function leaveBalances(): HasMany
+    {
+        return $this->hasMany(LeaveBalance::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function isHr(): bool
+    {
+        return in_array($this->role, ['admin', 'hr']);
     }
 
     public function isManager(): bool

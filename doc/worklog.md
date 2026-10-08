@@ -2,6 +2,35 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**特休與假別額度管理系統 (Leave Balance & Quota Management Engine)**：
+  - **資料庫架構與模型設計 (LeaveBalance Model)**：
+    - 建立遷移 `database/migrations/2026_10_08_080000_create_leave_balances_table.php`，建立 `leave_balances` 表，欄位包含 `user_id`, `year`, `leave_type`, `allocated_days`, `used_days`, `pending_days`, `note`，建立複合唯一約束 `[user_id, year, leave_type]`。
+    - 建立模型 `app/Models/LeaveBalance.php`，定義標準假別常數（特休 `annual`、補休 `compensatory`、病假 `sick`、事假 `personal`、婚喪假 `marriage_funeral`、公假 `official`），提供假別中文標準化 `normalizeType`，計算剩餘可用天數 `available_days`（總核給 - 已休 - 審核中扣留），區分硬性額度管制與常規上限假別。
+    - 在 `app/Models/User.php` 建立 `leaveBalances()` 一對多關聯與 `isHr()` 輔助方法。
+  - **核心業務服務層 (LeaveBalanceService)**：
+    - `getUserBalances`：讀取或自動初始化同仁當年度各類假別標準額度，依特休、補休、病假優先級有序排列。
+    - `checkAvailability`：支援中英文假別名稱解析，嚴格校驗可用額度；特休與補休超額時阻擋申請並返回友善提示；病假事假超額時回傳警示。
+    - `holdBalance`：申請單送出時，精準凍結申請天數至 `pending_days`。
+    - `releaseBalance`：表單簽核結案時，若通過則將 `pending_days` 轉為 `used_days`（DB Transaction 保證一致性）；若駁回則解凍釋放 `pending_days`。
+    - `updateQuota`：供 HR / 管理員彈性調整同仁額度，自動寫入 `AuditLog` 審計留痕。
+    - `batchInitYear`：支援一鍵批次為全公司或特定部門同仁初始化年度法定配額。
+  - **簽核流程與請假單全鏈整合**：
+    - `FormRequestController::create`：若為休假申請單（`code === 'LEAVE'`），自動向前端注入同仁當前年度可用假別額度清單。
+    - `FormRequestController::store`：若為休假單，提單前調用 `checkAvailability` 嚴格校驗額度，若不足則中止提單並返回驗證錯誤；提單後自動執行 `holdBalance` 扣留額度。
+    - `WorkflowService::processAction`：簽核駁回時調用 `releaseBalance(approved: false)` 釋放額度；所有關卡全數核准結案時調用 `releaseBalance(approved: true)` 結轉額度。
+  - **前端互動介面與全景整合 (Vue 3)**：
+    - 建立 `resources/js/Pages/LeaveBalances/Index.vue`：
+      - 個人年度休假概況卡片：即時呈現特休、補休、病假、事假等可用天數、上限、進度條、已用與審核中明細。
+      - 年度快速切換器（上一年度、當前年度、下一年度）。
+      - HR / 管理員專屬同仁配額管轄表格：支援部門下拉篩選、姓名/工號關鍵字即時查詢、分頁。
+      - 「調整額度」Modal：支援 0.5 天精度微調、各假別切換與異動備註輸入。
+      - 「批次初始化年度配額」Modal：一鍵全體同仁年度假別法定額度批量寫入。
+    - `resources/js/Pages/Forms/Create.vue`：休假單填寫時頂部即時顯示假別剩餘可用天數看板，選擇假別或天數超出額度時動態跳出紅框警告提示。
+    - `AuthenticatedLayout.vue`：在桌面版與手機版導覽列增加「休假額度」直達入口。
+    - `Attendance/Index.vue`：在考勤首頁頂部功能列加入「休假額度查詢」捷徑。
+  - **自動化測試全套驗證**：
+    - 建立 `tests/Feature/LeaveBalanceTest.php`，共 8 項測試案例（個人查閱、一般員工 403 阻擋、HR 調整配額、管理員批次初始化、提單凍結 pending、超額申請阻擋、核准結案轉 used、駁回解凍釋放）。
+    - 全系統所有 Feature 測試擴充至 **131 項測試 100% 全數通過 (549 assertions)**。
 - 實作「考勤打卡」模組之**考勤圍欄管理後台與超出半徑強制填寫事由機制 (Attendance Geofence Settings & Strict Reason Enforcement)**：
   - **資料庫動態系統設定架構 (SystemSetting Engine)**：
     - 建立遷移 `2026_10_08_070000_create_system_settings_table.php`，建立高彈性通用 `system_settings` 表（`key`, `value`, `description`）。

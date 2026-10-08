@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DelegationController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FormRequestController;
+use App\Http\Controllers\LeaveBalanceController;
 use App\Http\Controllers\MeetingRoomController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrganizationController;
@@ -52,6 +53,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance/reports/export-details', [AttendanceReportController::class, 'exportDetails'])->name('attendance.reports.exportDetails');
     Route::get('/attendance/settings', [AttendanceController::class, 'settings'])->name('attendance.settings');
     Route::post('/attendance/settings', [AttendanceController::class, 'updateSettings'])->name('attendance.settings.update');
+
+    // 特休與休假額度管理
+    Route::get('/leave-balances', [LeaveBalanceController::class, 'index'])->name('leave-balances.index');
+    Route::put('/leave-balances/{user}', [LeaveBalanceController::class, 'update'])->name('leave-balances.update');
+    Route::post('/leave-balances/batch-init', [LeaveBalanceController::class, 'batchInit'])->name('leave-balances.batchInit');
 
     // 會議室借用與行事曆
     Route::get('/meeting-rooms', [MeetingRoomController::class, 'index'])->name('meeting-rooms.index');

@@ -1,10 +1,14 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 
 const props = defineProps({
     form: Object,
+    leaveBalances: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const initialData = {};
@@ -18,6 +22,19 @@ const formState = useForm({
     title: `${props.form.name}申請`,
     data: initialData,
     attachments: [],
+});
+
+const selectedLeaveTypeBalance = computed(() => {
+    if (!props.leaveBalances || props.form.code !== 'LEAVE') return null;
+    const currentSelectedType = formState.data.leave_type;
+    return props.leaveBalances.find(b => b.type_label === currentSelectedType || b.leave_type === currentSelectedType);
+});
+
+const isQuotaExceeded = computed(() => {
+    if (!selectedLeaveTypeBalance.value) return false;
+    if (!selectedLeaveTypeBalance.value.is_hard_quota) return false;
+    const requested = parseFloat(formState.data.days || 0);
+    return requested > selectedLeaveTypeBalance.value.available_days;
 });
 
 const handleFileChange = (e) => {
@@ -77,6 +94,44 @@ const submit = () => {
                                     {{ errMsg }}
                                 </li>
                             </ul>
+                        </div>
+
+                        <!-- 休假額度即時看板 (僅休假單呈現) -->
+                        <div v-if="form.code === 'LEAVE' && leaveBalances && leaveBalances.length > 0" class="p-4 bg-indigo-50/70 rounded-xl border border-indigo-100">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    您當前的假別剩餘可用額度
+                                </span>
+                                <Link :href="route('leave-balances.index')" class="text-[11px] font-semibold text-indigo-600 hover:underline">
+                                    查看完整額度明細 &rarr;
+                                </Link>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                                <div
+                                    v-for="b in leaveBalances"
+                                    :key="b.id"
+                                    class="bg-white/90 p-2 rounded-lg border border-indigo-100/60"
+                                >
+                                    <div class="text-[11px] text-gray-500">{{ b.type_label }}</div>
+                                    <div class="font-bold text-gray-900 mt-0.5">
+                                        <span class="text-indigo-600 text-sm">{{ b.available_days }}</span>
+                                        <span class="text-gray-400 text-[10px]"> / {{ b.allocated_days }}天</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 額度超額警示 -->
+                        <div v-if="isQuotaExceeded" class="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700 text-xs flex items-center gap-2">
+                            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <span>
+                                <strong>額度不足警示：</strong>您所選的「{{ selectedLeaveTypeBalance?.type_label }}」剩餘可用為 <strong>{{ selectedLeaveTypeBalance?.available_days }}</strong> 天，本次欲申請 <strong>{{ formState.data.days }}</strong> 天已超出可用天數，請調整申請天數！
+                            </span>
                         </div>
 
                         <div>
