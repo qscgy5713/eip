@@ -171,6 +171,54 @@ const collapseAll = () => {
     props.departments.forEach((d) => collapsedDeptIds.value.add(d.id));
 };
 
+// 畫布即時關鍵字搜尋與高亮
+const canvasSearch = ref('');
+const handleCanvasSearchInput = (e) => {
+    const val = typeof e === 'string' ? e : e?.target?.value || '';
+    canvasSearch.value = val;
+    if (val && val.trim() !== '') {
+        // 輸入關鍵字時自動展開所有折疊節點，避免匹配項目被收合遮蔽
+        expandAll();
+    }
+};
+
+const clearCanvasSearch = () => {
+    canvasSearch.value = '';
+};
+
+const matchingDepts = computed(() => {
+    const q = canvasSearch.value.trim().toLowerCase();
+    if (!q) return [];
+    return props.departments.filter((dept) => {
+        const matchName = dept.name?.toLowerCase().includes(q);
+        const matchCode = dept.code?.toLowerCase().includes(q);
+        const matchLeader = dept.leader?.name?.toLowerCase().includes(q);
+        const matchMembers = (dept.users || []).some(
+            u => u.name?.toLowerCase().includes(q) ||
+                 u.email?.toLowerCase().includes(q) ||
+                 u.employee_no?.toLowerCase().includes(q)
+        );
+        return matchName || matchCode || matchLeader || matchMembers;
+    });
+});
+
+// 快速設定或解除部門主管
+const setDepartmentLeader = (dept, userOrNull) => {
+    const leaderId = userOrNull ? userOrNull.id : null;
+    const actionText = userOrNull
+        ? `確定要指派同仁「${userOrNull.name}」為「${dept.name}」的部門主管嗎？`
+        : `確定要解除「${dept.name}」的主管職務嗎？`;
+
+    if (confirm(actionText)) {
+        router.post(route('org-management.departments.leader', dept.id), {
+            leader_id: leaderId,
+        }, {
+            preserveScroll: true,
+            preserveState: true,
+        });
+    }
+};
+
 // 拖曳狀態管理
 const draggingDept = ref(null);
 const dropTargetDept = ref(null);
@@ -495,7 +543,15 @@ const statusLabel = (status) => {
                     </p>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2.5">
+                    <a
+                        :href="route('org-management.export-roster')"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 hover:text-indigo-600 text-xs font-semibold rounded-lg border border-slate-300 shadow-2xs transition"
+                        title="匯出全公司組織與人員編制表為 Excel 相容之 CSV 格式"
+                    >
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        匯出編制名冊 (CSV)
+                    </a>
                     <button
                         v-if="currentTab === 'departments'"
                         @click="openCreateDeptModal"
@@ -641,6 +697,36 @@ const statusLabel = (status) => {
                             </span>
                         </div>
 
+                        <!-- 中間：畫布即時關鍵字搜尋與高亮 (僅樹狀圖顯示) -->
+                        <div v-if="orgViewMode === 'chart'" class="flex-1 max-w-xs sm:max-w-sm w-full mx-auto md:mx-0">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                </div>
+                                <input
+                                    :value="canvasSearch"
+                                    @input="handleCanvasSearchInput"
+                                    type="text"
+                                    placeholder="搜尋部門、主管或同仁姓名/帳號..."
+                                    class="w-full pl-9 pr-16 py-1.5 text-xs bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-lg focus:ring-1 focus:ring-indigo-500 transition placeholder:text-slate-400"
+                                />
+                                <div class="absolute inset-y-0 right-0 pr-2 flex items-center gap-1">
+                                    <span v-if="canvasSearch.trim()" class="text-3xs px-1.5 py-0.5 rounded font-mono font-bold" :class="matchingDepts.length > 0 ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-500'">
+                                        {{ matchingDepts.length }} 部門
+                                    </span>
+                                    <button
+                                        v-if="canvasSearch"
+                                        @click="clearCanvasSearch"
+                                        type="button"
+                                        class="p-1 text-slate-400 hover:text-slate-600 rounded transition"
+                                        title="清除搜尋"
+                                    >
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- 右側：縮放控制與展開/收合 (僅樹狀圖顯示) -->
                         <div v-if="orgViewMode === 'chart'" class="flex items-center gap-3">
                             <!-- 縮放控制器 -->
@@ -777,6 +863,7 @@ const statusLabel = (status) => {
                                         :is-last="idx === departmentTree.length - 1"
                                         :is-single-child="departmentTree.length === 1"
                                         :collapsed-ids="collapsedDeptIds"
+                                        :search-keyword="canvasSearch"
                                         :dragging-dept-id="draggingDept?.id || null"
                                         :drop-target-id="dropTargetDept?.id || null"
                                         :disabled-drop-ids="disabledDropIds"
@@ -840,7 +927,10 @@ const statusLabel = (status) => {
                                                 </div>
                                                 <p class="text-xs text-gray-500 mt-0.5">
                                                     主管：<span class="font-medium text-gray-700">{{ rootDept.leader?.name ? `${rootDept.leader.name} (${rootDept.leader.job_title || '主管'})` : '未指定' }}</span> ·
-                                                    在職同仁：<button @click="openMembersDrawer(rootDept)" class="font-semibold text-indigo-600 hover:underline">{{ rootDept.users_count || (rootDept.users?.length || 0) }} 人</button>
+                                                    直屬同仁：<button @click="openMembersDrawer(rootDept)" class="font-semibold text-indigo-600 hover:underline">{{ rootDept.users_count || (rootDept.users?.length || 0) }} 人</button>
+                                                    <span v-if="rootDept.total_headcount !== undefined" class="text-2xs text-slate-500 font-medium ml-1.5 px-1.5 py-0.5 rounded bg-slate-100">
+                                                        全體編制 {{ rootDept.total_headcount }} 人
+                                                    </span>
                                                 </p>
                                             </div>
                                         </div>
@@ -893,7 +983,10 @@ const statusLabel = (status) => {
                                                     </div>
                                                     <p class="text-xs text-gray-500 mt-0.5">
                                                         主管：<span class="text-gray-700">{{ subDept.leader?.name ? `${subDept.leader.name} (${subDept.leader.job_title || '主管'})` : '未指定' }}</span> ·
-                                                        同仁：<button @click="openMembersDrawer(subDept)" class="font-semibold text-indigo-600 hover:underline">{{ subDept.users_count || (subDept.users?.length || 0) }} 人</button>
+                                                        直屬：<button @click="openMembersDrawer(subDept)" class="font-semibold text-indigo-600 hover:underline">{{ subDept.users_count || (subDept.users?.length || 0) }} 人</button>
+                                                        <span v-if="subDept.total_headcount !== undefined" class="text-2xs text-slate-500 font-medium ml-1.5 px-1.5 py-0.5 rounded bg-slate-100">
+                                                            全 {{ subDept.total_headcount }} 人
+                                                        </span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -1547,6 +1640,24 @@ const statusLabel = (status) => {
                                     </div>
 
                                     <div class="flex items-center gap-1 shrink-0">
+                                        <!-- 快速指派/解除主管按鈕 -->
+                                        <button
+                                            v-if="member.id !== activeDrawerDept.leader_id"
+                                            @click="setDepartmentLeader(activeDrawerDept, member)"
+                                            class="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition"
+                                            title="指派此同仁為此部門主管"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                                        </button>
+                                        <button
+                                            v-else
+                                            @click="setDepartmentLeader(activeDrawerDept, null)"
+                                            class="p-1.5 text-amber-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                                            title="解除其部門主管職務"
+                                        >
+                                            <svg class="w-4 h-4 fill-amber-400 text-amber-500" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                                        </button>
+
                                         <button
                                             @click="openEditUserModal(member); closeMembersDrawer();"
                                             class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"

@@ -110,9 +110,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 組織架構與人員管理後台 (限 Admin 與 HR)
     Route::get('/org-management', [OrgManagementController::class, 'index'])->name('org-management.index');
+    Route::get('/org-management/export-roster', [OrgManagementController::class, 'exportRoster'])->name('org-management.export-roster');
     Route::post('/org-management/departments', [OrgManagementController::class, 'storeDepartment'])->name('org-management.departments.store');
     Route::put('/org-management/departments/{department}', [OrgManagementController::class, 'updateDepartment'])->name('org-management.departments.update');
     Route::patch('/org-management/departments/{department}/move', [OrgManagementController::class, 'moveDepartment'])->name('org-management.departments.move');
+    Route::post('/org-management/departments/{department}/leader', [OrgManagementController::class, 'setLeader'])->name('org-management.departments.leader');
     Route::post('/org-management/departments/{department}/members', [OrgManagementController::class, 'addMember'])->name('org-management.departments.members.add');
     Route::delete('/org-management/departments/{department}/members/{user}', [OrgManagementController::class, 'removeMember'])->name('org-management.departments.members.remove');
     Route::delete('/org-management/departments/{department}', [OrgManagementController::class, 'destroyDepartment'])->name('org-management.departments.destroy');

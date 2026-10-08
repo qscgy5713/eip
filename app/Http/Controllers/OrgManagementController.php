@@ -44,6 +44,16 @@ class OrgManagementController extends Controller
             ->orderBy('id')
             ->get();
 
+        // 記憶體快速計算各部門總編制人數 (包含自身直接同仁與其所有子孫部門之同仁)
+        $directCounts = $departments->pluck('users_count', 'id')->toArray();
+        foreach ($departments as $dept) {
+            $headcount = $directCounts[$dept->id] ?? 0;
+            foreach ($dept->getAllDescendantIds() as $descendantId) {
+                $headcount += $directCounts[$descendantId] ?? 0;
+            }
+            $dept->total_headcount = $headcount;
+        }
+
         // 2. 同仁列表篩選查詢
         $userQuery = User::with('department:id,name,code')
             ->select([
@@ -251,6 +261,177 @@ class OrgManagementController extends Controller
         );
 
         return redirect()->back()->with('success', "已成功將部門「{$department->name}」調整隸屬於「{$newParentName}」！");
+    }
+
+    /**
+     * 快速指派或解除部門負責主管
+     */
+    public function setLeader(Request $request, Department $department): RedirectResponse
+    {
+        $operator = $request->user();
+        if (!$operator->isAdmin() && !$operator->isHr()) {
+            abort(403, '僅限系統管理員或人資管理員可指派部門主管。');
+        }
+
+        $validated = $request->validate([
+            'leader_id' => 'nullable|integer|exists:users,id',
+        ]);
+
+        $newLeaderId = $validated['leader_id'] ?? null;
+        $leaderUser = $newLeaderId ? User::find($newLeaderId) : null;
+
+        // 若指派主管，確認該同仁隸屬於此部門 (若原本未分配或在他部，自動調任至此部門)
+        if ($leaderUser && $leaderUser->department_id !== $department->id) {
+            $leaderUser->update(['department_id' => $department->id]);
+        }
+
+        $oldLeaderName = $department->leader?->name ?? '未指定';
+        $department->update(['leader_id' => $newLeaderId]);
+
+        AuditLog::log(
+            action: 'set_department_leader',
+            description: $leaderUser
+                ? "管理者 {$operator->name} 將部門「{$department->name}」的主管設定為「{$leaderUser->name}」（原主管：{$oldLeaderName}）"
+                : "管理者 {$operator->name} 解除了部門「{$department->name}」的主管職務（原主管：{$oldLeaderName}）",
+            auditable: $department,
+            details: [
+                'department_id' => $department->id,
+                'old_leader_name' => $oldLeaderName,
+                'new_leader_id' => $newLeaderId,
+            ]
+        );
+
+        return redirect()->back()->with('success', $leaderUser
+            ? "已成功將「{$leaderUser->name}」指派為「{$department->name}」的主管！"
+            : "已成功解除「{$department->name}」的主管職務！"
+        );
+    }
+
+    /**
+     * 匯出企業組織架構與人員編制表 (UTF-8 BOM CSV)
+     */
+    public function exportRoster(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $operator = $request->user();
+        if (!$operator->isAdmin() && !$operator->isHr()) {
+            abort(403, '僅限系統管理員或人資管理員可匯出組織編制表。');
+        }
+
+        $departments = Department::with([
+            'parent:id,name,code',
+            'leader:id,name,job_title',
+            'users' => function ($q) {
+                $q->orderBy('name');
+            },
+        ])
+            ->withCount('users')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+
+        $directCounts = $departments->pluck('users_count', 'id')->toArray();
+        foreach ($departments as $dept) {
+            $headcount = $directCounts[$dept->id] ?? 0;
+            foreach ($dept->getAllDescendantIds() as $descendantId) {
+                $headcount += $directCounts[$descendantId] ?? 0;
+            }
+            $dept->total_headcount = $headcount;
+        }
+
+        AuditLog::log(
+            action: 'export_organization_roster',
+            description: "管理者 {$operator->name} 匯出了全公司組織架構與人員編制表 CSV",
+            details: [
+                'total_departments' => $departments->count(),
+            ]
+        );
+
+        $fileName = '組織架構與人員編制表_' . now()->format('Ymd_His') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+        ];
+
+        $callback = function () use ($departments) {
+            $handle = fopen('php://output', 'w');
+            // 寫入 UTF-8 BOM 避免 Excel 亂碼
+            fputs($handle, "\xEF\xBB\xBF");
+
+            // 標題行
+            fputcsv($handle, [
+                '部門代碼',
+                '部門名稱',
+                '上級部門',
+                '部門負責人(主管)',
+                '部門直屬在職人數',
+                '轄下總編制(含子部門)',
+                '同仁工號',
+                '同仁姓名',
+                '帳號(Email)',
+                '職稱',
+                '系統角色',
+                '在職狀態',
+                '聯絡電話',
+            ]);
+
+            foreach ($departments as $dept) {
+                $parentName = $dept->parent?->name ?? '頂層公司';
+                $leaderName = $dept->leader?->name ? "{$dept->leader->name} ({$dept->leader->job_title})" : '未指定';
+
+                if ($dept->users->isEmpty()) {
+                    fputcsv($handle, [
+                        $dept->code,
+                        $dept->name,
+                        $parentName,
+                        $leaderName,
+                        0,
+                        $dept->total_headcount,
+                        '-',
+                        '(無在職同仁)',
+                        '-',
+                        '-',
+                        '-',
+                        '-',
+                        '-',
+                    ]);
+                } else {
+                    foreach ($dept->users as $u) {
+                        $roleMap = [
+                            'admin' => '系統管理員',
+                            'manager' => '部門主管',
+                            'hr' => '人資主管',
+                            'employee' => '一般同仁',
+                        ];
+                        $statusMap = [
+                            'active' => '在職正常',
+                            'suspended' => '暫時停權',
+                            'resigned' => '已離職',
+                        ];
+
+                        fputcsv($handle, [
+                            $dept->code,
+                            $dept->name,
+                            $parentName,
+                            $leaderName,
+                            $dept->users_count,
+                            $dept->total_headcount,
+                            $u->employee_no ?? '-',
+                            $u->name . ($u->id === $dept->leader_id ? ' ★(主管)' : ''),
+                            $u->email,
+                            $u->job_title ?? '未設職稱',
+                            $roleMap[$u->role] ?? $u->role,
+                            $statusMap[$u->status] ?? $u->status,
+                            $u->phone ?? '-',
+                        ]);
+                    }
+                }
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     /**

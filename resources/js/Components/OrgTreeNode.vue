@@ -38,6 +38,14 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    readOnly: {
+        type: Boolean,
+        default: false,
+    },
+    searchKeyword: {
+        type: String,
+        default: '',
+    },
 });
 
 const emit = defineEmits([
@@ -61,19 +69,39 @@ const hasChildren = computed(() => {
 });
 
 const isBeingDragged = computed(() => {
-    return props.draggingDeptId === props.node.id;
+    return !props.readOnly && props.draggingDeptId === props.node.id;
 });
 
 const isCurrentDropTarget = computed(() => {
-    return props.dropTargetId === props.node.id;
+    return !props.readOnly && props.dropTargetId === props.node.id;
 });
 
 const isDropDisabled = computed(() => {
-    return props.disabledDropIds.includes(props.node.id);
+    return props.readOnly || props.disabledDropIds.includes(props.node.id);
+});
+
+// 即時關鍵字搜尋匹配 (部門名稱、代碼、主管姓名、在職同仁姓名/工號/Email)
+const isMatched = computed(() => {
+    if (!props.searchKeyword) return false;
+    const q = props.searchKeyword.trim().toLowerCase();
+    if (!q) return false;
+
+    const nameMatch = (props.node.name || '').toLowerCase().includes(q);
+    const codeMatch = (props.node.code || '').toLowerCase().includes(q);
+    const leaderMatch = (props.node.leader?.name || '').toLowerCase().includes(q);
+    const memberMatch = (props.node.users || []).some((u) =>
+        (u.name || '').toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q) ||
+        (u.employee_no || '').toLowerCase().includes(q) ||
+        (u.job_title || '').toLowerCase().includes(q)
+    );
+
+    return nameMatch || codeMatch || leaderMatch || memberMatch;
 });
 
 // 拖曳事件處理
 const handleDragStart = (e) => {
+    if (props.readOnly) return;
     emit('drag-start', props.node, e);
 };
 
@@ -110,19 +138,22 @@ const handleDrop = (e) => {
 
         <!-- 部門節點卡片 -->
         <div
-            :draggable="true"
+            :draggable="!readOnly"
             @dragstart="handleDragStart"
             @dragover.prevent="handleDragOver"
             @dragleave="handleDragLeave"
             @drop.prevent="handleDrop"
             :class="[
                 'w-64 rounded-xl border transition-all duration-200 select-none relative z-10 group bg-white shadow-sm',
+                isMatched ? 'ring-4 ring-amber-400 ring-offset-2 border-amber-400 bg-amber-50/20 shadow-xl' : '',
                 isBeingDragged ? 'opacity-40 border-dashed border-indigo-400 scale-95 shadow-none' : '',
                 isCurrentDropTarget
                     ? 'ring-4 ring-indigo-500 ring-offset-2 border-indigo-500 bg-indigo-50/70 scale-105 shadow-xl'
                     : 'border-slate-200 hover:border-indigo-400 hover:shadow-md',
                 !node.is_active ? 'opacity-75 bg-slate-50' : '',
-                draggingDeptId && isDropDisabled && !isBeingDragged ? 'opacity-50 cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'
+                !readOnly && draggingDeptId && isDropDisabled && !isBeingDragged
+                    ? 'opacity-50 cursor-not-allowed'
+                    : !readOnly ? 'cursor-grab active:cursor-grabbing' : ''
             ]"
         >
             <!-- 拖曳高亮懸浮提示 -->
@@ -150,6 +181,9 @@ const handleDrop = (e) => {
                 >
                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     <span>{{ node.users_count || (node.users?.length || 0) }} 人</span>
+                    <span v-if="node.total_headcount && node.total_headcount > (node.users_count || node.users?.length || 0)" class="text-3xs text-indigo-600 font-mono" title="含轄下子部門總編制">
+                        (全 {{ node.total_headcount }})
+                    </span>
                 </button>
             </div>
 
@@ -159,8 +193,8 @@ const handleDrop = (e) => {
                     <h4 class="font-bold text-slate-900 text-sm truncate flex-1" :title="node.name">
                         {{ node.name }}
                     </h4>
-                    <!-- 拖曳握把小圖示 -->
-                    <span class="text-slate-300 group-hover:text-slate-400 shrink-0" title="可拖曳此部門調整上級隸屬">
+                    <!-- 拖曳握把小圖示 (唯讀模式下隱藏) -->
+                    <span v-if="!readOnly" class="text-slate-300 group-hover:text-slate-400 shrink-0" title="可拖曳此部門調整上級隸屬">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
                     </span>
                 </div>
@@ -182,7 +216,20 @@ const handleDrop = (e) => {
             </div>
 
             <!-- 卡片操作按鈕列 (快捷工具列) -->
-            <div class="px-2.5 py-2 bg-slate-50/50 border-t border-slate-100 rounded-b-xl flex items-center justify-between text-xs">
+            <!-- 模式 A：唯讀模式 (全員通訊錄瀏覽) -->
+            <div v-if="readOnly" class="px-2.5 py-2 bg-slate-50/50 border-t border-slate-100 rounded-b-xl flex items-center justify-center text-xs">
+                <button
+                    @click.stop="emit('view-members', node)"
+                    class="inline-flex items-center gap-1.5 px-3 py-1 text-2xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition w-full justify-center"
+                    title="查看部門同仁清單"
+                >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    查看部門成員
+                </button>
+            </div>
+
+            <!-- 模式 B：管理後台模式 (支援建立子部門、成員指派、編輯、刪除) -->
+            <div v-else class="px-2.5 py-2 bg-slate-50/50 border-t border-slate-100 rounded-b-xl flex items-center justify-between text-xs">
                 <button
                     @click.stop="emit('create-child', node)"
                     class="inline-flex items-center gap-1 px-2 py-1 text-2xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded transition"
@@ -253,6 +300,8 @@ const handleDrop = (e) => {
                     :dragging-dept-id="draggingDeptId"
                     :drop-target-id="dropTargetId"
                     :disabled-drop-ids="disabledDropIds"
+                    :read-only="readOnly"
+                    :search-keyword="searchKeyword"
                     @create-child="$emit('create-child', $event)"
                     @edit="$emit('edit', $event)"
                     @delete="$emit('delete', $event)"

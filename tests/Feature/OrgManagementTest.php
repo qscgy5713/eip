@@ -440,4 +440,68 @@ class OrgManagementTest extends TestCase
         ]));
         $removeResponse->assertStatus(403);
     }
+
+    public function test_admin_and_hr_can_set_and_clear_department_leader(): void
+    {
+        // 1. 指派 employee 為主管
+        $response = $this->actingAs($this->admin)->post(route('org-management.departments.leader', $this->rdDept->id), [
+            'leader_id' => $this->employee->id,
+        ]);
+
+        $response->assertRedirect();
+        $this->rdDept->refresh();
+        $this->employee->refresh();
+
+        $this->assertEquals($this->employee->id, $this->rdDept->leader_id);
+        $this->assertEquals($this->rdDept->id, $this->employee->department_id);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'set_department_leader',
+        ]);
+
+        // 2. 清除主管職務
+        $clearResponse = $this->actingAs($this->admin)->post(route('org-management.departments.leader', $this->rdDept->id), [
+            'leader_id' => null,
+        ]);
+
+        $clearResponse->assertRedirect();
+        $this->rdDept->refresh();
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'set_department_leader',
+        ]);
+
+        // 3. 一般員工無法設置主管
+        $unauthResponse = $this->actingAs($this->employee)->post(route('org-management.departments.leader', $this->rdDept->id), [
+            'leader_id' => $this->employee->id,
+        ]);
+        $unauthResponse->assertStatus(403);
+    }
+
+    public function test_admin_and_hr_can_export_roster_csv(): void
+    {
+        // 一般員工禁止匯出
+        $this->actingAs($this->employee)
+            ->get(route('org-management.export-roster'))
+            ->assertStatus(403);
+
+        // 管理員成功匯出
+        $response = $this->actingAs($this->admin)->get(route('org-management.export-roster'));
+
+        $response->assertOk();
+        $this->assertTrue(str_contains($response->headers->get('content-type'), 'text/csv'));
+        $this->assertTrue(str_contains($response->headers->get('content-disposition'), 'attachment'));
+
+        $content = $response->streamedContent();
+        // 包含 UTF-8 BOM
+        $this->assertStringStartsWith("\xEF\xBB\xBF", $content);
+        // 包含部門代碼與表頭
+        $this->assertStringContainsString('部門代碼', $content);
+        $this->assertStringContainsString('同仁姓名', $content);
+        $this->assertStringContainsString($this->rdDept->name, $content);
+
+        // 審計留痕
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'export_organization_roster',
+        ]);
+    }
 }

@@ -83,4 +83,15 @@ class Department extends Model
 
         return false;
     }
+
+    /**
+     * 計算包含此部門及所有轄下子孫部門之總在職人數 (全體子樹編制)
+     */
+    public function getTotalHeadcount(): int
+    {
+        $allDeptIds = array_merge([$this->id], $this->getAllDescendantIds());
+        return User::whereIn('department_id', $allDeptIds)
+            ->where('status', 'active')
+            ->count();
+    }
 }

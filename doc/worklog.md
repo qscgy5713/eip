@@ -2,6 +2,31 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**組織圖即時搜尋高亮、主管快速指派/解除、總編制計算、編制名冊匯出與通訊錄全景整合 (Enterprise Org Chart & Roster Engine)**：
+  - **畫布即時關鍵字搜尋與高亮定位 (`canvasSearch`)**：
+    - 於互動視覺組織樹畫布頂部工具列提供即時搜尋欄，支援輸入部門名稱、代碼、主管姓名、同仁姓名/帳號/工號模糊搜尋。
+    - 即時計算並呈現匹配部門數量徽章，支援一鍵清除（✖）。
+    - 輸入關鍵字時自動展開所有收合節點 (`expandAll()`)，避免匹配的子孫節點被折疊隱藏。
+    - 匹配節點於畫布上呈現精緻琥珀色外框高亮脈衝動畫 (`animate-pulse`)，大幅提升大型組織體系中的查找速度。
+  - **主管一鍵快速指派與解除職務 (`setLeader`)**：
+    - 於成員抽屜與彈窗中加入專屬「主管指派 / 解除」動作按鈕。
+    - 指派某位同仁為主管時，系統自動將該同仁調任歸屬於該部門，確保部門主管與隸屬關係邏輯一致。
+    - 支援一鍵解除主管職務，並於移出該同仁時提供連鎖清空主管安全保護。
+    - 全程由後端端點 `POST /org-management/departments/{department}/leader` 處理並記錄 `AuditLog` 審計留痕。
+  - **直屬人數與轄下全體子孫部門總編制計算 (`total_headcount`)**：
+    - 在卡片、節點徽章與清單總覽中，直觀呈現「直屬在職人數」與「全體子孫部門總編制人數」（例如：`直屬 3 人 · 全 12 人`）。
+    - 於後端採用記憶體統計演算法，避免迴圈對資料庫進行 N 次遞迴 SQL，極速完成總編制累積統計。
+  - **企業組織架構與人員編制表匯出 (UTF-8 BOM CSV with AuditLog)**：
+    - 新增後端路由 `GET /org-management/export-roster` (`org-management.export-roster`)。
+    - 支援一鍵下載全公司階層、主管、直屬人數、總編制與全員工號、姓名、帳號、職稱、角色之 CSV 清冊。
+    - 開頭寫入 UTF-8 BOM (`\xEF\xBB\xBF`)，徹底解決 Windows/Mac Excel 開啟繁體中文字元出現亂碼之問題，並記錄 `AuditLog` 審計留痕。
+  - **全員通訊錄整合組織架構全景圖 (`Directory/Index.vue` & `OrganizationController.php`)**：
+    - 一般員工在通訊錄頁面可一鍵切換【同仁通訊名冊】與【企業組織架構圖】。
+    - 引入 `<OrgTreeNode :read-only="true">` 唯讀模式，支援畫布縮放、節點展開/收合、關鍵字搜尋與唯讀成員抽屜，安全隱藏所有後台修改動作。
+  - **自動化測試與代碼品質**：
+    - `OrgManagementTest` 擴充 `test_admin_and_hr_can_set_and_clear_department_leader` 與 `test_admin_and_hr_can_export_roster_csv`。
+    - 全系統自動化測試套件擴充至 **165 項 Feature 測試 100% 全數通過 (795 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.27s)。
 - 實作**組織圖成員抽屜下拉選單指派與移出管理 (Org Chart Member Assignment & Drawer Engine)**：
   - **業務流程規範對齊**：落實標準企業人事作業流程——同仁帳號由公司 HR/Admin 先行建立完成後，於組織架構與部門檢視中透過「在職同仁下拉選單選取」將成員加入部門或進行跨部門調任。
   - **成員抽屜 (Slide-over Drawer) 功能升級**：
