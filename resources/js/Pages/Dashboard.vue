@@ -9,6 +9,8 @@ defineProps({
     stats: Object,
     todayAttendance: Object,
     myUpcomingBookings: Array,
+    myLeaveSummary: Object,
+    teamAttendanceSnapshot: Object,
 });
 
 const clockInForm = useForm({
@@ -142,38 +144,135 @@ const statusBadge = (status) => {
                     </div>
                 </div>
 
-                <!-- 數據統計看板 -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500">未讀企業公告</p>
-                            <p class="text-3xl font-extrabold text-blue-600 mt-1">{{ stats.unreadAnnouncementsCount }}</p>
+                <!-- 常用快捷行動列 (Quick Action Bar) -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                    <Link :href="route('forms.index')" class="p-3.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:border-blue-400 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
-                        <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">表單申辦</p>
+                            <p class="text-[11px] text-gray-400">請假、加班、簽呈</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('meeting-rooms.index')" class="p-3.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:border-indigo-400 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">會議室預約</p>
+                            <p class="text-[11px] text-gray-400">設備借用與時段</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('leave-balances.index')" class="p-3.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:border-emerald-400 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">假勤存摺</p>
+                            <p class="text-[11px] text-gray-400">特休與補休明細</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('organization.index')" class="p-3.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:border-amber-400 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">組織通訊錄</p>
+                            <p class="text-[11px] text-gray-400">同仁分機與主管</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('knowledge.index')" class="p-3.5 bg-white rounded-xl border border-gray-100 shadow-sm hover:border-purple-400 hover:shadow-md transition flex items-center space-x-3 group col-span-2 sm:col-span-1">
+                        <div class="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">企業知識庫</p>
+                            <p class="text-[11px] text-gray-400">規章辦法與手冊</p>
+                        </div>
+                    </Link>
+                </div>
+
+                <!-- 團隊出勤快報 (主管/人事/管理員專屬) -->
+                <div v-if="teamAttendanceSnapshot" class="bg-white rounded-xl p-5 border border-indigo-100 shadow-sm bg-gradient-to-r from-indigo-50/40 via-white to-blue-50/30">
+                    <div class="flex items-center justify-between pb-3 border-b border-indigo-100/60">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full animate-pulse"></span>
+                            <h3 class="text-sm font-bold text-gray-900">團隊今日出勤快報 (主管管理視圖)</h3>
+                        </div>
+                        <Link :href="route('attendance.index')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:underline">
+                            考勤詳情報告 &rarr;
+                        </Link>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+                        <div class="bg-white/80 p-3 rounded-lg border border-gray-100">
+                            <p class="text-xs text-gray-500 font-medium">部門在職同仁</p>
+                            <p class="text-xl font-black text-gray-800 mt-1">{{ teamAttendanceSnapshot.total_members }} <span class="text-xs font-normal text-gray-400">人</span></p>
+                        </div>
+                        <div class="bg-emerald-50/70 p-3 rounded-lg border border-emerald-100">
+                            <p class="text-xs text-emerald-700 font-medium">今日已打卡出勤</p>
+                            <p class="text-xl font-black text-emerald-700 mt-1">{{ teamAttendanceSnapshot.clocked_in_count }} <span class="text-xs font-normal text-emerald-600">人</span></p>
+                        </div>
+                        <div class="bg-blue-50/70 p-3 rounded-lg border border-blue-100">
+                            <p class="text-xs text-blue-700 font-medium">今日核准請假中</p>
+                            <p class="text-xl font-black text-blue-700 mt-1">{{ teamAttendanceSnapshot.on_leave_count }} <span class="text-xs font-normal text-blue-600">人</span></p>
+                        </div>
+                        <div class="bg-amber-50/70 p-3 rounded-lg border border-amber-100">
+                            <p class="text-xs text-amber-700 font-medium">尚未出勤打卡</p>
+                            <p class="text-xl font-black text-amber-700 mt-1">{{ teamAttendanceSnapshot.unclocked_count }} <span class="text-xs font-normal text-amber-600">人</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 數據統計看板 & 個人休假摘要 -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-gray-500">未讀企業公告</p>
+                            <p class="text-2xl font-extrabold text-blue-600 mt-1">{{ stats.unreadAnnouncementsCount }}</p>
+                        </div>
+                        <div class="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
                         </div>
                     </div>
                     <Link
                         :href="route('approvals.index')"
-                        class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-amber-300 hover:shadow-md transition cursor-pointer group"
+                        class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-amber-300 hover:shadow-md transition cursor-pointer group"
                     >
                         <div>
-                            <p class="text-sm font-medium text-gray-500 group-hover:text-amber-700 transition">待我審批單據</p>
-                            <p class="text-3xl font-extrabold text-amber-600 mt-1">{{ stats.pendingApprovalsCount }}</p>
+                            <p class="text-xs font-medium text-gray-500 group-hover:text-amber-700 transition">待我審批單據</p>
+                            <p class="text-2xl font-extrabold text-amber-600 mt-1">{{ stats.pendingApprovalsCount }}</p>
                         </div>
-                        <div class="p-3 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-100 transition">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="p-2.5 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-100 transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                     </Link>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-500">我進行中的申請</p>
-                            <p class="text-3xl font-extrabold text-emerald-600 mt-1">{{ stats.myPendingRequestsCount }}</p>
+                            <p class="text-xs font-medium text-gray-500">我進行中的申請</p>
+                            <p class="text-2xl font-extrabold text-emerald-600 mt-1">{{ stats.myPendingRequestsCount }}</p>
                         </div>
-                        <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                         </div>
                     </div>
+                    <!-- 個人休假餘額小卡 -->
+                    <Link
+                        :href="route('leave-balances.index')"
+                        class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-emerald-300 hover:shadow-md transition group"
+                    >
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 group-hover:text-emerald-700 transition">我的可用假額度</p>
+                            <div class="mt-1 flex items-baseline space-x-2">
+                                <span class="text-xs text-gray-500">特休: <strong class="text-base text-emerald-600">{{ myLeaveSummary?.annual_available ?? 0 }}</strong> 天</span>
+                                <span class="text-xs text-gray-300">|</span>
+                                <span class="text-xs text-gray-500">補休: <strong class="text-base text-teal-600">{{ myLeaveSummary?.compensatory_available ?? 0 }}</strong> 天</span>
+                            </div>
+                        </div>
+                        <div class="p-2.5 bg-teal-50 text-teal-600 rounded-xl group-hover:bg-teal-100 transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                    </Link>
                 </div>
 
                 <!-- 主體區塊：最新公告 與 簽核動態 -->
@@ -219,10 +318,15 @@ const statusBadge = (status) => {
                             <div class="mt-3 space-y-2">
                                 <div v-for="approval in pendingApprovals" :key="approval.id" class="p-3 rounded-lg bg-amber-50/60 border border-amber-100 flex items-center justify-between">
                                     <div>
-                                        <p class="font-semibold text-sm text-gray-900">{{ approval.form_request?.title }}</p>
-                                        <p class="text-xs text-gray-500">申請人：{{ approval.form_request?.user?.name }} ({{ approval.form_request?.form?.name }})</p>
+                                        <div class="flex items-center space-x-2">
+                                            <p class="font-semibold text-sm text-gray-900">{{ approval.form_request?.title }}</p>
+                                            <span v-if="approval.is_delegated" class="px-1.5 py-0.5 text-[10px] font-bold bg-amber-200/80 text-amber-900 border border-amber-300 rounded shrink-0">
+                                                代理：{{ approval.approver?.name }}
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-0.5">申請人：{{ approval.form_request?.user?.name }} ({{ approval.form_request?.form?.name }})</p>
                                     </div>
-                                    <Link :href="route('forms.show', approval.form_request_id)" class="px-3 py-1.5 text-xs font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg shadow-sm">
+                                    <Link :href="route('forms.show', approval.form_request_id)" class="px-3 py-1.5 text-xs font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg shadow-sm shrink-0">
                                         審核
                                     </Link>
                                 </div>

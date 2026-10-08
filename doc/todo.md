@@ -40,13 +40,13 @@
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
 - [x] 企業文件庫線上安全預覽引擎（支援 PDF 高解析度翻頁內嵌、圖片/文字檔直接預覽、Office 文件引導、新分頁全螢幕開啟與 AuditLog 預覽稽核）
 - [x] 頂部導覽列 (Header Bar) 自適應排版重構（修復字元跑版擠壓、響應式間距優化、管理員專屬項目收納為系統管理 Dropdown）
-- [x] 系統儀表板（待辦統計、未讀公告、進行中申請、即將到來會議、快捷打卡）
+- [x] 系統儀表板與個人工作台全景升級 (Dashboard & Daily Workspace Hub：待我審批無縫納入職務代理主管單據並醒目標示代理標籤、個人休假與補休可用額度摘要小卡、主管/人事/管理員專屬團隊今日出勤快報卡、五大高頻行政快捷導航工作列、即時會議提醒、全系統 177 項 Feature 測試 100% 通過)
 - [x] 站內通知中心與推播通知整合（Laravel Notifications、導覽列小鈴鐺即時未讀數與下拉預覽、簽核/會議室/公告事件即時發送、一鍵全讀）
 - [x] 外部通訊群組 Webhook 整合生態（Slack / Discord / Teams 即時推播、HMAC-SHA256 數位簽章防偽、雙向跨平台 Payload 相容、連線 Ping 測試與開關切換）
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest 等 174 項 Feature 測試 100% 通過，904 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest 等 177 項 Feature 測試 100% 通過，950 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）
