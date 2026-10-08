@@ -102,8 +102,15 @@ const deleteForm = (formId, formName) => {
                     <h2 class="text-xl font-bold leading-tight text-gray-800">表單與線上簽核</h2>
                     <p class="text-xs text-gray-500 mt-1">標準化行政工作流、靈活自訂表單與透明審批歷程</p>
                 </div>
-                <div v-if="canManageForms">
+                <div class="flex items-center gap-2">
+                    <Link
+                        :href="route('delegations.index')"
+                        class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition flex items-center space-x-1.5"
+                    >
+                        <span>🤝 設定職務代理人</span>
+                    </Link>
                     <button
+                        v-if="canManageForms"
                         @click="openCreateFormModal"
                         class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700 transition flex items-center space-x-1.5"
                     >
@@ -175,7 +182,15 @@ const deleteForm = (formId, formName) => {
                     <div class="divide-y divide-amber-100 bg-white rounded-lg border border-amber-200 overflow-hidden">
                         <div v-for="item in pendingApprovals" :key="item.id" class="p-4 flex items-center justify-between">
                             <div>
-                                <p class="font-bold text-sm text-gray-900">{{ item.form_request?.title }}</p>
+                                <div class="flex items-center space-x-2">
+                                    <p class="font-bold text-sm text-gray-900">{{ item.form_request?.title }}</p>
+                                    <span
+                                        v-if="item.is_delegated"
+                                        class="px-2 py-0.5 text-[11px] font-bold rounded bg-purple-100 text-purple-700"
+                                    >
+                                        🏷️ 代理代簽 (原主管：{{ item.approver?.name }})
+                                    </span>
+                                </div>
                                 <p class="text-xs text-gray-500 mt-0.5">
                                     申請人：<span class="font-semibold text-gray-700">{{ item.form_request?.user?.name }}</span>
                                     · 類別：{{ item.form_request?.form?.name }}

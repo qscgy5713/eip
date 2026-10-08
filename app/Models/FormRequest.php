@@ -66,6 +66,15 @@ class FormRequest extends Model
             return true;
         }
 
+        // 5. 待審核人目前生效中的職務代理人
+        $pendingApproverIds = $this->approvalRecords()
+            ->where('status', 'pending')
+            ->pluck('approver_id');
+
+        if ($user->delegatedToMe()->whereIn('user_id', $pendingApproverIds)->currentlyActive()->exists()) {
+            return true;
+        }
+
         return false;
     }
 }

@@ -215,6 +215,11 @@ const showingNavigationDropdown = ref(false);
                                             ⚡ 外部整合 (Webhooks)
                                         </DropdownLink>
                                         <DropdownLink
+                                            :href="route('delegations.index')"
+                                        >
+                                            🤝 職務代理人設定
+                                        </DropdownLink>
+                                        <DropdownLink
                                             :href="route('profile.edit')"
                                         >
                                             個人帳號設定
@@ -377,6 +382,9 @@ const showingNavigationDropdown = ref(false);
                                 :href="route('webhooks.index')"
                             >
                                 ⚡ 外部整合 (Webhooks)
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('delegations.index')">
+                                🤝 職務代理人設定
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 個人帳號設定

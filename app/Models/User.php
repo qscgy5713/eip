@@ -67,6 +67,35 @@ class User extends Authenticatable
         return $this->hasMany(AuditLog::class);
     }
 
+    /**
+     * 我指派出去的職務代理人
+     */
+    public function delegations(): HasMany
+    {
+        return $this->hasMany(Delegation::class, 'user_id');
+    }
+
+    /**
+     * 別人指派我為代理人的記錄
+     */
+    public function delegatedToMe(): HasMany
+    {
+        return $this->hasMany(Delegation::class, 'delegate_id');
+    }
+
+    /**
+     * 檢查是否目前有權代理指定主管
+     */
+    public function canActAsDelegateFor(int|User $user): bool
+    {
+        $userId = $user instanceof User ? $user->id : $user;
+
+        return $this->delegatedToMe()
+            ->where('user_id', $userId)
+            ->currentlyActive()
+            ->exists();
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

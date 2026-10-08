@@ -4,6 +4,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DelegationController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FormRequestController;
 use App\Http\Controllers\MeetingRoomController;
@@ -73,6 +74,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/webhooks/{webhook}/ping', [WebhookController::class, 'ping'])->name('webhooks.ping');
     Route::patch('/webhooks/{webhook}/toggle', [WebhookController::class, 'toggle'])->name('webhooks.toggle');
     Route::delete('/webhooks/{webhook}', [WebhookController::class, 'destroy'])->name('webhooks.destroy');
+
+    // 簽核職務代理人設定
+    Route::get('/delegations', [DelegationController::class, 'index'])->name('delegations.index');
+    Route::post('/delegations', [DelegationController::class, 'store'])->name('delegations.store');
+    Route::patch('/delegations/{delegation}/toggle', [DelegationController::class, 'toggle'])->name('delegations.toggle');
+    Route::delete('/delegations/{delegation}', [DelegationController::class, 'destroy'])->name('delegations.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

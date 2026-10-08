@@ -120,10 +120,21 @@ const statusBadge = (status) => {
                                     rec.status === 'approved' ? 'bg-emerald-500' : (rec.status === 'rejected' ? 'bg-rose-500' : 'bg-amber-400')
                                 ]"
                             ></span>
-                            <div class="flex items-center space-x-2">
-                                <p class="text-sm font-semibold text-gray-900">關卡 {{ rec.step }}：主管審核（{{ rec.approver?.name }}）</p>
+                            <div class="flex items-center space-x-2 flex-wrap gap-y-1">
+                                <p class="text-sm font-semibold text-gray-900">
+                                    關卡 {{ rec.step }}：
+                                    <template v-if="rec.delegated_from">
+                                        代理人代簽（{{ rec.approver?.name }}，原主管：{{ rec.delegated_from?.name }}）
+                                    </template>
+                                    <template v-else>
+                                        主管審核（{{ rec.approver?.name }}）
+                                    </template>
+                                </p>
                                 <span :class="['px-2 py-0.5 text-xs rounded', statusBadge(rec.status)]">
                                     {{ rec.status === 'approved' ? '核准' : (rec.status === 'rejected' ? '駁回' : '待審批') }}
+                                </span>
+                                <span v-if="rec.delegated_from" class="px-2 py-0.5 text-[10px] font-bold rounded bg-purple-100 text-purple-700">
+                                    職務代理代簽
                                 </span>
                             </div>
                             <p v-if="rec.comment" class="text-xs text-gray-600 mt-1 bg-gray-50 p-2 rounded border border-gray-100">意見：{{ rec.comment }}</p>

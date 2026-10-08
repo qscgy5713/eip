@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ApprovalRecord;
 use App\Models\AuditLog;
+use App\Models\Delegation;
 use App\Models\Form;
 use App\Models\FormRequest as EipFormRequest;
 use App\Models\User;
@@ -29,12 +30,19 @@ class FormRequestController extends Controller
             ->latest()
             ->paginate(10);
 
-        // 待我審核的單據
-        $pendingApprovals = ApprovalRecord::with(['formRequest.user', 'formRequest.form'])
-            ->where('approver_id', $user->id)
+        // 待我審核的單據 (包含我代理之主管單據)
+        $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
+        $approverIds = collect([$user->id])->merge($delegatorIds)->unique();
+
+        $pendingApprovals = ApprovalRecord::with(['formRequest.user', 'formRequest.form', 'approver'])
+            ->whereIn('approver_id', $approverIds)
             ->where('status', 'pending')
             ->latest()
-            ->get();
+            ->get()
+            ->map(function ($record) use ($user) {
+                $record->is_delegated = $record->approver_id !== $user->id;
+                return $record;
+            });
 
         return Inertia::render('Forms/Index', [
             'availableForms' => $availableForms,
@@ -94,6 +102,23 @@ class FormRequestController extends Controller
                 senderName: $user->name,
                 extra: ['form_request_id' => $formRequest->id]
             ));
+
+            // 若主管設定了生效中的代理人，同步通知代理人
+            $activeDelegations = Delegation::where('user_id', $approver->id)
+                ->currentlyActive()
+                ->with('delegate')
+                ->get();
+
+            foreach ($activeDelegations as $delegation) {
+                $delegation->delegate?->notify(new EipSystemNotification(
+                    title: "【代理待審核】{$form->name}（主管：{$approver->name}）",
+                    message: "同仁 {$user->name} 提交了「{$formRequest->title}」，您為主管 {$approver->name} 之生效代理人，可至簽核中心進行代審。",
+                    type: 'form_approval',
+                    actionUrl: route('forms.show', $formRequest->id),
+                    senderName: $user->name,
+                    extra: ['form_request_id' => $formRequest->id, 'delegated_from' => $approver->name]
+                ));
+            }
         }
 
         // 記錄審計日誌
@@ -129,12 +154,15 @@ class FormRequestController extends Controller
             abort(403, '您沒有權限檢閱此份申請單據。');
         }
 
-        $formRequest->load(['form', 'user.department', 'approvalRecords.approver']);
+        $formRequest->load(['form', 'user.department', 'approvalRecords.approver', 'approvalRecords.delegatedFrom']);
+
+        $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
+        $validApproverIds = collect([$user->id])->merge($delegatorIds);
 
         $canApprove = $user->role === 'admin'
             ? $formRequest->approvalRecords->where('status', 'pending')->isNotEmpty()
             : $formRequest->approvalRecords
-                ->where('approver_id', $user->id)
+                ->whereIn('approver_id', $validApproverIds)
                 ->where('status', 'pending')
                 ->isNotEmpty();
 
@@ -155,15 +183,26 @@ class FormRequestController extends Controller
         $recordQuery = ApprovalRecord::where('form_request_id', $formRequest->id)
             ->where('status', 'pending');
 
+        $delegatedFromId = null;
+
         if ($user->role !== 'admin') {
-            $recordQuery->where('approver_id', $user->id);
+            $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
+            $validApproverIds = collect([$user->id])->merge($delegatorIds);
+
+            $recordQuery->whereIn('approver_id', $validApproverIds);
         }
 
         $record = $recordQuery->firstOrFail();
 
+        // 若當前使用者不是原審批主管本人，表示為代理人簽核
+        if ($record->approver_id !== $user->id) {
+            $delegatedFromId = $record->approver_id;
+        }
+
         $record->update([
             'status' => $validated['status'],
             'comment' => $validated['comment'] ?? null,
+            'delegated_from_id' => $delegatedFromId,
             'actioned_at' => now(),
         ]);
 
@@ -173,23 +212,29 @@ class FormRequestController extends Controller
         ]);
 
         $statusText = $validated['status'] === 'approved' ? '核准通過' : '退件駁回';
+        $delegator = $delegatedFromId ? User::find($delegatedFromId) : null;
+        $signRoleText = $delegator ? "代理人 {$user->name}（原主管：{$delegator->name}）" : "主管 {$user->name}";
 
         // 記錄審計日誌
         AuditLog::log(
             action: $validated['status'] === 'approved' ? 'approve_form_request' : 'reject_form_request',
-            description: "主管 {$user->name} {$statusText}了申請單「{$formRequest->title}」",
+            description: "{$signRoleText} {$statusText}了申請單「{$formRequest->title}」",
             auditable: $formRequest,
-            details: ['status' => $validated['status'], 'comment' => $validated['comment'] ?? null]
+            details: [
+                'status' => $validated['status'],
+                'comment' => $validated['comment'] ?? null,
+                'delegated_from_id' => $delegatedFromId,
+            ]
         );
 
         // 通知原申請同仁
         $formRequest->user?->notify(new EipSystemNotification(
             title: "【簽核結果】您的申請單「{$formRequest->title}」已{$statusText}",
-            message: "主管 {$user->name} 已完成審核（狀態：{$statusText}）。" . (!empty($validated['comment']) ? " 意見：{$validated['comment']}" : ''),
+            message: "{$signRoleText} 已完成審核（狀態：{$statusText}）。" . (!empty($validated['comment']) ? " 意見：{$validated['comment']}" : ''),
             type: 'form_approval',
             actionUrl: route('forms.show', $formRequest->id),
             senderName: $user->name,
-            extra: ['status' => $validated['status']]
+            extra: ['status' => $validated['status'], 'delegated_from_id' => $delegatedFromId]
         ));
 
         // 觸發外部生態 Webhook 事件

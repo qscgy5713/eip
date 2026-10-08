@@ -90,6 +90,21 @@
   - 撰寫自動化測試套件 `tests/Feature/WebhookTest.php`：涵蓋管理員存取、員工越權防護 (403)、端點建立/切換/刪除、連線測試 Ping、表單提交推播與會議室預約推播等 8 項測試。
 - 執行前端資產建置（`npm run build`）與全套測試套件（`php artisan test`）：
   - 全系統累積 **74 項自動化 Feature/Unit 測試全數 100% 通過**（193 assertions）。
+- 完成 Phase 2「簽核職務代理人機制」(Delegation & Proxy Signing Engine)：
+  - 建立 `delegations` 資料表遷移，支援指定代理人 (`delegate_id`)、生效起訖日期 (`start_date`, `end_date`)、事由與啟用狀態；並於 `approval_records` 擴充 `delegated_from_id` 外鍵留存代簽軌跡。
+  - 實作 Eloquent 模型 `Delegation`，包含 `currentlyActive` scope 與 `isCurrentlyActive()` 期間演算。
+  - 於 `User` 模型實作關聯與 `canActAsDelegateFor($user)` 代理權限驗證。
+  - 深度擴充 `FormRequestController`：
+    - 待審清單 (`index`)：自動匯整由我代理之主管待審單據，並標記 `is_delegated`。
+    - 送單通知 (`store`)：主管若有生效中代理人，同步推播站內通知給代理人。
+    - 調閱授權 (`show`)：在 `FormRequest::canAccess` 中給予生效中代理人合規調閱權限（IDOR 防護加固）。
+    - 審批執行 (`action`)：支援代理人代為核准或駁回，審批紀錄與通知精確標記「代理人 XXX（原主管：YYY）代簽」。
+  - 實作前端 `Delegations/Index.vue`：支援我指派的代理人清單、指派我為代理人之主管清單、新增代理人彈窗、暫停/重新啟用與刪除。
+  - 於 `Forms/Index.vue` 增設「設定職務代理人」快捷鍵與待審單據「🏷️ 代理代簽」徽章；於 `Forms/Show.vue` 審核歷程標示職務代理節點。
+  - 於 `AuthenticatedLayout.vue` 整合職務代理人設定入口。
+  - 撰寫自動化測試套件 `tests/Feature/DelegationTest.php`，涵蓋設定、防指派自己、暫停/刪除、生效代理人調閱與代簽、過期代理人 403 阻擋等 6 項測試。
+- 執行前端資產打包（`npm run build`）與全套測試套件（`php artisan test`）：
+  - 全系統累積 **80 項自動化 Feature/Unit 測試全數 100% 通過**（223 assertions）。
 
 ### 下一步
 - 向使用者回報完整進度與成果，詢問是否同意執行 Git Commit 與 Git Push。

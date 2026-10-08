@@ -14,6 +14,7 @@ class ApprovalRecord extends Model
         'form_request_id',
         'step',
         'approver_id',
+        'delegated_from_id',
         'status',
         'comment',
         'actioned_at',
@@ -32,5 +33,10 @@ class ApprovalRecord extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approver_id');
+    }
+
+    public function delegatedFrom(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'delegated_from_id');
     }
 }
