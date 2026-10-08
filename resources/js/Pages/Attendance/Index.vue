@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm, Link } from '@inertiajs/vue3';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const props = defineProps({
@@ -10,6 +10,7 @@ const props = defineProps({
     stats: Object,
     teamAttendances: Array,
     geofenceConfig: Object,
+    clockAdjustFormId: [Number, String],
 });
 
 const currentTime = ref(new Date().toLocaleTimeString('zh-TW', { hour12: false }));
@@ -429,6 +430,7 @@ const typeLabel = (type) => {
                                     <th class="py-3 px-4">下班 IP</th>
                                     <th class="py-3 px-4">當日工時</th>
                                     <th class="py-3 px-4">狀態</th>
+                                    <th class="py-3 px-4 text-right">操作</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -462,13 +464,30 @@ const typeLabel = (type) => {
                                     <td class="py-3 px-4 text-gray-400 font-mono">{{ att.clock_out_ip || '-' }}</td>
                                     <td class="py-3 px-4 font-semibold text-gray-900">{{ att.work_hours }}h</td>
                                     <td class="py-3 px-4">
-                                        <span :class="['px-2 py-0.5 rounded text-[11px] font-semibold', statusBadge(att.status)]">
-                                            {{ statusLabel(att.status) }}
-                                        </span>
+                                        <div class="space-y-1">
+                                            <span :class="['px-2 py-0.5 rounded text-[11px] font-semibold inline-block', statusBadge(att.status)]">
+                                                {{ statusLabel(att.status) }}
+                                            </span>
+                                            <p v-if="att.note" class="text-3xs text-gray-500 max-w-xs truncate" :title="att.note">
+                                                {{ att.note }}
+                                            </p>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 px-4 text-right">
+                                        <Link
+                                            v-if="clockAdjustFormId && (att.status === 'late' || att.status === 'early_leave' || !att.clock_in_at || !att.clock_out_at)"
+                                            :href="route('forms.create', { form: clockAdjustFormId, date: att.date ? String(att.date).split('T')[0] : '' })"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 text-2xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md border border-indigo-200 transition"
+                                            title="出勤異常或缺卡，一鍵發起補打卡申請單"
+                                        >
+                                            <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                            補打卡
+                                        </Link>
+                                        <span v-else class="text-3xs text-gray-300">—</span>
                                     </td>
                                 </tr>
                                 <tr v-if="attendances.length === 0">
-                                    <td colspan="8" class="py-8 text-center text-gray-400">此月份尚無打卡紀錄</td>
+                                    <td colspan="9" class="py-8 text-center text-gray-400">此月份尚無打卡紀錄</td>
                                 </tr>
                             </tbody>
                         </table>

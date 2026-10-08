@@ -67,9 +67,19 @@ class FormRequestController extends Controller
             $leaveBalances = app(\App\Services\LeaveBalanceService::class)->getUserBalances($request->user());
         }
 
+        $prefillParam = $request->query('prefill');
+        $prefillData = is_array($prefillParam) ? $prefillParam : [];
+        if ($request->has('date') && !isset($prefillData['adjust_date'])) {
+            $prefillData['adjust_date'] = (string) $request->query('date');
+        }
+        if ($request->has('adjust_type') && !isset($prefillData['adjust_type'])) {
+            $prefillData['adjust_type'] = (string) $request->query('adjust_type');
+        }
+
         return Inertia::render('Forms/Create', [
             'form' => $form,
             'leaveBalances' => $leaveBalances,
+            'prefillData' => $prefillData,
         ]);
     }
 

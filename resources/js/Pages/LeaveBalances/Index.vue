@@ -1,12 +1,20 @@
 <script setup>
 import { ref } from 'vue';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const props = defineProps({
     myBalances: {
         type: Array,
         default: () => [],
+    },
+    myLeaveRequests: {
+        type: Array,
+        default: () => [],
+    },
+    leaveFormId: {
+        type: [Number, String],
+        default: null,
     },
     selectedYear: {
         type: Number,
@@ -128,6 +136,22 @@ const submitBatchInit = () => {
         },
     });
 };
+
+const leaveStatusBadgeClass = (status) => {
+    switch (status) {
+        case 'approved': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        case 'rejected': return 'bg-rose-50 text-rose-700 border-rose-200';
+        default: return 'bg-amber-50 text-amber-700 border-amber-200';
+    }
+};
+
+const leaveStatusLabel = (status) => {
+    switch (status) {
+        case 'approved': return '已核准 (已扣額)';
+        case 'rejected': return '已駁回 (已釋放)';
+        default: return '審核中 (已凍結)';
+    }
+};
 </script>
 
 <template>
@@ -164,13 +188,22 @@ const submitBatchInit = () => {
                         </button>
                     </div>
 
+                    <Link
+                        v-if="leaveFormId"
+                        :href="route('forms.create', leaveFormId)"
+                        class="inline-flex items-center px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition gap-1.5"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        發起請假申請
+                    </Link>
+
                     <button
                         v-if="canManage"
                         type="button"
                         @click="showBatchModal = true"
-                        class="inline-flex items-center px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition"
+                        class="inline-flex items-center px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg shadow-sm transition"
                     >
-                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                         批次初始化配額
@@ -256,6 +289,91 @@ const submitBatchInit = () => {
                                 備註：{{ b.note }}
                             </p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- 個人請假申請與扣抵紀錄 (Leave History Ledger) -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="p-5 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                我的請假申請與扣抵明細對帳表
+                            </h3>
+                            <p class="mt-1 text-xs text-gray-500">
+                                呈現您最近發起的請假申請單、對應假別天數與審批折抵狀態。
+                            </p>
+                        </div>
+                        <Link
+                            v-if="leaveFormId"
+                            :href="route('forms.create', leaveFormId)"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition shrink-0"
+                        >
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            新增請假單
+                        </Link>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-700 uppercase font-bold border-b border-gray-200">
+                                <tr>
+                                    <th class="px-5 py-3">申請公文單號 / 主旨</th>
+                                    <th class="px-5 py-3">假別類型</th>
+                                    <th class="px-5 py-3">請假期間</th>
+                                    <th class="px-5 py-3">請假天數</th>
+                                    <th class="px-5 py-3">事由說明</th>
+                                    <th class="px-5 py-3">額度折抵狀態</th>
+                                    <th class="px-5 py-3">申請時間</th>
+                                    <th class="px-5 py-3 text-right">單據詳情</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr v-for="req in myLeaveRequests" :key="req.id" class="hover:bg-gray-50/80 transition">
+                                    <td class="px-5 py-3 font-semibold text-gray-900">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-mono text-2xs text-indigo-600 font-bold bg-indigo-50 px-1.5 py-0.5 rounded">
+                                                #{{ req.id }}
+                                            </span>
+                                            <span class="truncate max-w-xs">{{ req.title }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-5 py-3 font-bold text-gray-800">
+                                        {{ req.leave_type }}
+                                    </td>
+                                    <td class="px-5 py-3 font-mono text-gray-600">
+                                        {{ req.start_date }} ~ {{ req.end_date }}
+                                    </td>
+                                    <td class="px-5 py-3 font-bold text-indigo-600">
+                                        {{ req.days }} 天
+                                    </td>
+                                    <td class="px-5 py-3 text-gray-500 max-w-xs truncate" :title="req.reason">
+                                        {{ req.reason || '—' }}
+                                    </td>
+                                    <td class="px-5 py-3">
+                                        <span :class="['px-2 py-0.5 rounded-full text-2xs font-bold border', leaveStatusBadgeClass(req.status)]">
+                                            {{ leaveStatusLabel(req.status) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-3 font-mono text-gray-400">
+                                        {{ req.created_at }}
+                                    </td>
+                                    <td class="px-5 py-3 text-right">
+                                        <Link
+                                            :href="route('forms.show', req.id)"
+                                            class="text-indigo-600 hover:text-indigo-900 font-semibold"
+                                        >
+                                            檢視簽核 ➜
+                                        </Link>
+                                    </td>
+                                </tr>
+                                <tr v-if="myLeaveRequests.length === 0">
+                                    <td colspan="8" class="px-5 py-8 text-center text-gray-400">
+                                        您近期尚無請假申請紀錄，可點擊右上角「新增請假單」送出假單
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 

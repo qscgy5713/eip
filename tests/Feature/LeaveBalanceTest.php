@@ -278,4 +278,38 @@ class LeaveBalanceTest extends TestCase
         $this->assertEquals(0.0, $balance->used_days);
         $this->assertEquals(7.0, $balance->available_days);
     }
+
+    public function test_authenticated_user_can_view_leave_requests_ledger_and_apply_link(): void
+    {
+        app(LeaveBalanceService::class)->initUserBalances($this->employee, (int) date('Y'));
+
+        // 建立一筆已提交的請假單
+        $this->actingAs($this->employee)
+            ->post(route('forms.store', $this->leaveForm->id), [
+                'title' => '私人休假申請',
+                'data' => [
+                    'leave_type' => '特休假',
+                    'start_date' => '2026-10-15',
+                    'end_date' => '2026-10-16',
+                    'days' => 2.0,
+                    'reason' => '家族聚會',
+                ],
+            ]);
+
+        $response = $this->actingAs($this->employee)
+            ->get(route('leave-balances.index'));
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page
+            ->component('LeaveBalances/Index')
+            ->has('myBalances')
+            ->has('myLeaveRequests', 1)
+            ->where('leaveFormId', $this->leaveForm->id)
+            ->where('myLeaveRequests.0.title', '私人休假申請')
+            ->where('myLeaveRequests.0.leave_type', '特休假')
+            ->where('myLeaveRequests.0.days', fn ($days) => (float) $days === 2.0)
+            ->where('myLeaveRequests.0.status', 'pending')
+        );
+    }
 }
+

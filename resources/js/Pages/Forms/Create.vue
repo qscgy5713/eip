@@ -9,12 +9,17 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    prefillData: {
+        type: Object,
+        default: () => ({}),
+    },
 });
 
 const initialData = {};
 if (props.form.fields_schema) {
     props.form.fields_schema.forEach(field => {
-        initialData[field.key] = field.type === 'select' && field.options ? field.options[0] : '';
+        initialData[field.key] = props.prefillData?.[field.key]
+            ?? (field.type === 'select' && field.options ? field.options[0] : '');
     });
 }
 

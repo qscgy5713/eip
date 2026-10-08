@@ -76,6 +76,7 @@ class AttendanceController extends Controller
             ],
             'teamAttendances' => $teamAttendances,
             'geofenceConfig' => $this->geofenceService->getOfficeConfig(),
+            'clockAdjustFormId' => \App\Models\Form::where('code', 'CLOCK_ADJUST')->value('id'),
         ]);
     }
 

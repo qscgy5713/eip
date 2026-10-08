@@ -442,6 +442,9 @@ class WorkflowService
         // 若為休假單，將凍結扣留額度正式結轉為已使用額度 (Pending ➜ Used)
         app(\App\Services\LeaveBalanceService::class)->releaseBalance($formRequest, approved: true);
 
+        // 若為忘刷/補打卡單，自動同步修復考勤打卡紀錄 (Attendance Regularization)
+        $this->syncAttendanceAmendment($formRequest);
+
         AuditLog::log(
             action: 'approve_form_request',
             description: "{$signRoleText} 完成了「{$stepTitle}」最終審定，單據「{$formRequest->title}」正式結案核准",
@@ -666,5 +669,105 @@ class WorkflowService
             'status' => 'add_signed',
             'message' => "已成功發起會辦加簽給「{$targetAddSigner->name}」！",
         ];
+    }
+
+    /**
+     * 補打卡申請單核准結案時，自動同步修正或建立當日考勤紀錄 (Attendance Regularization)
+     */
+    public function syncAttendanceAmendment(FormRequest $formRequest): void
+    {
+        // 需為忘刷/補打卡單
+        if ($formRequest->form?->code !== 'CLOCK_ADJUST') {
+            return;
+        }
+
+        $formData = $formRequest->data ?? [];
+        $adjustDate = $formData['adjust_date'] ?? null;
+        if (!$adjustDate) {
+            return;
+        }
+
+        $adjustType = $formData['adjust_type'] ?? '';
+        $actualTimeStr = trim($formData['actual_time'] ?? '');
+        $reason = $formData['reason'] ?? '';
+        $user = $formRequest->user;
+        if (!$user) {
+            return;
+        }
+
+        // 查找或建立當日考勤紀錄 (使用 whereDate 相容多種資料庫日期儲存格式)
+        $attendance = \App\Models\Attendance::where('user_id', $user->id)
+            ->whereDate('date', $adjustDate)
+            ->first();
+
+        if (!$attendance) {
+            $attendance = new \App\Models\Attendance([
+                'user_id' => $user->id,
+                'date' => $adjustDate,
+            ]);
+        }
+
+        $noteMsg = "[補打卡核准結案] 單號 #{$formRequest->id}" . ($reason ? " (事由: {$reason})" : "");
+        $attendance->note = $attendance->note ? "{$attendance->note}；{$noteMsg}" : $noteMsg;
+
+        // 解析時間：例如 "09:00"、"18:30"、"09:00 - 18:00" 或 "09:00~18:00"
+        $times = preg_split('/[\s\-\~～至到,]+/', $actualTimeStr);
+        $time1 = !empty($times[0]) ? $times[0] : null;
+        $time2 = !empty($times[1]) ? $times[1] : null;
+
+        $parseDateTime = function ($date, $time, $defaultTime) {
+            $t = $time ?: $defaultTime;
+            if (preg_match('/^\d{1,2}:\d{2}(:\d{2})?$/', $t)) {
+                return \Carbon\Carbon::parse("{$date} {$t}");
+            }
+            try {
+                return \Carbon\Carbon::parse("{$date} {$t}");
+            } catch (\Exception $e) {
+                return \Carbon\Carbon::parse("{$date} {$defaultTime}");
+            }
+        };
+
+        $isClockInOnly = str_contains($adjustType, '上班') && !str_contains($adjustType, '全日');
+        $isClockOutOnly = str_contains($adjustType, '下班') && !str_contains($adjustType, '全日');
+
+        if ($isClockInOnly) {
+            $attendance->clock_in_at = $parseDateTime($adjustDate, $time1, '09:00:00');
+            $attendance->clock_in_type = $attendance->clock_in_type ?: 'office';
+        } elseif ($isClockOutOnly) {
+            $attendance->clock_out_at = $parseDateTime($adjustDate, $time1, '18:00:00');
+            $attendance->clock_out_type = $attendance->clock_out_type ?: 'office';
+        } else {
+            // 全日未打卡補登
+            $attendance->clock_in_at = $parseDateTime($adjustDate, $time1, '09:00:00');
+            $attendance->clock_in_type = $attendance->clock_in_type ?: 'office';
+            $attendance->clock_out_at = $parseDateTime($adjustDate, $time2 ?: '18:00:00', '18:00:00');
+            $attendance->clock_out_type = $attendance->clock_out_type ?: 'office';
+        }
+
+        // 計算工時與狀態判定
+        $attendance->calculateWorkHours();
+        // 主管核准補卡後，若上下班打卡時間齊備，出勤狀態校正為正常出勤 (normal)
+        if ($attendance->clock_in_at && $attendance->clock_out_at) {
+            $attendance->status = 'normal';
+        } elseif (!$attendance->status) {
+            $attendance->status = 'normal';
+        }
+
+        $attendance->save();
+
+        AuditLog::log(
+            action: 'attendance_amendment_synced',
+            description: "補打卡單「{$formRequest->title}」核准結案，系統自動同步修正同仁 {$user->name} 於 {$adjustDate} 之考勤紀錄",
+            auditable: $attendance,
+            details: [
+                'form_request_id' => $formRequest->id,
+                'adjust_date' => $adjustDate,
+                'adjust_type' => $adjustType,
+                'clock_in_at' => $attendance->clock_in_at?->toDateTimeString(),
+                'clock_out_at' => $attendance->clock_out_at?->toDateTimeString(),
+                'status' => $attendance->status,
+                'work_hours' => $attendance->work_hours,
+            ]
+        );
     }
 }

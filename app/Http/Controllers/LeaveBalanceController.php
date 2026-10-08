@@ -65,8 +65,36 @@ class LeaveBalanceController extends Controller
             });
         }
 
+        // 3. 個人請假申請與折抵歷史紀錄 (Leave History Ledger)
+        $leaveForm = \App\Models\Form::where('code', 'LEAVE')->first();
+        $myLeaveRequests = [];
+        if ($leaveForm) {
+            $myLeaveRequests = \App\Models\FormRequest::with(['form:id,name,code'])
+                ->where('user_id', $user->id)
+                ->where('form_id', $leaveForm->id)
+                ->latest()
+                ->take(15)
+                ->get()
+                ->map(function ($req) {
+                    $fd = $req->data ?? [];
+                    return [
+                        'id' => $req->id,
+                        'title' => $req->title,
+                        'leave_type' => $fd['leave_type'] ?? '特休假',
+                        'start_date' => $fd['start_date'] ?? '',
+                        'end_date' => $fd['end_date'] ?? '',
+                        'days' => (float) ($fd['days'] ?? 0),
+                        'reason' => $fd['reason'] ?? '',
+                        'status' => $req->status,
+                        'created_at' => $req->created_at->format('Y-m-d H:i'),
+                    ];
+                });
+        }
+
         return Inertia::render('LeaveBalances/Index', [
             'myBalances' => $myBalances,
+            'myLeaveRequests' => $myLeaveRequests,
+            'leaveFormId' => $leaveForm?->id,
             'selectedYear' => $selectedYear,
             'canManage' => $canManage,
             'managedUsers' => $managedUsers,

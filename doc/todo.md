@@ -32,6 +32,8 @@
 - [x] 特休與假別額度管理系統 (Leave Balance & Quota Engine：支援同仁查閱個人特休/病事假/補休剩餘天數與年度配額、HR/Admin 跨同仁額度管理與一鍵年度初始化、請假單填寫即時額度顯示與超額防呆、提單審批流程與 pending/used 扣減連鎖機制、全系統 131 項測試 100% 通過)
 - [x] 主管審批中心與一鍵批次簽核系統 (Approvals Hub & Batch Approve Engine：集中管理所有待審單據、待審指標統計卡片、表單種類/代理/同仁多維篩選、多選 Checkbox 批次核准/駁回、審批批註附言、自動多級關卡流轉與休假額度連鎖處理、防越級搶審安全機制、全套自動化測試 139 項 100% 通過)
 - [x] 表單簽核協同加簽 (Add-Sign) 與轉簽派審 (Forward/Transfer) 系統 (Collaborative Workflow Engine：支援主管審批時全權轉簽給新主管決行並保留交接軌跡、臨時跨部門同仁或專家會辦加簽邀請、加簽不影響主流程關卡推進與結案生命週期、會辦完成意見自動通知並回流主審主管、防重複加簽與防轉/加簽給自己邊界防呆、多筆待辦情境優先精準匹配指派記錄、全系統 155 項 Feature 測試 100% 通過)
+- [x] 忘刷/補打卡單結案自動同步考勤紀錄引擎 (Attendance Regularization Sync Engine：同仁提交「忘刷/補打卡單 CLOCK_ADJUST」經多級簽核核准結案時，系統自動查找或建立該員工當日 attendances 紀錄，智慧解析出勤時間，補齊上班或下班打卡時間，重新計算工時並將出勤狀態校正為 normal 正常出勤，寫入單號備註與 AuditLog 審計留痕，考勤首頁提供未簽退/遲到早退異常一鍵發起補打卡與日期自動預填)
+- [x] 休假管理中心與請假歷史對帳表系統 (Leave Balance Ledger & Apply Link：在休假額度中心 LeaveBalances/Index.vue 提供「發起請假申請」快捷按鈕與關聯表單，並於額度卡片下方建立「我的請假申請與扣抵明細對帳表」，完整列出近期請假單號、假別類型、請假期間、天數、事由、審批折抵狀態與單據詳情連結)
 
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
@@ -43,7 +45,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest 等 165 項 Feature 測試 100% 通過，795 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest 等 170 項 Feature 測試 100% 通過，864 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

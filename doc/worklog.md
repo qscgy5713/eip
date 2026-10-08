@@ -2,6 +2,31 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**忘刷補打卡單結案考勤自動同步、出勤紀錄快捷補卡與休假歷史對帳表系統 (Attendance Regularization Sync & Leave Ledger Engine)**：
+  - **忘刷/補打卡單結案自動同步考勤紀錄 (`Attendance Regularization Sync Engine`)**：
+    - 當同仁提報之「忘刷/補打卡申請單 (`CLOCK_ADJUST`)」經直屬主管或多級簽核全數核准結案時，簽核引擎 (`WorkflowService::syncAttendanceAmendment`) 自動連鎖觸發考勤同步。
+    - 採用相容 SQLite 與 PostgreSQL/MySQL 的 `whereDate` 智慧查找或實例化當日 `attendances` 紀錄。
+    - 智慧正則時間解析器：支援格式包括單一時間點 (`09:00`、`18:30`) 或時間範圍區間 (`09:00 - 18:00`、`09:00~18:00`)，遇到異常自動回退至標準上下班時間 (09:00 / 18:00)。
+    - 依補刷類型動態修復：
+      - 「上班卡補刷」：補齊 `clock_in_at`，保留現有下班卡打卡時間與型態。
+      - 「下班卡補刷」：補齊 `clock_out_at`，保留現有上班卡打卡時間與型態。
+      - 「全日未打卡補登」：同步補齊上班與下班卡打卡時間。
+    - 連鎖調用 `calculateWorkHours()` 精準重新核算當日出勤工時，並將原先為異常/缺卡之狀態校正為 `normal`（正常出勤）。
+    - 於出勤明細自動標記結案單號備註（如 `[補打卡核准結案] 單號 #1`），並記錄 `AuditLog` 審計留痕（動作：`attendance_amendment_synced`）。
+  - **出勤紀錄異常一鍵快捷發起補打卡 (`Attendance/Index.vue` & `AttendanceController.php`)**：
+    - 考勤看板傳入 `clockAdjustFormId`。
+    - 出勤紀錄表中，若當日有出勤異常（如未簽退、遲到、早退、缺卡），操作欄位直觀提供「申請補打卡」按鈕。
+    - 點擊按鈕直接攜帶 `date` 與 `prefill` 參數跳轉至申請頁面，`FormRequestController::create` 與 `Forms/Create.vue` 自動安全預填補刷日期與補卡類別。
+    - 狀態欄位若已有補打卡核准備註，呈現專屬補卡結案綠色標籤與說明。
+  - **休假管理中心與請假歷史對帳表 (`LeaveBalances/Index.vue` & `LeaveBalanceController.php`)**：
+    - 於休假額度中心頂部提供「發起請假申請」快捷按鈕，直達請假申請單。
+    - 於個人假別額度卡片下方，建立「我的請假申請與扣抵明細對帳表 (Leave History Ledger)」：
+      - 呈現申請公文單號、主旨、假別類型、請假期間、請假天數、事由說明、額度折抵狀態（審核中凍結扣額 Pending / 已核准結轉扣抵 Approved / 已駁回釋放 Rejected）、申請時間與單據簽核詳情直達連結。
+  - **自動化測試與代碼品質**：
+    - 新增 `tests/Feature/AttendanceAmendmentSyncTest.php` 涵蓋 4 大 Feature 測試：考勤首頁提供單號、表單建立頁面預填參數、全日補打卡自動生成與同步、下班補打卡修正缺卡狀態與工時計算。
+    - 擴充 `tests/Feature/LeaveBalanceTest.php` 涵蓋請假對帳表與單據連結測試。
+    - 全系統自動化測試套件擴充至 **170 項 Feature 測試 100% 全數通過 (864 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.01s)。
 - 實作**組織圖即時搜尋高亮、主管快速指派/解除、總編制計算、編制名冊匯出與通訊錄全景整合 (Enterprise Org Chart & Roster Engine)**：
   - **畫布即時關鍵字搜尋與高亮定位 (`canvasSearch`)**：
     - 於互動視覺組織樹畫布頂部工具列提供即時搜尋欄，支援輸入部門名稱、代碼、主管姓名、同仁姓名/帳號/工號模糊搜尋。
