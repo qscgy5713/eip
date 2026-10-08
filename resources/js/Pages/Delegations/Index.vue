@@ -71,7 +71,7 @@ const getStatusBadge = (delegation) => {
     if (delegation.start_date > today) {
         return { text: '尚未開始', class: 'bg-blue-100 text-blue-700' };
     }
-    return { text: '⚡ 生效代簽中', class: 'bg-emerald-100 text-emerald-800 font-bold' };
+    return { text: '生效代簽中', class: 'bg-emerald-100 text-emerald-800 font-bold' };
 };
 </script>
 
@@ -139,8 +139,14 @@ const getStatusBadge = (delegation) => {
                                     </span>
                                 </div>
                                 <div class="text-xs text-gray-500 flex items-center space-x-4">
-                                    <span>📅 代理期間：{{ item.start_date }} ~ {{ item.end_date }}</span>
-                                    <span v-if="item.reason">💬 事由：{{ item.reason }}</span>
+                                    <span class="flex items-center">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        代理期間：{{ item.start_date }} ~ {{ item.end_date }}
+                                    </span>
+                                    <span v-if="item.reason" class="flex items-center">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                                        事由：{{ item.reason }}
+                                    </span>
                                 </div>
                             </div>
 
@@ -188,8 +194,14 @@ const getStatusBadge = (delegation) => {
                                     </span>
                                 </div>
                                 <div class="text-xs text-gray-500 flex items-center space-x-4">
-                                    <span>📅 代理區間：{{ item.start_date }} ~ {{ item.end_date }}</span>
-                                    <span v-if="item.reason">💬 事由：{{ item.reason }}</span>
+                                    <span class="flex items-center">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        代理區間：{{ item.start_date }} ~ {{ item.end_date }}
+                                    </span>
+                                    <span v-if="item.reason" class="flex items-center">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                                        事由：{{ item.reason }}
+                                    </span>
                                 </div>
                             </div>
 

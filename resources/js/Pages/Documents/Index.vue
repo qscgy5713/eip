@@ -11,11 +11,11 @@ const props = defineProps({
 });
 
 const categories = [
-    { key: 'all', label: '全部文件', icon: '📁' },
-    { key: 'policy', label: '公司規章', icon: '📜' },
-    { key: 'template', label: '表單範本', icon: '📝' },
-    { key: 'tech', label: '技術規範', icon: '💻' },
-    { key: 'training', label: '教育訓練', icon: '🎓' },
+    { key: 'all', label: '全部文件' },
+    { key: 'policy', label: '公司規章' },
+    { key: 'template', label: '表單範本' },
+    { key: 'tech', label: '技術規範' },
+    { key: 'training', label: '教育訓練' },
 ];
 
 const search = ref(props.filters.search || '');
@@ -35,22 +35,22 @@ const selectCategory = (catKey) => {
     applyFilters();
 };
 
-// 檔案類型圖示與顏色
-const getFileIcon = (mimeType, fileName = '') => {
-    const ext = fileName.split('.').pop()?.toLowerCase();
-    if (mimeType?.includes('pdf') || ext === 'pdf') {
-        return { icon: '📕', color: 'bg-rose-50 text-rose-600 border-rose-200' };
+// 檔案類型標籤與顏色
+const getFileInfo = (mimeType, fileName = '') => {
+    const ext = fileName.split('.').pop()?.toUpperCase() || 'FILE';
+    if (mimeType?.includes('pdf') || ext === 'PDF') {
+        return { tag: 'PDF', color: 'bg-rose-50 text-rose-600 border-rose-200' };
     }
-    if (mimeType?.includes('word') || ext === 'doc' || ext === 'docx') {
-        return { icon: '📘', color: 'bg-blue-50 text-blue-600 border-blue-200' };
+    if (mimeType?.includes('word') || ['DOC', 'DOCX'].includes(ext)) {
+        return { tag: 'DOC', color: 'bg-blue-50 text-blue-600 border-blue-200' };
     }
-    if (mimeType?.includes('sheet') || ext === 'xls' || ext === 'xlsx' || ext === 'csv') {
-        return { icon: '📗', color: 'bg-emerald-50 text-emerald-600 border-emerald-200' };
+    if (mimeType?.includes('sheet') || ['XLS', 'XLSX', 'CSV'].includes(ext)) {
+        return { tag: 'XLS', color: 'bg-emerald-50 text-emerald-600 border-emerald-200' };
     }
-    if (mimeType?.includes('presentation') || ext === 'ppt' || ext === 'pptx') {
-        return { icon: '📙', color: 'bg-amber-50 text-amber-600 border-amber-200' };
+    if (mimeType?.includes('presentation') || ['PPT', 'PPTX'].includes(ext)) {
+        return { tag: 'PPT', color: 'bg-amber-50 text-amber-600 border-amber-200' };
     }
-    return { icon: '📄', color: 'bg-gray-50 text-gray-600 border-gray-200' };
+    return { tag: ext.slice(0, 4), color: 'bg-gray-50 text-gray-600 border-gray-200' };
 };
 
 // 上傳新文件 Modal
@@ -189,7 +189,6 @@ const deleteDoc = (docId) => {
                                     : 'text-gray-600 hover:bg-gray-100'
                             ]"
                         >
-                            <span>{{ cat.icon }}</span>
                             <span>{{ cat.label }}</span>
                         </button>
                     </div>
@@ -232,8 +231,8 @@ const deleteDoc = (docId) => {
                         <div class="p-5 space-y-3">
                             <div class="flex items-start justify-between gap-3">
                                 <div class="flex items-center space-x-3">
-                                    <div :class="['w-10 h-10 rounded-xl border flex items-center justify-center text-xl shrink-0', getFileIcon(doc.latest_version?.mime_type, doc.latest_version?.file_name).color]">
-                                        {{ getFileIcon(doc.latest_version?.mime_type, doc.latest_version?.file_name).icon }}
+                                    <div :class="['w-10 h-10 rounded-xl border flex items-center justify-center text-xs font-bold font-mono shrink-0', getFileInfo(doc.latest_version?.mime_type, doc.latest_version?.file_name).color]">
+                                        {{ getFileInfo(doc.latest_version?.mime_type, doc.latest_version?.file_name).tag }}
                                     </div>
                                     <div>
                                         <h3 class="font-bold text-sm text-gray-900 group-hover:text-blue-600 transition line-clamp-1">
@@ -252,8 +251,9 @@ const deleteDoc = (docId) => {
                                         </div>
                                     </div>
                                 </div>
-                                <span v-if="doc.restricted_roles" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded shrink-0" title="權限受限">
-                                    🔒 主管限定
+                                <span v-if="doc.restricted_roles" class="text-[10px] px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded shrink-0 flex items-center" title="權限受限">
+                                    <svg class="w-3 h-3 mr-1 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                    主管限定
                                 </span>
                             </div>
 
@@ -312,7 +312,9 @@ const deleteDoc = (docId) => {
 
                 <!-- 空狀態提示 -->
                 <div v-else class="bg-white rounded-xl border border-gray-100 p-12 text-center space-y-3">
-                    <span class="text-4xl">📂</span>
+                    <div class="w-12 h-12 mx-auto rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-400 mb-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                    </div>
                     <h3 class="font-bold text-gray-700 text-base">目前尚無符合條件的文件</h3>
                     <p class="text-xs text-gray-400">您可以切換分類標籤，或點擊右上角「上傳新文件」建立第一份文件。</p>
                 </div>
@@ -348,10 +350,10 @@ const deleteDoc = (docId) => {
                                 class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                                 required
                             >
-                                <option value="policy">📜 公司規章制度</option>
-                                <option value="template">📝 行政表單範本</option>
-                                <option value="tech">💻 技術規格書</option>
-                                <option value="training">🎓 教育訓練教材</option>
+                                <option value="policy">公司規章制度</option>
+                                <option value="template">行政表單範本</option>
+                                <option value="tech">技術規格書</option>
+                                <option value="training">教育訓練教材</option>
                             </select>
                         </div>
                         <div>

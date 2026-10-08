@@ -94,16 +94,18 @@ const getExportDetailsUrl = () => {
                     <a
                         v-if="canExport"
                         :href="getExportSummaryUrl()"
-                        class="px-4 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg shadow-sm hover:bg-indigo-100 transition flex items-center space-x-1"
+                        class="px-4 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg shadow-sm hover:bg-indigo-100 transition flex items-center space-x-1.5"
                     >
-                        <span>📥 匯出月度彙總 CSV</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span>匯出月度彙總 CSV</span>
                     </a>
                     <a
                         v-if="canExport"
                         :href="getExportDetailsUrl()"
-                        class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 transition flex items-center space-x-1"
+                        class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 transition flex items-center space-x-1.5"
                     >
-                        <span>📥 匯出每日明細 CSV</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span>匯出每日明細 CSV</span>
                     </a>
                 </div>
             </div>

@@ -107,7 +107,8 @@ const deleteForm = (formId, formName) => {
                         :href="route('delegations.index')"
                         class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition flex items-center space-x-1.5"
                     >
-                        <span>🤝 設定職務代理人</span>
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                        <span>設定職務代理人</span>
                     </Link>
                     <button
                         v-if="canManageForms"
@@ -188,7 +189,7 @@ const deleteForm = (formId, formName) => {
                                         v-if="item.is_delegated"
                                         class="px-2 py-0.5 text-[11px] font-bold rounded bg-purple-100 text-purple-700"
                                     >
-                                        🏷️ 代理代簽 (原主管：{{ item.approver?.name }})
+                                        代理代簽 (原主管：{{ item.approver?.name }})
                                     </span>
                                 </div>
                                 <p class="text-xs text-gray-500 mt-0.5">

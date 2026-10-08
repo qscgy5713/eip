@@ -164,7 +164,7 @@ const showingNavigationDropdown = ref(false);
                                                 :href="route('notifications.index')"
                                                 class="text-xs text-gray-600 hover:text-indigo-600 font-medium block"
                                             >
-                                                進入個人通知中心 ➔
+                                                前往通知中心
                                             </Link>
                                         </div>
                                     </template>
@@ -200,30 +200,30 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink :href="route('notifications.index')">
-                                            🔔 通知中心
+                                            通知中心
                                         </DropdownLink>
                                         <DropdownLink
                                             v-if="$page.props.auth.user.role === 'admin'"
                                             :href="route('audit-logs.index')"
                                         >
-                                            🛡️ 系統審計日誌
+                                            系統審計日誌
                                         </DropdownLink>
                                         <DropdownLink
                                             v-if="$page.props.auth.user.role === 'admin'"
                                             :href="route('webhooks.index')"
                                         >
-                                            ⚡ 外部整合 (Webhooks)
+                                            外部整合 (Webhooks)
                                         </DropdownLink>
                                         <DropdownLink
                                             :href="route('delegations.index')"
                                         >
-                                            🤝 職務代理人設定
+                                            職務代理人設定
                                         </DropdownLink>
                                         <DropdownLink
                                             v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)"
                                             :href="route('attendance.reports.index')"
                                         >
-                                            📊 考勤月報統計
+                                            考勤月報統計
                                         </DropdownLink>
                                         <DropdownLink
                                             :href="route('profile.edit')"
@@ -369,7 +369,7 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('notifications.index')">
-                                🔔 個人通知中心
+                                個人通知中心
                                 <span
                                     v-if="$page.props.auth.unread_notifications_count > 0"
                                     class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800"
@@ -381,22 +381,22 @@ const showingNavigationDropdown = ref(false);
                                 v-if="$page.props.auth.user.role === 'admin'"
                                 :href="route('audit-logs.index')"
                             >
-                                🛡️ 系統審計日誌
+                                系統審計日誌
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 v-if="$page.props.auth.user.role === 'admin'"
                                 :href="route('webhooks.index')"
                             >
-                                ⚡ 外部整合 (Webhooks)
+                                外部整合 (Webhooks)
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('delegations.index')">
-                                🤝 職務代理人設定
+                                職務代理人設定
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)"
                                 :href="route('attendance.reports.index')"
                             >
-                                📊 考勤月報統計
+                                考勤月報統計
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 個人帳號設定

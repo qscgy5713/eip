@@ -54,8 +54,9 @@ const deleteWebhook = (id, name) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold leading-tight text-gray-900">
-                        ⚡ 外部生態 Webhook 整合
+                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                        外部生態 Webhook 整合
                     </h2>
                     <p class="text-sm text-gray-500 mt-1">
                         支援與 Slack、Discord、Microsoft Teams 或自訂內部服務串接，即時推播企業重要公告與審核事件
@@ -200,7 +201,7 @@ const deleteWebhook = (id, name) => {
             <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 text-left">
                 <div class="flex items-center justify-between pb-4 border-b border-gray-100">
                     <h3 class="text-lg font-bold text-gray-900">
-                        ⚡ 配置新外部 Webhook 端點
+                        配置新外部 Webhook 端點
                     </h3>
                     <button @click="showModal = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">
                         ×

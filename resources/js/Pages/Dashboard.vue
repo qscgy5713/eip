@@ -213,11 +213,13 @@ const statusBadge = (status) => {
                                 <div v-for="b in myUpcomingBookings" :key="b.id" class="p-3 rounded-lg bg-blue-50/50 border border-blue-100 flex items-center justify-between text-xs">
                                     <div>
                                         <p class="font-bold text-gray-900 text-sm">{{ b.title }}</p>
-                                        <p class="text-gray-500 mt-0.5">
-                                            🏢 {{ b.room?.name }} ({{ b.room?.location }})
+                                        <p class="text-gray-500 mt-1 flex items-center">
+                                            <svg class="w-3.5 h-3.5 mr-1 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                            {{ b.room?.name }} ({{ b.room?.location }})
                                         </p>
-                                        <p class="text-blue-700 mt-0.5 font-mono">
-                                            ⏰ {{ new Date(b.start_time).toLocaleDateString() }} {{ new Date(b.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }} ~ {{ new Date(b.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }}
+                                        <p class="text-blue-700 mt-0.5 font-mono flex items-center">
+                                            <svg class="w-3.5 h-3.5 mr-1 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                            {{ new Date(b.start_time).toLocaleDateString() }} {{ new Date(b.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }} ~ {{ new Date(b.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }}
                                         </p>
                                     </div>
                                     <Link :href="route('meeting-rooms.index')" class="text-xs text-blue-600 font-medium px-2 py-1 bg-white border border-blue-200 rounded hover:bg-blue-50">
