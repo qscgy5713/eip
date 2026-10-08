@@ -122,5 +122,18 @@
   - 將 Emoji 替換為乾淨、俐落的企業級 SVG 向量圖示（如 Heroicons 風格的盾牌、鈴鐺、時鐘、建築、下載、傳輸、資料夾、連結、信箱與電話等）或專業的文字狀態標籤（如 PDF / DOC / XLS / PPT 副檔名 badge）。
   - 重新打包前端資產（`npm run build`），並執行全系統 86 項 Feature/Unit 測試全數 100% 通過。
 
+- 完成 Phase 2「企業全景綜合行事曆看板 (Enterprise Calendar Hub)」：
+  - 實作控制器 `CalendarController`：
+    - 聚合會議室預約事件 (`RoomBooking`)、核准差勤休假單 (`FormRequest`) 與企業重要公告發布日程 (`Announcement`)。
+    - 支援依年月期間（自動補齊月曆首尾前後補日）範圍抓取、事件類型篩選（全部、會議、休假、公告）與部門篩選。
+  - 註冊路由 `/calendar` 並整併至頂部主導覽列與手機選單 (`AuthenticatedLayout.vue`)。
+  - 實作前端 `Calendar/Index.vue`：
+    - 42 格標準月曆網格，即時標記當日 (Today) 與週末。
+    - 藍/紫/琥珀三色事件徽章、超出 3 筆「+N 則更多」摺疊收納。
+    - 單一事件詳情彈窗（包含會議參與人數、地點、時間，請假事由與天數，公告導覽連結）與當日全體事件列表彈窗。
+    - 年月份快捷切換（上個月、今天、下個月）。
+  - 撰寫自動化測試套件 `tests/Feature/CalendarTest.php`：涵蓋行事曆檢閱、會議室聚合、核准假單聚合、公告日程聚合、類型篩選等 5 項測試。
+  - 全系統累積 **91 項自動化測試 100% 通過**（339 assertions）。
+
 ### 下一步
-- 向使用者回報圖示優化成果，詢問是否同意執行 Git Commit 與 Git Push。
+- 向使用者回報行事曆成果，詢問是否同意執行 Git Commit 與 Git Push。

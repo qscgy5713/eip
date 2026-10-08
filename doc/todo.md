@@ -21,6 +21,7 @@
 - [x] 簽核職務代理人機制（Delegation Engine：出差休假代簽人設定、生效期間自動判定、代理待審通知連鎖、歷程代簽標籤與 IDOR 權限加固）
 - [x] 打卡考勤系統與 HR 月報結算（GPS/IP 限制、打卡紀錄、異常判定、主管團隊出勤、月度考勤統計看板、月度彙總與每日明細 CSV/Excel 格式化匯出、敏感個資匯出審計）
 - [x] 行事曆與會議室借用管理（會議室管理、防衝突排程、日曆預約、超額人數校驗）
+- [x] 企業全景綜合行事曆看板（Calendar Hub：整合會議室借用、同仁休假/出勤單據、企業重大公告日程，支援月曆切換、三色事件標籤、彈窗明細與部門篩選）
 
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
@@ -30,7 +31,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, AttendanceTest, AttendanceReportTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest, WebhookTest, DelegationTest 等 86 項測試案例全數 100% 通過）
+- [x] 單元與整合測試（EipTest, AttendanceTest, AttendanceReportTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest, WebhookTest, DelegationTest, CalendarTest 等 91 項測試案例全數 100% 通過）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

@@ -76,6 +76,12 @@ const showingNavigationDropdown = ref(false);
                                     企業文件庫
                                 </NavLink>
                                 <NavLink
+                                    :href="route('calendar.index')"
+                                    :active="route().current('calendar.*')"
+                                >
+                                    全景行事曆
+                                </NavLink>
+                                <NavLink
                                     v-if="$page.props.auth.user.role === 'admin'"
                                     :href="route('audit-logs.index')"
                                     :active="route().current('audit-logs.*')"
@@ -335,6 +341,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('documents.*')"
                         >
                             企業文件庫
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('calendar.index')"
+                            :active="route().current('calendar.*')"
+                        >
+                            全景行事曆
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"
