@@ -14,6 +14,7 @@
 - [x] 企業公告發布與閱覽追蹤功能（Announcements, Reads 追蹤）
 - [x] 員工通訊錄與組織樹狀圖（Directory 查詢與篩選）
 - [x] 組織架構與員工維護管理後台 (Org Chart & Employee Management Hub：視覺化部門樹狀階層 CRUD、父子隸屬、主管指派、防刪保護、員工帳號建立/異動、自動休假額度初始化、在職/停權/離職狀態切換與登入阻擋防護、重設密碼、全系統 149 項 Feature 測試 100% 通過)
+- [x] 互動式組織架構圖、拖曳階層與同仁搜尋指派系統 (Interactive Drag-and-Drop Org Chart & Member Assignment Engine：一鍵無縫切換【互動視覺組織樹】與【階層清單總覽】雙重視圖、支援原生 HTML5 拖曳部門節點動態調整父子階層與直屬隸屬關係、頂部一級公司直屬部門放置區 Drop Zone、前後端雙層深度遞迴循環依賴防呆阻擋、卡片節點快捷建立子部門/編輯/安全防刪、右側成員抽屜與主管指派整合非原生自訂 Combobox 下拉組件「支援輸入姓名、Email 帳號或工號即時過濾選取同仁」、支援移出部門未分配化、樹狀畫布 60%~140% 縮放與一鍵展開/收合控制、全系統 163 項 Feature 測試 100% 通過)
 
 ## 階段 2：行政流程與協同工作
 - [x] 電子表單簽核工作流引擎（請假單、報銷單、加班單、補打卡單、請購單、差旅單等動態 JSON Schema 欄位）
@@ -30,6 +31,7 @@
 - [x] 多層級簽核與條件分支流程引擎（Workflow Engine：支援依請假天數 >3 天動態追加人資複核、報銷金額 >=10,000 元追加財務/管理員複核、巨額報支 >=50,000 總經理決行；前端響應式 Stepper 進度管線、公文列印多級印章鏈、自訂表單多級簽核模式與 111 項測試 100% 通過）
 - [x] 特休與假別額度管理系統 (Leave Balance & Quota Engine：支援同仁查閱個人特休/病事假/補休剩餘天數與年度配額、HR/Admin 跨同仁額度管理與一鍵年度初始化、請假單填寫即時額度顯示與超額防呆、提單審批流程與 pending/used 扣減連鎖機制、全系統 131 項測試 100% 通過)
 - [x] 主管審批中心與一鍵批次簽核系統 (Approvals Hub & Batch Approve Engine：集中管理所有待審單據、待審指標統計卡片、表單種類/代理/同仁多維篩選、多選 Checkbox 批次核准/駁回、審批批註附言、自動多級關卡流轉與休假額度連鎖處理、防越級搶審安全機制、全套自動化測試 139 項 100% 通過)
+- [x] 表單簽核協同加簽 (Add-Sign) 與轉簽派審 (Forward/Transfer) 系統 (Collaborative Workflow Engine：支援主管審批時全權轉簽給新主管決行並保留交接軌跡、臨時跨部門同仁或專家會辦加簽邀請、加簽不影響主流程關卡推進與結案生命週期、會辦完成意見自動通知並回流主審主管、防重複加簽與防轉/加簽給自己邊界防呆、多筆待辦情境優先精準匹配指派記錄、全系統 155 項 Feature 測試 100% 通過)
 
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
@@ -41,7 +43,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, SecurityAndIdorTest 等 123 項 Feature 測試 100% 通過，511 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest 等 163 項 Feature 測試 100% 通過，779 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

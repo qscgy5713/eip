@@ -267,4 +267,177 @@ class OrgManagementTest extends TestCase
         $reLoginResponse->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($this->employee);
     }
+
+    public function test_admin_and_hr_can_move_department_via_org_chart(): void
+    {
+        $mktDept = Department::where('code', 'MKT')->first();
+        $this->assertNotNull($mktDept);
+
+        // 1. 建立一個新子部門，原本隸屬於 RD
+        $subDept = Department::create([
+            'name' => '雲端架構組',
+            'code' => 'RD_CLOUD',
+            'parent_id' => $this->rdDept->id,
+            'sort_order' => 10,
+            'is_active' => true,
+        ]);
+
+        // 2. 拖曳將子部門調整隸屬於行銷業務部 MKT
+        $response = $this->actingAs($this->admin)->patch(route('org-management.departments.move', $subDept->id), [
+            'parent_id' => $mktDept->id,
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+        $subDept->refresh();
+        $this->assertEquals($mktDept->id, $subDept->parent_id);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'move_department',
+        ]);
+
+        // 3. 拖曳將子部門提升為頂層公司直屬部門 (parent_id = null)
+        $rootResponse = $this->actingAs($this->hrUser)->patch(route('org-management.departments.move', $subDept->id), [
+            'parent_id' => null,
+        ]);
+
+        $rootResponse->assertRedirect();
+        $subDept->refresh();
+        $this->assertNull($subDept->parent_id);
+    }
+
+    public function test_cannot_move_department_to_itself(): void
+    {
+        $response = $this->actingAs($this->admin)->patch(route('org-management.departments.move', $this->rdDept->id), [
+            'parent_id' => $this->rdDept->id,
+        ]);
+
+        $response->assertSessionHasErrors(['parent_id']);
+    }
+
+    public function test_cannot_move_department_to_its_descendant_preventing_cycle(): void
+    {
+        // 建立階層：RD -> 子部門 Frontend -> 孫部門 UI
+        $frontendDept = Department::create([
+            'name' => '前端小組',
+            'code' => 'RD_FE',
+            'parent_id' => $this->rdDept->id,
+            'sort_order' => 10,
+            'is_active' => true,
+        ]);
+
+        $uiDept = Department::create([
+            'name' => 'UI 設計分組',
+            'code' => 'RD_FE_UI',
+            'parent_id' => $frontendDept->id,
+            'sort_order' => 10,
+            'is_active' => true,
+        ]);
+
+        // 嘗試將頂層 RD 部門拖曳移到其孫部門 UI 設計分組底下 -> 應被循環依賴阻擋
+        $response = $this->actingAs($this->admin)->patch(route('org-management.departments.move', $this->rdDept->id), [
+            'parent_id' => $uiDept->id,
+        ]);
+
+        $response->assertSessionHasErrors(['error']);
+        $this->rdDept->refresh();
+        // 原 parent_id 不應被變更
+        $this->assertNotEquals($uiDept->id, $this->rdDept->parent_id);
+    }
+
+    public function test_regular_employee_cannot_move_department(): void
+    {
+        $response = $this->actingAs($this->employee)->patch(route('org-management.departments.move', $this->rdDept->id), [
+            'parent_id' => null,
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_admin_and_hr_can_add_existing_user_to_department_via_dropdown(): void
+    {
+        // 建立一位尚未分配部門的同仁 (例如公司剛建立帳號的同仁)
+        $unassignedUser = User::factory()->create([
+            'department_id' => null,
+            'status' => 'active',
+            'role' => 'employee',
+        ]);
+
+        // 1. 管理員將該同仁指派至 RD 部門
+        $response = $this->actingAs($this->admin)->post(route('org-management.departments.members.add', $this->rdDept->id), [
+            'user_id' => $unassignedUser->id,
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+        $unassignedUser->refresh();
+        $this->assertEquals($this->rdDept->id, $unassignedUser->department_id);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'assign_department_member',
+        ]);
+
+        // 2. HR 將該同仁調任至 HR 部門
+        $hrDept = Department::where('code', 'HR')->first();
+        $transferResponse = $this->actingAs($this->hrUser)->post(route('org-management.departments.members.add', $hrDept->id), [
+            'user_id' => $unassignedUser->id,
+        ]);
+
+        $transferResponse->assertRedirect();
+        $unassignedUser->refresh();
+        $this->assertEquals($hrDept->id, $unassignedUser->department_id);
+    }
+
+    public function test_admin_and_hr_can_remove_member_from_department(): void
+    {
+        $this->assertEquals($this->rdDept->id, $this->employee->department_id);
+
+        // 移出同仁
+        $response = $this->actingAs($this->admin)->delete(route('org-management.departments.members.remove', [
+            $this->rdDept->id,
+            $this->employee->id,
+        ]));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+        $this->employee->refresh();
+        $this->assertNull($this->employee->department_id);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'remove_department_member',
+        ]);
+    }
+
+    public function test_removing_department_leader_clears_leader_id(): void
+    {
+        // 將 manager 設為 rdDept 主管
+        $this->rdDept->update(['leader_id' => $this->manager->id]);
+        $this->manager->update(['department_id' => $this->rdDept->id]);
+
+        $response = $this->actingAs($this->admin)->delete(route('org-management.departments.members.remove', [
+            $this->rdDept->id,
+            $this->manager->id,
+        ]));
+
+        $response->assertRedirect();
+        $this->rdDept->refresh();
+        $this->manager->refresh();
+
+        $this->assertNull($this->manager->department_id);
+        $this->assertNull($this->rdDept->leader_id);
+    }
+
+    public function test_regular_employee_cannot_add_or_remove_department_members(): void
+    {
+        $addResponse = $this->actingAs($this->employee)->post(route('org-management.departments.members.add', $this->rdDept->id), [
+            'user_id' => $this->employee->id,
+        ]);
+        $addResponse->assertStatus(403);
+
+        $removeResponse = $this->actingAs($this->employee)->delete(route('org-management.departments.members.remove', [
+            $this->rdDept->id,
+            $this->employee->id,
+        ]));
+        $removeResponse->assertStatus(403);
+    }
 }

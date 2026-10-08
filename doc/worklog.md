@@ -2,6 +2,78 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**組織圖成員抽屜下拉選單指派與移出管理 (Org Chart Member Assignment & Drawer Engine)**：
+  - **業務流程規範對齊**：落實標準企業人事作業流程——同仁帳號由公司 HR/Admin 先行建立完成後，於組織架構與部門檢視中透過「在職同仁下拉選單選取」將成員加入部門或進行跨部門調任。
+  - **成員抽屜 (Slide-over Drawer) 功能升級**：
+    - **非原生自訂 Combobox 同仁搜尋下拉組件 (`SearchableUserSelect.vue`)**：
+      - 抽屜頂部「指派同仁」與部門主管指派全面揚棄 HTML 原生 `<select>`，升級為企業級自訂可搜尋下拉選單。
+      - 支援即時關鍵字模糊搜尋：可輸入同仁**姓名**、**帳號 (Email)**、**工號**或**職稱**即時過濾並動態高亮。
+      - 具備鍵盤操作導航（↑ / ↓ 鍵移動高亮、Enter 確認選取、Esc 關閉、點擊外部自動收合）。
+      - 清晰呈現同仁頭像、姓名、帳號、工號職稱與目前部門狀態標籤（例如「現屬：研發工程部」或「未分配部門」）。
+      - 支援一鍵快速清除 (Clear) 與重新選取，大幅提升幾十至數百人企業中的指派操作流暢度。
+    - **同仁移出此部門 (Unassign Member)**：
+      - 部門成員清單中每位同仁新增「移出部門」操作按鈕。
+      - 點擊時彈出防呆確認對話框，說明移出後同仁帳號完整保留，所屬部門將變更為「未分配部門」。
+      - 若該同仁恰好為部門主管，系統自動連鎖清空部門之主管指派 (`leader_id = null`) 並給予告知。
+  - **後端端點與權限審計**：
+    - 新增 `POST /org-management/departments/{department}/members` (`org-management.departments.members.add`)。
+    - 新增 `DELETE /org-management/departments/{department}/members/{user}` (`org-management.departments.members.remove`)。
+    - 嚴格校驗僅系統管理員與人資管理員具備成員指派權限，非授權操作者一律回傳 403 Forbidden。
+    - 異動全程記錄 `AuditLog` 審計留痕（記錄原所屬部門、目標部門、操作者與被異動同仁）。
+  - **自動化測試與代碼品質**：
+    - `OrgManagementTest` 擴充 4 項 Feature 測試：下拉選單指派加入部門、跨部門調任、移出部門變更為未分配、移出主管自動清空 `leader_id`、一般員工越權阻擋。
+    - 全系統自動化測試套件擴充至 **163 項 Feature 測試 100% 全數通過 (779 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.04s)。
+- 實作**互動式組織架構圖與拖曳調整系統 (Interactive Drag-and-Drop Org Chart Engine)**：
+  - **雙重視圖切換 (Switchable Views)**：
+    - 於「組織架構與部門階層」頁籤內，新增雙重視圖切換控制器：【互動視覺組織樹】與【階層清單總覽】。
+    - 保留結構化總表檢視，同時提供視覺樹狀畫布，支援 60% ~ 140% 縮放控制與一鍵 100% 復原重置，以及「全部展開 / 全部收合」操作。
+  - **遞迴視覺組織樹組件 (`resources/js/Components/OrgTreeNode.vue`)**：
+    - 精緻樹狀分支導引連線（上引線、水平匯流排線、主幹垂直延伸線）。
+    - 節點獨立折疊/展開（帶有子部門計數徽章）與拖曳抓握手把。
+    - 節點卡片資訊：部門代碼、在職同仁人數徽章、主管姓名/頭像/職稱。
+    - 節點卡片快捷動作：
+      - ➕ **新增子部門**：一鍵開啟建立部門彈窗並自動鎖定上級部門。
+      - 👥 **成員名冊**：點擊觸發右側成員抽屜 (Slide-over Drawer)，詳細列出該部門主管與在職同仁（姓名、照片、工號、職稱、角色、Email、分機）並支援直接點選跳轉編輯。
+      - ✏️ **編輯部門**：開啟彈窗修改名稱、代碼、主管與排序。
+      - 🗑️ **刪除部門**：直接觸發並由後端落實員工與子部門嚴格防刪保護。
+  - **原生 HTML5 拖曳變更階層與雙層循環依賴死鎖防護 (Cycle Reference Protection)**：
+    - 節點支援 `draggable="true"`，拖曳時呈現半透明拖曳視覺反饋，目標卡片懸停高亮藍框，並於非放置目標顯示禁止游標。
+    - 樹狀圖頂部專設「設為一級直屬公司部門」放置區 (Drop Zone)，拖曳至此處可將任意子部門升級為頂層獨立部門 (`parent_id = null`)。
+    - **雙層循環依賴致命死鎖防呆**：
+      - 前端拖曳啟動時，自動計算自身與所有子孫部門 ID (`disabledDropIds`)，嚴格禁止將父節點拖放到自己或自己的子孫節點上。
+      - 後端 `Department` 模型新增 `getAllDescendantIds()` (帶有 visited 訪問追蹤防護) 與 `isDescendantOf()` 方法。
+      - 後端 `OrgManagementController::moveDepartment` 與 `updateDepartment` 深度驗證防範循環依賴，若偵測到循環直接回傳 422 錯誤阻擋，並詳實記錄 `AuditLog` 審計留痕。
+  - **後端端點與自動化測試套件**：
+    - 新增路由 `PATCH /org-management/departments/{department}/move` (`org-management.departments.move`)。
+    - 擴充 `tests/Feature/OrgManagementTest.php`：包含移動部門、防移至自己、防循環依賴移至子孫部門、一般員工越權阻擋等測試。
+    - 全系統自動化測試擴充至 **159 項 Feature 測試 100% 通過 (763 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.69s)。
+- 實作**表單簽核協同加簽 (Add-Sign) 與轉簽派審 (Forward/Transfer) 協同審批系統 (Collaborative Workflow Engine)**：
+  - **資料庫擴充與模型升級**：
+    - 建立遷移 `database/migrations/2026_10_08_090000_add_add_sign_and_transfer_to_approval_records_table.php`：
+      - 為 `approval_records` 資料表擴充 `transferred_to_id` (受派新主管)、`transferred_from_id` (原轉簽主管)、`add_signed_by_id` (發起加簽邀請主管)、`is_add_sign` (布林值標記)。
+    - 模型 `app/Models/ApprovalRecord.php`：
+      - 擴充 `$fillable` 與 `$casts` (`is_add_sign` 為 boolean)。
+      - 新增 BelongsTo 關聯：`transferredTo()`、`transferredFrom()`、`addSignedBy()`。
+  - **工作流核心服務層 (WorkflowService)**：
+    - `transferApproval`：支援主管審批時全權轉派新主管。驗證審批權限，將原記錄狀態更新為 `transferred`、註記交接事由；建立新主管之 `pending` 關卡記錄，發送 `form_approval` 待審通知給新主管及其代理人、寫入 `AuditLog` 與派發 Webhook。
+    - `addSignApproval`：支援主管臨時邀請專業同仁或跨部門主管會辦簽署意見。驗證審批權限，建立 `is_add_sign = true` 的加簽記錄，發送通知，不影響主流程關卡生命週期。
+    - `processAction` 加簽分支處理：加簽同仁簽署會辦意見後，記錄變為 `approved`/`rejected`，系統自動發送回流通知給發起加簽之主審主管，單據保持 `pending`，等待主審主管最終決行，防範加簽提前結案。
+  - **控制器與路由安全加固 (FormRequestController & routes/web.php)**：
+    - `FormRequestController::show`：精準比對當前登入者專屬的待簽記錄（優先匹配加簽或指派主審記錄，無指定時超管 fallback），並傳遞 `activeUsers` 供前端彈窗選取。
+    - `FormRequestController::action`：精準定位操作者專屬的 pending 記錄，防範多待辦情境下的誤審或搶審。
+    - `FormRequestController::transfer` 與 `addSign`：雙層安全防呆，防範自我轉簽 (`Rule::notIn([$user->id])`)、同關卡重複加簽校驗，非法操作者明確拋出 403 Forbidden。
+    - 註冊 `forms.transfer` 與 `forms.add-sign` 路由端點。
+  - **前端單據詳情與時間軸歷程介面 (Forms/Show.vue)**：
+    - 審批操作區新增「會辦加簽」與「轉簽派審」操作按鈕。
+    - 實作「轉簽派審 Modal」與「會辦加簽 Modal」：支援動態搜尋指派同仁與輸入說明事由。
+    - 針對受加簽同仁特化顯示專屬「簽署會辦同意」/「簽署保留意見」之會辦專用介面。
+    - 簽核歷程時間軸支援呈現「已轉簽」、「受轉簽派審」與「會辦加簽」之徽章與事由資訊。
+  - **自動化測試與代碼品質**：
+    - 建立 `tests/Feature/FormCollaborativeApprovalTest.php`，包含 6 項完整 Feature 測試：主管轉簽並由新主管審批結案、禁止轉簽給自己、未授權用戶 403 阻擋、主管發起加簽並由加簽同仁簽署後回流主管核准、防重複加簽、加簽保留意見不提前殺死主流程。
+    - 全系統自動化測試套件擴充至 **155 項 Feature 測試 100% 全數通過 (750 assertions)**。
+    - 前端 Vite 建置確認 0 警告、0 錯誤。
 - 實作**組織架構與員工維護管理後台 (Org Chart & Employee Management Hub)**：
   - **後端控制器與權限防護 (OrgManagementController)**：
     - 建立 `app/Http/Controllers/OrgManagementController.php`，嚴格限制僅系統管理員 (`admin`) 與人資主管 (`hr`) 具備存取與維護權限。

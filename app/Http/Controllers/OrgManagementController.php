@@ -30,10 +30,14 @@ class OrgManagementController extends Controller
             abort(403, '僅限系統管理員或人資管理員存取組織管理中心。');
         }
 
-        // 1. 部門清單 (包含父部門、主管與人數統計)
+        // 1. 部門清單 (包含父部門、主管、所屬同仁與人數統計)
         $departments = Department::with([
             'parent:id,name',
             'leader:id,name,email,job_title',
+            'users' => function ($q) {
+                $q->select('id', 'name', 'email', 'employee_no', 'job_title', 'role', 'status', 'phone', 'department_id')
+                    ->orderBy('name');
+            },
         ])
             ->withCount('users')
             ->orderBy('sort_order')
@@ -80,8 +84,9 @@ class OrgManagementController extends Controller
         $users = $userQuery->orderBy('id', 'desc')->paginate(15)->withQueryString();
 
         // 3. 所有在職候選主管/人員名單 (供下拉選單快速指派)
-        $activeUsers = User::where('status', 'active')
-            ->select('id', 'name', 'job_title', 'department_id')
+        $activeUsers = User::with('department:id,name,code')
+            ->where('status', 'active')
+            ->select('id', 'name', 'email', 'employee_no', 'job_title', 'department_id', 'role')
             ->orderBy('name')
             ->get();
 
@@ -167,6 +172,16 @@ class OrgManagementController extends Controller
         ]);
 
         $validated['sort_order'] = $validated['sort_order'] ?? $department->sort_order;
+
+        if (!empty($validated['parent_id'])) {
+            $descendantIds = $department->getAllDescendantIds();
+            if (in_array((int)$validated['parent_id'], $descendantIds)) {
+                return redirect()->back()->withErrors([
+                    'parent_id' => '不可將部門設定隸屬於其子部門或下層後代部門，避免形成循環階層引用。',
+                ]);
+            }
+        }
+
         $department->update($validated);
 
         AuditLog::log(
@@ -177,6 +192,142 @@ class OrgManagementController extends Controller
         );
 
         return redirect()->back()->with('success', "部門「{$department->name}」資訊已成功儲存！");
+    }
+
+    /**
+     * 拖曳調整組織部門階層隸屬 (Drag & Drop Re-parent)
+     */
+    public function moveDepartment(Request $request, Department $department): RedirectResponse
+    {
+        $operator = $request->user();
+        if (!$operator->isAdmin() && !$operator->isHr()) {
+            abort(403, '僅限系統管理員或人資管理員可調整組織架構。');
+        }
+
+        $validated = $request->validate([
+            'parent_id' => [
+                'nullable',
+                'integer',
+                'exists:departments,id',
+                Rule::notIn([$department->id]),
+            ],
+            'sort_order' => 'nullable|integer|min:0',
+        ], [
+            'parent_id.not_in' => '不可將部門拖曳設置隸屬於自己。',
+        ]);
+
+        $newParentId = $validated['parent_id'] ? (int) $validated['parent_id'] : null;
+
+        // 循環依賴檢測
+        if ($newParentId !== null) {
+            $descendantIds = $department->getAllDescendantIds();
+            if (in_array($newParentId, $descendantIds)) {
+                return redirect()->back()->withErrors([
+                    'error' => "無法將部門「{$department->name}」移動至其下層子部門底下，避免組織形成循環階層。",
+                ]);
+            }
+        }
+
+        $oldParent = $department->parent?->name ?? '頂層公司';
+        $oldParentId = $department->parent_id;
+
+        $department->parent_id = $newParentId;
+        if (isset($validated['sort_order'])) {
+            $department->sort_order = $validated['sort_order'];
+        }
+        $department->save();
+
+        $newParentName = $newParentId ? Department::find($newParentId)?->name : '頂層公司';
+
+        AuditLog::log(
+            action: 'move_department',
+            description: "管理者 {$operator->name} 透過視覺組織圖調整了部門「{$department->name}」的組織隸屬關係（從「{$oldParent}」調整至「{$newParentName}」）",
+            auditable: $department,
+            details: [
+                'department_id' => $department->id,
+                'old_parent_id' => $oldParentId,
+                'new_parent_id' => $newParentId,
+            ]
+        );
+
+        return redirect()->back()->with('success', "已成功將部門「{$department->name}」調整隸屬於「{$newParentName}」！");
+    }
+
+    /**
+     * 加入現有同仁至部門 (從全公司在職同仁名冊下拉選單指派)
+     */
+    public function addMember(Request $request, Department $department): RedirectResponse
+    {
+        $operator = $request->user();
+        if (!$operator->isAdmin() && !$operator->isHr()) {
+            abort(403, '僅限系統管理員或人資管理員可調整部門成員。');
+        }
+
+        $validated = $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        $user = User::with('department')->findOrFail($validated['user_id']);
+
+        if ($user->department_id === $department->id) {
+            return redirect()->back()->with('info', "同仁「{$user->name}」已在「{$department->name}」中。");
+        }
+
+        $previousDept = $user->department;
+        $user->update(['department_id' => $department->id]);
+
+        AuditLog::log(
+            action: 'assign_department_member',
+            description: $previousDept
+                ? "管理者 {$operator->name} 將同仁「{$user->name}」從「{$previousDept->name}」調任至「{$department->name}」"
+                : "管理者 {$operator->name} 將同仁「{$user->name}」指派加入部門「{$department->name}」",
+            auditable: $department,
+            details: [
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'from_department_id' => $previousDept?->id,
+                'to_department_id' => $department->id,
+            ]
+        );
+
+        return redirect()->back()->with('success', "已成功將同仁「{$user->name}」加入部門「{$department->name}」！");
+    }
+
+    /**
+     * 從部門移出同仁 (移出後同仁仍保留帳號，部門設為未分配)
+     */
+    public function removeMember(Request $request, Department $department, User $user): RedirectResponse
+    {
+        $operator = $request->user();
+        if (!$operator->isAdmin() && !$operator->isHr()) {
+            abort(403, '僅限系統管理員或人資管理員可調整部門成員。');
+        }
+
+        if ($user->department_id !== $department->id) {
+            return redirect()->back()->withErrors([
+                'error' => "同仁「{$user->name}」目前不屬於部門「{$department->name}」。",
+            ]);
+        }
+
+        // 若該同仁恰好為該部門主管，同步清空主管設定
+        if ($department->leader_id === $user->id) {
+            $department->update(['leader_id' => null]);
+        }
+
+        $user->update(['department_id' => null]);
+
+        AuditLog::log(
+            action: 'remove_department_member',
+            description: "管理者 {$operator->name} 將同仁「{$user->name}」從部門「{$department->name}」移出",
+            auditable: $department,
+            details: [
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'department_id' => $department->id,
+            ]
+        );
+
+        return redirect()->back()->with('success', "已將同仁「{$user->name}」從部門「{$department->name}」移出！");
     }
 
     /**

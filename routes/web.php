@@ -42,6 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/forms/requests/{formRequest}/print', [FormRequestController::class, 'print'])->name('forms.print');
     Route::get('/forms/requests/{formRequest}/attachments/{index}', [FormRequestController::class, 'downloadAttachment'])->name('forms.attachments.download');
     Route::post('/forms/requests/{formRequest}/action', [FormRequestController::class, 'action'])->name('forms.action');
+    Route::post('/forms/requests/{formRequest}/transfer', [FormRequestController::class, 'transfer'])->name('forms.transfer');
+    Route::post('/forms/requests/{formRequest}/add-sign', [FormRequestController::class, 'addSign'])->name('forms.add-sign');
 
     // 主管審批中心與一鍵批次簽核
     Route::get('/approvals', [ApprovalHubController::class, 'index'])->name('approvals.index');
@@ -110,6 +112,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/org-management', [OrgManagementController::class, 'index'])->name('org-management.index');
     Route::post('/org-management/departments', [OrgManagementController::class, 'storeDepartment'])->name('org-management.departments.store');
     Route::put('/org-management/departments/{department}', [OrgManagementController::class, 'updateDepartment'])->name('org-management.departments.update');
+    Route::patch('/org-management/departments/{department}/move', [OrgManagementController::class, 'moveDepartment'])->name('org-management.departments.move');
+    Route::post('/org-management/departments/{department}/members', [OrgManagementController::class, 'addMember'])->name('org-management.departments.members.add');
+    Route::delete('/org-management/departments/{department}/members/{user}', [OrgManagementController::class, 'removeMember'])->name('org-management.departments.members.remove');
     Route::delete('/org-management/departments/{department}', [OrgManagementController::class, 'destroyDepartment'])->name('org-management.departments.destroy');
     Route::post('/org-management/users', [OrgManagementController::class, 'storeUser'])->name('org-management.users.store');
     Route::put('/org-management/users/{user}', [OrgManagementController::class, 'updateUser'])->name('org-management.users.update');

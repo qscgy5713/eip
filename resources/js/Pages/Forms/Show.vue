@@ -1,10 +1,16 @@
 <script setup>
+import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     formRequest: Object,
     canApprove: Boolean,
+    currentPendingRecord: Object,
+    activeUsers: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const approvalForm = useForm({
@@ -17,10 +23,55 @@ const handleAction = (status) => {
     approvalForm.post(route('forms.action', props.formRequest.id));
 };
 
+// 轉簽派審 Modal
+const showTransferModal = ref(false);
+const transferForm = useForm({
+    target_user_id: '',
+    reason: '',
+});
+
+const openTransferModal = () => {
+    transferForm.reset();
+    transferForm.clearErrors();
+    showTransferModal.value = true;
+};
+
+const submitTransfer = () => {
+    transferForm.post(route('forms.transfer', props.formRequest.id), {
+        onSuccess: () => {
+            showTransferModal.value = false;
+            transferForm.reset();
+        },
+    });
+};
+
+// 會辦加簽 Modal
+const showAddSignModal = ref(false);
+const addSignForm = useForm({
+    target_user_id: '',
+    reason: '',
+});
+
+const openAddSignModal = () => {
+    addSignForm.reset();
+    addSignForm.clearErrors();
+    showAddSignModal.value = true;
+};
+
+const submitAddSign = () => {
+    addSignForm.post(route('forms.add-sign', props.formRequest.id), {
+        onSuccess: () => {
+            showAddSignModal.value = false;
+            addSignForm.reset();
+        },
+    });
+};
+
 const statusBadge = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
         case 'rejected': return 'bg-rose-100 text-rose-800 border-rose-200';
+        case 'transferred': return 'bg-purple-100 text-purple-800 border-purple-200';
         default: return 'bg-amber-100 text-amber-800 border-amber-200';
     }
 };
@@ -197,23 +248,26 @@ const formatSize = (bytes) => {
                     <div class="flex items-center justify-between">
                         <h3 class="font-bold text-amber-900 text-base flex items-center space-x-2">
                             <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                            <span>簽核審批動作</span>
+                            <span>{{ currentPendingRecord?.is_add_sign ? '會辦加簽意見簽署' : '簽核審批動作' }}</span>
                         </h3>
-                        <span v-if="currentPendingRecord" class="text-xs font-semibold px-2.5 py-1 bg-amber-200/70 text-amber-900 rounded-lg">
-                            目前審批：{{ currentPendingRecord.step_title || ('關卡 ' + currentPendingRecord.step) }}
+                        <span v-if="currentPendingRecord" :class="['text-xs font-semibold px-2.5 py-1 rounded-lg', currentPendingRecord.is_add_sign ? 'bg-blue-100 text-blue-900' : 'bg-amber-200/70 text-amber-900']">
+                            {{ currentPendingRecord.is_add_sign ? '受託會辦加簽' : (currentPendingRecord.step_title || ('關卡 ' + currentPendingRecord.step)) }}
                         </span>
                     </div>
 
                     <div class="space-y-2">
-                        <label class="block text-xs font-medium text-gray-600">審核意見 / 備註</label>
+                        <label class="block text-xs font-medium text-gray-600">
+                            {{ currentPendingRecord?.is_add_sign ? '會辦附言意見' : '審核意見 / 備註' }}
+                        </label>
                         <textarea
                             v-model="approvalForm.comment"
                             rows="2"
-                            placeholder="請輸入審核意見（可選）..."
+                            :placeholder="currentPendingRecord?.is_add_sign ? '請輸入會辦審查意見...' : '請輸入審核意見（可選）...'"
                             class="w-full text-sm rounded-lg border-amber-200 focus:border-amber-500 focus:ring-amber-500 bg-white"
                         ></textarea>
                     </div>
-                    <div class="flex items-center space-x-3">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- 一般關卡核准或加簽同意 -->
                         <button
                             type="button"
                             @click="handleAction('approved')"
@@ -221,8 +275,10 @@ const formatSize = (bytes) => {
                             class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-sm rounded-lg shadow-sm transition flex items-center space-x-1.5"
                         >
                             <svg v-if="approvalForm.processing && approvalForm.status === 'approved'" class="animate-spin -ml-1 mr-1 h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            <span>{{ formRequest.current_step < (formRequest.total_steps || 1) ? '同意並流轉至下一關' : '同意核准並結案' }}</span>
+                            <span>{{ currentPendingRecord?.is_add_sign ? '簽署會辦同意' : (formRequest.current_step < (formRequest.total_steps || 1) ? '同意並流轉至下一關' : '同意核准並結案') }}</span>
                         </button>
+
+                        <!-- 一般關卡退回或加簽保留意見 -->
                         <button
                             type="button"
                             @click="handleAction('rejected')"
@@ -230,8 +286,29 @@ const formatSize = (bytes) => {
                             class="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-bold text-sm rounded-lg shadow-sm transition flex items-center space-x-1.5"
                         >
                             <svg v-if="approvalForm.processing && approvalForm.status === 'rejected'" class="animate-spin -ml-1 mr-1 h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            <span>退回駁回</span>
+                            <span>{{ currentPendingRecord?.is_add_sign ? '簽署保留意見' : '退回駁回' }}</span>
                         </button>
+
+                        <!-- 協同加簽與轉簽按鈕 (非加簽關卡時可使用) -->
+                        <template v-if="!currentPendingRecord?.is_add_sign">
+                            <button
+                                type="button"
+                                @click="openAddSignModal"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-1.5"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                <span>會辦加簽</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                @click="openTransferModal"
+                                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-1.5"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                <span>轉簽派審</span>
+                            </button>
+                        </template>
                     </div>
                 </div>
 
@@ -251,29 +328,161 @@ const formatSize = (bytes) => {
                             <span
                                 :class="[
                                     'absolute -left-[23px] top-1 w-3 h-3 rounded-full border-2 border-white',
-                                    rec.status === 'approved' ? 'bg-emerald-500' : (rec.status === 'rejected' ? 'bg-rose-500' : 'bg-amber-400')
+                                    rec.status === 'approved' ? 'bg-emerald-500' : (rec.status === 'rejected' ? 'bg-rose-500' : (rec.status === 'transferred' ? 'bg-purple-500' : 'bg-amber-400'))
                                 ]"
                             ></span>
                             <div class="flex items-center space-x-2 flex-wrap gap-y-1">
                                 <p class="text-sm font-semibold text-gray-900">
                                     {{ rec.step_title ? rec.step_title : ('關卡 ' + rec.step) }}：
-                                    <template v-if="rec.delegated_from">
+                                    <template v-if="rec.is_add_sign">
+                                        會辦加簽（{{ rec.approver?.name }}，由主管 {{ rec.add_signed_by?.name || '主審' }} 發起）
+                                    </template>
+                                    <template v-else-if="rec.delegated_from">
                                         代理人代簽（{{ rec.approver?.name }}，原主管：{{ rec.delegated_from?.name }}）
+                                    </template>
+                                    <template v-else-if="rec.transferred_to">
+                                        轉簽派審（{{ rec.approver?.name }} ➔ {{ rec.transferred_to?.name }}）
                                     </template>
                                     <template v-else>
                                         審核（{{ rec.approver?.name }}）
                                     </template>
                                 </p>
                                 <span :class="['px-2 py-0.5 text-xs rounded', statusBadge(rec.status)]">
-                                    {{ rec.status === 'approved' ? '核准' : (rec.status === 'rejected' ? '駁回' : '待審批') }}
+                                    {{ rec.status === 'approved' ? '核准/簽畢' : (rec.status === 'rejected' ? '駁回' : (rec.status === 'transferred' ? '已轉簽' : '待審批')) }}
+                                </span>
+                                <span v-if="rec.is_add_sign" class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-blue-700">
+                                    會辦加簽
                                 </span>
                                 <span v-if="rec.delegated_from" class="px-2 py-0.5 text-[10px] font-bold rounded bg-purple-100 text-purple-700">
                                     職務代理代簽
+                                </span>
+                                <span v-if="rec.transferred_from" class="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-700">
+                                    由 {{ rec.transferred_from?.name }} 轉簽
                                 </span>
                             </div>
                             <p v-if="rec.comment" class="text-xs text-gray-600 mt-1 bg-gray-50 p-2 rounded border border-gray-100">意見：{{ rec.comment }}</p>
                             <p v-if="rec.actioned_at" class="text-xs text-gray-400 mt-0.5">{{ new Date(rec.actioned_at).toLocaleString() }}</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ================= 轉簽派審 Modal ================= -->
+                <div v-if="showTransferModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                            <h3 class="text-base font-bold text-gray-900">協同轉簽派審</h3>
+                            <button @click="showTransferModal = false" class="text-gray-400 hover:text-gray-600">&times;</button>
+                        </div>
+
+                        <p class="text-xs text-gray-500">
+                            將目前關卡的審核決行權限全權轉派給指定的主管接手審查。
+                        </p>
+
+                        <form @submit.prevent="submitTransfer" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">受派審查主管 <span class="text-rose-500">*</span></label>
+                                <select
+                                    v-model="transferForm.target_user_id"
+                                    required
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                >
+                                    <option value="">— 請選擇受派主管 —</option>
+                                    <option v-for="u in activeUsers" :key="u.id" :value="u.id">
+                                        {{ u.name }} ({{ u.job_title || '主管' }} · {{ u.role }})
+                                    </option>
+                                </select>
+                                <p v-if="transferForm.errors.target_user_id" class="text-2xs text-rose-600 mt-1">{{ transferForm.errors.target_user_id }}</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">轉簽派審事由說明 <span class="text-rose-500">*</span></label>
+                                <textarea
+                                    v-model="transferForm.reason"
+                                    required
+                                    rows="3"
+                                    placeholder="請說明轉簽的原因（例如：涉及該處管轄業務，轉請決行）..."
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                ></textarea>
+                                <p v-if="transferForm.errors.reason" class="text-2xs text-rose-600 mt-1">{{ transferForm.errors.reason }}</p>
+                            </div>
+
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    @click="showTransferModal = false"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                >
+                                    取消
+                                </button>
+                                <button
+                                    type="submit"
+                                    :disabled="transferForm.processing"
+                                    class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold shadow-sm"
+                                >
+                                    確認轉簽派送
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ================= 會辦加簽 Modal ================= -->
+                <div v-if="showAddSignModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                            <h3 class="text-base font-bold text-gray-900">發起會辦加簽</h3>
+                            <button @click="showAddSignModal = false" class="text-gray-400 hover:text-gray-600">&times;</button>
+                        </div>
+
+                        <p class="text-xs text-gray-500">
+                            邀請特定專業同仁或跨部門主管會審並簽署意見，會辦完成後流程將回流至您手續審。
+                        </p>
+
+                        <form @submit.prevent="submitAddSign" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">會辦加簽對象 <span class="text-rose-500">*</span></label>
+                                <select
+                                    v-model="addSignForm.target_user_id"
+                                    required
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                >
+                                    <option value="">— 請選擇會辦對象 —</option>
+                                    <option v-for="u in activeUsers" :key="u.id" :value="u.id">
+                                        {{ u.name }} ({{ u.job_title || '同仁' }} · {{ u.role }})
+                                    </option>
+                                </select>
+                                <p v-if="addSignForm.errors.target_user_id" class="text-2xs text-rose-600 mt-1">{{ addSignForm.errors.target_user_id }}</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">加簽會審事由說明 <span class="text-rose-500">*</span></label>
+                                <textarea
+                                    v-model="addSignForm.reason"
+                                    required
+                                    rows="3"
+                                    placeholder="請說明需會辦說明的項目（例如：請 IT 評估伺服器規格、請會計覆核報銷單據）..."
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                ></textarea>
+                                <p v-if="addSignForm.errors.reason" class="text-2xs text-rose-600 mt-1">{{ addSignForm.errors.reason }}</p>
+                            </div>
+
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    @click="showAddSignModal = false"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                >
+                                    取消
+                                </button>
+                                <button
+                                    type="submit"
+                                    :disabled="addSignForm.processing"
+                                    class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm"
+                                >
+                                    發送加簽邀請
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

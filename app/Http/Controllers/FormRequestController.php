@@ -14,6 +14,8 @@ use App\Services\WorkflowService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -176,14 +178,30 @@ class FormRequestController extends Controller
             abort(403, '您沒有權限檢閱此份申請單據。');
         }
 
-        $formRequest->load(['form', 'user.department', 'approvalRecords.approver', 'approvalRecords.delegatedFrom']);
+        $formRequest->load([
+            'form',
+            'user.department',
+            'approvalRecords.approver.department',
+            'approvalRecords.delegatedFrom',
+            'approvalRecords.transferredTo',
+            'approvalRecords.transferredFrom',
+            'approvalRecords.addSignedBy',
+        ]);
 
         $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
         $validApproverIds = collect([$user->id])->merge($delegatorIds);
 
-        // 取得當前關卡處於 pending 的審核記錄 (按 step 正序)
-        $currentPendingRecord = $formRequest->approvalRecords
+        // 優先尋找屬於當前登入者（或其代理主管）的待簽核記錄（無論是加簽或主審）
+        $myPendingRecord = $formRequest->approvalRecords
             ->where('status', 'pending')
+            ->first(function ($r) use ($validApproverIds) {
+                return $validApproverIds->contains($r->approver_id);
+            });
+
+        // 若無個人指定項目，但具備管理者權限，則取得當前主流程待審記錄
+        $currentPendingRecord = $myPendingRecord ?: $formRequest->approvalRecords
+            ->where('status', 'pending')
+            ->where('is_add_sign', false)
             ->first();
 
         // 僅限當前關卡之負責人、有效代理人或系統管理員具備審批權限 (防範後續關卡搶先審核)
@@ -196,10 +214,17 @@ class FormRequestController extends Controller
             }
         }
 
+        $activeUsers = User::where('status', 'active')
+            ->where('id', '!=', $user->id)
+            ->select('id', 'name', 'job_title', 'department_id', 'role')
+            ->orderBy('name')
+            ->get();
+
         return Inertia::render('Forms/Show', [
             'formRequest' => $formRequest,
             'currentPendingRecord' => $currentPendingRecord,
             'canApprove' => $canApprove,
+            'activeUsers' => $activeUsers,
         ]);
     }
 
@@ -293,17 +318,26 @@ class FormRequestController extends Controller
             'comment' => 'nullable|string|max:500',
         ]);
 
-        $recordQuery = ApprovalRecord::where('form_request_id', $formRequest->id)
-            ->where('status', 'pending');
+        $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
+        $validApproverIds = collect([$user->id])->merge($delegatorIds);
 
-        if ($user->role !== 'admin') {
-            $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
-            $validApproverIds = collect([$user->id])->merge($delegatorIds);
+        // 優先尋找明確指派給當前操作者（或其代理主管）的 pending 記錄（加簽或主管審核）
+        $record = ApprovalRecord::where('form_request_id', $formRequest->id)
+            ->where('status', 'pending')
+            ->whereIn('approver_id', $validApproverIds)
+            ->first();
 
-            $recordQuery->whereIn('approver_id', $validApproverIds);
+        // 若無個人指派記錄，但操作者為系統管理員，則允許代審當前主流程待審記錄
+        if (!$record && $user->role === 'admin') {
+            $record = ApprovalRecord::where('form_request_id', $formRequest->id)
+                ->where('status', 'pending')
+                ->where('is_add_sign', false)
+                ->first();
         }
 
-        $record = $recordQuery->firstOrFail();
+        if (!$record) {
+            abort(403, '您目前沒有此單據的待簽核權限。');
+        }
 
         // 委由多層級簽核引擎處理流轉或結案
         $result = $this->workflowService->processAction(
@@ -312,6 +346,112 @@ class FormRequestController extends Controller
             $user,
             $validated['status'],
             $validated['comment'] ?? null
+        );
+
+        return redirect()->back()->with('success', $result['message']);
+    }
+
+    /**
+     * 主管協同轉簽 (Transfer)
+     */
+    public function transfer(Request $request, EipFormRequest $formRequest): RedirectResponse
+    {
+        $user = $request->user();
+
+        $recordQuery = ApprovalRecord::where('form_request_id', $formRequest->id)
+            ->where('status', 'pending');
+
+        if ($user->role !== 'admin') {
+            $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
+            $validApproverIds = collect([$user->id])->merge($delegatorIds);
+            $recordQuery->whereIn('approver_id', $validApproverIds);
+        }
+
+        $record = $recordQuery->first();
+        if (!$record) {
+            abort(403, '您沒有權限轉簽此單據。');
+        }
+
+        $validated = $request->validate([
+            'target_user_id' => [
+                'required',
+                'integer',
+                'exists:users,id',
+                Rule::notIn([$user->id]),
+            ],
+            'reason' => 'required|string|max:500',
+        ], [
+            'target_user_id.not_in' => '不可將單據轉簽給自己。',
+        ]);
+
+        $targetUser = User::findOrFail($validated['target_user_id']);
+
+        $result = $this->workflowService->transferApproval(
+            $formRequest,
+            $record,
+            $user,
+            $targetUser,
+            $validated['reason']
+        );
+
+        return redirect()->back()->with('success', $result['message']);
+    }
+
+    /**
+     * 主管協同會辦加簽 (Add-Sign)
+     */
+    public function addSign(Request $request, EipFormRequest $formRequest): RedirectResponse
+    {
+        $user = $request->user();
+
+        $recordQuery = ApprovalRecord::where('form_request_id', $formRequest->id)
+            ->where('status', 'pending');
+
+        if ($user->role !== 'admin') {
+            $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');
+            $validApproverIds = collect([$user->id])->merge($delegatorIds);
+            $recordQuery->whereIn('approver_id', $validApproverIds);
+        }
+
+        $record = $recordQuery->first();
+        if (!$record) {
+            abort(403, '您沒有權限發起加簽。');
+        }
+
+        $validated = $request->validate([
+            'target_user_id' => [
+                'required',
+                'integer',
+                'exists:users,id',
+                Rule::notIn([$user->id]),
+            ],
+            'reason' => 'required|string|max:500',
+        ], [
+            'target_user_id.not_in' => '不可對自己發起會辦加簽。',
+        ]);
+
+        // 防呆：確認是否已在此關卡存在尚未簽署的加簽
+        $existingPendingAddSign = ApprovalRecord::where('form_request_id', $formRequest->id)
+            ->where('step', $record->step)
+            ->where('is_add_sign', true)
+            ->where('approver_id', $validated['target_user_id'])
+            ->where('status', 'pending')
+            ->exists();
+
+        if ($existingPendingAddSign) {
+            throw ValidationException::withMessages([
+                'target_user_id' => '該同仁已在會辦加簽名單中，尚待簽署。',
+            ]);
+        }
+
+        $targetUser = User::findOrFail($validated['target_user_id']);
+
+        $result = $this->workflowService->addSignApproval(
+            $formRequest,
+            $record,
+            $user,
+            $targetUser,
+            $validated['reason']
         );
 
         return redirect()->back()->with('success', $result['message']);

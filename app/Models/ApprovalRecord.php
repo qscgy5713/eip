@@ -16,6 +16,10 @@ class ApprovalRecord extends Model
         'step_title',
         'approver_id',
         'delegated_from_id',
+        'transferred_to_id',
+        'transferred_from_id',
+        'add_signed_by_id',
+        'is_add_sign',
         'status',
         'comment',
         'actioned_at',
@@ -23,6 +27,7 @@ class ApprovalRecord extends Model
 
     protected $casts = [
         'step' => 'integer',
+        'is_add_sign' => 'boolean',
         'actioned_at' => 'datetime',
     ];
 
@@ -39,5 +44,20 @@ class ApprovalRecord extends Model
     public function delegatedFrom(): BelongsTo
     {
         return $this->belongsTo(User::class, 'delegated_from_id');
+    }
+
+    public function transferredTo(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'transferred_to_id');
+    }
+
+    public function transferredFrom(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'transferred_from_id');
+    }
+
+    public function addSignedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'add_signed_by_id');
     }
 }

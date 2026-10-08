@@ -272,6 +272,40 @@ class WorkflowService
         $signRoleText = $delegator ? "代理人 {$actionUser->name}（原主管：{$delegator->name}）" : "審核人 {$actionUser->name}";
         $stepTitle = $record->step_title ?? "關卡 {$record->step}";
 
+        // 0. 特殊分支：若該記錄為協同「會辦加簽」記錄，加簽簽署不影響主關卡推進或終止
+        if ($record->is_add_sign) {
+            $addSignedBy = $record->addSignedBy;
+            $msg = $status === 'approved' ? '會辦簽署通過' : '會辦意見保留';
+
+            AuditLog::log(
+                action: 'complete_add_sign',
+                description: "加簽協辦人 {$actionUser->name} 完成了對單據「{$formRequest->title}」之會辦加簽（{$msg}，意見：{$comment}）",
+                auditable: $formRequest,
+                details: [
+                    'action_user_id' => $actionUser->id,
+                    'status' => $status,
+                    'comment' => $comment,
+                    'original_approver_id' => $record->add_signed_by_id,
+                ]
+            );
+
+            // 通知發起加簽之主審主管
+            $addSignedBy?->notify(new EipSystemNotification(
+                title: "【加簽完成回流】單據「{$formRequest->title}」已完成會辦",
+                message: "同仁 {$actionUser->name} 已簽署加簽意見：" . ($comment ?: '無特殊備註') . "，請您接續進行審查決行。",
+                type: 'form_approval',
+                actionUrl: route('forms.show', $formRequest->id),
+                senderName: $actionUser->name,
+                extra: ['form_request_id' => $formRequest->id, 'step' => $record->step]
+            ));
+
+            return [
+                'status' => $status,
+                'is_completed' => false,
+                'message' => '您已順利完成會辦加簽意見簽署！',
+            ];
+        }
+
         // 1. 若駁回：立即終止流程
         if ($status === 'rejected') {
             $formRequest->update(['status' => 'rejected']);
@@ -487,5 +521,150 @@ class WorkflowService
                 extra: ['form_request_id' => $formRequest->id, 'delegated_from' => $approver->name, 'step' => $record->step]
             ));
         }
+    }
+
+    /**
+     * 主管協同轉簽 (Transfer Approval)
+     * 將當前審核關卡權責轉派給指定主管決行
+     */
+    public function transferApproval(
+        FormRequest $formRequest,
+        ApprovalRecord $record,
+        User $operator,
+        User $targetApprover,
+        string $reason
+    ): array {
+        $isValidApprover = $operator->isAdmin()
+            || $record->approver_id === $operator->id
+            || $operator->canActAsDelegateFor($record->approver_id);
+
+        if (!$isValidApprover) {
+            abort(403, '您沒有權限轉簽此單據。');
+        }
+
+        if ($targetApprover->id === $operator->id) {
+            abort(422, '不可將單據轉簽給自己。');
+        }
+
+        $stepTitle = $record->step_title ?: "關卡 {$record->step}";
+
+        // 更新原主管記錄為 transferred
+        $record->update([
+            'status' => 'transferred',
+            'comment' => "【轉簽派審】轉由主管 {$targetApprover->name} 決行。事由：{$reason}",
+            'transferred_to_id' => $targetApprover->id,
+            'actioned_at' => now(),
+        ]);
+
+        // 建立受派新主管的待審記錄
+        $newRecord = ApprovalRecord::create([
+            'form_request_id' => $formRequest->id,
+            'step' => $record->step,
+            'step_title' => "{$stepTitle} (由 {$operator->name} 轉簽)",
+            'approver_id' => $targetApprover->id,
+            'transferred_from_id' => $operator->id,
+            'status' => 'pending',
+        ]);
+
+        $newRecord->load('approver');
+        $this->notifyApproverAndDelegates($newRecord, $formRequest, $newRecord->step_title);
+
+        AuditLog::log(
+            action: 'transfer_form_approval',
+            description: "審核人 {$operator->name} 將單據「{$formRequest->title}」之「{$stepTitle}」轉簽給主管 {$targetApprover->name}（事由：{$reason}）",
+            auditable: $formRequest,
+            details: [
+                'from_user_id' => $operator->id,
+                'target_approver_id' => $targetApprover->id,
+                'step' => $record->step,
+                'reason' => $reason,
+            ]
+        );
+
+        WebhookService::dispatch(
+            'form.transferred',
+            [
+                'form_request_id' => $formRequest->id,
+                'title' => $formRequest->title,
+                'step' => $record->step,
+                'from_user' => $operator->name,
+                'target_user' => $targetApprover->name,
+                'reason' => $reason,
+            ],
+            "【簽核轉簽】「{$formRequest->title}」已由 {$operator->name} 轉簽給主管 {$targetApprover->name}"
+        );
+
+        return [
+            'status' => 'transferred',
+            'message' => "單據已成功轉簽給主管「{$targetApprover->name}」！",
+        ];
+    }
+
+    /**
+     * 主管協同加簽 (Add-Sign)
+     * 邀請其他同仁或專業主管會辦簽署意見
+     */
+    public function addSignApproval(
+        FormRequest $formRequest,
+        ApprovalRecord $record,
+        User $operator,
+        User $targetAddSigner,
+        string $reason
+    ): array {
+        $isValidApprover = $operator->isAdmin()
+            || $record->approver_id === $operator->id
+            || $operator->canActAsDelegateFor($record->approver_id);
+
+        if (!$isValidApprover) {
+            abort(403, '您沒有權限發起加簽。');
+        }
+
+        if ($targetAddSigner->id === $operator->id) {
+            abort(422, '不可對自己發起會辦加簽。');
+        }
+
+        $existingPendingAddSign = ApprovalRecord::where('form_request_id', $formRequest->id)
+            ->where('step', $record->step)
+            ->where('is_add_sign', true)
+            ->where('approver_id', $targetAddSigner->id)
+            ->where('status', 'pending')
+            ->exists();
+
+        if ($existingPendingAddSign) {
+            abort(422, "同仁「{$targetAddSigner->name}」已在會辦加簽名單中，尚待簽署。");
+        }
+
+        $stepTitle = "【會辦加簽】邀請 {$targetAddSigner->name} 會審";
+
+        $addSignRecord = ApprovalRecord::create([
+            'form_request_id' => $formRequest->id,
+            'step' => $record->step,
+            'step_title' => $stepTitle,
+            'approver_id' => $targetAddSigner->id,
+            'add_signed_by_id' => $operator->id,
+            'is_add_sign' => true,
+            'status' => 'pending',
+            'comment' => "【加簽邀請事由】{$reason}",
+        ]);
+
+        $addSignRecord->load('approver');
+        $this->notifyApproverAndDelegates($addSignRecord, $formRequest, $stepTitle);
+
+        AuditLog::log(
+            action: 'add_sign_form_request',
+            description: "審核人 {$operator->name} 於單據「{$formRequest->title}」發起會辦加簽給 {$targetAddSigner->name}（事由：{$reason}）",
+            auditable: $formRequest,
+            details: [
+                'operator_id' => $operator->id,
+                'target_add_signer_id' => $targetAddSigner->id,
+                'step' => $record->step,
+                'reason' => $reason,
+            ]
+        );
+
+        return [
+            'status' => 'add_signed',
+            'message' => "已成功發起會辦加簽給「{$targetAddSigner->name}」！",
+        ];
     }
 }
