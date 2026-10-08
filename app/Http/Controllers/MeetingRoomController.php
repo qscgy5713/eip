@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AuditLog;
 use App\Models\MeetingRoom;
 use App\Models\RoomBooking;
+use App\Models\User;
 use App\Notifications\EipSystemNotification;
 use App\Services\WebhookService;
 use Carbon\Carbon;
@@ -40,26 +41,45 @@ class MeetingRoomController extends Controller
                                     ->where('end_time', '>=', $endOfDay);
                             });
                     })
-                    ->with('user:id,name,email,department_id')
+                    ->with([
+                        'user:id,name,email,department_id',
+                        'attendees:id,name,email,department_id',
+                    ])
                     ->orderBy('start_time', 'asc');
             }])
             ->orderBy('name', 'asc')
             ->get();
 
-        // 當前使用者未來/近期的有效預約（個人行程卡）
+        // 當前使用者未來/近期的有效預約（包含發起與受邀出席）
         $myBookings = RoomBooking::query()
-            ->where('user_id', $request->user()->id)
+            ->where(function ($q) use ($request) {
+                $q->where('user_id', $request->user()->id)
+                    ->orWhereHas('attendees', function ($sub) use ($request) {
+                        $sub->where('users.id', $request->user()->id);
+                    });
+            })
             ->where('end_time', '>=', Carbon::now()->subHours(2))
             ->where('status', 'confirmed')
-            ->with('room:id,name,location')
+            ->with([
+                'room:id,name,location',
+                'user:id,name',
+                'attendees:id,name',
+            ])
             ->orderBy('start_time', 'asc')
             ->take(10)
             ->get();
+
+        // 所有在職同仁（供預約時搜尋勾選邀請名單）
+        $allUsers = User::where('status', 'active')
+            ->orderBy('name', 'asc')
+            ->get(['id', 'name', 'email', 'employee_no', 'department_id'])
+            ->load('department:id,name');
 
         return Inertia::render('MeetingRooms/Index', [
             'rooms' => $rooms,
             'selectedDate' => $selectedDate,
             'myBookings' => $myBookings,
+            'allUsers' => $allUsers,
             'isAdmin' => $request->user()->isAdmin(),
         ]);
     }
@@ -76,6 +96,10 @@ class MeetingRoomController extends Controller
             'start_time' => ['required', 'date'],
             'end_time' => ['required', 'date', 'after:start_time'],
             'attendees_count' => ['nullable', 'integer', 'min:1'],
+            'attendee_ids' => ['nullable', 'array'],
+            'attendee_ids.*' => ['integer', 'exists:users,id'],
+            'equipment_needed' => ['nullable', 'array'],
+            'equipment_needed.*' => ['string', 'max:50'],
         ]);
 
         $room = MeetingRoom::findOrFail($validated['meeting_room_id']);
@@ -89,10 +113,14 @@ class MeetingRoomController extends Controller
         $startTime = Carbon::parse($validated['start_time']);
         $endTime = Carbon::parse($validated['end_time']);
 
+        // 預計與會同仁名單（排除發起人自己重複加入）
+        $attendeeIds = array_values(array_diff($validated['attendee_ids'] ?? [], [$request->user()->id]));
+        $calculatedAttendeesCount = max($validated['attendees_count'] ?? 1, count($attendeeIds) + 1);
+
         // 檢查與會人數不可超出會議室容納上限
-        if (!empty($validated['attendees_count']) && $validated['attendees_count'] > $room->capacity) {
+        if ($calculatedAttendeesCount > $room->capacity) {
             throw ValidationException::withMessages([
-                'attendees_count' => "預估與會人數 ({$validated['attendees_count']} 人) 已超過此會議室最大容納上限 ({$room->capacity} 人)。",
+                'attendees_count' => "預計與會人數 ({$calculatedAttendeesCount} 人) 已超過此會議室最大容納上限 ({$room->capacity} 人)。",
             ]);
         }
 
@@ -117,9 +145,15 @@ class MeetingRoomController extends Controller
             'description' => $validated['description'] ?? null,
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'attendees_count' => $validated['attendees_count'] ?? 1,
+            'attendees_count' => $calculatedAttendeesCount,
+            'equipment_needed' => $validated['equipment_needed'] ?? [],
             'status' => 'confirmed',
         ]);
+
+        // 同步受邀與會同仁
+        if (!empty($attendeeIds)) {
+            $booking->attendees()->sync($attendeeIds);
+        }
 
         // 記錄審計日誌
         AuditLog::log(
@@ -130,6 +164,9 @@ class MeetingRoomController extends Controller
                 'room' => $room->name,
                 'start_time' => $startTime->toDateTimeString(),
                 'end_time' => $endTime->toDateTimeString(),
+                'attendees_count' => $calculatedAttendeesCount,
+                'invited_count' => count($attendeeIds),
+                'equipment_needed' => $validated['equipment_needed'] ?? [],
             ]
         );
 
@@ -142,6 +179,21 @@ class MeetingRoomController extends Controller
             senderName: '系統管理員'
         ));
 
+        // 發送會議邀請通知給所有受邀同仁
+        if (!empty($attendeeIds)) {
+            $invitedUsers = User::whereIn('id', $attendeeIds)->get();
+            foreach ($invitedUsers as $invitee) {
+                $invitee->notify(new EipSystemNotification(
+                    title: "【會議邀請】{$validated['title']}",
+                    message: "{$request->user()->name} 邀請您參加於「{$room->name}」之會議（時間：{$startTime->format('m/d H:i')} ~ {$endTime->format('H:i')}）。",
+                    type: 'meeting_room',
+                    actionUrl: route('meeting-rooms.index', ['date' => $startTime->toDateString()]),
+                    senderName: $request->user()->name,
+                    extra: ['booking_id' => $booking->id]
+                ));
+            }
+        }
+
         // 觸發外部生態 Webhook 事件
         WebhookService::dispatch(
             'room.booked',
@@ -150,6 +202,8 @@ class MeetingRoomController extends Controller
                 'room' => $room->name,
                 'title' => $booking->title,
                 'user' => $request->user()->name,
+                'attendees_count' => $calculatedAttendeesCount,
+                'equipment_needed' => $validated['equipment_needed'] ?? [],
                 'start_time' => $startTime->toDateTimeString(),
                 'end_time' => $endTime->toDateTimeString(),
             ],
@@ -180,10 +234,27 @@ class MeetingRoomController extends Controller
             'cancel_reason' => $reason,
         ]);
 
+        // 取得受邀同仁並連鎖發送取消通知
+        $attendees = $booking->attendees()->get();
+        $roomName = $booking->room?->name ?? '會議室';
+
+        foreach ($attendees as $attendee) {
+            if ($attendee->id !== $request->user()->id) {
+                $attendee->notify(new EipSystemNotification(
+                    title: "【會議取消通知】{$booking->title}",
+                    message: "原定於「{$roomName}」之會議「{$booking->title}」已取消（原因：{$reason}）。",
+                    type: 'meeting_room',
+                    actionUrl: route('meeting-rooms.index', ['date' => Carbon::parse($booking->start_time)->toDateString()]),
+                    senderName: $request->user()->name,
+                    extra: ['booking_id' => $booking->id]
+                ));
+            }
+        }
+
         // 記錄審計日誌
         AuditLog::log(
             action: 'cancel_room_booking',
-            description: "取消了會議室「{$booking->meetingRoom?->name}」預約（原主旨：{$booking->title}）",
+            description: "取消了會議室「{$roomName}」預約（原主旨：{$booking->title}）",
             auditable: $booking,
             details: ['reason' => $reason]
         );

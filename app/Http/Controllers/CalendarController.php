@@ -51,7 +51,11 @@ class CalendarController extends Controller
 
         // 1. 會議室預約事件
         if ($type === 'all' || $type === 'meeting') {
-            $bookingsQuery = RoomBooking::with(['room:id,name,location', 'user:id,name,department_id'])
+            $bookingsQuery = RoomBooking::with([
+                'room:id,name,location',
+                'user:id,name,department_id',
+                'attendees:id,name',
+            ])
                 ->where('status', 'confirmed')
                 ->where('start_time', '>=', $startDate)
                 ->where('start_time', '<=', $endDate);
@@ -76,6 +80,10 @@ class CalendarController extends Controller
                     'user_name' => $b->user?->name ?? '未知同仁',
                     'location' => $b->room ? $b->room->name . ' (' . $b->room->location . ')' : '會議室',
                     'attendees_count' => $b->attendees_count,
+                    'attendees' => $b->attendees->map(fn($a) => ['id' => $a->id, 'name' => $a->name])->toArray(),
+                    'equipment_needed' => $b->equipment_needed ?? [],
+                    'is_mine' => $b->user_id === $user->id,
+                    'is_attending' => $b->attendees->contains('id', $user->id),
                     'details' => $b->description,
                 ];
             }

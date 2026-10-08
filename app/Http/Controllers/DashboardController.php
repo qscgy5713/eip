@@ -61,14 +61,23 @@ class DashboardController extends Controller
             ->whereDate('date', $today)
             ->first();
 
-        // 5. 即將開始的會議行程
-        $myUpcomingBookings = RoomBooking::with('room')
-            ->where('user_id', $user->id)
+        // 5. 即將開始的會議行程 (包含本人發起與受邀出席)
+        $myUpcomingBookings = RoomBooking::with(['room', 'user:id,name', 'attendees:id,name'])
+            ->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                  ->orWhereHas('attendees', function ($sub) use ($user) {
+                      $sub->where('users.id', $user->id);
+                  });
+            })
             ->where('status', 'confirmed')
             ->where('end_time', '>=', now())
             ->orderBy('start_time')
             ->take(3)
-            ->get();
+            ->get()
+            ->map(function ($booking) use ($user) {
+                $booking->is_host = $booking->user_id === $user->id;
+                return $booking;
+            });
 
         // 6. 個人休假額度摘要 (特休與補休可用餘額)
         $leaveBalances = app(\App\Services\LeaveBalanceService::class)->getUserBalances($user);

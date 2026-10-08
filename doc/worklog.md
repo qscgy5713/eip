@@ -2,6 +2,27 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**會議室與會同仁邀請、設備需求借用與行事曆/工作台連鎖系統 (Meeting Attendees Invitation & Equipment Engine)**：
+  - **資料庫遷移與 Model 關聯升級 (`room_booking_attendees` 樞紐表與 `equipment_needed` JSON 欄位)**：
+    - 新增 `database/migrations/2026_10_08_110000_add_attendees_and_equipment_to_room_bookings_table.php`，建立 `room_booking_attendees` 樞紐表（外鍵約束、級聯刪除與唯一複合鍵），並於 `room_bookings` 表擴充 `equipment_needed` (jsonb)。
+    - `RoomBooking` Model 新增 `$fillable` 與 `$casts` 配置，並建立 `attendees(): BelongsToMany` 多對多關聯。
+    - `User` Model 新增 `attendedBookings(): BelongsToMany` 多對多關聯。
+  - **後端預約邏輯、人數防呆與通知連鎖擴充 (`MeetingRoomController.php`)**：
+    - `index`: 預載 `attendees` 關聯；回傳全體在職同仁清單 `allUsers` 供前端即時模糊檢索；升級 `myBookings` 查詢邏輯，使其同時涵蓋「本人主辦發起」與「本人受邀出席」之所有有效會議。
+    - `storeBooking`: 支援傳入 `attendee_ids` 與 `equipment_needed`；自動計算最低出席人數下限（受邀同仁數 + 1 本人）；嚴格阻擋總人數超出會議室容量上限 (`$room->capacity`)；預約成功時連鎖對所有受邀同仁發送站內邀請通知 (`EipSystemNotification`)，並推播包含與會名冊之 Webhook。
+    - `cancelBooking`: 取消會議時，自動連鎖向所有受邀與會同仁發送「會議取消通知」，告知取消原由與會議時段。
+  - **個人工作台與綜合行事曆全景聯動 (`DashboardController.php` & `CalendarController.php`)**：
+    - `DashboardController.php`: 首頁「即將開始的會議行程」全面納入受邀出席會議，並自動附加 `is_host` 標籤，讓同仁清楚掌握本人主辦或受邀之行程。
+    - `CalendarController.php`: 綜合行事曆聚合輸出與會同仁名冊 `attendees`、借用設備 `equipment_needed` 以及個人出席狀態 `is_mine` / `is_attending`。
+  - **前端視圖體驗升級 (`MeetingRooms/Index.vue`)**：
+    - 預約 Modal 新增「邀請與會同仁」即時關鍵字模糊搜尋輸入框、快捷下拉選單、已選同仁標籤與一鍵移除按鈕；自動連動出席人數下限。
+    - 預約 Modal 動態依據所選會議室呈現可借用設備核取方塊（如投影機、視訊設備、電子白板）。
+    - 「我的即將開始會議行程」橫幅針對受邀會議醒目標示「受邀出席」琥珀色徽章與發起人姓名。
+    - 各會議室預約時段卡片清晰展示受邀同仁姓名標籤與借用設備清單。
+  - **自動化測試與代碼品質**：
+    - 新增 `tests/Feature/MeetingRoomAttendeesAndEquipmentTest.php` 涵蓋 6 大 Feature 測試：預約與會同仁及設備借用、受邀通知發送、取消會議通知連鎖、個人會議清單雙向查詢、首頁 Dashboard 受邀會議展示、行事曆聚合與超額人數防呆。
+    - 全系統自動化測試套件擴充至 **195 項 Feature 測試 100% 全數通過 (1092 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.46s)。
 - 實作**企業內部公告發布管理、官方附件檔案上傳與安全下載系統 (Announcement Publishing & Attachments Engine)**：
   - **資料庫遷移與 Model 升級 (`announcements.attachments` JSON 欄位)**：
     - 在 `announcements` 資料表新增 `attachments` JSON 欄位，結構化儲存附件檔名、儲存路徑、大小 (bytes) 與 MIME 類型。

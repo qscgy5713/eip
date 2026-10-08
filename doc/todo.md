@@ -26,6 +26,7 @@
 - [x] 智慧 GPS 經緯度地理圍欄打卡與外勤/遠端判定（Geofence Engine：Haversine 距離計算演算法、台北總部/自訂半徑判定、內勤辦公室/外勤遠端自動標籤、出勤明細 Google Maps 定位連結、團隊出勤狀態同步）
 - [x] 考勤打卡管理後台與超出半徑強制填寫事由機制（Attendance Settings & Strict Reason Modal：管理員/HR專屬後台視覺化配置公司名稱、詳細地址、經緯度座標與允許打卡半徑；GPS 一鍵定位填入；支援未設定/清空公司位置即自動啟用「全遠端自由打卡」模式、無需設定距離且不限制事由；動態 SystemSetting 快取存儲即時生效；超出半徑打卡前後端雙層嚴格阻擋未填事由；彈出專屬事由輸入 Modal 且未填寫事由一律不給打卡；全系統 123 項測試 100% 通過）
 - [x] 行事曆與會議室借用管理（會議室管理、防衝突排程、日曆預約、超額人數校驗）
+- [x] 會議室與會同仁邀請、設備需求借用與行事曆/工作台連鎖系統 (Meeting Attendees Invitation & Equipment Engine：預約時即時模糊搜尋邀請多位在職同仁、自動人數下限聯動、會議室設備需求借用勾選、受邀同仁連鎖站內會議邀請通知、取消會議連鎖取消通知、個人工作台 Dashboard 即將開始會議行程自動納入受邀會議並標示主辦/受邀狀態、綜合行事曆 Calendar 聚合與會同仁名冊與設備標籤，全系統 195 項 Feature 測試 100% 通過，1092 assertions)
 - [x] 企業全景綜合行事曆看板（Calendar Hub：整合會議室借用、同仁休假/出勤單據、企業重大公告日程，支援月曆切換、三色事件標籤、彈窗明細與部門篩選）
 - [x] 電子簽核公文單據正式列印與 PDF 存證匯出（Print-Ready View：A4 版型、公文編號、申請資訊、審核簽署鏈歷程、電子核准印章、列印防偽留痕與 AuditLog 審計）
 - [x] 電子表單檢附證明文件與附件安全上傳/下載系統（支援請假就醫證明、公文單據等多檔上傳、10MB 限制與類型校驗、防越權 IDOR 下載保護、A4 列印存證留痕與 AuditLog 下載稽核）
@@ -48,7 +49,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest 等 189 項 Feature 測試 100% 通過，1032 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest, MeetingRoomAttendeesAndEquipmentTest 等 195 項 Feature 測試 100% 通過，1092 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

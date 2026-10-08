@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class RoomBooking extends Model
 {
@@ -18,6 +19,7 @@ class RoomBooking extends Model
         'start_time',
         'end_time',
         'attendees_count',
+        'equipment_needed',
         'status',
         'cancelled_at',
         'cancel_reason',
@@ -28,6 +30,7 @@ class RoomBooking extends Model
         'end_time' => 'datetime',
         'cancelled_at' => 'datetime',
         'attendees_count' => 'integer',
+        'equipment_needed' => 'array',
     ];
 
     public function room(): BelongsTo
@@ -38,6 +41,12 @@ class RoomBooking extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function attendees(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'room_booking_attendees')
+            ->withTimestamps();
     }
 
     /**

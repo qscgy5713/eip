@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -99,6 +100,12 @@ class User extends Authenticatable
     public function leaveBalances(): HasMany
     {
         return $this->hasMany(LeaveBalance::class);
+    }
+
+    public function attendedBookings(): BelongsToMany
+    {
+        return $this->belongsToMany(RoomBooking::class, 'room_booking_attendees')
+            ->withTimestamps();
     }
 
     public function isAdmin(): bool
