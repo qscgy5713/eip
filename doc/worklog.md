@@ -28,6 +28,9 @@
     - `resources/js/Pages/Forms/Create.vue`：休假單填寫時頂部即時顯示假別剩餘可用天數看板，選擇假別或天數超出額度時動態跳出紅框警告提示。
     - `AuthenticatedLayout.vue`：在桌面版與手機版導覽列增加「休假額度」直達入口。
     - `Attendance/Index.vue`：在考勤首頁頂部功能列加入「休假額度查詢」捷徑。
+    - **修復前端白畫面問題 (White Screen Fix)**：
+      - 根本原因：Eloquent 模型序列化關聯時輸出為蛇底命名 `leave_balances`，而 Vue 元件初版以駝峰命名 `user.leaveBalances.find(...)` 存取，導致前端執行階段拋出 `TypeError: Cannot read properties of undefined (reading 'find')`，致使 Vue 組件無法掛載渲染成白畫面。
+      - 解法：在 `getUserBalancesList` 增加對 `user.leave_balances || user.leaveBalances || []` 的雙向相容與空值防禦；移除 `lang="ts"` 避免型別轉換問題，全面重建 Vite 前端資源。
   - **自動化測試全套驗證**：
     - 建立 `tests/Feature/LeaveBalanceTest.php`，共 8 項測試案例（個人查閱、一般員工 403 阻擋、HR 調整配額、管理員批次初始化、提單凍結 pending、超額申請阻擋、核准結案轉 used、駁回解凍釋放）。
     - 全系統所有 Feature 測試擴充至 **131 項測試 100% 全數通過 (549 assertions)**。

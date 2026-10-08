@@ -1,65 +1,46 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
-interface LeaveBalance {
-    id: number;
-    user_id: number;
-    year: number;
-    leave_type: string;
-    allocated_days: number;
-    used_days: number;
-    pending_days: number;
-    available_days: number;
-    type_label: string;
-    is_hard_quota: boolean;
-    note: string | null;
-}
-
-interface UserSummary {
-    id: number;
-    name: string;
-    email: string;
-    employee_no?: string;
-    department?: {
-        id: number;
-        name: string;
-    };
-    leaveBalances: LeaveBalance[];
-}
-
-interface PaginationMeta<T> {
-    data: T[];
-    current_page: number;
-    last_page: number;
-    prev_page_url: string | null;
-    next_page_url: string | null;
-    total: number;
-    links: Array<{ url: string | null; label: string; active: boolean }>;
-}
-
-const props = defineProps<{
-    myBalances: LeaveBalance[];
-    selectedYear: number;
-    canManage: boolean;
-    managedUsers?: PaginationMeta<UserSummary> | null;
-    departments: Array<{ id: number; name: string }>;
-    leaveTypesMeta: Record<string, { name: string; is_hard_quota: boolean; default_allocated: number; description: string }>;
+const props = defineProps({
+    myBalances: {
+        type: Array,
+        default: () => [],
+    },
+    selectedYear: {
+        type: Number,
+        default: () => new Date().getFullYear(),
+    },
+    canManage: {
+        type: Boolean,
+        default: false,
+    },
+    managedUsers: {
+        type: Object,
+        default: null,
+    },
+    departments: {
+        type: Array,
+        default: () => [],
+    },
+    leaveTypesMeta: {
+        type: Object,
+        default: () => ({}),
+    },
     filters: {
-        department_id: string;
-        search: string;
-        year: number;
-    };
-}>();
+        type: Object,
+        default: () => ({}),
+    },
+});
 
 const currentYear = new Date().getFullYear();
 const yearOptions = [currentYear - 1, currentYear, currentYear + 1];
 
 const filterForm = ref({
-    year: props.selectedYear,
-    department_id: props.filters.department_id || '',
-    search: props.filters.search || '',
+    year: props.selectedYear || currentYear,
+    department_id: props.filters?.department_id || '',
+    search: props.filters?.search || '',
 });
 
 const applyFilters = () => {
@@ -73,40 +54,50 @@ const applyFilters = () => {
     });
 };
 
-const changeYear = (yr: number) => {
+const changeYear = (yr) => {
     filterForm.value.year = yr;
     applyFilters();
 };
 
 // 調整單一同仁額度 Modal 狀態
 const showEditModal = ref(false);
-const editingUser = ref<UserSummary | null>(null);
+const editingUser = ref(null);
 
 const editForm = useForm({
-    year: props.selectedYear,
+    year: props.selectedYear || currentYear,
     leave_type: 'annual',
     allocated_days: 7.0,
     note: '',
 });
 
-const openEditModal = (user: UserSummary, defaultType: string = 'annual') => {
+const getUserBalancesList = (user) => {
+    if (!user) return [];
+    return user.leave_balances || user.leaveBalances || [];
+};
+
+const getUserBalanceByType = (user, type) => {
+    const list = getUserBalancesList(user);
+    return list.find(b => b.leave_type === type);
+};
+
+const openEditModal = (user, defaultType = 'annual') => {
     editingUser.value = user;
-    const balance = user.leaveBalances.find(b => b.leave_type === defaultType);
-    editForm.year = props.selectedYear;
+    const balance = getUserBalanceByType(user, defaultType);
+    editForm.year = props.selectedYear || currentYear;
     editForm.leave_type = defaultType;
-    editForm.allocated_days = balance ? balance.allocated_days : 7.0;
+    editForm.allocated_days = balance ? parseFloat(balance.allocated_days) : 7.0;
     editForm.note = balance?.note || '';
     showEditModal.value = true;
 };
 
 const handleTypeChangeInModal = () => {
     if (!editingUser.value) return;
-    const balance = editingUser.value.leaveBalances.find(b => b.leave_type === editForm.leave_type);
+    const balance = getUserBalanceByType(editingUser.value, editForm.leave_type);
     if (balance) {
-        editForm.allocated_days = balance.allocated_days;
+        editForm.allocated_days = parseFloat(balance.allocated_days);
         editForm.note = balance.note || '';
     } else {
-        const meta = props.leaveTypesMeta[editForm.leave_type];
+        const meta = props.leaveTypesMeta ? props.leaveTypesMeta[editForm.leave_type] : null;
         editForm.allocated_days = meta ? meta.default_allocated : 0;
         editForm.note = '';
     }
@@ -125,7 +116,7 @@ const submitEditForm = () => {
 // 批次初始化 Modal 狀態
 const showBatchModal = ref(false);
 const batchForm = useForm({
-    year: props.selectedYear,
+    year: props.selectedYear || currentYear,
     department_id: '',
 });
 
@@ -136,10 +127,6 @@ const submitBatchInit = () => {
             showBatchModal.value = false;
         },
     });
-};
-
-const getUserBalanceByType = (user: UserSummary, type: string): LeaveBalance | undefined => {
-    return user.leaveBalances.find(b => b.leave_type === type);
 };
 </script>
 
@@ -210,7 +197,7 @@ const getUserBalanceByType = (user: UserSummary, type: string): LeaveBalance | u
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         <div
-                            v-for="b in myBalances"
+                            v-for="b in (myBalances || [])"
                             :key="b.id"
                             class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-gray-300 transition"
                         >
@@ -233,12 +220,12 @@ const getUserBalanceByType = (user: UserSummary, type: string): LeaveBalance | u
                             <div class="mt-4 flex items-baseline justify-between">
                                 <div>
                                     <span class="text-3xl font-extrabold tracking-tight text-gray-900">
-                                        {{ b.available_days }}
+                                        {{ b.available_days ?? 0 }}
                                     </span>
                                     <span class="ml-1 text-sm text-gray-500">天可用</span>
                                 </div>
                                 <div class="text-right text-xs text-gray-500">
-                                    核給上限：<span class="font-semibold text-gray-700">{{ b.allocated_days }}</span> 天
+                                    核給上限：<span class="font-semibold text-gray-700">{{ b.allocated_days ?? 0 }}</span> 天
                                 </div>
                             </div>
 
@@ -249,7 +236,7 @@ const getUserBalanceByType = (user: UserSummary, type: string): LeaveBalance | u
                                         class="h-2 rounded-full transition-all duration-300"
                                         :class="b.is_hard_quota ? 'bg-indigo-600' : 'bg-blue-500'"
                                         :style="{
-                                            width: `${b.allocated_days > 0 ? Math.min(100, Math.round(((b.used_days + b.pending_days) / b.allocated_days) * 100)) : 0}%`
+                                            width: `${(b.allocated_days || 0) > 0 ? Math.min(100, Math.round(((parseFloat(b.used_days || 0) + parseFloat(b.pending_days || 0)) / parseFloat(b.allocated_days || 1)) * 100)) : 0}%`
                                         }"
                                     ></div>
                                 </div>
@@ -258,10 +245,10 @@ const getUserBalanceByType = (user: UserSummary, type: string): LeaveBalance | u
                             <!-- 明細欄位 -->
                             <div class="mt-4 pt-3 border-t border-gray-100 grid grid-cols-2 text-xs text-gray-500">
                                 <div>
-                                    已核准使用：<span class="font-semibold text-gray-800">{{ b.used_days }}</span> 天
+                                    已核准使用：<span class="font-semibold text-gray-800">{{ b.used_days ?? 0 }}</span> 天
                                 </div>
                                 <div class="text-right">
-                                    審核中凍結：<span class="font-semibold text-amber-600">{{ b.pending_days }}</span> 天
+                                    審核中凍結：<span class="font-semibold text-amber-600">{{ b.pending_days ?? 0 }}</span> 天
                                 </div>
                             </div>
 
@@ -273,7 +260,7 @@ const getUserBalanceByType = (user: UserSummary, type: string): LeaveBalance | u
                 </div>
 
                 <!-- HR / 管理員專屬：同仁配額管轄清單 -->
-                <div v-if="canManage && managedUsers" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div v-if="canManage && managedUsers && managedUsers.data" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                     <div class="p-5 sm:p-6 border-b border-gray-200">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div>
@@ -350,7 +337,7 @@ const getUserBalanceByType = (user: UserSummary, type: string): LeaveBalance | u
                                     <td class="py-3.5 px-4">
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-xs">
-                                                {{ user.name.slice(0, 1) }}
+                                                {{ (user.name || '').slice(0, 1) }}
                                             </div>
                                             <div>
                                                 <div class="font-bold text-gray-900">{{ user.name }}</div>
@@ -430,7 +417,7 @@ const getUserBalanceByType = (user: UserSummary, type: string): LeaveBalance | u
                             共 {{ managedUsers.total }} 位同仁
                         </div>
                         <div class="flex items-center gap-1">
-                            <template v-for="(link, i) in managedUsers.links" :key="i">
+                            <template v-for="(link, i) in (managedUsers.links || [])" :key="i">
                                 <button
                                     v-if="link.url"
                                     type="button"
