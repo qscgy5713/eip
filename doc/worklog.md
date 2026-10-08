@@ -2,6 +2,33 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**組織架構與員工維護管理後台 (Org Chart & Employee Management Hub)**：
+  - **後端控制器與權限防護 (OrgManagementController)**：
+    - 建立 `app/Http/Controllers/OrgManagementController.php`，嚴格限制僅系統管理員 (`admin`) 與人資主管 (`hr`) 具備存取與維護權限。
+    - **部門組織維護**：
+      - `storeDepartment` / `updateDepartment`：支援設定部門名稱、代碼 (unique)、上級父部門 (防範自環指派)、部門主管 (Leader) 與排序權重。
+      - `destroyDepartment`：提供雙層嚴格防呆機制，若部門內尚有在職員工或下轄子部門，100% 阻擋刪除並給予具體引導。
+    - **同仁帳號全生命週期管理**：
+      - `storeUser`：支援配置姓名、Email、工號、部門、職稱、角色 (RBAC: admin/manager/hr/employee)、聯絡電話與密碼；建立時自動呼叫 `LeaveBalanceService::initUserBalances` 配發年度法定休假額度。
+      - `updateUser`：彈性調整部門、職稱、角色與電話；具備防呆機制，禁止降級最後一名系統管理員身分。
+      - `resetPassword`：支援管理員/HR 為同仁重設登入密碼 (含 confirmed 校驗)。
+      - `updateUserStatus`：支援在職 (`active`)、暫時停權 (`suspended`)、已離職 (`resigned`) 狀態切換；禁止操作自身帳號。
+    - **登入安全攔截 (LoginRequest)**：
+      - 擴充 `app/Http/Requests/Auth/LoginRequest.php`，同仁登入時驗證帳號狀態，若為停權或離職立即強制登出並返回阻擋提示。
+    - **審計留痕**：新增/編輯/刪除部門、建立/修改員工、重設密碼與狀態變更全數寫入 `AuditLog`。
+  - **前端視覺與互動介面 (OrgManagement/Index.vue)**：
+    - 建立 `resources/js/Pages/OrgManagement/Index.vue`：
+      - 頂部 4 項指標看板（部門總數、全員總數、在職人數、停權/離職人數）。
+      - 雙頁籤切換：【組織架構與部門階層】與【員工名冊與帳號維護】。
+      - 視覺化階層樹狀卡片：呈現父部門與子部門的階層關係、主管與在職同仁人數。
+      - 部門總表、多維度篩選員工表格（關鍵字/部門/角色/狀態）、分頁導航。
+      - 模態彈窗 (Modals)：新增/編輯部門、新增/編輯同仁、重設密碼。
+  - **全站導航整合**：
+    - `AuthenticatedLayout.vue`：於桌面版「系統管理」下拉選單與手機版選單新增「組織與員工管理」直達入口，並開放 HR 角色存取該選單。
+  - **自動化測試與代碼品質**：
+    - 建立 `tests/Feature/OrgManagementTest.php`，共 10 項完整 Feature 測試（訪客與一般同仁/主管 403 阻擋、Admin/HR 存取、部門 CRUD、防刪防呆、建立同仁自動初始化假別額度、修改資訊、重設密碼、停權阻擋登入與復原登入）。
+    - 全系統後端測試套件擴充至 **149 項 Feature 測試 100% 全數通過 (708 assertions)**。
+    - 前端 Vite 建置確認 0 警告、0 錯誤。
 - 實作**主管審批中心與一鍵批次簽核系統 (Approvals Hub & Batch Approve Engine)**：
   - **核心架構與控制器 (ApprovalHubController)**：
     - 建立 `app/Http/Controllers/ApprovalHubController.php`：

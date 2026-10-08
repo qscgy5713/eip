@@ -50,6 +50,16 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+        if ($user && $user->status !== 'active') {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => '該帳號目前處於停用或離職狀態，無法登入系統。請洽詢人事管理員。',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

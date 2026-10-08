@@ -14,6 +14,7 @@ use App\Http\Controllers\LeaveBalanceController;
 use App\Http\Controllers\MeetingRoomController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\OrgManagementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebhookController;
 use Illuminate\Foundation\Application;
@@ -104,6 +105,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/delegations', [DelegationController::class, 'store'])->name('delegations.store');
     Route::patch('/delegations/{delegation}/toggle', [DelegationController::class, 'toggle'])->name('delegations.toggle');
     Route::delete('/delegations/{delegation}', [DelegationController::class, 'destroy'])->name('delegations.destroy');
+
+    // 組織架構與人員管理後台 (限 Admin 與 HR)
+    Route::get('/org-management', [OrgManagementController::class, 'index'])->name('org-management.index');
+    Route::post('/org-management/departments', [OrgManagementController::class, 'storeDepartment'])->name('org-management.departments.store');
+    Route::put('/org-management/departments/{department}', [OrgManagementController::class, 'updateDepartment'])->name('org-management.departments.update');
+    Route::delete('/org-management/departments/{department}', [OrgManagementController::class, 'destroyDepartment'])->name('org-management.departments.destroy');
+    Route::post('/org-management/users', [OrgManagementController::class, 'storeUser'])->name('org-management.users.store');
+    Route::put('/org-management/users/{user}', [OrgManagementController::class, 'updateUser'])->name('org-management.users.update');
+    Route::post('/org-management/users/{user}/reset-password', [OrgManagementController::class, 'resetPassword'])->name('org-management.users.reset-password');
+    Route::post('/org-management/users/{user}/status', [OrgManagementController::class, 'updateUserStatus'])->name('org-management.users.status');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

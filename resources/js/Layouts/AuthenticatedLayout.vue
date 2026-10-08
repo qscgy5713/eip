@@ -104,9 +104,9 @@ const showingNavigationDropdown = ref(false);
                                     行事曆
                                 </NavLink>
 
-                                <!-- 系統管理 Dropdown (限管理者) -->
+                                <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
-                                    v-if="$page.props.auth.user.role === 'admin'"
+                                    v-if="['admin', 'hr'].includes($page.props.auth.user.role)"
                                     class="relative inline-flex items-center"
                                 >
                                     <Dropdown align="left" width="48">
@@ -115,7 +115,7 @@ const showingNavigationDropdown = ref(false);
                                                 type="button"
                                                 :class="[
                                                     'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none whitespace-nowrap',
-                                                    route().current('audit-logs.*') || route().current('webhooks.*') || route().current('attendance.settings')
+                                                    route().current('audit-logs.*') || route().current('webhooks.*') || route().current('attendance.settings') || route().current('org-management.*')
                                                         ? 'border-indigo-400 text-gray-900 font-bold'
                                                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                                 ]"
@@ -127,13 +127,16 @@ const showingNavigationDropdown = ref(false);
                                             </button>
                                         </template>
                                         <template #content>
+                                            <DropdownLink :href="route('org-management.index')">
+                                                組織與員工管理
+                                            </DropdownLink>
                                             <DropdownLink :href="route('attendance.settings')">
                                                 考勤圍欄設定
                                             </DropdownLink>
-                                            <DropdownLink :href="route('audit-logs.index')">
+                                            <DropdownLink v-if="$page.props.auth.user.role === 'admin'" :href="route('audit-logs.index')">
                                                 系統日誌 (Audit)
                                             </DropdownLink>
-                                            <DropdownLink :href="route('webhooks.index')">
+                                            <DropdownLink v-if="$page.props.auth.user.role === 'admin'" :href="route('webhooks.index')">
                                                 整合設定 (Webhook)
                                             </DropdownLink>
                                         </template>
@@ -417,6 +420,13 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('webhooks.*')"
                         >
                             整合設定
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="['admin', 'hr'].includes($page.props.auth.user.role)"
+                            :href="route('org-management.index')"
+                            :active="route().current('org-management.*')"
+                        >
+                            組織與員工管理
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="['admin', 'hr'].includes($page.props.auth.user.role)"
