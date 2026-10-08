@@ -5,9 +5,11 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import CommandPalette from '@/Components/CommandPalette.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+const commandPaletteRef = ref(null);
 </script>
 
 <template>
@@ -146,6 +148,20 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center gap-2">
+                            <!-- 全站快捷搜尋 Command Palette 按鈕 -->
+                            <button
+                                type="button"
+                                @click="commandPaletteRef?.open()"
+                                class="inline-flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 rounded-lg transition text-left cursor-pointer focus:outline-none"
+                                title="全站快捷搜尋 (Cmd+K / Ctrl+K)"
+                            >
+                                <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                <span class="hidden md:inline font-normal text-gray-500">搜尋全站...</span>
+                                <kbd class="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono font-semibold text-gray-500 bg-white border border-gray-200 rounded">⌘K</kbd>
+                            </button>
+
                             <!-- Notification Bell Dropdown -->
                             <div class="relative">
                                 <Dropdown align="right" width="60">
@@ -513,5 +529,8 @@ const showingNavigationDropdown = ref(false);
                 <slot />
             </main>
         </div>
+
+        <!-- 全站快捷搜尋指揮中心 (Global Command Palette) -->
+        <CommandPalette ref="commandPaletteRef" />
     </div>
 </template>

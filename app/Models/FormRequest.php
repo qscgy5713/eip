@@ -22,12 +22,14 @@ class FormRequest extends Model
         'current_step',
         'total_steps',
         'workflow_snapshot',
+        'revision_history',
     ];
 
     protected $casts = [
         'data' => 'array',
         'attachments' => 'array',
         'workflow_snapshot' => 'array',
+        'revision_history' => 'array',
         'current_step' => 'integer',
         'total_steps' => 'integer',
     ];

@@ -952,11 +952,28 @@ class WorkflowService
             $attachments = array_merge($attachments, $newAttachments);
         }
 
+        // 記錄歷次版本修訂快照與差異對比
+        $revisionHistory = $formRequest->revision_history ?? [];
+        $versionNumber = count($revisionHistory) + 1;
+        $revisionHistory[] = [
+            'version' => $versionNumber,
+            'resubmitted_at' => now()->toIso8601String(),
+            'resubmitted_by' => [
+                'id' => $applicant->id,
+                'name' => $applicant->name,
+            ],
+            'resubmit_note' => $resubmitNote,
+            'previous_data' => $formRequest->data ?? [],
+            'new_data' => $updatedData,
+            'new_attachments' => $newAttachments ?? [],
+        ];
+
         // 更新單據資料與狀態
         $formRequest->update([
             'data' => $updatedData,
             'attachments' => $attachments,
             'status' => 'pending',
+            'revision_history' => $revisionHistory,
         ]);
 
         // 取得當前關卡資訊

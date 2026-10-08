@@ -2,6 +2,35 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**全站快捷搜尋指揮中心 (Global Command Palette / Cmd+K 或 Ctrl+K Engine)**：
+  - **後端搜尋引擎 (`GlobalSearchController` & `/global-search`)**：
+    - 支援全站多模組平行模糊檢索：同仁通訊錄、表單公文單據、企業正式公告、會議室設施空間、知識文件庫、常用快捷導航。
+    - 嚴格落實資安與權限隔離：
+      - 通訊錄：僅限在職 (`status = active`) 同仁，排除離職或停權帳號。
+      - 單據：非管理者/人資情況下，主管僅限調閱本人/轄下部屬/審批單據，一般同仁僅限調閱本人單據，徹底杜絕 IDOR 橫向越權。
+      - 公告：排除未發布草稿 (`status = draft`) 與未來預約排程公告，一般同仁無法探知內部草稿。
+      - 知識文件：嚴格遵循 `restricted_roles` 密件角色白名單過濾，非授權職級同仁無法檢索機密文檔。
+    - 空關鍵字查詢自動回傳推薦快捷功能（發起請假、考勤打卡、預約會議室、同仁通訊名冊、休假額度、文庫預覽等）。
+  - **前端指揮中心視窗 (`CommandPalette.vue` & `AuthenticatedLayout.vue`)**：
+    - 支援原生鍵盤快捷鍵 `Cmd+K` (Mac) 與 `Ctrl+K` (Windows/Linux) 全域呼出與關閉。
+    - 頂部導覽列內嵌美觀之快捷搜尋按鈕，標註 `⌘K` 快捷鍵徽章。
+    - 輸入框具備即時防抖 (Debounce 200ms) 與載入旋轉動畫 (Spinner)。
+    - 扁平化結果索引支援鍵盤 `↑` / `↓` 鍵循環切換高亮、`Enter` 直達頁面跳轉、`Esc` 關閉視窗。
+    - 各分組以色彩微徽章 (Badges) 與 SVG 向量圖示清晰標註，提供無結果友好引導。
+- 實作**表單公文線上歷史版本審批對比與版本回溯系統 (Form History Diff & Audit Trail Engine)**：
+  - **資料模型與版本快照存儲 (`FormRequest` 模型與 migration)**：
+    - 資料表新增 `revision_history` JSONB 欄位，在 `WorkflowService::resubmitFormRequest` 中，於退回修改重新提交時，自動將修改前之完整欄位資料 (`previous_data`)、修改後之欄位資料 (`new_data`)、補充上傳之附件檔案清單 (`new_attachments`)、重新送審說明備註 (`resubmit_note`)、修訂時間 (`resubmitted_at`) 與修訂人 (`resubmitted_by`) 封裝為版本快照並累加保存。
+  - **前端修訂對比視窗 (`Forms/Show.vue`)**：
+    - 當單據曾發生退回修改並已重新送審時，自動在單據詳情下方顯示專屬之琥珀色「歷史版本修訂提示橫幅」，標註累計修訂次數與最新送審時間。
+    - 提供「比對歷史修訂差異 (Diff)」按鈕，點擊彈出企業級修訂差異對照 Modal：
+      - 支援多版次 Tabs 自由切換檢視（第 1 次修訂、第 2 次修訂...）。
+      - 欄位變更智慧比對：紅色刪除線標註 `- 原值`，綠色粗體標註 `+ 新值`，主管審核時一眼洞察申請人修改內容，消除核對痛點。
+      - 清楚列出該次修訂所補充檢附之檔案名稱與檔案大小。
+- **全套自動化測試與工程品質提升**：
+  - 新增 `tests/Feature/GlobalSearchTest.php`（覆蓋快捷捷徑、同仁搜尋、單據 IDOR 隔離、草稿公告隔離、密件文件隔離、會議室搜尋等 6 大測試，75 assertions）。
+  - 新增 `tests/Feature/FormRevisionDiffTest.php`（覆蓋退回修改重新送審、版本快照累積保存、欄位差異比較資料結構等 17 assertions）。
+  - 全系統自動化測試套件累積達到 **223 項 Feature / Unit 測試 100% 全數通過 (1292 assertions)**。
+  - 前端 Vite 8.3.3 資產 0 錯誤順利建置 (1.18s)。
 - 完成**企業級全方位資安強化與 7 大安全弱點修補 (Enterprise Security Hardening & Remediation)**：
   - **SEC-01: 機密證明檔案與公告附件私有磁碟遷移**：
     - 將請假就醫證明、報銷單據等證明文件與公告附件改為儲存於 `local` 私有磁碟 (`private_form_attachments`, `private_announcement_attachments`)，禁止 Nginx 靜態檔案直接對外暴露。

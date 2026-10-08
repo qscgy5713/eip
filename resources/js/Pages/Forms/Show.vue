@@ -144,6 +144,39 @@ const formatSize = (bytes) => {
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 };
+
+// 歷史版本修訂對照 (Diff Viewer)
+const showDiffViewer = ref(false);
+const activeDiffVersion = ref(null);
+
+const getChangedFields = (rev) => {
+    if (!rev) return [];
+    const prev = rev.previous_data || {};
+    const curr = rev.new_data || {};
+    const allKeys = Array.from(new Set([...Object.keys(prev), ...Object.keys(curr)]));
+    const changes = [];
+    for (const key of allKeys) {
+        const oldVal = prev[key] !== undefined && prev[key] !== null ? String(prev[key]) : '(未填寫)';
+        const newVal = curr[key] !== undefined && curr[key] !== null ? String(curr[key]) : '(未填寫)';
+        if (oldVal !== newVal) {
+            changes.push({
+                key,
+                oldVal,
+                newVal,
+            });
+        }
+    }
+    return changes;
+};
+
+const openDiffViewer = (rev = null) => {
+    if (rev) {
+        activeDiffVersion.value = rev;
+    } else if (props.formRequest.revision_history && props.formRequest.revision_history.length > 0) {
+        activeDiffVersion.value = props.formRequest.revision_history[props.formRequest.revision_history.length - 1];
+    }
+    showDiffViewer.value = true;
+};
 </script>
 
 <template>
@@ -296,6 +329,36 @@ const formatSize = (bytes) => {
                                     下載
                                 </a>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- 歷史版本修訂比對提示條 (Version Revision Diff Banner) -->
+                    <div
+                        v-if="formRequest.revision_history && formRequest.revision_history.length > 0"
+                        class="pt-4 border-t border-gray-100"
+                    >
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-amber-50/80 border border-amber-200 rounded-xl gap-3">
+                            <div class="flex items-start sm:items-center space-x-3">
+                                <div class="p-2 bg-amber-100 text-amber-700 rounded-lg shrink-0">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-amber-900">
+                                        此單據曾退回修改並已重新送審（累計 {{ formRequest.revision_history.length }} 次修訂）
+                                    </h4>
+                                    <p class="text-xs text-amber-700 mt-0.5">
+                                        最新修訂於 {{ new Date(formRequest.revision_history[formRequest.revision_history.length - 1].resubmitted_at).toLocaleString() }}，可比對欄位異動差異與補充附件。
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                @click="openDiffViewer()"
+                                class="inline-flex items-center justify-center px-3.5 py-2 text-xs font-bold text-amber-800 bg-amber-200/80 hover:bg-amber-300 rounded-lg transition shrink-0 shadow-sm cursor-pointer"
+                            >
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                                比對歷史修訂差異 (Diff)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -801,6 +864,124 @@ const formatSize = (bytes) => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 歷史版本修訂差異比對 Modal (Revision Diff Viewer Modal) -->
+            <div
+                v-if="showDiffViewer && activeDiffVersion"
+                class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-xs flex items-center justify-center p-4"
+            >
+                <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-100 overflow-hidden transform transition-all">
+                    <!-- Modal 標題 -->
+                    <div class="px-6 py-4 bg-amber-500/10 border-b border-amber-200/50 flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="p-1.5 bg-amber-100 text-amber-700 rounded-lg">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                            </span>
+                            <h3 class="text-base font-bold text-gray-900">
+                                歷史版本修訂對照 (Diff Viewer)
+                            </h3>
+                        </div>
+                        <button
+                            type="button"
+                            @click="showDiffViewer = false"
+                            class="text-gray-400 hover:text-gray-600 transition p-1 rounded-lg"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+                        <!-- 版本切換 Tabs (若有多個版本) -->
+                        <div v-if="formRequest.revision_history && formRequest.revision_history.length > 1" class="flex items-center gap-2 border-b border-gray-100 pb-3">
+                            <span class="text-xs font-semibold text-gray-500">切換版次：</span>
+                            <button
+                                v-for="(rev, idx) in formRequest.revision_history"
+                                :key="idx"
+                                type="button"
+                                @click="activeDiffVersion = rev"
+                                :class="[
+                                    'px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer',
+                                    activeDiffVersion.version === rev.version
+                                        ? 'bg-amber-600 text-white shadow-xs'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                ]"
+                            >
+                                第 {{ rev.version }} 次修訂
+                            </button>
+                        </div>
+
+                        <!-- 當前版本修訂資訊卡片 -->
+                        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 space-y-2">
+                            <div class="flex items-center justify-between text-xs text-gray-500">
+                                <span>修訂人：<strong class="text-gray-900">{{ activeDiffVersion.resubmitted_by?.name || '申請人' }}</strong></span>
+                                <span>提交時間：<strong class="text-gray-900">{{ new Date(activeDiffVersion.resubmitted_at).toLocaleString() }}</strong></span>
+                            </div>
+                            <div v-if="activeDiffVersion.resubmit_note" class="text-xs text-gray-700 bg-white p-2.5 rounded-lg border border-gray-200">
+                                <span class="font-bold text-amber-800">修訂附言：</span>
+                                <span>{{ activeDiffVersion.resubmit_note }}</span>
+                            </div>
+                        </div>
+
+                        <!-- 欄位差異對比清單 (Field Diff List) -->
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400">
+                                欄位變更對比 (Changes)
+                            </h4>
+
+                            <div v-if="getChangedFields(activeDiffVersion).length === 0" class="p-4 text-center text-xs text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                                表單欄位文字未變動（本次修訂僅補充上傳附件或說明備註）
+                            </div>
+
+                            <div
+                                v-for="(chg, cIdx) in getChangedFields(activeDiffVersion)"
+                                :key="cIdx"
+                                class="border border-gray-200 rounded-xl overflow-hidden text-xs"
+                            >
+                                <div class="px-3.5 py-2 bg-gray-100 font-bold text-gray-700 capitalize border-b border-gray-200">
+                                    {{ chg.key }}
+                                </div>
+                                <div class="p-3 space-y-2 font-mono">
+                                    <div class="flex items-start gap-2 text-rose-700 bg-rose-50/70 p-2 rounded-lg">
+                                        <span class="font-bold shrink-0 text-rose-500">- 原值:</span>
+                                        <span class="line-through break-all whitespace-pre-wrap">{{ chg.oldVal }}</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 text-emerald-800 bg-emerald-50/70 p-2 rounded-lg">
+                                        <span class="font-bold shrink-0 text-emerald-600">+ 新值:</span>
+                                        <span class="font-semibold break-all whitespace-pre-wrap">{{ chg.newVal }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 本次補充上傳之附件檔案 (若有) -->
+                        <div v-if="activeDiffVersion.new_attachments && activeDiffVersion.new_attachments.length > 0" class="space-y-2 pt-2 border-t border-gray-100">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400">
+                                本次修訂新補充之附件檔案 ({{ activeDiffVersion.new_attachments.length }})
+                            </h4>
+                            <div class="space-y-1.5">
+                                <div
+                                    v-for="(att, aIdx) in activeDiffVersion.new_attachments"
+                                    :key="aIdx"
+                                    class="flex items-center justify-between p-2.5 bg-blue-50/50 border border-blue-100 rounded-lg text-xs"
+                                >
+                                    <span class="font-medium text-gray-800 truncate mr-2">{{ att.name }}</span>
+                                    <span class="text-gray-400 shrink-0">{{ formatSize(att.size) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-6 py-3 bg-gray-50 border-t border-gray-100 flex justify-end">
+                        <button
+                            type="button"
+                            @click="showDiffViewer = false"
+                            class="px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-lg text-xs font-bold transition cursor-pointer"
+                        >
+                            關閉對照視窗
+                        </button>
                     </div>
                 </div>
             </div>

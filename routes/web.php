@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DelegationController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FormRequestController;
+use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\LeaveBalanceController;
 use App\Http\Controllers\MeetingRoomController;
 use App\Http\Controllers\NotificationController;
@@ -27,6 +28,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/global-search', [GlobalSearchController::class, 'search'])->name('global-search');
 
     // 公告中心
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
