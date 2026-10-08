@@ -235,6 +235,11 @@ class DocumentController extends Controller
      */
     public function download(Request $request, Document $document, ?DocumentVersion $version = null): StreamedResponse
     {
+        // 嚴格校驗版本與文件的隸屬關係，防範跨物件 IDOR 越權調閱 (SEC-02)
+        if ($version && $version->document_id !== $document->id) {
+            abort(404, '指定的版本記錄不屬於此文件。');
+        }
+
         if (!$document->canAccess($request->user())) {
             abort(403, '您沒有權限下載此機密文件。');
         }
@@ -262,6 +267,11 @@ class DocumentController extends Controller
      */
     public function preview(Request $request, Document $document, ?DocumentVersion $version = null)
     {
+        // 嚴格校驗版本與文件的隸屬關係，防範跨物件 IDOR 越權調閱 (SEC-02)
+        if ($version && $version->document_id !== $document->id) {
+            abort(404, '指定的版本記錄不屬於此文件。');
+        }
+
         if (!$document->canAccess($request->user())) {
             abort(403, '您沒有權限預覽此機密文件。');
         }

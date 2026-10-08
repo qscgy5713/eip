@@ -2,7 +2,32 @@
 
 ## 2026-10-08
 ### 做了什麼
-- 實作**表單簽核退回修改與補件重新送審閉環系統 (Form Revision & Resubmission Engine)**：
+- 完成**企業級全方位資安強化與 7 大安全弱點修補 (Enterprise Security Hardening & Remediation)**：
+  - **SEC-01: 機密證明檔案與公告附件私有磁碟遷移**：
+    - 將請假就醫證明、報銷單據等證明文件與公告附件改為儲存於 `local` 私有磁碟 (`private_form_attachments`, `private_announcement_attachments`)，禁止 Nginx 靜態檔案直接對外暴露。
+    - 串流下載端點優先讀取 `local` 私有磁碟並相容歷史 `public` 檔案，所有調閱下載 100% 嚴格經過 Controller 之 `canAccess` 授權檢查並留存 `AuditLog`。
+  - **SEC-02: 跨物件歷史版本調閱越權修復 (Scoped Route Model Binding IDOR)**：
+    - 在 `DocumentController::download` 與 `preview` 中加入嚴格校驗：`if ($version && $version->document_id !== $document->id) abort(404);`，防範攻擊者以合法文件 ID 串接跨文件機密歷史版本實體檔案。
+  - **SEC-03: 全域活躍會話即時撤銷機制 (Active Session Revocation)**：
+    - 新增 `EnsureUserIsActive` 中介層並掛載至全域 `web` pipeline，當登入同仁被管理者標記為 `suspended`（停權）或 `resigned`（離職）時，下一次任何請求立即強制註銷其 Auth 會話、清空 Session 並重導向至登入頁顯示安全警示，防範在線離職員工持續存取內部系統。
+  - **SEC-04: 人資建立人員之垂直越權防護 (Privilege Escalation Fix)**：
+    - 在 `OrgManagementController::storeUser` 中加入權限檢核：`if (!$operator->isAdmin() && $validated['role'] === 'admin') abort(403);`，徹底防範非 Admin 人資帳號擅自建立最高權限 Admin 帳號。
+  - **SEC-05: 休假額度並發扣減排他性悲觀鎖 (Concurrency TOCTOU Fix)**：
+    - 在 `LeaveBalanceService::holdBalance` 中採用 `DB::transaction` 配合 `lockForUpdate()` 悲觀排他鎖，並在鎖定狀態下執行硬性管制額度二次檢核，徹底杜絕高並發重複送單之額度超額透支風險。
+  - **SEC-06: Webhook SSRF 內網阻斷與 Secret 金鑰隱藏**：
+    - 實作 `WebhookService::isSafeUrl` 檢核，嚴格阻絕 URL 指向本機 (`localhost`)、內部私有網段 (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `127.0.0.0/8`) 或雲端中繼資料位址 (`169.254.169.254`)。
+    - 在 `Webhook` 模型中加入 `protected $hidden = ['secret'];`，防止簽章密鑰明文回傳至前端。
+  - **SEC-07: CSV 匯出公式注入防護 (CSV Formula / DDE Injection)**：
+    - 建立 `CsvExportService`，凡單元格以 `=`, `+`, `-`, `@`, `\t`, `\r` 開頭之字串自動前綴單引號 `'`，全面套用於考勤彙總、明細與組織架構編制表匯出。
+  - **自動化測試與工程品質**：
+    - 新增 `tests/Feature/SecurityHardeningTest.php` 涵蓋 7 大安全專案之 Feature 測試。
+    - 全系統自動化測試套件擴充至 **216 項 Feature / Unit 測試 100% 全數通過 (1200 assertions)**。
+    - 前端 Vite 資產 0 錯誤順利建置 (1.05s)。
+- 執行**系統全方位資安代碼審查與威脅建模 (Comprehensive Security Review & Threat Modeling)**：
+  - 產製完整資安分析與修復藍圖文件：`doc/security-review.md`。
+  - 全面排查：認證與會話安全、IDOR 權限隔離、私有檔案存取邊界、SQLi / XSS / CSV 注入防護、SSRF 外部端點、休假額度並發扣減競態條件等。
+  - 盤點出 2 項高風險 (High)、4 項中風險 (Medium) 與 1 項低風險 (Low) 之安全強化點，並制定精準修復代碼建議與實作計畫。
+- 實作**表單簽核退回修改與補件重新送審閉查系統 (Form Revision & Resubmission Engine)**：
   - **主管退回修改邏輯與審查意見強約束 (`WorkflowService::processAction` & `FormRequestController::action`)**：
     - 簽核審批動作擴充支援 `revision_required`（退回修改）；會辦加簽關卡防呆阻擋，確保僅主審關卡可執行退回。
     - 嚴格校驗：執行退回修改時，審查意見/修改指示 (`comment`) 為必填欄位，防止同仁無所適從。

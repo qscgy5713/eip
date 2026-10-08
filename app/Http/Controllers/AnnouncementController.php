@@ -74,7 +74,8 @@ class AnnouncementController extends Controller
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 if ($file && $file->isValid()) {
-                    $path = $file->store('announcement_attachments', 'public');
+                    // 存入 local 私有儲存磁碟，避免草稿附件遭 Nginx 直接外洩 (SEC-01)
+                    $path = $file->store('private_announcement_attachments', 'local');
                     $attachmentsData[] = [
                         'name' => $file->getClientOriginalName(),
                         'path' => $path,
@@ -197,7 +198,8 @@ class AnnouncementController extends Controller
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 if ($file && $file->isValid()) {
-                    $path = $file->store('announcement_attachments', 'public');
+                    // 改用 local 私有儲存磁碟 (SEC-01)
+                    $path = $file->store('private_announcement_attachments', 'local');
                     $existingAttachments[] = [
                         'name' => $file->getClientOriginalName(),
                         'path' => $path,
@@ -245,12 +247,16 @@ class AnnouncementController extends Controller
         $title = $announcement->title;
         $id = $announcement->id;
 
-        // 清理附件實體檔案
+        // 清理附件實體檔案 (local 與 public 雙磁碟相容)
         if (!empty($announcement->attachments)) {
-            $disk = Storage::disk('public');
             foreach ($announcement->attachments as $att) {
-                if (isset($att['path']) && $disk->exists($att['path'])) {
-                    $disk->delete($att['path']);
+                if (isset($att['path'])) {
+                    if (Storage::disk('local')->exists($att['path'])) {
+                        Storage::disk('local')->delete($att['path']);
+                    }
+                    if (Storage::disk('public')->exists($att['path'])) {
+                        Storage::disk('public')->delete($att['path']);
+                    }
                 }
             }
         }
@@ -288,10 +294,15 @@ class AnnouncementController extends Controller
         }
 
         $attachment = $attachments[$index];
-        $disk = Storage::disk('public');
+        $disk = Storage::disk('local');
+        $filePath = $attachment['path'] ?? '';
 
-        if (!isset($attachment['path']) || !$disk->exists($attachment['path'])) {
-            abort(404, '附件檔案實體不存在或已損毀。');
+        // 優先從 local 私有磁碟讀取，若不存在則相容歷史 public 磁碟檔案 (SEC-01)
+        if (!$disk->exists($filePath)) {
+            $disk = Storage::disk('public');
+            if (!$disk->exists($filePath)) {
+                abort(404, '附件檔案實體不存在或已損毀。');
+            }
         }
 
         AuditLog::log(
@@ -305,7 +316,7 @@ class AnnouncementController extends Controller
             ]
         );
 
-        return $disk->download($attachment['path'], $attachment['name']);
+        return $disk->download($filePath, $attachment['name']);
     }
 }
 

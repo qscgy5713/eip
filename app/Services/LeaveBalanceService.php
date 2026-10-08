@@ -145,24 +145,32 @@ class LeaveBalanceService
         $type = LeaveBalance::normalizeType($rawType);
         $year = (int) date('Y', strtotime($data['start_date'] ?? 'now'));
 
-        $balance = LeaveBalance::where('user_id', $formRequest->user_id)
-            ->where('year', $year)
-            ->where('leave_type', $type)
-            ->first();
+        return DB::transaction(function () use ($formRequest, $year, $type, $days) {
+            $balance = LeaveBalance::where('user_id', $formRequest->user_id)
+                ->where('year', $year)
+                ->where('leave_type', $type)
+                ->lockForUpdate()
+                ->first();
 
-        if (!$balance) {
-            $balance = LeaveBalance::create([
-                'user_id' => $formRequest->user_id,
-                'year' => $year,
-                'leave_type' => $type,
-                'allocated_days' => LeaveBalance::LEAVE_TYPES[$type]['default_allocated'] ?? 0.0,
-                'used_days' => 0.0,
-                'pending_days' => 0.0,
-            ]);
-        }
+            if (!$balance) {
+                $balance = LeaveBalance::create([
+                    'user_id' => $formRequest->user_id,
+                    'year' => $year,
+                    'leave_type' => $type,
+                    'allocated_days' => LeaveBalance::LEAVE_TYPES[$type]['default_allocated'] ?? 0.0,
+                    'used_days' => 0.0,
+                    'pending_days' => 0.0,
+                ]);
+            }
 
-        $balance->increment('pending_days', $days);
-        return true;
+            // 並發排他校驗：硬性管制假別在資料庫鎖定態進行嚴格額度二次檢核 (SEC-05)
+            if ($balance->is_hard_quota && $balance->available_days < $days) {
+                throw new \InvalidArgumentException("「{$balance->type_label}」可用額度不足（可用剩餘 {$balance->available_days} 天，欲申請 {$days} 天）。");
+            }
+
+            $balance->increment('pending_days', $days);
+            return true;
+        });
     }
 
     /**

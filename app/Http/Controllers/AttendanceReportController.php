@@ -177,7 +177,7 @@ class AttendanceReportController extends Controller
                 $lateCount = $records->where('status', 'late')->count();
                 $earlyLeaveCount = $records->where('status', 'early_leave')->count();
 
-                fputcsv($handle, [
+                fputcsv($handle, \App\Services\CsvExportService::sanitizeRow([
                     $user->employee_no ?? '-',
                     $user->name,
                     $user->department?->name ?? '無部門',
@@ -186,7 +186,7 @@ class AttendanceReportController extends Controller
                     $totalHours,
                     $lateCount,
                     $earlyLeaveCount,
-                ]);
+                ]));
             }
 
             fclose($handle);
@@ -246,7 +246,7 @@ class AttendanceReportController extends Controller
             ];
 
             foreach ($attendances as $row) {
-                fputcsv($handle, [
+                fputcsv($handle, \App\Services\CsvExportService::sanitizeRow([
                     Carbon::parse($row->date)->format('Y-m-d'),
                     $row->user?->employee_no ?? '-',
                     $row->user?->name ?? '未知',
@@ -256,7 +256,7 @@ class AttendanceReportController extends Controller
                     $row->work_hours ?? 0,
                     $statusMap[$row->status] ?? $row->status,
                     $row->note ?? '',
-                ]);
+                ]));
             }
 
             fclose($handle);

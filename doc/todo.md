@@ -52,7 +52,17 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest, MeetingRoomAttendeesAndEquipmentTest, DocumentUpdateAndIcsExportTest, FormRevisionAndResubmitTest 等 209 項 Feature 測試 100% 通過，1159 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest, MeetingRoomAttendeesAndEquipmentTest, DocumentUpdateAndIcsExportTest, FormRevisionAndResubmitTest, SecurityHardeningTest 等 216 項 Feature 測試 100% 通過，1200 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）
+
+## 階段 5：企業級資安強化與防禦縱深 (Security Hardening & Remediation)
+- [x] 完成系統全方位資安代碼審查報告 (`doc/security-review.md`：剖析 7 大弱點面向)
+- [x] 【高】機密證明文件與草稿附件自 public disk 遷移至 private disk (SEC-01)
+- [x] 【高】修復文件歷史版本調閱跨物件 IDOR 漏洞 (Scoped Route Model Binding - SEC-02)
+- [x] 【中】實作全域活躍會話即時撤銷中介層 EnsureUserIsActive (SEC-03)
+- [x] 【中】修復人資帳號建立使用者之垂直越權漏洞 (Role Escalation Fix - SEC-04)
+- [x] 【中】休假額度檢查與扣減加上悲觀排他鎖 lockForUpdate 與 DB Transaction (TOCTOU Fix - SEC-05)
+- [x] 【中】Webhook URL 實作 SSRF 防護與隱藏 Secret (SSRF & Info Disclosure - SEC-06)
+- [x] 【低】報表與名冊 CSV 匯出實作 Formula Injection 防護 (CSV Escaping - SEC-07)

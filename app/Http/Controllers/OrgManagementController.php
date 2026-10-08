@@ -380,7 +380,7 @@ class OrgManagementController extends Controller
                 $leaderName = $dept->leader?->name ? "{$dept->leader->name} ({$dept->leader->job_title})" : '未指定';
 
                 if ($dept->users->isEmpty()) {
-                    fputcsv($handle, [
+                    fputcsv($handle, \App\Services\CsvExportService::sanitizeRow([
                         $dept->code,
                         $dept->name,
                         $parentName,
@@ -394,7 +394,7 @@ class OrgManagementController extends Controller
                         '-',
                         '-',
                         '-',
-                    ]);
+                    ]));
                 } else {
                     foreach ($dept->users as $u) {
                         $roleMap = [
@@ -409,7 +409,7 @@ class OrgManagementController extends Controller
                             'resigned' => '已離職',
                         ];
 
-                        fputcsv($handle, [
+                        fputcsv($handle, \App\Services\CsvExportService::sanitizeRow([
                             $dept->code,
                             $dept->name,
                             $parentName,
@@ -423,7 +423,7 @@ class OrgManagementController extends Controller
                             $roleMap[$u->role] ?? $u->role,
                             $statusMap[$u->status] ?? $u->status,
                             $u->phone ?? '-',
-                        ]);
+                        ]));
                     }
                 }
             }
@@ -570,6 +570,11 @@ class OrgManagementController extends Controller
             'phone' => 'nullable|string|max:30',
             'password' => ['required', 'string', 'min:8'],
         ]);
+
+        // 防範垂直越權：非系統管理員禁止建立 admin 角色帳號 (SEC-04)
+        if (!$operator->isAdmin() && $validated['role'] === 'admin') {
+            abort(403, '僅系統管理員有權指派或建立管理員身分。');
+        }
 
         $newUser = User::create([
             'name' => $validated['name'],

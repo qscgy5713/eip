@@ -25,6 +25,10 @@ class Webhook extends Model
         'last_triggered_at' => 'datetime',
     ];
 
+    protected $hidden = [
+        'secret',
+    ];
+
     /**
      * 判斷是否訂閱了某事件
      */

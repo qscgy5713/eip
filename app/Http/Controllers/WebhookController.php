@@ -55,6 +55,13 @@ class WebhookController extends Controller
             'is_active' => ['boolean'],
         ]);
 
+        // 防範 SSRF：禁止輸入指向內部私有網段、本機或中繼資料之 URL (SEC-06)
+        if (!WebhookService::isSafeUrl($validated['url'])) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['url' => '安全性限制：Webhook URL 不得指向本機 (localhost)、內部私有網段或雲端中繼資料端點。']);
+        }
+
         $webhook = Webhook::create([
             'name' => $validated['name'],
             'url' => $validated['url'],

@@ -126,7 +126,8 @@ class FormRequestController extends Controller
             foreach ($request->file('attachments') as $file) {
                 if ($file && $file->isValid()) {
                     $originalName = $file->getClientOriginalName();
-                    $storedPath = $file->store('form_attachments', 'public');
+                    // 改用 local 私有儲存磁碟，杜絕 Nginx 靜態存取繞過授權 (SEC-01)
+                    $storedPath = $file->store('private_form_attachments', 'local');
                     $attachmentsData[] = [
                         'name' => $originalName,
                         'path' => $storedPath,
@@ -308,10 +309,15 @@ class FormRequestController extends Controller
         }
 
         $attachment = $attachments[$index];
-        $disk = Storage::disk('public');
+        $disk = Storage::disk('local');
+        $filePath = $attachment['path'] ?? '';
 
-        if (!$disk->exists($attachment['path'])) {
-            abort(404, '附件檔案實體不存在或已損毀。');
+        // 優先從 local 私有磁碟讀取，若不存在則相容歷史 public 檔案 (SEC-01)
+        if (!$disk->exists($filePath)) {
+            $disk = Storage::disk('public');
+            if (!$disk->exists($filePath)) {
+                abort(404, '附件檔案實體不存在或已損毀。');
+            }
         }
 
         // 記錄附件下載審計日誌
@@ -326,7 +332,7 @@ class FormRequestController extends Controller
             ]
         );
 
-        return $disk->download($attachment['path'], $attachment['name']);
+        return $disk->download($filePath, $attachment['name']);
     }
 
     public function action(Request $request, EipFormRequest $formRequest): RedirectResponse
@@ -591,11 +597,11 @@ class FormRequestController extends Controller
             'attachments.*' => 'file|max:10240|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx,zip',
         ]);
 
-        // 處理補充上傳之附件檔案
+        // 處理補充上傳之附件檔案 (改用 local 私有儲存磁碟 SEC-01)
         $newAttachments = [];
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $path = $file->store('form_attachments', 'public');
+                $path = $file->store('private_form_attachments', 'local');
                 $newAttachments[] = [
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,

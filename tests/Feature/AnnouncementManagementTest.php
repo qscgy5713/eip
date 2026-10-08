@@ -51,7 +51,7 @@ class AnnouncementManagementTest extends TestCase
 
     public function test_admin_or_manager_can_publish_announcement_with_attachments(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
         Notification::fake();
 
         $pdfFile = UploadedFile::fake()->create('2026年度規章手冊.pdf', 800, 'application/pdf');
@@ -84,11 +84,11 @@ class AnnouncementManagementTest extends TestCase
 
         $firstAttachment = $announcement->attachments[0];
         $this->assertEquals('2026年度規章手冊.pdf', $firstAttachment['name']);
-        Storage::disk('public')->assertExists($firstAttachment['path']);
+        Storage::disk('local')->assertExists($firstAttachment['path']);
 
         $secondAttachment = $announcement->attachments[1];
         $this->assertEquals('活動海報.png', $secondAttachment['name']);
-        Storage::disk('public')->assertExists($secondAttachment['path']);
+        Storage::disk('local')->assertExists($secondAttachment['path']);
 
         // 審計日誌確認
         $this->assertDatabaseHas('audit_logs', [
@@ -223,6 +223,7 @@ class AnnouncementManagementTest extends TestCase
     public function test_admin_can_update_announcement_and_append_attachments(): void
     {
         Storage::fake('public');
+        Storage::fake('local');
 
         $initialPath = 'announcements/attachments/initial.pdf';
         Storage::disk('public')->put($initialPath, 'Initial file content');
@@ -267,7 +268,7 @@ class AnnouncementManagementTest extends TestCase
         $this->assertCount(2, $announcement->attachments);
         $this->assertEquals('初版檔案.pdf', $announcement->attachments[0]['name']);
         $this->assertEquals('更新行程表.xlsx', $announcement->attachments[1]['name']);
-        Storage::disk('public')->assertExists($announcement->attachments[1]['path']);
+        Storage::disk('local')->assertExists($announcement->attachments[1]['path']);
     }
 
     public function test_admin_can_delete_announcement_and_storage_files_are_cleaned(): void

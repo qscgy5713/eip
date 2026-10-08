@@ -87,7 +87,15 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
 - 🔔 **站內通知中心與事件推播引擎**：導覽列即時未讀通知鈴鐺與下拉摘要面板、簽核待審批/審核結果/會議預約即時通知、一鍵標記已讀與分類清單。
 - ⚡ **外部通訊群組 Webhook 整合生態 (Slack / Discord / Teams)**：支援管理員設定第三方群組推播端點，簽核送單、主管審批結果、會議室借用等核心業務即時自動推播，提供 HMAC-SHA256 數位簽章防偽、雙向跨平台 Payload 相容、連線測試 Ping 與開關控制。
 - 🛡️ **系統審計稽核日誌 (Audit Trail)**：全面追蹤企業機密操作軌跡（表單簽核、機密文件調閱、會議室預約、出勤打卡、Webhook 異動、職務代理設定、考勤報表匯出、公文存證列印、表單證明附件調閱、知識文件線上預覽、考勤圍欄設定變更、休假額度調整與批次初始化、主管批次審批簽核、部門與員工維護、轉簽與加簽會辦操作、組織編制名冊匯出、補打卡考勤自動校正、加班折算補休入帳、公告附件調閱與下架刪除、文件屬性更新與密件角色配置、表單退回修改與補件重審），支援管理員關鍵字搜尋、動作分類統計與 IP 裝置溯源。
-- 🔒 **企業級資安稽核與 CI/CD Pipeline**：全系統無死角 IDOR 防水平越權隔離保護（表單單據、未公開公告、檔案安全下載、會議室維護、考勤月報敏感個資、公文列印調閱、單據證明附件、文件線上預覽、考勤圍欄管理後台、同仁休假額度維護、批次簽核授權、組織部門與員工帳號管轄、協同轉簽與加簽授權、組織圖拖曳與循環防呆、同仁下拉選單指派調任授權、文件資料更新權限邊界、表單退回重審權限邊界），累積 209 項自動化 Feature 測試 100% 覆蓋通過，並配置 GitHub Actions 持續整合流程。
+- 🔒 **企業級資安防禦縱深與 CI/CD Pipeline (Security Hardened Architecture)**：
+  - **私有磁碟嚴格隔離 (Private Storage Isolation)**：機密證明文件與未公開公告附件全數由 `public` 遷移至 `local` 私有儲存，徹底阻絕 Nginx 靜態檔案繞過 Controller 授權之資料外洩風險。
+  - **跨物件歷史版本 IDOR 防護 (Scoped Route Model Binding)**：嚴格校驗歷史版本與當前文件之一致性隸屬，杜絕跨機密文件版本越權下載與預覽。
+  - **全域活躍會話即時撤銷 (Active Session Revocation Middleware)**：掛載 `EnsureUserIsActive` 全域中介層，同仁一旦被標記為停權或離職，線上活躍會話立即強制登出並銷毀 Session。
+  - **垂直越權與提權阻絕 (Vertical Privilege Escalation Defense)**：嚴格限制人資帳號禁止建立或提拔最高權限 Admin 帳號。
+  - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
+  - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
+  - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
+  - **全面測試覆蓋**：累積 **216 項自動化 Feature 測試 100% 覆蓋通過 (1200 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)

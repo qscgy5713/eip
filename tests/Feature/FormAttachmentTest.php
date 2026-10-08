@@ -52,7 +52,7 @@ class FormAttachmentTest extends TestCase
 
     public function test_user_can_submit_form_request_with_attachments(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
 
         $pdfFile = UploadedFile::fake()->create('診斷證明書.pdf', 500, 'application/pdf');
         $imgFile = UploadedFile::fake()->image('收據證明.png', 400, 300);
@@ -77,8 +77,8 @@ class FormAttachmentTest extends TestCase
         $this->assertEquals('診斷證明書.pdf', $formRequest->attachments[0]['name']);
         $this->assertEquals('收據證明.png', $formRequest->attachments[1]['name']);
 
-        Storage::disk('public')->assertExists($formRequest->attachments[0]['path']);
-        Storage::disk('public')->assertExists($formRequest->attachments[1]['path']);
+        Storage::disk('local')->assertExists($formRequest->attachments[0]['path']);
+        Storage::disk('local')->assertExists($formRequest->attachments[1]['path']);
     }
 
     public function test_user_can_submit_form_request_without_attachments(): void
