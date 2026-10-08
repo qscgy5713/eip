@@ -12,6 +12,7 @@
 - [x] 實作 RBAC 角色與細部權限機制（admin, manager, employee, hr）
 - [x] 使用者身分驗證與個人資料維護
 - [x] 企業公告發布與閱覽追蹤功能（Announcements, Reads 追蹤）
+- [x] 企業公告發布管理、官方附件檔案上傳與安全下載系統 (Announcement Publishing & Attachments Engine：管理員/主管前端發布公告 Modal、多檔附件上傳與單檔 10MB 校驗、公告置頂與緊急度選擇、草稿/正式發布切換、草稿公告嚴格權限隔離防洩露、在職同仁安全下載官方附件、下載稽核日誌 AuditLog 留痕、刪除公告實體檔案自動清理、重要公告連鎖全員系統通知與 Webhook 推播，全系統 189 項 Feature 測試 100% 通過，1032 assertions)
 - [x] 員工通訊錄與組織架構全景圖（Directory 查詢與篩選、支援切換「同仁通訊名冊」與「企業組織架構全景圖」唯讀畫布、即時關鍵字模糊搜尋、節點折疊收合、縮放控制與唯讀同仁抽屜）
 - [x] 組織架構與員工維護管理後台 (Org Chart & Employee Management Hub：視覺化部門樹狀階層 CRUD、父子隸屬、主管指派、防刪保護、員工帳號建立/異動、自動休假額度初始化、在職/停權/離職狀態切換與登入阻擋防護、重設密碼、全系統 165 項 Feature 測試 100% 通過)
 - [x] 互動式組織架構圖、拖曳階層、主管一鍵指派與編制匯出系統 (Interactive Drag-and-Drop Org Chart & Member Engine：一鍵無縫切換【互動視覺組織樹】與【階層清單總覽】雙重視圖、支援原生 HTML5 拖曳部門節點動態調整父子階層與直屬隸屬關係、頂部一級公司直屬部門放置區 Drop Zone、前後端雙層深度遞迴循環依賴防呆阻擋、卡片節點快捷建立子部門/編輯/安全防刪、畫布即時關鍵字模糊搜尋高亮脈衝、主管一鍵指派/解除並自動同步部門隸屬、直屬人數與轄下全體子孫部門總編制統計計算、非原生自訂 Combobox 下拉組件「支援輸入姓名、Email 帳號或工號即時過濾選取同仁」、全公司組織與人員編制表匯出 CSV (支援 UTF-8 BOM Excel 相容與 AuditLog 審計)、樹狀畫布 60%~140% 縮放與一鍵展開/收合控制、全系統 165 項 Feature 測試 100% 通過)
@@ -47,7 +48,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest 等 182 項 Feature 測試 100% 通過，988 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest 等 189 項 Feature 測試 100% 通過，1032 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

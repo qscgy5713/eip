@@ -14,6 +14,7 @@ class Announcement extends Model
     protected $fillable = [
         'title',
         'content',
+        'attachments',
         'category',
         'priority',
         'is_pinned',
@@ -26,6 +27,7 @@ class Announcement extends Model
     protected $casts = [
         'is_pinned' => 'boolean',
         'published_at' => 'datetime',
+        'attachments' => 'array',
     ];
 
     public function author(): BelongsTo

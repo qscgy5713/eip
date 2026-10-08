@@ -30,7 +30,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 公告中心
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+    Route::post('/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
     Route::get('/announcements/{announcement}', [AnnouncementController::class, 'show'])->name('announcements.show');
+    Route::put('/announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
+    Route::delete('/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    Route::get('/announcements/{announcement}/attachments/{index}', [AnnouncementController::class, 'downloadAttachment'])->name('announcements.attachments.download');
 
     // 表單簽核工作流
     Route::get('/forms', [FormRequestController::class, 'index'])->name('forms.index');

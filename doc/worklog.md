@@ -2,6 +2,23 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**企業內部公告發布管理、官方附件檔案上傳與安全下載系統 (Announcement Publishing & Attachments Engine)**：
+  - **資料庫遷移與 Model 升級 (`announcements.attachments` JSON 欄位)**：
+    - 在 `announcements` 資料表新增 `attachments` JSON 欄位，結構化儲存附件檔名、儲存路徑、大小 (bytes) 與 MIME 類型。
+    - 在 `Announcement` Model 中配置 `$fillable` 與 `'attachments' => 'array'` casts。
+  - **後端控制器擴充與權限安全隔離 (`AnnouncementController.php`)**：
+    - `store`: 僅限系統管理員 (`admin`)、人資主管 (`hr`) 與部門主管 (`manager`) 具備發布企業內部公告權限，其餘基層同仁嚴格阻擋 403 Forbidden。支援單次上傳多個官方附件（PDF、Word、Excel、圖片、ZIP，單檔上限 10MB），儲存於 `storage/app/public/announcements/attachments/`。
+    - `update`: 支援管理者/主管修改公告主旨、分類、優先級、置頂狀態、公開/草稿切換，並可追加新附件。
+    - `destroy`: 刪除公告時，自動透過 `Storage::disk('public')->delete()` 遍歷清理關聯實體磁碟檔案，防止留存垃圾孤兒檔案，並記錄 `AuditLog` 審計日誌。
+    - `downloadAttachment`: 實作嚴格的安全下載機制。若公告為公開發布狀態 (`published`)，全體在職同仁均可調閱下載；若公告為草稿狀態 (`draft`)，非管理員或非作者本人直接 404 隔離（不洩露草稿存在性）。下載時自動記錄 `AuditLog` 審計留痕（動作：`download_announcement_attachment`）。
+    - 置頂或重要/緊急公告 (`urgent`/`high`/`is_pinned`) 發布時，自動連鎖向全體在職同仁（排除發布者本人）派發站內鈴鐺通知 (`EipSystemNotification`)，並同步推播外部 Webhook (`announcement.published`)。
+  - **前端視圖體驗升級 (`Announcements/Index.vue` & `Announcements/Show.vue`)**：
+    - `Index.vue`: 頂部提供「＋ 發布企業公告」專屬彈窗 Modal（含標題、分類選單、緊急度單選、內文、置頂開關、草稿/發布切換、官方附件拖曳多檔選取與大小預覽移除）。提供管理員專屬「發布中 / 草稿 / 全部」狀態篩選鈕。公告列表卡片動態展示「📎 N 個檢附檔案」藍色標籤、置頂/草稿徽章與已讀未讀狀態。
+    - `Show.vue`: 新增「官方檢附文件」安全下載專屬資訊卡，清楚列出檔案名稱、大小、副檔名標籤與一鍵下載按鈕；管理員專屬置頂/緊急狀態標籤與刪除下架按鈕。
+  - **自動化測試與代碼品質**：
+    - 新增 `tests/Feature/AnnouncementManagementTest.php` 涵蓋 7 大 Feature 測試：管理員發布公告上傳多檔附件、一般同仁無法發布 (403)、同仁安全下載附件與 AuditLog 留痕、草稿公告隔離保護 (404)、編輯更新追加附件、刪除公告與實體檔案清理、緊急公告觸發通知與 Webhook。
+    - 全系統自動化測試套件擴充至 **189 項 Feature 測試 100% 全數通過 (1032 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.42s)。
 - 實作**表單申請主動撤回與作廢機制 (Form Request Withdrawal & Re-apply Engine)**：
   - **申請人主動撤回與權限保護 (`WorkflowService::withdrawFormRequest` & `FormRequestController::withdraw`)**：
     - 嚴格校驗單據狀態：僅限處於 `pending`（審核中）之申請單允許撤回；已核准 (`approved`) 或已駁回 (`rejected`) 之結案單據禁止撤回（回傳 422 錯誤）。
