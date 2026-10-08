@@ -105,6 +105,13 @@ const commandPaletteRef = ref(null);
                                 >
                                     行事曆
                                 </NavLink>
+                                <NavLink
+                                    :href="route('polls.index')"
+                                    :active="route().current('polls.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    同仁投票
+                                </NavLink>
 
                                 <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
@@ -422,6 +429,12 @@ const commandPaletteRef = ref(null);
                             :active="route().current('calendar.*')"
                         >
                             全景行事曆
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('polls.index')"
+                            :active="route().current('polls.*')"
+                        >
+                            同仁投票
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"

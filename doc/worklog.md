@@ -2,6 +2,31 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**企業同仁投票與意見調查系統 (Polls & Survey Engine)**：
+  - **資料架構與資料表設計 (`Poll`, `PollOption`, `PollVoter`, `PollVote` 模型與 migration)**：
+    - `polls`：儲存活動標題、詳細說明、單選/複選 (`is_multiple_choice`)、匿名/記名 (`is_anonymous`)、截止時間 (`ends_at`)、狀態 (`active`/`closed`) 與建立者。
+    - `poll_options`：動態選項內容與自訂排序順序 (`sort_order`)。
+    - `poll_voters`：記錄投票者 ID 與投票活動 ID（唯一約束 `unique(poll_id, user_id)`），嚴密防範重複投票與並發刷票。
+    - `poll_votes`：記錄各選項得票數。**核心隱私架構**：若為匿名投票 (`is_anonymous = true`)，`user_id` 欄位一律寫入 `null`，使投票選項與投票者身分端到端徹底解耦，連資料庫管理員或後端查詢也無法逆向追蹤同仁具體選項，落實真正的企業匿名保障！
+  - **後端控制器業務邏輯 (`PollController`)**：
+    - 投票清單：支援「進行中 / 已截止 / 我發起的 / 全部」多維狀態篩選與分頁，標註當前使用者之參與狀態。
+    - 活動建立：限管理員、主管或人事同仁發起，校驗選項清單（2~20 項）與截止時間，支援事務處理與 AuditLog 審計日誌。
+    - 投票提交：多層驗證（未截止、未重複投過、單/複選筆數校驗、選項邊界校驗），事務防呆寫入。
+    - 關閉與刪除：建立者與管理員專屬權限控制。
+  - **前端互動與統計視圖 (`Polls/Index.vue` & `Polls/Show.vue`)**：
+    - 清單頁面：投票活動卡片、狀態徽章、匿名標籤、單複選標示、參與人數與「已參與/未參與」狀態徽章；發起投票專屬彈窗 Modal（支援動態增減選項）。
+    - 投票詳情頁面：
+      - 進行中未投票時：提供互動式單選 Radio / 複選 Checkbox 選取卡片與一鍵送出選票。
+      - 已投票或已截止時：切換為即時統計看板，呈現動態百分比進度長條圖 (Progress bar)、總票數、參與人數、最高票 👑 冠軍高亮徽章、個人選票標示。
+      - 記名投票主管專屬：提供各選項具名同仁名冊之折疊展開檢視。
+  - **企業生態聯動與工作台整合**：
+    - **儀表板 (`Dashboard.vue` & `DashboardController`)**：在工作台加入「同仁投票調查」小卡，展示進行中的活躍投票與一鍵參與/看結果。
+    - **全站搜尋指揮中心 (`GlobalSearchController`)**：支援鍵盤 `Cmd+K` 輸入關鍵字模糊檢索進行中或歷史投票，快捷直達。
+    - **導覽列整合 (`AuthenticatedLayout.vue`)**：桌機與手機端選單加入「同仁投票」入口。
+  - **自動化測試與工程品質**：
+    - 新增 `tests/Feature/PollTest.php` 涵蓋 10 項完整測試（40 assertions），包括清單檢視、主管建立、一般同仁建立阻擋、單選/複選、匿名 user_id 為 null 隱私校驗、防重複投票、截止後禁止投票、提前結束、刪除與全域搜尋。
+    - 全系統自動化測試累積達到 **235 項 Feature / Unit 測試 100% 全數通過 (1348 assertions)**。
+    - 前端 Vite 8.3.3 Client 順利建置 (1.14s)。
 - 實作**電子表單線上手寫數位簽章與公文壓印系統 (E-Signature & Digital Stamp Engine)**：
   - **資料模型與簽核紀錄擴充 (`ApprovalRecord` 模型與 migration)**：
     - 資料表新增 `signature` TEXT 欄位，在 `WorkflowService::processAction` 與 `FormRequestController::action` 中支援驗證與安全儲存審批主管之手寫簽章圖片 DataURL。

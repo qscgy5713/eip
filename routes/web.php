@@ -16,6 +16,7 @@ use App\Http\Controllers\MeetingRoomController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrgManagementController;
+use App\Http\Controllers\PollController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebhookController;
 use Illuminate\Foundation\Application;
@@ -96,6 +97,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/documents/{document}/preview/{version?}', [DocumentController::class, 'preview'])->name('documents.preview');
     Route::put('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+
+    // 企業同仁投票與意見調查系統
+    Route::get('/polls', [PollController::class, 'index'])->name('polls.index');
+    Route::post('/polls', [PollController::class, 'store'])->name('polls.store');
+    Route::get('/polls/{poll}', [PollController::class, 'show'])->name('polls.show');
+    Route::post('/polls/{poll}/vote', [PollController::class, 'vote'])->name('polls.vote');
+    Route::post('/polls/{poll}/close', [PollController::class, 'close'])->name('polls.close');
+    Route::delete('/polls/{poll}', [PollController::class, 'destroy'])->name('polls.destroy');
 
     // 站內通知中心
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

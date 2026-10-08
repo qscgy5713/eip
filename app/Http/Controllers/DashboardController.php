@@ -6,6 +6,8 @@ use App\Models\Announcement;
 use App\Models\ApprovalRecord;
 use App\Models\Attendance;
 use App\Models\FormRequest;
+use App\Models\Poll;
+use App\Models\PollVoter;
 use App\Models\RoomBooking;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -127,6 +129,27 @@ class DashboardController extends Controller
             ];
         }
 
+        // 進行中的企業投票活動
+        $activePolls = Poll::withCount(['voters'])
+            ->where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('ends_at')
+                  ->orWhere('ends_at', '>', now());
+            })
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $votedPollIds = PollVoter::where('user_id', $user->id)
+            ->whereIn('poll_id', $activePolls->pluck('id'))
+            ->pluck('poll_id')
+            ->toArray();
+
+        $activePolls->transform(function ($poll) use ($votedPollIds) {
+            $poll->has_voted = in_array($poll->id, $votedPollIds);
+            return $poll;
+        });
+
         return Inertia::render('Dashboard', [
             'announcements' => $announcements,
             'pendingApprovals' => $pendingApprovals,
@@ -135,6 +158,7 @@ class DashboardController extends Controller
             'myUpcomingBookings' => $myUpcomingBookings,
             'myLeaveSummary' => $myLeaveSummary,
             'teamAttendanceSnapshot' => $teamAttendanceSnapshot,
+            'activePolls' => $activePolls,
             'stats' => [
                 'unreadAnnouncementsCount' => Announcement::where('status', 'published')->whereDoesntHave('reads', fn($q) => $q->where('user_id', $user->id))->count(),
                 'pendingApprovalsCount' => $totalPendingApprovalsCount,

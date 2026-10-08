@@ -108,6 +108,16 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function polls(): HasMany
+    {
+        return $this->hasMany(Poll::class, 'creator_id');
+    }
+
+    public function pollVoters(): HasMany
+    {
+        return $this->hasMany(PollVoter::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

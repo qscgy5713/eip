@@ -11,6 +11,7 @@ defineProps({
     myUpcomingBookings: Array,
     myLeaveSummary: Object,
     teamAttendanceSnapshot: Object,
+    activePolls: Array,
 });
 
 const clockInForm = useForm({
@@ -301,6 +302,52 @@ const statusBadge = (status) => {
                                 <span v-if="!item.is_read" class="w-2 h-2 rounded-full bg-red-500 shrink-0 mt-2" title="未讀"></span>
                             </div>
                             <div v-if="announcements.length === 0" class="py-8 text-center text-sm text-gray-400">目前尚無公告</div>
+                        </div>
+                    </div>
+
+                    <!-- 同仁投票調查專區 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
+                                <h3 class="font-bold text-gray-900 text-lg">同仁投票調查</h3>
+                            </div>
+                            <Link :href="route('polls.index')" class="text-sm text-indigo-600 hover:text-indigo-700 font-semibold hover:underline">
+                                投票專區 &rarr;
+                            </Link>
+                        </div>
+                        <div class="mt-4 space-y-3">
+                            <div
+                                v-for="poll in activePolls"
+                                :key="poll.id"
+                                class="p-3.5 rounded-lg bg-indigo-50/50 border border-indigo-100 flex items-center justify-between gap-3"
+                            >
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-700 shrink-0">
+                                            {{ poll.is_multiple_choice ? '複選' : '單選' }}
+                                        </span>
+                                        <Link :href="route('polls.show', poll.id)" class="font-semibold text-sm text-gray-900 hover:text-indigo-600 truncate block">
+                                            {{ poll.title }}
+                                        </Link>
+                                    </div>
+                                    <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
+                                        <span>{{ poll.voters_count }} 人參與</span>
+                                        <span v-if="poll.has_voted" class="text-emerald-600 font-medium">✓ 您已投票</span>
+                                        <span v-else class="text-amber-600 font-medium">尚未投票</span>
+                                    </div>
+                                </div>
+                                <Link
+                                    :href="route('polls.show', poll.id)"
+                                    class="px-3 py-1.5 text-xs font-medium rounded-lg shadow-2xs shrink-0 transition-colors"
+                                    :class="poll.has_voted ? 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50' : 'bg-indigo-600 text-white hover:bg-indigo-700'"
+                                >
+                                    {{ poll.has_voted ? '看結果' : '投票' }}
+                                </Link>
+                            </div>
+                            <div v-if="!activePolls || activePolls.length === 0" class="py-6 text-center text-xs text-gray-400">
+                                目前尚無進行中的同仁投票活動
+                            </div>
                         </div>
                     </div>
 

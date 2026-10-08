@@ -6,6 +6,7 @@ use App\Models\Announcement;
 use App\Models\Document;
 use App\Models\FormRequest as EipFormRequest;
 use App\Models\MeetingRoom;
+use App\Models\Poll;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -208,6 +209,34 @@ class GlobalSearchController extends Controller
             ];
         }
 
+        // 7. 檢索同仁投票與意見調查 (Polls)
+        $polls = Poll::where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%");
+            })
+            ->latest()
+            ->limit(5)
+            ->get()
+            ->map(function ($p) {
+                $statusText = $p->isClosed() ? '已截止' : '進行中';
+                $badge = $p->is_anonymous ? '匿名投票' : '記名投票';
+                return [
+                    'id' => $p->id,
+                    'title' => $p->title,
+                    'subtitle' => "狀態: {$statusText} · " . ($p->is_multiple_choice ? '複選' : '單選'),
+                    'url' => route('polls.show', $p->id),
+                    'badge' => $badge,
+                    'type' => 'poll',
+                ];
+            });
+
+        if ($polls->isNotEmpty()) {
+            $results['polls'] = [
+                'title' => '企業投票與調查',
+                'items' => $polls,
+            ];
+        }
+
         return response()->json([
             'query' => $query,
             'results' => $results,
@@ -220,6 +249,14 @@ class GlobalSearchController extends Controller
     private function getQuickShortcuts(User $user): array
     {
         $shortcuts = [
+            [
+                'id' => 'quick-polls',
+                'title' => '企業投票與意見調查',
+                'subtitle' => '參與福委活動、意見徵詢與即時投票',
+                'url' => route('polls.index'),
+                'badge' => '投票',
+                'type' => 'shortcut',
+            ],
             [
                 'id' => 'quick-form',
                 'title' => '發起電子表單申請',

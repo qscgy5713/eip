@@ -98,6 +98,12 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **HTML5 Canvas 數位手寫簽名板**：封裝獨立組件 `SignaturePad.vue`，具備 Retina 螢幕解析度適配，支援滑鼠拖曳、觸控筆與觸控螢幕手寫感應（貝茲平滑筆觸），提供水平簽署導引線與一鍵清除重簽。
   - **審批歷程親筆筆跡印記**：主管審核時可選擇展開簽名板附署手寫親筆簽名，審核通過後自動存於 `approval_records.signature`，於前台歷程時間軸以專屬手寫簽章印記卡展示。
   - **A4 正式列印手寫簽名壓印**：公文正式列印頁面於主管審核欄位直接壓印真實手寫簽名，並與企業電子核准防偽印章相互印證，達成現代無紙化高規格公文存證。
+- 🗳️ **企業同仁內部投票與意見調查系統 (Polls & Survey Engine)**：
+  - **靈活配置與多維屬性**：支援管理員、主管或人資發起投票活動，支援單選/複選題型、匿名/記名機制、截止時間與動態增減選項（2~20 項）。
+  - **一人一票嚴密防刷防呆**：資料庫 `poll_voters` 建立 `unique(poll_id, user_id)` 唯一索引約束，嚴密防止同仁重複投票與並發刷票。
+  - **端到端匿名隱私保護架構**：匿名投票時，`poll_votes.user_id` 一律存入 `null`，投票選項與投票者身分端到端徹底解耦，即使是資料庫管理員亦無法逆向追蹤同仁具體選項，落實真正的企業匿名保障。
+  - **視覺化統計與主管名冊展開**：投票結果提供動態進度長條圖 (Progress bar)、票數與百分比統計、最高票 👑 冠軍高亮徽章；若為記名投票，具管理權限者可折疊展開各選項之具名同仁名冊。
+  - **生態深度整合**：工作台儀表板 (Dashboard) 內嵌活躍投票小卡、全站搜尋 (Cmd+K) 模糊檢索與全方位 `AuditLog` 審計留痕。
 - 🔒 **企業級資安防禦縱深與 CI/CD Pipeline (Security Hardened Architecture)**：
   - **私有磁碟嚴格隔離 (Private Storage Isolation)**：機密證明文件與未公開公告附件全數由 `public` 遷移至 `local` 私有儲存，徹底阻絕 Nginx 靜態檔案繞過 Controller 授權之資料外洩風險。
   - **跨物件歷史版本 IDOR 防護 (Scoped Route Model Binding)**：嚴格校驗歷史版本與當前文件之一致性隸屬，杜絕跨機密文件版本越權下載與預覽。
@@ -106,7 +112,7 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
   - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
   - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
-  - **全面測試覆蓋**：累積 **225 項自動化 Feature 測試 100% 覆蓋通過 (1302 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **全面測試覆蓋**：累積 **235 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1348 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)
