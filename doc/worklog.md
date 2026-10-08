@@ -2,6 +2,24 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**加班單結案自動折算補休額度與個人假額存摺雙頁籤對帳系統 (Overtime to Compensatory Credit & Dual-Tab Ledger Engine)**：
+  - **加班單結案自動折算補休額度入帳 (`LeaveBalanceService::creditCompensatoryLeave`)**：
+    - 同仁提交「加班申請單 (`OVERTIME`)」並勾選「換取補休時數」經主管（及達 8 小時之人資工時稽核）核准結案時，簽核引擎自動觸發補休額度折算。
+    - 依據勞動基準法 8 小時 = 1 天標準工時精準計算：`$creditDays = round($hours / 8.0, 2)`。
+    - 自動在 `leave_balances` 查找或建立該同仁在加班年份之 `compensatory`（補休）配額，自動累加 `allocated_days`。
+    - 於備註欄位自動標記 `[加班單 #{$formRequest->id} 核准入帳 +{$creditDays}天]`。
+    - 發送即時站內系統通知 (`EipSystemNotification`) 告知同仁補休已成功入帳，並留存 `AuditLog` 審計留痕（動作：`overtime_compensatory_credited`）。
+    - 若加班單選擇「核發加班費」，則維持財務支出流程，不增加休假額度。
+  - **個人假額存摺雙頁籤對帳表 (`LeaveBalances/Index.vue` & `LeaveBalanceController.php`)**：
+    - 休假管理中心頂部新增「申請加班換補休」快捷按鈕，直通加班申請單。
+    - 對帳表全面升級為【請假支出扣額】與【加班換補休入帳】雙頁籤無縫切換：
+      - 「請假支出扣額」：清晰列出請假單號、假別類型、期間、扣除天數（如 `-1.0 天`）、事由說明與扣額狀態。
+      - 「加班換補休入帳」：完整列出加班單號、加班日期、加班類型、時數、補償方式、補休折算入帳（如 `+1.0 天補休` 或 `核發加班費`）、審核狀態與單據連結。
+    - 實現企業人事與員工個人休假額度「支出扣除 / 加班存入」雙向閉環對帳透明化。
+  - **自動化測試與代碼品質**：
+    - 新增 `tests/Feature/OvertimeCompensatoryCreditTest.php` 涵蓋 4 大 Feature 測試：兩級簽核結案自動折算入帳、加班費不折算、折算補休即刻可用提單防呆驗證、休假中心 props 傳遞。
+    - 全系統自動化測試套件擴充至 **174 項 Feature 測試 100% 全數通過 (904 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.25s)。
 - 實作**忘刷補打卡單結案考勤自動同步、出勤紀錄快捷補卡與休假歷史對帳表系統 (Attendance Regularization Sync & Leave Ledger Engine)**：
   - **忘刷/補打卡單結案自動同步考勤紀錄 (`Attendance Regularization Sync Engine`)**：
     - 當同仁提報之「忘刷/補打卡申請單 (`CLOCK_ADJUST`)」經直屬主管或多級簽核全數核准結案時，簽核引擎 (`WorkflowService::syncAttendanceAmendment`) 自動連鎖觸發考勤同步。

@@ -12,7 +12,15 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    myOvertimeRequests: {
+        type: Array,
+        default: () => [],
+    },
     leaveFormId: {
+        type: [Number, String],
+        default: null,
+    },
+    overtimeFormId: {
         type: [Number, String],
         default: null,
     },
@@ -137,6 +145,8 @@ const submitBatchInit = () => {
     });
 };
 
+const activeLedgerTab = ref('leave'); // 'leave' | 'overtime'
+
 const leaveStatusBadgeClass = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
@@ -150,6 +160,22 @@ const leaveStatusLabel = (status) => {
         case 'approved': return '已核准 (已扣額)';
         case 'rejected': return '已駁回 (已釋放)';
         default: return '審核中 (已凍結)';
+    }
+};
+
+const overtimeStatusBadgeClass = (status) => {
+    switch (status) {
+        case 'approved': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        case 'rejected': return 'bg-rose-50 text-rose-700 border-rose-200';
+        default: return 'bg-amber-50 text-amber-700 border-amber-200';
+    }
+};
+
+const overtimeStatusLabel = (status, isComp) => {
+    switch (status) {
+        case 'approved': return isComp ? '已核准 (補休已入帳)' : '已核准 (核發加班費)';
+        case 'rejected': return '已駁回';
+        default: return '審核中';
     }
 };
 </script>
@@ -195,6 +221,15 @@ const leaveStatusLabel = (status) => {
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         發起請假申請
+                    </Link>
+
+                    <Link
+                        v-if="overtimeFormId"
+                        :href="route('forms.create', overtimeFormId)"
+                        class="inline-flex items-center px-3.5 py-2 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg shadow-sm transition gap-1.5"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        申請加班換補休
                     </Link>
 
                     <button
@@ -292,29 +327,78 @@ const leaveStatusLabel = (status) => {
                     </div>
                 </div>
 
-                <!-- 個人請假申請與扣抵紀錄 (Leave History Ledger) -->
+                <!-- 個人請假與加班補休對帳單 (Leave & Overtime Compensatory Ledger) -->
                 <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="p-5 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="p-5 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                            <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-                                我的請假申請與扣抵明細對帳表
-                            </h3>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                    個人假額存摺與申請對帳表
+                                </h3>
+                            </div>
                             <p class="mt-1 text-xs text-gray-500">
-                                呈現您最近發起的請假申請單、對應假別天數與審批折抵狀態。
+                                完整追蹤您的請假扣額支出與加班換補休入帳歷程，即時掌握額度變動軌跡。
                             </p>
                         </div>
-                        <Link
-                            v-if="leaveFormId"
-                            :href="route('forms.create', leaveFormId)"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition shrink-0"
-                        >
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                            新增請假單
-                        </Link>
+
+                        <!-- 雙頁籤切換按鈕與快捷申請 -->
+                        <div class="flex items-center gap-3 self-start sm:self-auto">
+                            <div class="inline-flex rounded-lg bg-gray-100 p-1 border border-gray-200 text-xs font-semibold">
+                                <button
+                                    type="button"
+                                    @click="activeLedgerTab = 'leave'"
+                                    :class="[
+                                        'px-3 py-1.5 rounded-md transition flex items-center gap-1.5',
+                                        activeLedgerTab === 'leave'
+                                            ? 'bg-white text-gray-900 shadow-sm'
+                                            : 'text-gray-600 hover:text-gray-900'
+                                    ]"
+                                >
+                                    <span>請假支出扣額</span>
+                                    <span class="px-1.5 py-0.2 bg-indigo-50 text-indigo-700 text-2xs rounded-full font-bold">
+                                        {{ myLeaveRequests.length }}
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="activeLedgerTab = 'overtime'"
+                                    :class="[
+                                        'px-3 py-1.5 rounded-md transition flex items-center gap-1.5',
+                                        activeLedgerTab === 'overtime'
+                                            ? 'bg-white text-gray-900 shadow-sm'
+                                            : 'text-gray-600 hover:text-gray-900'
+                                    ]"
+                                >
+                                    <span>加班換補休入帳</span>
+                                    <span class="px-1.5 py-0.2 bg-amber-50 text-amber-700 text-2xs rounded-full font-bold">
+                                        {{ myOvertimeRequests.length }}
+                                    </span>
+                                </button>
+                            </div>
+
+                            <Link
+                                v-if="activeLedgerTab === 'leave' && leaveFormId"
+                                :href="route('forms.create', leaveFormId)"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg border border-indigo-200 transition shrink-0"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                新增請假單
+                            </Link>
+
+                            <Link
+                                v-if="activeLedgerTab === 'overtime' && overtimeFormId"
+                                :href="route('forms.create', overtimeFormId)"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-semibold rounded-lg border border-amber-200 transition shrink-0"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                填寫加班單
+                            </Link>
+                        </div>
                     </div>
 
-                    <div class="overflow-x-auto">
+                    <!-- 頁籤 1: 請假扣額明細表格 -->
+                    <div v-show="activeLedgerTab === 'leave'" class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-gray-600">
                             <thead class="bg-gray-50 text-gray-700 uppercase font-bold border-b border-gray-200">
                                 <tr>
@@ -345,7 +429,7 @@ const leaveStatusLabel = (status) => {
                                         {{ req.start_date }} ~ {{ req.end_date }}
                                     </td>
                                     <td class="px-5 py-3 font-bold text-indigo-600">
-                                        {{ req.days }} 天
+                                        -{{ req.days }} 天
                                     </td>
                                     <td class="px-5 py-3 text-gray-500 max-w-xs truncate" :title="req.reason">
                                         {{ req.reason || '—' }}
@@ -370,6 +454,84 @@ const leaveStatusLabel = (status) => {
                                 <tr v-if="myLeaveRequests.length === 0">
                                     <td colspan="8" class="px-5 py-8 text-center text-gray-400">
                                         您近期尚無請假申請紀錄，可點擊右上角「新增請假單」送出假單
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 頁籤 2: 加班補休折算入帳明細表格 -->
+                    <div v-show="activeLedgerTab === 'overtime'" class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-600">
+                            <thead class="bg-gray-50 text-gray-700 uppercase font-bold border-b border-gray-200">
+                                <tr>
+                                    <th class="px-5 py-3">加班單號 / 主旨</th>
+                                    <th class="px-5 py-3">加班日期</th>
+                                    <th class="px-5 py-3">加班類型</th>
+                                    <th class="px-5 py-3">加班時數</th>
+                                    <th class="px-5 py-3">補償方式</th>
+                                    <th class="px-5 py-3">補休折算入帳</th>
+                                    <th class="px-5 py-3">核准狀態</th>
+                                    <th class="px-5 py-3">申請時間</th>
+                                    <th class="px-5 py-3 text-right">單據詳情</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr v-for="req in myOvertimeRequests" :key="req.id" class="hover:bg-gray-50/80 transition">
+                                    <td class="px-5 py-3 font-semibold text-gray-900">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-mono text-2xs text-amber-600 font-bold bg-amber-50 px-1.5 py-0.5 rounded">
+                                                #{{ req.id }}
+                                            </span>
+                                            <span class="truncate max-w-xs">{{ req.title }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-5 py-3 font-mono text-gray-700 font-semibold">
+                                        {{ req.overtime_date }}
+                                    </td>
+                                    <td class="px-5 py-3 text-gray-800">
+                                        {{ req.overtime_type }}
+                                    </td>
+                                    <td class="px-5 py-3 font-bold text-gray-900">
+                                        {{ req.hours }} 小時
+                                    </td>
+                                    <td class="px-5 py-3">
+                                        <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-2xs font-medium">
+                                            {{ req.compensation }}
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-3">
+                                        <span
+                                            v-if="req.credit_days > 0"
+                                            class="inline-flex items-center gap-1 font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded text-2xs"
+                                        >
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                            +{{ req.credit_days }} 天補休
+                                        </span>
+                                        <span v-else class="text-gray-400 text-2xs">
+                                            核發加班費
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-3">
+                                        <span :class="['px-2 py-0.5 rounded-full text-2xs font-bold border', overtimeStatusBadgeClass(req.status)]">
+                                            {{ overtimeStatusLabel(req.status, req.credit_days > 0) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-3 font-mono text-gray-400">
+                                        {{ req.created_at }}
+                                    </td>
+                                    <td class="px-5 py-3 text-right">
+                                        <Link
+                                            :href="route('forms.show', req.id)"
+                                            class="text-indigo-600 hover:text-indigo-900 font-semibold"
+                                        >
+                                            檢視簽核 ➜
+                                        </Link>
+                                    </td>
+                                </tr>
+                                <tr v-if="myOvertimeRequests.length === 0">
+                                    <td colspan="9" class="px-5 py-8 text-center text-gray-400">
+                                        您近期尚無加班申請紀錄，若有延長工時可點擊右上角「填寫加班單」申請換取補休
                                     </td>
                                 </tr>
                             </tbody>

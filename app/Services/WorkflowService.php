@@ -445,6 +445,9 @@ class WorkflowService
         // 若為忘刷/補打卡單，自動同步修復考勤打卡紀錄 (Attendance Regularization)
         $this->syncAttendanceAmendment($formRequest);
 
+        // 若為加班單且選擇換取補休，自動將加班時數折算入補休額度 (Overtime Compensatory Credit)
+        app(\App\Services\LeaveBalanceService::class)->creditCompensatoryLeave($formRequest);
+
         AuditLog::log(
             action: 'approve_form_request',
             description: "{$signRoleText} 完成了「{$stepTitle}」最終審定，單據「{$formRequest->title}」正式結案核准",

@@ -285,4 +285,85 @@ class LeaveBalanceService
 
         return $count;
     }
+
+    /**
+     * 加班申請單 (OVERTIME) 核准結案時，若選擇「換取補休時數」，自動折算補休額度入帳
+     */
+    public function creditCompensatoryLeave(FormRequest $formRequest): ?LeaveBalance
+    {
+        if ($formRequest->form?->code !== 'OVERTIME') {
+            return null;
+        }
+
+        $data = $formRequest->data ?? [];
+        $compensation = $data['compensation'] ?? '';
+
+        // 僅當補償方式為換取補休時處理
+        if (!str_contains($compensation, '補休')) {
+            return null;
+        }
+
+        $hours = floatval($data['hours'] ?? 0);
+        if ($hours <= 0) {
+            return null;
+        }
+
+        $user = $formRequest->user;
+        if (!$user) {
+            return null;
+        }
+
+        // 以法定 8 小時 = 1 天標準工時進行折算（例如 4 小時 = 0.5 天）
+        $creditDays = round($hours / 8.0, 2);
+        $overtimeDate = $data['overtime_date'] ?? date('Y-m-d');
+        $year = (int) date('Y', strtotime($overtimeDate));
+
+        $balance = LeaveBalance::firstOrCreate(
+            [
+                'user_id' => $user->id,
+                'year' => $year,
+                'leave_type' => LeaveBalance::TYPE_COMPENSATORY,
+            ],
+            [
+                'allocated_days' => 0.0,
+                'used_days' => 0.0,
+                'pending_days' => 0.0,
+                'note' => '系統補休帳戶',
+            ]
+        );
+
+        $oldAllocated = (float) $balance->allocated_days;
+        $newAllocated = $oldAllocated + $creditDays;
+        $balance->allocated_days = $newAllocated;
+
+        $noteMsg = "[加班單 #{$formRequest->id} 核准入帳 +{$creditDays}天]";
+        $balance->note = $balance->note ? "{$balance->note}；{$noteMsg}" : $noteMsg;
+        $balance->save();
+
+        AuditLog::log(
+            action: 'overtime_compensatory_credited',
+            description: "加班單「{$formRequest->title}」核准結案，系統自動為同仁 {$user->name} 折算入帳 {$creditDays} 天補休額度（加班 {$hours} 小時）",
+            auditable: $balance,
+            details: [
+                'form_request_id' => $formRequest->id,
+                'user_id' => $user->id,
+                'year' => $year,
+                'overtime_date' => $overtimeDate,
+                'overtime_hours' => $hours,
+                'credit_days' => $creditDays,
+                'old_allocated' => $oldAllocated,
+                'new_allocated' => $newAllocated,
+            ]
+        );
+
+        $user->notify(new \App\Notifications\EipSystemNotification(
+            title: "【補休入帳通知】加班單 #{$formRequest->id} 已核准並折算補休",
+            message: "您於 {$overtimeDate} 之加班申請（共 {$hours} 小時）已全數審核通過，系統已自動折算 {$creditDays} 天補休額度入帳至您的 {$year} 年度休假帳戶！",
+            type: 'form_approval',
+            actionUrl: route('leave-balances.index'),
+            senderName: '系統自動入帳'
+        ));
+
+        return $balance;
+    }
 }

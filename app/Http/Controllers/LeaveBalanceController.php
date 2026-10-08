@@ -91,10 +91,43 @@ class LeaveBalanceController extends Controller
                 });
         }
 
+        // 4. 個人加班申請與補休折算入帳明細 (Overtime & Compensatory Credits Ledger)
+        $overtimeForm = \App\Models\Form::where('code', 'OVERTIME')->first();
+        $myOvertimeRequests = [];
+        if ($overtimeForm) {
+            $myOvertimeRequests = \App\Models\FormRequest::with(['form:id,name,code'])
+                ->where('user_id', $user->id)
+                ->where('form_id', $overtimeForm->id)
+                ->latest()
+                ->take(15)
+                ->get()
+                ->map(function ($req) {
+                    $fd = $req->data ?? [];
+                    $hours = (float) ($fd['hours'] ?? 0);
+                    $comp = $fd['compensation'] ?? '換取補休時數';
+                    $isComp = str_contains($comp, '補休');
+                    $creditDays = $isComp ? round($hours / 8.0, 2) : 0;
+                    return [
+                        'id' => $req->id,
+                        'title' => $req->title,
+                        'overtime_date' => $fd['overtime_date'] ?? '',
+                        'overtime_type' => $fd['overtime_type'] ?? '平日延長工時',
+                        'hours' => $hours,
+                        'compensation' => $comp,
+                        'credit_days' => $creditDays,
+                        'reason' => $fd['reason'] ?? '',
+                        'status' => $req->status,
+                        'created_at' => $req->created_at->format('Y-m-d H:i'),
+                    ];
+                });
+        }
+
         return Inertia::render('LeaveBalances/Index', [
             'myBalances' => $myBalances,
             'myLeaveRequests' => $myLeaveRequests,
+            'myOvertimeRequests' => $myOvertimeRequests,
             'leaveFormId' => $leaveForm?->id,
+            'overtimeFormId' => $overtimeForm?->id,
             'selectedYear' => $selectedYear,
             'canManage' => $canManage,
             'managedUsers' => $managedUsers,
