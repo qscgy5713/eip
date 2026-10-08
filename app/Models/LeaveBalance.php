@@ -93,6 +93,11 @@ class LeaveBalance extends Model
         return round(max(0, $avail), 1);
     }
 
+    public function getRemainingDaysAttribute(): float
+    {
+        return $this->getAvailableDaysAttribute();
+    }
+
     public function getTypeLabelAttribute(): string
     {
         return self::LEAVE_TYPES[$this->leave_type]['name'] ?? $this->leave_type;
@@ -110,7 +115,7 @@ class LeaveBalance extends Model
     {
         $trimmed = trim($input);
         return match ($trimmed) {
-            '特休假', '特休', 'annual', 'annual_leave' => self::TYPE_ANNUAL,
+            '特休假', '特休', '特別休假', 'annual', 'annual_leave' => self::TYPE_ANNUAL,
             '補休', 'compensatory', 'comp_leave' => self::TYPE_COMPENSATORY,
             '病假', '傷病假', 'sick', 'sick_leave' => self::TYPE_SICK,
             '事假', 'personal', 'personal_leave' => self::TYPE_PERSONAL,

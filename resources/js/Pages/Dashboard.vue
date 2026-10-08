@@ -153,15 +153,18 @@ const statusBadge = (status) => {
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                    <Link
+                        :href="route('approvals.index')"
+                        class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:border-amber-300 hover:shadow-md transition cursor-pointer group"
+                    >
                         <div>
-                            <p class="text-sm font-medium text-gray-500">待我審批單據</p>
+                            <p class="text-sm font-medium text-gray-500 group-hover:text-amber-700 transition">待我審批單據</p>
                             <p class="text-3xl font-extrabold text-amber-600 mt-1">{{ stats.pendingApprovalsCount }}</p>
                         </div>
-                        <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
+                        <div class="p-3 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-100 transition">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
-                    </div>
+                    </Link>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-500">我進行中的申請</p>
@@ -211,7 +214,7 @@ const statusBadge = (status) => {
                                     <span class="w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
                                     <h3 class="font-bold text-gray-900 text-lg">待我審批</h3>
                                 </div>
-                                <Link :href="route('forms.index')" class="text-sm text-blue-600 hover:underline">進入簽核中心 &rarr;</Link>
+                                <Link :href="route('approvals.index')" class="text-sm text-amber-600 hover:text-amber-700 font-semibold hover:underline">審批中心 (批次簽核) &rarr;</Link>
                             </div>
                             <div class="mt-3 space-y-2">
                                 <div v-for="approval in pendingApprovals" :key="approval.id" class="p-3 rounded-lg bg-amber-50/60 border border-amber-100 flex items-center justify-between">

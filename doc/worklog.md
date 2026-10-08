@@ -2,6 +2,29 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**主管審批中心與一鍵批次簽核系統 (Approvals Hub & Batch Approve Engine)**：
+  - **核心架構與控制器 (ApprovalHubController)**：
+    - 建立 `app/Http/Controllers/ApprovalHubController.php`：
+      - `index`：即時統計個人待審、今日新增、代理代簽與休假單據等 4 大待審指標；支援管理者全公司待審視角 (`all_company`)、表單種類過濾 (`form_id`)、審核類型（本人直審/職務代理代審）與關鍵字多欄位搜尋（申請人姓名、單號、表單主旨）。
+      - `batchAction`：接收批次審核陣列 (`record_ids`)、動作 (`approved`/`rejected`) 與審核批註。嚴格檢驗每筆記錄的當前關卡一致性（防範多級關卡越級搶審）與審核人員權限（本人、生效中代理人或系統管理員）；調用 `WorkflowService::processAction` 執行關卡推進/結案、休假額度扣除/釋放、發送站內通知與外部 Webhook；寫入 `AuditLog` 審計日誌。
+  - **前端視覺與互動介面 (Approvals/Index.vue)**：
+    - 建立 `resources/js/Pages/Approvals/Index.vue`：
+      - 頂部 4 項核心待辦統計指標看板（總待審、今日新增、代理代審、休假單據）。
+      - 全公司/待我審核一鍵切換器（限管理員）。
+      - 表單種類下拉、審核類型切換、關鍵字搜尋列。
+      - 待審單據列表：支援全選/反選 Checkbox、申請人頭像與部門、表單徽章、主旨、關鍵摘要（天數、金額、加班時數）、當前關卡 Stepper 進度徽章與職務代理代簽標籤。
+      - 勾選單據即浮現頂部 Sticky 批次操作工具列，顯示已選數量，支援一鍵開啟「批次核准」或「批次駁回」對話框 (Modal) 並填寫簽核附言。
+      - 每列單據提供行內快捷「核准」、「駁回」與「詳情」跳轉。
+  - **全站導航與儀表板深度整合**：
+    - `AuthenticatedLayout.vue`：於桌面版導覽列與手機版選單新增「審批中心 (Approvals Hub)」入口。
+    - `Dashboard.vue`：將首頁「待我審批單據」統計卡片與「待我審批」區塊直接連結至審批中心 (`approvals.index`)，支援一鍵前往進行批次審核。
+  - **模型相容性與假別正規化優化 (LeaveBalance Model)**：
+    - `LeaveBalance::normalizeType` 擴充支援 `'特別休假'` 同義詞別名。
+    - `LeaveBalance` 模型新增 `remaining_days` 存取器（指向 `available_days`），強化跨層調用相容性。
+  - **自動化測試與代碼品質**：
+    - 建立 `tests/Feature/ApprovalHubTest.php`，共 8 項完整 Feature 測試（訪客 302 導向登入、主管檢視待審單、跨主管資料隔離、代理人生效檢視與標籤判定、管理員全公司切換、批次核准與 AuditLog、批次駁回與休假額度釋放、非授權或越級搶審防護）。
+    - 全系統後端測試套件擴充至 **139 項 Feature 測試 100% 全數通過 (647 assertions)**。
+    - 前端 Vite 建置確認 0 警告、0 錯誤。
 - 實作**特休與假別額度管理系統 (Leave Balance & Quota Management Engine)**：
   - **資料庫架構與模型設計 (LeaveBalance Model)**：
     - 建立遷移 `database/migrations/2026_10_08_080000_create_leave_balances_table.php`，建立 `leave_balances` 表，欄位包含 `user_id`, `year`, `leave_type`, `allocated_days`, `used_days`, `pending_days`, `note`，建立複合唯一約束 `[user_id, year, leave_type]`。

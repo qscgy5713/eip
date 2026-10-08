@@ -55,6 +55,13 @@ const showingNavigationDropdown = ref(false);
                                     表單簽核
                                 </NavLink>
                                 <NavLink
+                                    :href="route('approvals.index')"
+                                    :active="route().current('approvals.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    審批中心
+                                </NavLink>
+                                <NavLink
                                     :href="route('directory.index')"
                                     :active="route().current('directory.*')"
                                     class="whitespace-nowrap"
@@ -354,6 +361,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('forms.*')"
                         >
                             表單簽核
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('approvals.index')"
+                            :active="route().current('approvals.*')"
+                        >
+                            主管審批中心
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('directory.index')"

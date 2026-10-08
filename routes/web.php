@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ApprovalHubController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceReportController;
 use App\Http\Controllers\AuditLogController;
@@ -40,6 +41,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/forms/requests/{formRequest}/print', [FormRequestController::class, 'print'])->name('forms.print');
     Route::get('/forms/requests/{formRequest}/attachments/{index}', [FormRequestController::class, 'downloadAttachment'])->name('forms.attachments.download');
     Route::post('/forms/requests/{formRequest}/action', [FormRequestController::class, 'action'])->name('forms.action');
+
+    // 主管審批中心與一鍵批次簽核
+    Route::get('/approvals', [ApprovalHubController::class, 'index'])->name('approvals.index');
+    Route::post('/approvals/batch-action', [ApprovalHubController::class, 'batchAction'])->name('approvals.batchAction');
 
     // 組織通訊錄
     Route::get('/directory', [OrganizationController::class, 'index'])->name('directory.index');
