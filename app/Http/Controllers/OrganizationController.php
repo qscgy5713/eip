@@ -17,7 +17,9 @@ class OrganizationController extends Controller
 
         $departments = Department::withCount('users')->orderBy('sort_order')->get();
 
-        $usersQuery = User::with('department')->where('status', 'active');
+        $usersQuery = User::with('department:id,name,code')
+            ->select(['id', 'name', 'email', 'department_id', 'job_title', 'phone', 'employee_no', 'status'])
+            ->where('status', 'active');
 
         if ($departmentId) {
             $usersQuery->where('department_id', $departmentId);

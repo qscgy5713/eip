@@ -219,6 +219,37 @@ class DocumentController extends Controller
     }
 
     /**
+     * 線上安全預覽檔案 (支援 PDF、圖片、文字檔直接內嵌檢視，或串流預覽)
+     */
+    public function preview(Request $request, Document $document, ?DocumentVersion $version = null)
+    {
+        if (!$document->canAccess($request->user())) {
+            abort(403, '您沒有權限預覽此機密文件。');
+        }
+
+        $targetVersion = $version ?? $document->latestVersion;
+
+        if (!$targetVersion || !Storage::exists($targetVersion->file_path)) {
+            abort(404, '文件實體檔案不存在或已被移除。');
+        }
+
+        AuditLog::log(
+            action: 'preview_document',
+            description: "線上預覽了企業文件「{$document->title}」({$targetVersion->version_label})",
+            auditable: $document,
+            details: ['version_label' => $targetVersion->version_label, 'file_name' => $targetVersion->file_name]
+        );
+
+        $filePath = Storage::path($targetVersion->file_path);
+        $mimeType = $targetVersion->mime_type ?: Storage::mimeType($targetVersion->file_path) ?: 'application/octet-stream';
+
+        return response()->file($filePath, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . rawurlencode($targetVersion->file_name) . '"',
+        ]);
+    }
+
+    /**
      * 刪除文件與實體檔案
      */
     public function destroy(Request $request, Document $document): RedirectResponse

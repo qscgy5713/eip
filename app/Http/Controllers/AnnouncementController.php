@@ -17,6 +17,7 @@ class AnnouncementController extends Controller
         $category = $request->query('category');
 
         $query = Announcement::with('author')
+            ->withExists(['reads as is_read' => fn($q) => $q->where('user_id', $user->id)])
             ->where('status', 'published')
             ->orderByDesc('is_pinned')
             ->orderByDesc('published_at');
@@ -25,10 +26,7 @@ class AnnouncementController extends Controller
             $query->where('category', $category);
         }
 
-        $announcements = $query->paginate(10)->through(function ($item) use ($user) {
-            $item->is_read = $item->isReadBy($user);
-            return $item;
-        });
+        $announcements = $query->paginate(10);
 
         return Inertia::render('Announcements/Index', [
             'announcements' => $announcements,

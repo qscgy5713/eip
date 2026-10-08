@@ -19,9 +19,12 @@ const changeDate = (dateStr) => {
 };
 
 const shiftDate = (days) => {
-    const d = new Date(currentDate.value);
-    d.setDate(d.getDate() + days);
-    changeDate(d.toISOString().split('T')[0]);
+    const parts = currentDate.value.split('-').map(Number);
+    const d = new Date(parts[0], parts[1] - 1, parts[2] + days);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dt = String(d.getDate()).padStart(2, '0');
+    changeDate(`${y}-${m}-${dt}`);
 };
 
 // 預約 Modal 狀態與表單

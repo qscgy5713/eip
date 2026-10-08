@@ -36,6 +36,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/forms/create/{form}', [FormRequestController::class, 'create'])->name('forms.create');
     Route::post('/forms/create/{form}', [FormRequestController::class, 'store'])->name('forms.store');
     Route::get('/forms/requests/{formRequest}', [FormRequestController::class, 'show'])->name('forms.show');
+    Route::get('/forms/requests/{formRequest}/print', [FormRequestController::class, 'print'])->name('forms.print');
+    Route::get('/forms/requests/{formRequest}/attachments/{index}', [FormRequestController::class, 'downloadAttachment'])->name('forms.attachments.download');
     Route::post('/forms/requests/{formRequest}/action', [FormRequestController::class, 'action'])->name('forms.action');
 
     // 組織通訊錄
@@ -65,6 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/documents/{document}/versions', [DocumentController::class, 'uploadVersion'])->name('documents.versions.upload');
     Route::get('/documents/{document}/versions', [DocumentController::class, 'versions'])->name('documents.versions.list');
     Route::get('/documents/{document}/download/{version?}', [DocumentController::class, 'download'])->name('documents.download');
+    Route::get('/documents/{document}/preview/{version?}', [DocumentController::class, 'preview'])->name('documents.preview');
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 
     // 站內通知中心

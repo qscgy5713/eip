@@ -12,6 +12,7 @@ use App\Notifications\EipSystemNotification;
 use App\Services\WebhookService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -65,9 +66,29 @@ class FormRequestController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'data' => 'required|array',
+            'attachments' => 'nullable|array',
+            'attachments.*' => 'nullable|file|max:10240|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx,csv,zip',
         ]);
 
         $requestNo = 'REQ-' . date('Ymd') . '-' . str_pad((string) (EipFormRequest::count() + 1), 4, '0', STR_PAD_LEFT);
+
+        // 處理證明文件附件上傳
+        $attachmentsData = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                if ($file && $file->isValid()) {
+                    $originalName = $file->getClientOriginalName();
+                    $storedPath = $file->store('form_attachments', 'public');
+                    $attachmentsData[] = [
+                        'name' => $originalName,
+                        'path' => $storedPath,
+                        'size' => $file->getSize(),
+                        'mime_type' => $file->getClientMimeType(),
+                        'uploaded_at' => now()->toIso8601String(),
+                    ];
+                }
+            }
+        }
 
         $formRequest = EipFormRequest::create([
             'form_id' => $form->id,
@@ -75,6 +96,7 @@ class FormRequestController extends Controller
             'request_no' => $requestNo,
             'title' => $validated['title'],
             'data' => $validated['data'],
+            'attachments' => $attachmentsData,
             'status' => 'pending',
             'current_step' => 1,
         ]);
@@ -170,6 +192,87 @@ class FormRequestController extends Controller
             'formRequest' => $formRequest,
             'canApprove' => $canApprove,
         ]);
+    }
+
+    /**
+     * 產製公文單據正式列印與 PDF 存證視圖
+     */
+    public function print(Request $request, EipFormRequest $formRequest): Response
+    {
+        $user = $request->user();
+
+        // 嚴格 IDOR 檢查：僅限申請人、審核主管、代理人或系統管理員查閱
+        if (!$formRequest->canAccess($user)) {
+            abort(403, '您沒有權限調閱或列印此份申請單據。');
+        }
+
+        $formRequest->load([
+            'form',
+            'user.department',
+            'approvalRecords.approver.department',
+            'approvalRecords.delegatedFrom'
+        ]);
+
+        // 記錄機密單據列印稽核日誌
+        AuditLog::log(
+            action: 'print_form_request',
+            description: "同仁 {$user->name} 調閱並產製了單據「{$formRequest->request_no}」之正式存證列印文件",
+            auditable: $formRequest,
+            details: [
+                'form_request_id' => $formRequest->id,
+                'request_no' => $formRequest->request_no,
+                'status' => $formRequest->status,
+            ]
+        );
+
+        return Inertia::render('Forms/Print', [
+            'formRequest' => $formRequest,
+            'printedBy' => [
+                'name' => $user->name,
+                'employee_no' => $user->employee_no ?? 'N/A',
+                'department' => $user->department?->name ?? '公司同仁',
+                'printed_at' => now()->format('Y-m-d H:i:s'),
+            ],
+        ]);
+    }
+
+    /**
+     * 安全下載單據證明附件
+     */
+    public function downloadAttachment(Request $request, EipFormRequest $formRequest, int $index)
+    {
+        $user = $request->user();
+
+        // 嚴格 IDOR 檢查：僅限申請人、審核主管、代理人或系統管理員存取
+        if (!$formRequest->canAccess($user)) {
+            abort(403, '您沒有權限下載此份申請單據之附件。');
+        }
+
+        $attachments = $formRequest->attachments ?? [];
+        if (!isset($attachments[$index])) {
+            abort(404, '找不到指定的證明附件檔案。');
+        }
+
+        $attachment = $attachments[$index];
+        $disk = Storage::disk('public');
+
+        if (!$disk->exists($attachment['path'])) {
+            abort(404, '附件檔案實體不存在或已損毀。');
+        }
+
+        // 記錄附件下載審計日誌
+        AuditLog::log(
+            action: 'download_form_attachment',
+            description: "同仁 {$user->name} 下載了單據「{$formRequest->request_no}」之附件「{$attachment['name']}」",
+            auditable: $formRequest,
+            details: [
+                'form_request_id' => $formRequest->id,
+                'attachment_name' => $attachment['name'],
+                'file_size' => $attachment['size'],
+            ]
+        );
+
+        return $disk->download($attachment['path'], $attachment['name']);
     }
 
     public function action(Request $request, EipFormRequest $formRequest): RedirectResponse

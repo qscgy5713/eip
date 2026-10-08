@@ -22,16 +22,20 @@
 - [x] 打卡考勤系統與 HR 月報結算（GPS/IP 限制、打卡紀錄、異常判定、主管團隊出勤、月度考勤統計看板、月度彙總與每日明細 CSV/Excel 格式化匯出、敏感個資匯出審計）
 - [x] 行事曆與會議室借用管理（會議室管理、防衝突排程、日曆預約、超額人數校驗）
 - [x] 企業全景綜合行事曆看板（Calendar Hub：整合會議室借用、同仁休假/出勤單據、企業重大公告日程，支援月曆切換、三色事件標籤、彈窗明細與部門篩選）
+- [x] 電子簽核公文單據正式列印與 PDF 存證匯出（Print-Ready View：A4 版型、公文編號、申請資訊、審核簽署鏈歷程、電子核准印章、列印防偽留痕與 AuditLog 審計）
+- [x] 電子表單檢附證明文件與附件安全上傳/下載系統（支援請假就醫證明、公文單據等多檔上傳、10MB 限制與類型校驗、防越權 IDOR 下載保護、A4 列印存證留痕與 AuditLog 下載稽核）
 
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
+- [x] 企業文件庫線上安全預覽引擎（支援 PDF 高解析度翻頁內嵌、圖片/文字檔直接預覽、Office 文件引導、新分頁全螢幕開啟與 AuditLog 預覽稽核）
+- [x] 頂部導覽列 (Header Bar) 自適應排版重構（修復字元跑版擠壓、響應式間距優化、管理員專屬項目收納為系統管理 Dropdown）
 - [x] 系統儀表板（待辦統計、未讀公告、進行中申請、即將到來會議、快捷打卡）
 - [x] 站內通知中心與推播通知整合（Laravel Notifications、導覽列小鈴鐺即時未讀數與下拉預覽、簽核/會議室/公告事件即時發送、一鍵全讀）
 - [x] 外部通訊群組 Webhook 整合生態（Slack / Discord / Teams 即時推播、HMAC-SHA256 數位簽章防偽、雙向跨平台 Payload 相容、連線 Ping 測試與開關切換）
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, AttendanceTest, AttendanceReportTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest, WebhookTest, DelegationTest, CalendarTest 等 91 項測試案例全數 100% 通過）
-- [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗）
+- [x] 單元與整合測試（EipTest, AttendanceTest, AttendanceReportTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest, WebhookTest, DelegationTest, CalendarTest, FormPrintTest 等 96 項測試案例全數 100% 通過）
+- [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

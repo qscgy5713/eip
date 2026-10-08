@@ -17,11 +17,11 @@ const showingNavigationDropdown = ref(false);
                 class="border-b border-gray-100 bg-white"
             >
                 <!-- Primary Navigation Menu -->
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex h-16 justify-between">
-                        <div class="flex">
+                <div class="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 justify-between items-center">
+                        <div class="flex items-center min-w-0">
                             <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
+                            <div class="flex shrink-0 items-center mr-2 lg:mr-4">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
@@ -31,70 +31,97 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                                class="hidden space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6 sm:-my-px sm:flex items-center flex-nowrap"
                             >
                                 <NavLink
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
+                                    class="whitespace-nowrap"
                                 >
                                     總覽儀表板
                                 </NavLink>
                                 <NavLink
                                     :href="route('announcements.index')"
                                     :active="route().current('announcements.*')"
+                                    class="whitespace-nowrap"
                                 >
                                     企業公告
                                 </NavLink>
                                 <NavLink
                                     :href="route('forms.index')"
                                     :active="route().current('forms.*')"
+                                    class="whitespace-nowrap"
                                 >
                                     表單簽核
                                 </NavLink>
                                 <NavLink
                                     :href="route('directory.index')"
                                     :active="route().current('directory.*')"
+                                    class="whitespace-nowrap"
                                 >
-                                    組織通訊錄
+                                    通訊錄
                                 </NavLink>
                                 <NavLink
                                     :href="route('attendance.index')"
                                     :active="route().current('attendance.*')"
+                                    class="whitespace-nowrap"
                                 >
                                     考勤打卡
                                 </NavLink>
                                 <NavLink
                                     :href="route('meeting-rooms.index')"
                                     :active="route().current('meeting-rooms.*')"
+                                    class="whitespace-nowrap"
                                 >
-                                    會議室借用
+                                    會議室
                                 </NavLink>
                                 <NavLink
                                     :href="route('documents.index')"
                                     :active="route().current('documents.*')"
+                                    class="whitespace-nowrap"
                                 >
-                                    企業文件庫
+                                    知識文件
                                 </NavLink>
                                 <NavLink
                                     :href="route('calendar.index')"
                                     :active="route().current('calendar.*')"
+                                    class="whitespace-nowrap"
                                 >
-                                    全景行事曆
+                                    行事曆
                                 </NavLink>
-                                <NavLink
+
+                                <!-- 系統管理 Dropdown (限管理者) -->
+                                <div
                                     v-if="$page.props.auth.user.role === 'admin'"
-                                    :href="route('audit-logs.index')"
-                                    :active="route().current('audit-logs.*')"
+                                    class="relative inline-flex items-center"
                                 >
-                                    系統日誌
-                                </NavLink>
-                                <NavLink
-                                    v-if="$page.props.auth.user.role === 'admin'"
-                                    :href="route('webhooks.index')"
-                                    :active="route().current('webhooks.*')"
-                                >
-                                    整合設定
-                                </NavLink>
+                                    <Dropdown align="left" width="48">
+                                        <template #trigger>
+                                            <button
+                                                type="button"
+                                                :class="[
+                                                    'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none whitespace-nowrap',
+                                                    route().current('audit-logs.*') || route().current('webhooks.*')
+                                                        ? 'border-indigo-400 text-gray-900 font-bold'
+                                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                                ]"
+                                            >
+                                                <span>系統管理</span>
+                                                <svg class="ms-1 h-3.5 w-3.5 fill-current text-gray-400" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </template>
+                                        <template #content>
+                                            <DropdownLink :href="route('audit-logs.index')">
+                                                系統日誌 (Audit)
+                                            </DropdownLink>
+                                            <DropdownLink :href="route('webhooks.index')">
+                                                整合設定 (Webhook)
+                                            </DropdownLink>
+                                        </template>
+                                    </Dropdown>
+                                </div>
                             </div>
                         </div>
 

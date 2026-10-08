@@ -145,6 +145,46 @@ const deleteDoc = (docId) => {
         router.delete(route('documents.destroy', docId));
     }
 };
+
+// 線上預覽 Modal 狀態與方法
+const isPreviewModalOpen = ref(false);
+const previewDoc = ref(null);
+const previewVersion = ref(null);
+const previewUrl = ref('');
+
+const openPreviewModal = (doc, version = null) => {
+    previewDoc.value = doc;
+    previewVersion.value = version || doc.latest_version;
+    const versionId = version ? version.id : (doc.latest_version ? doc.latest_version.id : '');
+    previewUrl.value = route('documents.preview', {
+        document: doc.id,
+        version: versionId || undefined,
+    });
+    isPreviewModalOpen.value = true;
+};
+
+const closePreviewModal = () => {
+    isPreviewModalOpen.value = false;
+    previewDoc.value = null;
+    previewVersion.value = null;
+    previewUrl.value = '';
+};
+
+const isPdf = (mimeType, fileName = '') => {
+    return mimeType?.includes('pdf') || fileName?.toLowerCase().endsWith('.pdf');
+};
+
+const isImage = (mimeType, fileName = '') => {
+    if (mimeType?.startsWith('image/')) return true;
+    const ext = fileName?.split('.').pop()?.toLowerCase();
+    return ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext);
+};
+
+const isText = (mimeType, fileName = '') => {
+    if (mimeType?.includes('text') || mimeType?.includes('json')) return true;
+    const ext = fileName?.split('.').pop()?.toLowerCase();
+    return ['txt', 'md', 'json', 'csv', 'log'].includes(ext);
+};
 </script>
 
 <template>
@@ -270,10 +310,19 @@ const deleteDoc = (docId) => {
 
                         <!-- 底部操作列 -->
                         <div class="bg-gray-50/70 px-5 py-3 border-t border-gray-100 flex items-center justify-between text-xs">
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center space-x-1.5">
+                                <button
+                                    type="button"
+                                    @click="openPreviewModal(doc)"
+                                    class="px-2.5 py-1.5 font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-600 hover:text-white rounded-lg transition flex items-center space-x-1"
+                                    title="線上預覽文件"
+                                >
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    <span>預覽</span>
+                                </button>
                                 <a
                                     :href="route('documents.download', doc.id)"
-                                    class="px-3 py-1.5 font-semibold text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white rounded-lg transition flex items-center space-x-1"
+                                    class="px-2.5 py-1.5 font-semibold text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white rounded-lg transition flex items-center space-x-1"
                                     title="下載最新版本"
                                 >
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -281,7 +330,7 @@ const deleteDoc = (docId) => {
                                 </a>
                                 <button
                                     @click="openHistoryModal(doc)"
-                                    class="text-gray-500 hover:text-gray-800 px-2 py-1.5"
+                                    class="text-gray-500 hover:text-gray-800 px-1.5 py-1.5"
                                     title="查看歷史修訂版本"
                                 >
                                     歷程 ({{ doc.versions_count }})
@@ -531,13 +580,138 @@ const deleteDoc = (docId) => {
                             </p>
                         </div>
 
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <button
+                                type="button"
+                                @click="openPreviewModal(historyDoc, ver)"
+                                class="px-2.5 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-600 hover:text-white rounded-lg transition"
+                                title="預覽此歷史版本"
+                            >
+                                預覽
+                            </button>
+                            <a
+                                :href="route('documents.download', { document: historyDoc.id, version: ver.id })"
+                                class="px-2.5 py-1.5 text-xs font-semibold text-blue-600 bg-white border border-blue-200 hover:bg-blue-50 rounded-lg transition"
+                                title="下載此歷史版本"
+                            >
+                                下載此版
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 線上預覽 Modal -->
+        <div v-if="isPreviewModalOpen" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden">
+            <div class="bg-white rounded-2xl max-w-5xl w-full h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-gray-100">
+                <!-- 預覽視窗頂部標題列 -->
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0">
+                    <div class="flex items-center space-x-3 min-w-0">
+                        <div :class="['w-8 h-8 rounded-lg border flex items-center justify-center text-xs font-bold font-mono shrink-0', getFileInfo(previewVersion?.mime_type, previewVersion?.file_name).color]">
+                            {{ getFileInfo(previewVersion?.mime_type, previewVersion?.file_name).tag }}
+                        </div>
+                        <div class="truncate">
+                            <div class="flex items-center space-x-2">
+                                <h3 class="text-sm font-bold text-gray-900 truncate" :title="previewDoc?.title">
+                                    {{ previewDoc?.title }}
+                                </h3>
+                                <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-100 text-blue-700 rounded">
+                                    {{ previewVersion?.version_label }}
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-gray-400 truncate">
+                                檔案名稱：{{ previewVersion?.file_name }} ({{ previewVersion?.formatted_size }})
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 shrink-0">
                         <a
-                            :href="route('documents.download', { document: historyDoc.id, version: ver.id })"
-                            class="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-white border border-blue-200 hover:bg-blue-50 rounded-lg transition shrink-0"
-                            title="下載此歷史版本"
+                            :href="previewUrl"
+                            target="_blank"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                            title="開新分頁全螢幕檢視"
                         >
-                            下載此版
+                            <svg class="w-3.5 h-3.5 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            <span>新分頁開啟</span>
                         </a>
+                        <a
+                            :href="route('documents.download', { document: previewDoc?.id, version: previewVersion?.id })"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition"
+                            title="下載此檔案"
+                        >
+                            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            <span>下載檔案</span>
+                        </a>
+                        <button
+                            type="button"
+                            @click="closePreviewModal"
+                            class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-200 transition"
+                            title="關閉預覽"
+                        >
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 預覽主體內容區 -->
+                <div class="flex-1 bg-gray-100 p-2 sm:p-4 overflow-auto flex items-center justify-center">
+                    <!-- PDF 內嵌預覽 -->
+                    <iframe
+                        v-if="isPdf(previewVersion?.mime_type, previewVersion?.file_name)"
+                        :src="previewUrl"
+                        class="w-full h-full border-0 rounded-lg bg-white shadow-sm"
+                    ></iframe>
+
+                    <!-- 圖片預覽 -->
+                    <div
+                        v-else-if="isImage(previewVersion?.mime_type, previewVersion?.file_name)"
+                        class="max-w-full max-h-full flex items-center justify-center p-4 bg-white rounded-lg shadow-sm"
+                    >
+                        <img
+                            :src="previewUrl"
+                            :alt="previewDoc?.title"
+                            class="max-w-full max-h-[75vh] object-contain rounded"
+                        />
+                    </div>
+
+                    <!-- 純文字 / Markdown / JSON 檔案 -->
+                    <iframe
+                        v-else-if="isText(previewVersion?.mime_type, previewVersion?.file_name)"
+                        :src="previewUrl"
+                        class="w-full h-full border rounded-lg bg-white shadow-sm p-2 font-mono text-xs"
+                    ></iframe>
+
+                    <!-- 其他不支援原生預覽的格式 (如 Word, Excel, PPT, ZIP) -->
+                    <div
+                        v-else
+                        class="max-w-md w-full bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center space-y-4"
+                    >
+                        <div :class="['w-16 h-16 mx-auto rounded-2xl border flex items-center justify-center text-lg font-bold font-mono', getFileInfo(previewVersion?.mime_type, previewVersion?.file_name).color]">
+                            {{ getFileInfo(previewVersion?.mime_type, previewVersion?.file_name).tag }}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-base">{{ previewVersion?.file_name }}</h4>
+                            <p class="text-xs text-gray-500 mt-1">此格式（Office 文件或壓縮檔）需由本地端對應應用程式檢視</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">檔案大小：{{ previewVersion?.formatted_size }}</p>
+                        </div>
+                        <div class="pt-2 flex justify-center space-x-3">
+                            <a
+                                :href="route('documents.download', { document: previewDoc?.id, version: previewVersion?.id })"
+                                class="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span>下載檔案以開啟</span>
+                            </a>
+                            <a
+                                :href="previewUrl"
+                                target="_blank"
+                                class="px-4 py-2 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                            >
+                                嘗試於新分頁開啟
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

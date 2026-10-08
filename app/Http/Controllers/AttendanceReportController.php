@@ -36,8 +36,8 @@ class AttendanceReportController extends Controller
         $departmentId = $request->input('department_id');
         $search = $request->input('search');
 
-        // 主管預設僅能看自己部門
-        if ($currentUser->role === 'manager' && empty($departmentId)) {
+        // 主管強制僅能查閱自己所屬部門，防範水平越權 (IDOR)
+        if ($currentUser->role === 'manager') {
             $departmentId = $currentUser->department_id;
         }
 
@@ -135,6 +135,11 @@ class AttendanceReportController extends Controller
         $month = $request->input('month', Carbon::now()->format('Y-m'));
         $departmentId = $request->input('department_id');
 
+        // 主管僅限匯出所屬部門之考勤彙總
+        if ($currentUser->role === 'manager') {
+            $departmentId = $currentUser->department_id;
+        }
+
         $startDate = Carbon::parse($month)->startOfMonth()->toDateString();
         $endDate = Carbon::parse($month)->endOfMonth()->toDateString();
 
@@ -200,6 +205,11 @@ class AttendanceReportController extends Controller
 
         $month = $request->input('month', Carbon::now()->format('Y-m'));
         $departmentId = $request->input('department_id');
+
+        // 主管僅限匯出所屬部門之考勤明細
+        if ($currentUser->role === 'manager') {
+            $departmentId = $currentUser->department_id;
+        }
 
         $startDate = Carbon::parse($month)->startOfMonth()->toDateString();
         $endDate = Carbon::parse($month)->endOfMonth()->toDateString();

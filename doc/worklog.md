@@ -1,5 +1,47 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-08
+### 做了什麼
+- 實作「電子表單與簽核」模組之**檢附證明文件與附件安全上傳/下載系統 (Form Attachments & Proof Documents Upload/Download)**：
+  - **資料庫擴充**：建立資料庫遷移 `2026_10_08_040000_add_attachments_to_form_requests_table.php`，為 `form_requests` 表新增 `attachments` JSONB 欄位，支援動態陣列存儲附件中繼資料（原始檔名、儲存路徑、大小、MIME 類型與上傳時間）。
+  - **後端安全防護**：
+    - `app/Http/Controllers/FormRequestController.php` 實作多檔案驗證上傳（限制單檔最大 10MB，副檔名白名單：jpg, jpeg, png, pdf, doc, docx, xls, xlsx, csv, zip）。
+    - 檔案安全存放於 `storage/app/public/form_attachments`，檔名採用隨機 hash 避免衝突。
+    - 實作安全下載方法 `downloadAttachment`，透過 `EipFormRequest::canAccess` 實施強制 IDOR 存取控制（僅申請人、審核主管、簽核代理人與管理員可調閱），並在每次下載時自動寫入 `AuditLog` 審計留痕。
+  - **前端介面 (Vue 3)**：
+    - `resources/js/Pages/Forms/Create.vue`：加入檢附證明文件上傳區塊，支援點擊/拖曳多檔案選取、即時檔案大小格式化與個別移除按鈕。
+    - `resources/js/Pages/Forms/Show.vue`：在申請單明細加入檢附證明文件卡片清單與安全下載按鈕。
+    - `resources/js/Pages/Forms/Print.vue`：在公文存證列印頁面整合「檢附證明文件清單」表格，完整記錄項次、檔名、大小與上傳存檔時間，確保紙本與 PDF 存證備查。
+  - **自動化測試**：
+    - 建立 `tests/Feature/FormAttachmentTest.php`，共 7 項測試案例（包含有附件/無附件建立、申請人/主管授權下載、他部同仁 403 越權阻擋、不存在附件 404、副檔名與大小違規防護、下載 AuditLog 審計）。
+    - 執行全系統 103 項測試案例全數 100% 通過（403 assertions）。
+- **表單申請送出防呆與錯誤反饋全面加固**：
+  - 排查並解決前端發起申請時因缺乏 `forceFormData` 與欄位錯誤未提示所導致的「按了沒反應」問題。
+  - 在 `Forms/Create.vue` 提交時加入 `{ forceFormData: true, preserveScroll: true }`，並增設全域錯誤橫幅與單一欄位紅字提示，按鈕加入旋轉 Loading 動畫與防重複提交機制。
+  - 後端 `FormRequestController::store` 擴充 `attachments` 為陣列容錯驗證。
+- **導覽列 (Header Bar) 跑版擠壓修復與排版重構**：
+  - 排查桌機與筆電螢幕因 10 個導覽連結與過大間距 (`space-x-8`) 導致文字換行擠壓跑版問題。
+  - 將導覽容器寬度調整為自適應全寬 (`max-w-full px-4 sm:px-6 lg:px-8`)，間距設為動態自適應 (`space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6`)。
+  - 將管理員專屬之「系統日誌」與「整合設定」整併收納至「系統管理」Dropdown 下拉選單，大幅釋放導覽列寬度空間，文字加入 `whitespace-nowrap`，徹底解決擠壓跑版問題。
+- **知識文件庫 (Documents) 線上安全預覽引擎開發**：
+  - 新增路由 `/documents/{document}/preview/{version?}` 與 Controller 方法 `preview`。
+  - 支援以 `inline` Content-Disposition 安全輸出文件串流，自動映射正確 MIME 類型，並記錄 `preview_document` AuditLog 審計日誌。
+  - 前端 `Documents/Index.vue` 列表與版本歷程加入「預覽」按鈕，實作全螢幕高質感 Modal 彈窗：PDF 內嵌高畫質閱讀、圖片原寸自適應、純文字代碼瀏覽、Office 文件引導與新分頁全螢幕開啟。
+  - 於 `tests/Feature/DocumentTest.php` 增加 2 項 Feature 測試（公開文件預覽、機密文件 403 阻擋），全系統測試擴充至 105 項 100% 通過（408 assertions）。
+- **全方位深度 Code Review (CR) 與系統架構重構修復**：
+  - **安全性加固 (Security / IDOR)**：排查出 `AttendanceReportController` 之 `index`、`exportSummary` 與 `exportDetails` 存在主管可傳入他部 `department_id` 越權竊閱/匯出全公司考勤薪資紀錄之高風險 IDOR 漏洞，全面加入強制部門鎖定防護。
+  - **敏感個資防護 (Data Exposure Prevention)**：排查出 `OrganizationController` 原先整列查詢使用者暴露雜湊密碼與 Token 等隱私資料，全面改為顯式 `select` 白名單欄位。
+  - **資料庫效能優化 (N+1 Query Optimization)**：排查出 `AnnouncementController::index` 原先於列表遍歷時逐筆調用 `isReadBy` 造成 10 次額外 SQL 查詢，重構改用 Eloquent `withExists` 關聯子查詢一次加載，完全消滅 N+1 瓶頸。
+  - **邊界防禦與例外處理 (Edge Cases)**：修復 `AttendanceController::clockOut` 原先當同仁未打上班卡時直接拋出 404 ModelNotFoundException 白畫面崩潰之問題，改為友善提示導流。
+  - **前端時間換日偏差修復 (Timezone Shift Bug)**：修復 `MeetingRooms/Index.vue` 中 `shiftDate` 使用 `toISOString()` 導致 UTC+8 換日產生跨天偏差問題，改用本地年月日建構防範。
+  - **操作視覺狀態回饋 (UX Polish)**：補強 `Forms/Show.vue` 主管審核同意/駁回按鈕在 `processing` 狀態之禁用樣式與旋轉 Loading 動畫。
+  - 全套自動化 Feature 測試 105 項全數 100% 通過（408 assertions），前端 Vite 建置 0 錯誤 0 警告。
+
+### 為什麼這樣做
+- 同仁請假（病假、婚喪假、公傷假）與報銷常需檢附就醫診斷證明、公文或收據，原先系統僅能填寫文字理由，造成審批主管無法實質查驗佐證資料。
+- 採用 JSONB 儲存附件中繼資料兼顧了結構彈性與查詢效能，下載時透過索引 (index) 映射後端檔案路徑，杜絕路徑遍歷與內部儲存結構暴露風險。
+- 企業知識文件庫同仁經常需要快速查閱規章或範本內容，若每次都需下載至本機電腦開啟，不僅繁瑣且造成暫存檔佔用；提供線上預覽大幅提升同仁日常閱讀與檢閱效率。
+
 ## 2026-10-07
 ### 做了什麼
 - 初始化專案文件結構與骨架。
@@ -135,5 +177,19 @@
   - 撰寫自動化測試套件 `tests/Feature/CalendarTest.php`：涵蓋行事曆檢閱、會議室聚合、核准假單聚合、公告日程聚合、類型篩選等 5 項測試。
   - 全系統累積 **91 項自動化測試 100% 通過**（339 assertions）。
 
+- 完成 Phase 2「電子簽核公文單據正式列印與 PDF 存證匯出 (Form Request Print & Official PDF Archive)」：
+  - 擴充控制器 `FormRequestController::print`：
+    - 支援依單據 ID 產製公文存證檢視，嚴格校驗 IDOR 水平越權（僅限申請人本人、審批主管、生效職務代理人或系統管理員調閱）。
+    - 每次產製與列印機密單據自動寫入系統審計稽核日誌 (`print_form_request`)。
+  - 註冊路由 `/forms/requests/{formRequest}/print`。
+  - 於 `Forms/Show.vue` 單據頁面增設「列印存證 / PDF」快捷按鈕。
+  - 實作前端 `Forms/Print.vue`：
+    - 標準 A4 版型高對比度排版，整合 `@media print` 列印最佳化（自動隱藏頂部工具列、邊距最佳化、防跨頁截斷）。
+    - 完整呈現公文編號、申請同仁資訊（工號、部門、職稱）、申請主旨與自訂欄位表格。
+    - 呈現完整審核簽署鏈軌跡（包含職務代理代簽標註、審定時間與附言）。
+    - 右下角蓋上紅色雙圓框「企業電子核准防偽印章 (Official Approved Seal)」，頁尾附帶安全雜湊序號與調閱留痕。
+  - 撰寫自動化測試套件 `tests/Feature/FormPrintTest.php`：涵蓋本人調閱、主管調閱、未授權 403 阻擋、審計日誌生成、生效職務代理人調閱等 5 項測試。
+  - 全系統累積 **96 項自動化 Feature/Unit 測試全數 100% 通過**（380 assertions）。
+
 ### 下一步
-- 向使用者回報行事曆成果，詢問是否同意執行 Git Commit 與 Git Push。
+- 向使用者回報公文單據列印存證與 PDF 匯出功能成果，詢問是否同意執行 Git Commit 與 Git Push。

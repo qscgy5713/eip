@@ -100,7 +100,12 @@ class AttendanceController extends Controller
         $user = $request->user();
         $today = now()->toDateString();
 
-        $attendance = Attendance::where('user_id', $user->id)->whereDate('date', $today)->firstOrFail();
+        $attendance = Attendance::where('user_id', $user->id)->whereDate('date', $today)->first();
+
+        if (!$attendance) {
+            return redirect()->back()->with('error', '今日尚無上班打卡紀錄，請先填寫忘刷/補打卡申請單或先執行上班打卡。');
+        }
+
         $attendance->clock_out_at = now();
         $attendance->clock_out_ip = $request->ip();
         $attendance->clock_out_location = $request->input('location', '辦公室網段');

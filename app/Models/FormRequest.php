@@ -17,12 +17,14 @@ class FormRequest extends Model
         'request_no',
         'title',
         'data',
+        'attachments',
         'status',
         'current_step',
     ];
 
     protected $casts = [
         'data' => 'array',
+        'attachments' => 'array',
         'current_step' => 'integer',
     ];
 

@@ -229,4 +229,73 @@ class DocumentTest extends TestCase
 
         $this->assertDatabaseHas('documents', ['id' => $doc->id]);
     }
+
+    public function test_user_can_preview_public_document(): void
+    {
+        $fakePath = 'documents/preview_rules.pdf';
+        Storage::disk('local')->put($fakePath, '%PDF-1.4 test preview pdf content');
+
+        $doc = Document::create([
+            'title' => '員工線上預覽指引',
+            'category' => 'policy',
+            'uploader_id' => $this->manager->id,
+            'current_version' => 1,
+        ]);
+
+        $ver = DocumentVersion::create([
+            'document_id' => $doc->id,
+            'uploader_id' => $this->manager->id,
+            'version_number' => 1,
+            'version_label' => 'v1.0',
+            'file_path' => $fakePath,
+            'file_name' => 'preview_rules.pdf',
+            'file_size' => 200,
+            'mime_type' => 'application/pdf',
+        ]);
+
+        $response = $this->actingAs($this->employee)->get("/documents/{$doc->id}/preview/{$ver->id}");
+
+        $response->assertStatus(200);
+        $this->assertStringContainsString('inline', $response->headers->get('content-disposition'));
+
+        $this->assertDatabaseHas('audit_logs', [
+            'user_id' => $this->employee->id,
+            'action' => 'preview_document',
+            'auditable_type' => Document::class,
+            'auditable_id' => $doc->id,
+        ]);
+    }
+
+    public function test_regular_employee_cannot_preview_restricted_document(): void
+    {
+        $fakePath = 'documents/secret_plan.pdf';
+        Storage::disk('local')->put($fakePath, 'Secret Content');
+
+        $doc = Document::create([
+            'title' => '高階主管薪資方案',
+            'category' => 'policy',
+            'uploader_id' => $this->admin->id,
+            'current_version' => 1,
+            'restricted_roles' => ['admin', 'manager'],
+        ]);
+
+        $ver = DocumentVersion::create([
+            'document_id' => $doc->id,
+            'uploader_id' => $this->admin->id,
+            'version_number' => 1,
+            'version_label' => 'v1.0',
+            'file_path' => $fakePath,
+            'file_name' => 'secret_plan.pdf',
+            'file_size' => 100,
+            'mime_type' => 'application/pdf',
+        ]);
+
+        // 一般同仁預覽被阻擋
+        $response = $this->actingAs($this->employee)->get("/documents/{$doc->id}/preview/{$ver->id}");
+        $response->assertStatus(403);
+
+        // 主管預覽成功
+        $managerResponse = $this->actingAs($this->manager)->get("/documents/{$doc->id}/preview/{$ver->id}");
+        $managerResponse->assertStatus(200);
+    }
 }
