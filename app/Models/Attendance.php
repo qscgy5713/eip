@@ -17,18 +17,33 @@ class Attendance extends Model
         'clock_in_at',
         'clock_in_ip',
         'clock_in_location',
+        'clock_in_lat',
+        'clock_in_lng',
+        'clock_in_distance',
+        'clock_in_type',
         'clock_out_at',
         'clock_out_ip',
         'clock_out_location',
+        'clock_out_lat',
+        'clock_out_lng',
+        'clock_out_distance',
+        'clock_out_type',
         'status',
         'work_hours',
         'note',
+        'field_work_note',
     ];
 
     protected $casts = [
         'date' => 'date',
         'clock_in_at' => 'datetime',
+        'clock_in_lat' => 'decimal:7',
+        'clock_in_lng' => 'decimal:7',
+        'clock_in_distance' => 'integer',
         'clock_out_at' => 'datetime',
+        'clock_out_lat' => 'decimal:7',
+        'clock_out_lng' => 'decimal:7',
+        'clock_out_distance' => 'integer',
         'work_hours' => 'decimal:2',
     ];
 

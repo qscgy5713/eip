@@ -20,6 +20,7 @@
 - [x] 主管審批與簽核歷程記錄機制（Approval Records、核准/駁回附言、單據狀態即時更新）
 - [x] 簽核職務代理人機制（Delegation Engine：出差休假代簽人設定、生效期間自動判定、代理待審通知連鎖、歷程代簽標籤與 IDOR 權限加固）
 - [x] 打卡考勤系統與 HR 月報結算（GPS/IP 限制、打卡紀錄、異常判定、主管團隊出勤、月度考勤統計看板、月度彙總與每日明細 CSV/Excel 格式化匯出、敏感個資匯出審計）
+- [x] 智慧 GPS 經緯度地理圍欄打卡與外勤/遠端判定（Geofence Engine：Haversine 距離計算演算法、台北總部/自訂半徑判定、內勤辦公室/外勤遠端自動標籤、外勤事由必填提示、出勤明細 Google Maps 定位連結、團隊出勤狀態同步與 116 項全系統測試 100% 通過）
 - [x] 行事曆與會議室借用管理（會議室管理、防衝突排程、日曆預約、超額人數校驗）
 - [x] 企業全景綜合行事曆看板（Calendar Hub：整合會議室借用、同仁休假/出勤單據、企業重大公告日程，支援月曆切換、三色事件標籤、彈窗明細與部門篩選）
 - [x] 電子簽核公文單據正式列印與 PDF 存證匯出（Print-Ready View：A4 版型、公文編號、申請資訊、審核簽署鏈歷程、電子核准印章、列印防偽留痕與 AuditLog 審計）
@@ -36,7 +37,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, SecurityAndIdorTest 等 111 項 Feature 測試 100% 通過，447 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, SecurityAndIdorTest 等 116 項 Feature 測試 100% 通過，484 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

@@ -2,6 +2,28 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作「智慧考勤打卡」模組之**智慧 GPS 經緯度地理圍欄打卡與外勤/遠端判定 (Smart Geofencing Attendance Engine)**：
+  - **地理圍欄配置**：
+    - 建立 `config/eip.php`，集中管理企業總部 GPS 座標（預設台北企業總部大樓 25.033964, 121.564468）、允許打卡半徑（500m）與總部名稱，並支援 `.env` 動態覆寫。
+  - **資料庫擴充**：
+    - 建立遷移 `2026_10_08_060000_add_geofencing_to_attendances_table.php`，為 `attendances` 表增加 `clock_in_lat`, `clock_in_lng`, `clock_in_distance`, `clock_in_type`, `clock_out_lat`, `clock_out_lng`, `clock_out_distance`, `clock_out_type`, `field_work_note`。
+    - 更新 `app/Models/Attendance.php` 之 `$fillable` 與 `$casts`。
+  - **地理計算核心服務 (GeofenceService)**：
+    - 建立 `app/Services/GeofenceService.php`，實作 Haversine 大圓距離球面三角公式（精準計算同仁座標與總部直線公尺數）。
+    - 判定打卡型態：若距離小於等於設定半徑標記為 `office`（辦公室內勤打卡）；若超出半徑標記為 `remote`（外勤/遠端打卡）；未提供 GPS 座標則標記為 `unverified`（IP 網段打卡）。
+  - **後端控制器與審計記錄整合**：
+    - `AttendanceController::index`：回傳 `geofenceConfig` 供前端即時比對；團隊出勤列表包含打卡型態。
+    - `AttendanceController::clockIn` & `clockOut`：接收經緯度與外勤事由，調用 `GeofenceService` 判定打卡型態與距離，相容既有自訂地點字串；加固同仁防重複上班打卡防呆；於 `AuditLog` 完整留痕打卡類型、距離與外勤事由。
+  - **前端打卡介面全面升級 (Vue 3)**：
+    - `resources/js/Pages/Attendance/Index.vue`：
+      - 整合 HTML5 Geolocation API（高精確度 `enableHighAccuracy: true`）。
+      - 新增即時 GPS 地理圍欄狀態橫幅（顯示當前座標、距總部距離、辦公室內勤 / 外勤遠端即時標籤）。
+      - 超出圍欄時自動展開「外勤/遠端事由說明」輸入框並給予友善提示。
+      - 出勤明細表格擴充「地點 / 型態 (GPS)」徽章，並提供直接開起 Google Maps 定位之外部連結。
+    - `resources/js/Pages/Dashboard.vue`：首頁工作台打卡快捷按鈕無縫升級支援取得 GPS 經緯度座標。
+  - **單元與全系統自動化測試驗證**：
+    - 建立 `tests/Feature/GeofencingAttendanceTest.php`，涵蓋圍欄內打卡、圍欄外外勤打卡附帶事由、無座標 fallback、下班打卡距離計算、前端配置資料提供等 5 項專屬測試全案通過。
+    - 執行全系統所有 Feature 測試（包含認證、表單多級簽核、附件、列印、代理人、會議室、行事曆、通知、Webhooks、文件預覽等），共計 **116 項測試 100% 全數通過 (484 assertions)**。
 - 實作「電子表單簽核」模組之**多層級簽核與條件分支流程引擎 (Multi-level & Conditional Workflow Engine)**：
   - **資料庫擴充**：建立資料庫遷移 `2026_10_08_050000_add_multilevel_workflow_to_form_requests_table.php`：
     - `forms` 表增加 `workflow_config` (JSONB)，支援自訂簽核關卡、角色與條件規則。

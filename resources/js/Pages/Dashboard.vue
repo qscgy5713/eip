@@ -11,13 +11,49 @@ defineProps({
     myUpcomingBookings: Array,
 });
 
-const clockInForm = useForm({});
-const clockOutForm = useForm({});
+const clockInForm = useForm({
+    latitude: null,
+    longitude: null,
+});
+const clockOutForm = useForm({
+    latitude: null,
+    longitude: null,
+});
+
 const handleClockIn = () => {
-    clockInForm.post(route('attendance.clockIn'));
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                clockInForm.latitude = pos.coords.latitude;
+                clockInForm.longitude = pos.coords.longitude;
+                clockInForm.post(route('attendance.clockIn'), { preserveScroll: true });
+            },
+            () => {
+                clockInForm.post(route('attendance.clockIn'), { preserveScroll: true });
+            },
+            { timeout: 5000 }
+        );
+    } else {
+        clockInForm.post(route('attendance.clockIn'), { preserveScroll: true });
+    }
 };
+
 const handleClockOut = () => {
-    clockOutForm.post(route('attendance.clockOut'));
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                clockOutForm.latitude = pos.coords.latitude;
+                clockOutForm.longitude = pos.coords.longitude;
+                clockOutForm.post(route('attendance.clockOut'), { preserveScroll: true });
+            },
+            () => {
+                clockOutForm.post(route('attendance.clockOut'), { preserveScroll: true });
+            },
+            { timeout: 5000 }
+        );
+    } else {
+        clockOutForm.post(route('attendance.clockOut'), { preserveScroll: true });
+    }
 };
 
 const priorityBadge = (priority) => {
