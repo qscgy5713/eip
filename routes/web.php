@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceReportController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DelegationController;
@@ -39,10 +40,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 組織通訊錄
     Route::get('/directory', [OrganizationController::class, 'index'])->name('directory.index');
 
-    // 考勤打卡
+    // 考勤打卡與月報結算
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
+    Route::get('/attendance/reports', [AttendanceReportController::class, 'index'])->name('attendance.reports.index');
+    Route::get('/attendance/reports/export-summary', [AttendanceReportController::class, 'exportSummary'])->name('attendance.reports.exportSummary');
+    Route::get('/attendance/reports/export-details', [AttendanceReportController::class, 'exportDetails'])->name('attendance.reports.exportDetails');
 
     // 會議室借用與行事曆
     Route::get('/meeting-rooms', [MeetingRoomController::class, 'index'])->name('meeting-rooms.index');

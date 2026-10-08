@@ -19,7 +19,7 @@
 - [x] 自訂動態表單設計器（Custom Form Builder：支援管理員/主管自由配置欄位型態、選項與驗證，建立後全員立即套用發起申請）
 - [x] 主管審批與簽核歷程記錄機制（Approval Records、核准/駁回附言、單據狀態即時更新）
 - [x] 簽核職務代理人機制（Delegation Engine：出差休假代簽人設定、生效期間自動判定、代理待審通知連鎖、歷程代簽標籤與 IDOR 權限加固）
-- [x] 打卡考勤系統（GPS/IP 限制、打卡紀錄、異常判定、主管團隊出勤）
+- [x] 打卡考勤系統與 HR 月報結算（GPS/IP 限制、打卡紀錄、異常判定、主管團隊出勤、月度考勤統計看板、月度彙總與每日明細 CSV/Excel 格式化匯出、敏感個資匯出審計）
 - [x] 行事曆與會議室借用管理（會議室管理、防衝突排程、日曆預約、超額人數校驗）
 
 ## 階段 3：資產管理與生態整合
@@ -30,6 +30,6 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest, WebhookTest, DelegationTest 等 80 項測試案例全數 100% 通過）
+- [x] 單元與整合測試（EipTest, AttendanceTest, AttendanceReportTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest, WebhookTest, DelegationTest 等 86 項測試案例全數 100% 通過）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）

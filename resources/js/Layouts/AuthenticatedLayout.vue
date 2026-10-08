@@ -220,6 +220,12 @@ const showingNavigationDropdown = ref(false);
                                             🤝 職務代理人設定
                                         </DropdownLink>
                                         <DropdownLink
+                                            v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)"
+                                            :href="route('attendance.reports.index')"
+                                        >
+                                            📊 考勤月報統計
+                                        </DropdownLink>
+                                        <DropdownLink
                                             :href="route('profile.edit')"
                                         >
                                             個人帳號設定
@@ -385,6 +391,12 @@ const showingNavigationDropdown = ref(false);
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('delegations.index')">
                                 🤝 職務代理人設定
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)"
+                                :href="route('attendance.reports.index')"
+                            >
+                                📊 考勤月報統計
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 個人帳號設定

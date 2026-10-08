@@ -105,6 +105,17 @@
   - 撰寫自動化測試套件 `tests/Feature/DelegationTest.php`，涵蓋設定、防指派自己、暫停/刪除、生效代理人調閱與代簽、過期代理人 403 阻擋等 6 項測試。
 - 執行前端資產打包（`npm run build`）與全套測試套件（`php artisan test`）：
   - 全系統累積 **80 項自動化 Feature/Unit 測試全數 100% 通過**（223 assertions）。
+- 完成 Phase 2「HR 人資考勤月報統計與工時結算匯出系統」(Attendance & Payroll Analytics with CSV Export)：
+  - 實作控制器 `AttendanceReportController`：
+    - `index`：月度出勤 KPI 統計（涵蓋在職員工數、總累計工時、全體遲到人次、早退人次）、員工個人月度出勤天數/工時/異常匯總，以及每日打卡明細展開檢視。
+    - `exportSummary`：一鍵匯出月度各員工出勤統計彙總 CSV，內建 UTF-8 BOM，相容 Windows/Mac Microsoft Excel 繁中無亂碼。
+    - `exportDetails`：一鍵匯出月度全員每日打卡明細 CSV，包含打卡時間戳、工時、出勤狀態與備註說明。
+    - 安全防護：嚴格限定 HR、主管與系統管理員檢閱，一般員工阻擋（403 IDOR 防護），每次匯出敏感個資均自動寫入審計稽核日誌 (AuditLog)。
+  - 實作前端 `Attendance/Report.vue`：支援年份月份快速切換、部門篩選下拉、員工姓名/工號關鍵字檢索、4 大 KPI 指標卡、彙總資料表格與點擊展開每日出勤明細。
+  - 於 `Attendance/Index.vue` 頂部增設「📊 考勤月報統計與工時結算」入口按鈕，於 `AuthenticatedLayout.vue` 整合選單連結。
+  - 撰寫自動化測試套件 `tests/Feature/AttendanceReportTest.php`：涵蓋 HR/Admin/Manager 存取授權、一般同仁越權防護 (403)、月份與部門篩選、匯出 CSV 格式/BOM/標頭/審計日誌等 6 項測試。
+- 執行前端資產建置（`npm run build`）與全套測試套件（`php artisan test`）：
+  - 全系統累積 **86 項自動化 Feature/Unit 測試全數 100% 通過**（278 assertions）。
 
 ### 下一步
 - 向使用者回報完整進度與成果，詢問是否同意執行 Git Commit 與 Git Push。

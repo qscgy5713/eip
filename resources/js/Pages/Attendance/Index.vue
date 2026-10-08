@@ -65,9 +65,19 @@ const statusLabel = (status) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold leading-tight text-gray-800">考勤打卡管理</h2>
-                <span class="text-sm text-gray-500">標準工時記錄與出勤異常統計</span>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold leading-tight text-gray-800">考勤打卡管理</h2>
+                    <span class="text-sm text-gray-500">標準工時記錄與出勤異常統計</span>
+                </div>
+                <div v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)">
+                    <Link
+                        :href="route('attendance.reports.index')"
+                        class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                    >
+                        <span>📊 考勤月報統計與工時結算</span>
+                    </Link>
+                </div>
             </div>
         </template>
 
