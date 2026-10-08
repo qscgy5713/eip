@@ -15,8 +15,9 @@
 - [x] 員工通訊錄與組織樹狀圖（Directory 查詢與篩選）
 
 ## 階段 2：行政流程與協同工作
-- [x] 電子表單簽核工作流引擎（請假單、報銷單、動態 JSON Schema 欄位）
-- [x] 主管審批與簽核歷程記錄機制（Approval Records、核准/駁回附言）
+- [x] 電子表單簽核工作流引擎（請假單、報銷單、加班單、補打卡單、請購單、差旅單等動態 JSON Schema 欄位）
+- [x] 自訂動態表單設計器（Custom Form Builder：支援管理員/主管自由配置欄位型態、選項與驗證，建立後全員立即套用發起申請）
+- [x] 主管審批與簽核歷程記錄機制（Approval Records、核准/駁回附言、單據狀態即時更新）
 - [x] 打卡考勤系統（GPS/IP 限制、打卡紀錄、異常判定、主管團隊出勤）
 - [x] 行事曆與會議室借用管理（會議室管理、防衝突排程、日曆預約、超額人數校驗）
 
@@ -27,6 +28,6 @@
 - [ ] 審計日誌與安全性加固
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest 等 51 項測試案例全數通過）
+- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest 等 54 項測試案例全數 100% 通過）
 - [ ] 權限越權檢查 (IDOR) 與安全性稽核
 - [ ] 容器化 (Docker) 與 CI/CD 部署建置

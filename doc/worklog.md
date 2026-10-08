@@ -48,5 +48,15 @@
   - 透過 Headless Chrome 進行端對端畫面渲染驗證，確保 Vue 3 與 Tailwind CSS 樣式與機密權限隱藏效果完美呈現。
   - 全套測試通過數提升至 51 項 Feature/Unit 測試 100% 通過（138 assertions）。
 
+- 大幅擴充電子表單範本與示範簽核單據資料庫（Forms & FormRequests）：
+  - 擴充表單範本至 6 大常見企業行政類別：休假申請單 (LEAVE)、費用報銷單 (EXPENSE)、加班申請單 (OVERTIME)、忘刷/補打卡單 (CLOCK_ADJUST)、資訊設備資產採購單 (PURCHASE)、公出外勤洽公單 (TRIP)。
+  - 豐富示範單據至 9 筆不同情境與狀態：包含待主管審批（特休、週末加班、4K 螢幕採購）、待總裁審批（Kubernetes 伺服器擴容）、已核准單據（出差高鐵報銷、上班補打卡、公出拜訪、季度慶生茶會點心）、已駁回單據（未檢附發票報銷退件）及詳細的主管審批附言紀錄。
+  - 實作「自訂動態表單設計器」(Custom Form Builder)：
+    - 後端：`FormRequestController::storeTemplate` 與 `destroyTemplate`，具備代碼格式校驗、JSON Schema 欄位結構驗證、無單據時徹底刪除與有單據時軟性下架防呆機制。
+    - 路由：註冊 `POST /forms/templates` 與 `DELETE /forms/templates/{form}`。
+    - 前端：於 `Forms/Index.vue` 增設「+ 自訂新表單範本」彈窗，支援主管與管理員動態新增欄位、指定類型（單行、多行、數值、日期、自訂下拉清單），儲存後全體同仁於前台立即可發起申請。
+  - 擴充自動化測試案例：於 `tests/Feature/EipTest.php` 增設主管建立表單範本、一般同仁越權防護 (403) 與範本刪除/軟性停用測試。
+  - 執行前端資產編譯（`npm run build`）與全套測試套件（`make test`），全系統 54 項 Feature/Unit 測試全數 100% 通過（146 assertions）。
+
 ### 下一步
-- 詢問使用者是否提交 Git，並可繼續推進 Phase 3「第三方推播通知整合 (Email / LINE / Slack)」或「審計日誌與安全性加固」。
+- 詢問使用者是否同意執行 Git Commit 與 Git Push，確認後即可繼續推進 Phase 3「第三方推播通知整合 (Email / LINE / Slack)」或「審計日誌與安全性加固」。

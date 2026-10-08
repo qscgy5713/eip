@@ -111,9 +111,9 @@ class EipDatabaseSeeder extends Seeder
         $leaveForm = Form::create([
             'name' => '休假申請單',
             'code' => 'LEAVE',
-            'description' => '事假、病假、特休、公假等各式差假申請',
+            'description' => '事假、病假、特休、公假、補休等各式差假申請',
             'fields_schema' => [
-                ['key' => 'leave_type', 'label' => '假別', 'type' => 'select', 'options' => ['特休假', '事假', '病假', '公假', '婚喪假']],
+                ['key' => 'leave_type', 'label' => '假別', 'type' => 'select', 'options' => ['特休假', '事假', '病假', '公假', '補休', '婚喪假']],
                 ['key' => 'start_date', 'label' => '開始日期', 'type' => 'date'],
                 ['key' => 'end_date', 'label' => '結束日期', 'type' => 'date'],
                 ['key' => 'days', 'label' => '請假天數', 'type' => 'number'],
@@ -133,12 +133,64 @@ class EipDatabaseSeeder extends Seeder
             ],
         ]);
 
-        // 5. 示範申請單據與審批歷程
-        $request1 = FormRequest::create([
+        $overtimeForm = Form::create([
+            'name' => '加班申請單',
+            'code' => 'OVERTIME',
+            'description' => '平日延長工時或國定休假日專案支援加班申請',
+            'fields_schema' => [
+                ['key' => 'overtime_type', 'label' => '加班類型', 'type' => 'select', 'options' => ['平日延長工時', '週末假日加班', '國定假日專案支援']],
+                ['key' => 'overtime_date', 'label' => '加班日期', 'type' => 'date'],
+                ['key' => 'hours', 'label' => '加班時數 (小時)', 'type' => 'number'],
+                ['key' => 'compensation', 'label' => '補償方式', 'type' => 'select', 'options' => ['換取補休時數', '核發加班費']],
+                ['key' => 'reason', 'label' => '專案事由與工作內容', 'type' => 'textarea'],
+            ],
+        ]);
+
+        $clockAdjustForm = Form::create([
+            'name' => '忘刷/補打卡申請單',
+            'code' => 'CLOCK_ADJUST',
+            'description' => '公出外勤、感應異常或突發狀況忘記上下班打卡之補登申請',
+            'fields_schema' => [
+                ['key' => 'adjust_date', 'label' => '忘刷日期', 'type' => 'date'],
+                ['key' => 'adjust_type', 'label' => '補刷卡別', 'type' => 'select', 'options' => ['上班卡補刷', '下班卡補刷', '全日未打卡補登']],
+                ['key' => 'actual_time', 'label' => '實際出勤時間', 'type' => 'text'],
+                ['key' => 'reason', 'label' => '未依規定打卡原因說明', 'type' => 'textarea'],
+            ],
+        ]);
+
+        $purchaseForm = Form::create([
+            'name' => '資訊設備與資產採購單',
+            'code' => 'PURCHASE',
+            'description' => '開發用筆電、外接螢幕、測試設備與雲端伺服器擴容請購',
+            'fields_schema' => [
+                ['key' => 'item_category', 'label' => '資產類別', 'type' => 'select', 'options' => ['電腦主機/筆電', '周邊顯示器/硬體', '雲端主機擴展', '軟體商業授權']],
+                ['key' => 'item_name', 'label' => '請購品項與型號', 'type' => 'text'],
+                ['key' => 'estimated_cost', 'label' => '預算金額 (TWD)', 'type' => 'number'],
+                ['key' => 'urgency', 'label' => '急迫程度', 'type' => 'select', 'options' => ['普通 (一週內)', '緊急 (專案阻礙)', '年度編列預算']],
+                ['key' => 'purpose', 'label' => '請購需求與效益評估', 'type' => 'textarea'],
+            ],
+        ]);
+
+        $tripForm = Form::create([
+            'name' => '公出與外勤洽公單',
+            'code' => 'TRIP',
+            'description' => '上班時間外出拜訪客戶、跨廠區技術交流或外勤公事申請',
+            'fields_schema' => [
+                ['key' => 'trip_date', 'label' => '公出日期', 'type' => 'date'],
+                ['key' => 'client_name', 'label' => '拜訪對象 / 客戶機構', 'type' => 'text'],
+                ['key' => 'destination', 'label' => '目的地地點', 'type' => 'text'],
+                ['key' => 'transportation', 'label' => '交通工具', 'type' => 'select', 'options' => ['大眾捷運/公車', '高鐵/台鐵', '公司公務車', '自行駕車']],
+                ['key' => 'agenda', 'label' => '洽談主旨與任務預計產出', 'type' => 'textarea'],
+            ],
+        ]);
+
+        // 5. 示範申請單據與審批歷程 (多筆豐富資料)
+        // 單據 1: 陳同仁 - 特休申請 (待審核)
+        $req1 = FormRequest::create([
             'form_id' => $leaveForm->id,
             'user_id' => $employee->id,
             'request_no' => 'REQ-' . date('Ymd') . '-0001',
-            'title' => '陳同仁 - 特休申請 (1天)',
+            'title' => '陳同仁 - 特休請假申請 (1天)',
             'data' => [
                 'leave_type' => '特休假',
                 'start_date' => date('Y-m-d', strtotime('+3 days')),
@@ -149,12 +201,197 @@ class EipDatabaseSeeder extends Seeder
             'status' => 'pending',
             'current_step' => 1,
         ]);
-
         ApprovalRecord::create([
-            'form_request_id' => $request1->id,
+            'form_request_id' => $req1->id,
             'step' => 1,
             'approver_id' => $manager->id,
             'status' => 'pending',
+        ]);
+
+        // 單據 2: 陳同仁 - 週末系統部署加班申請 (待審核)
+        $req2 = FormRequest::create([
+            'form_id' => $overtimeForm->id,
+            'user_id' => $employee->id,
+            'request_no' => 'REQ-' . date('Ymd') . '-0002',
+            'title' => '陳同仁 - 週末版本上線加班申請 (4小時)',
+            'data' => [
+                'overtime_type' => '週末假日加班',
+                'overtime_date' => date('Y-m-d', strtotime('+5 days')),
+                'hours' => 4,
+                'compensation' => '換取補休時數',
+                'reason' => 'EIP 企業入口網核心模組全面上線發布與驗收監控。',
+            ],
+            'status' => 'pending',
+            'current_step' => 1,
+        ]);
+        ApprovalRecord::create([
+            'form_request_id' => $req2->id,
+            'step' => 1,
+            'approver_id' => $manager->id,
+            'status' => 'pending',
+        ]);
+
+        // 單據 3: 陳同仁 - 4K 專業螢幕請購 (待審核)
+        $req3 = FormRequest::create([
+            'form_id' => $purchaseForm->id,
+            'user_id' => $employee->id,
+            'request_no' => 'REQ-' . date('Ymd') . '-0003',
+            'title' => '陳同仁 - 前端多工開發用 27 吋 4K 顯示器請購',
+            'data' => [
+                'item_category' => '周邊顯示器/硬體',
+                'item_name' => 'Dell UltraSharp 27 4K USB-C Hub 顯示器 (U2723QE)',
+                'estimated_cost' => 18500,
+                'urgency' => '普通 (一週內)',
+                'purpose' => '多重視窗切換與響應式前台跨端校對，可大幅提升編程開發效率。',
+            ],
+            'status' => 'pending',
+            'current_step' => 1,
+        ]);
+        ApprovalRecord::create([
+            'form_request_id' => $req3->id,
+            'step' => 1,
+            'approver_id' => $manager->id,
+            'status' => 'pending',
+        ]);
+
+        // 單據 4: 陳同仁 - 出差高鐵交通費報支 (已核准)
+        $req4 = FormRequest::create([
+            'form_id' => $expenseForm->id,
+            'user_id' => $employee->id,
+            'request_no' => 'REQ-' . date('Ymd', strtotime('-3 days')) . '-0004',
+            'title' => '陳同仁 - 新竹台積電廠區技術對齊高鐵交通費報銷',
+            'data' => [
+                'expense_type' => '出差交通費',
+                'amount' => 2980,
+                'invoice_no' => 'THSR-88992211',
+                'description' => '台北至新竹往返商務車廂票券，客戶現場系統連線測試。',
+            ],
+            'status' => 'approved',
+            'current_step' => 1,
+        ]);
+        ApprovalRecord::create([
+            'form_request_id' => $req4->id,
+            'step' => 1,
+            'approver_id' => $manager->id,
+            'status' => 'approved',
+            'comment' => '單據核對無誤，同意核撥報支款項。',
+        ]);
+
+        // 單據 5: 陳同仁 - 昨日捷運訊號不良補打卡 (已核准)
+        $req5 = FormRequest::create([
+            'form_id' => $clockAdjustForm->id,
+            'user_id' => $employee->id,
+            'request_no' => 'REQ-' . date('Ymd', strtotime('-1 day')) . '-0005',
+            'title' => '陳同仁 - 昨日上班卡補登 (08:58)',
+            'data' => [
+                'adjust_date' => date('Y-m-d', strtotime('-1 day')),
+                'adjust_type' => '上班卡補刷',
+                'actual_time' => '08:58',
+                'reason' => '大樓閘門感應器維護，改由臨櫃簽到，特此補刷。',
+            ],
+            'status' => 'approved',
+            'current_step' => 1,
+        ]);
+        ApprovalRecord::create([
+            'form_request_id' => $req5->id,
+            'step' => 1,
+            'approver_id' => $manager->id,
+            'status' => 'approved',
+            'comment' => '行政部已查核紙本簽名紀錄相符，准予補登。',
+        ]);
+
+        // 單據 6: 張經理 - 雲端伺服器年度升級採購單 (待王總裁審批)
+        $req6 = FormRequest::create([
+            'form_id' => $purchaseForm->id,
+            'user_id' => $manager->id,
+            'request_no' => 'REQ-' . date('Ymd') . '-0006',
+            'title' => '張經理 - 核心 Kubernetes 叢集與資料庫擴容採購',
+            'data' => [
+                'item_category' => '雲端主機擴展',
+                'item_name' => 'AWS EKS Production Cluster 64GB 節點擴充方案 (年度約)',
+                'estimated_cost' => 68000,
+                'urgency' => '普通 (一週內)',
+                'purpose' => '因應用戶量大幅成長，提升資料庫在高併發情境下的查詢效能與穩定度。',
+            ],
+            'status' => 'pending',
+            'current_step' => 1,
+        ]);
+        ApprovalRecord::create([
+            'form_request_id' => $req6->id,
+            'step' => 1,
+            'approver_id' => $admin->id,
+            'status' => 'pending',
+        ]);
+
+        // 單據 7: 張經理 - 客戶機構技術諮詢公出單 (已核准)
+        $req7 = FormRequest::create([
+            'form_id' => $tripForm->id,
+            'user_id' => $manager->id,
+            'request_no' => 'REQ-' . date('Ymd', strtotime('-2 days')) . '-0007',
+            'title' => '張經理 - 國泰世華金控總部架構諮詢公出',
+            'data' => [
+                'trip_date' => date('Y-m-d', strtotime('-2 days')),
+                'client_name' => '國泰世華商業銀行 資訊處',
+                'destination' => '台北市信義區松仁路 7 號',
+                'transportation' => '大眾捷運/公車',
+                'agenda' => '商討企業級 SSO 與 EIP 權限架構相容性規範。',
+            ],
+            'status' => 'approved',
+            'current_step' => 1,
+        ]);
+        ApprovalRecord::create([
+            'form_request_id' => $req7->id,
+            'step' => 1,
+            'approver_id' => $admin->id,
+            'status' => 'approved',
+            'comment' => '同意公出。請隨時回報洽商進度。',
+        ]);
+
+        // 單據 8: 陳同仁 - 未檢附發票之耗材代墊 (已駁回示範)
+        $req8 = FormRequest::create([
+            'form_id' => $expenseForm->id,
+            'user_id' => $employee->id,
+            'request_no' => 'REQ-' . date('Ymd', strtotime('-4 days')) . '-0008',
+            'title' => '陳同仁 - 文具與白板筆代墊款項 (NT$ 1,200)',
+            'data' => [
+                'expense_type' => '辦公耗材',
+                'amount' => 1200,
+                'invoice_no' => '未檢附',
+                'description' => '緊急採買討論用玻璃白板專用筆與磁鐵。',
+            ],
+            'status' => 'rejected',
+            'current_step' => 1,
+        ]);
+        ApprovalRecord::create([
+            'form_request_id' => $req8->id,
+            'step' => 1,
+            'approver_id' => $manager->id,
+            'status' => 'rejected',
+            'comment' => '依據財務規定，未檢附統一發票統編憑證無法報支，請向店家重新索取發票後再行送件。',
+        ]);
+
+        // 單據 9: 林專員 (HR) - 季度茶會點心採購 (已核准)
+        $req9 = FormRequest::create([
+            'form_id' => $purchaseForm->id,
+            'user_id' => $hrUser->id,
+            'request_no' => 'REQ-' . date('Ymd', strtotime('-1 day')) . '-0009',
+            'title' => '林專員 - Q4 全員大會暨慶生茶會餐飲點心採購',
+            'data' => [
+                'item_category' => '周邊顯示器/硬體',
+                'item_name' => '知名烘焙坊精選茶點與新鮮水果盒 (共 50 人份)',
+                'estimated_cost' => 6500,
+                'urgency' => '普通 (一週內)',
+                'purpose' => '提升同仁向心力與跨部門情感交流，已列入年度福利預算。',
+            ],
+            'status' => 'approved',
+            'current_step' => 1,
+        ]);
+        ApprovalRecord::create([
+            'form_request_id' => $req9->id,
+            'step' => 1,
+            'approver_id' => $admin->id,
+            'status' => 'approved',
+            'comment' => '准予動支福委會編列預算。',
         ]);
 
         // 6. 示範考勤打卡紀錄

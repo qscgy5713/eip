@@ -37,6 +37,7 @@ class FormRequestController extends Controller
             'availableForms' => $availableForms,
             'myRequests' => $myRequests,
             'pendingApprovals' => $pendingApprovals,
+            'canManageForms' => $user->isAdmin() || $user->isManager(),
         ]);
     }
 
@@ -132,5 +133,60 @@ class FormRequestController extends Controller
         ]);
 
         return redirect()->back()->with('success', '簽核狀態已更新！');
+    }
+
+    /**
+     * 自訂建立新表單種類 (管理員與主管)
+     */
+    public function storeTemplate(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isManager()) {
+            abort(403, '僅主管與系統管理員具備自訂表單範本權限。');
+        }
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'code' => ['required', 'string', 'max:50', 'regex:/^[A-Z0-9_]+$/', 'unique:forms,code'],
+            'description' => ['nullable', 'string', 'max:500'],
+            'fields_schema' => ['required', 'array', 'min:1'],
+            'fields_schema.*.key' => ['required', 'string', 'max:50'],
+            'fields_schema.*.label' => ['required', 'string', 'max:100'],
+            'fields_schema.*.type' => ['required', 'string', 'in:text,textarea,number,date,select'],
+            'fields_schema.*.options' => ['nullable', 'array'],
+        ]);
+
+        $form = Form::create([
+            'name' => $validated['name'],
+            'code' => strtoupper($validated['code']),
+            'description' => $validated['description'] ?? null,
+            'fields_schema' => $validated['fields_schema'],
+            'is_active' => true,
+        ]);
+
+        return back()->with('success', "已成功建立新表單範本「{$form->name}」！全體同仁現已可發起申請。");
+    }
+
+    /**
+     * 刪除或下架自訂表單範本
+     */
+    public function destroyTemplate(Request $request, Form $form): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->isAdmin() && !$user->isManager()) {
+            abort(403, '您沒有權限管理此表單。');
+        }
+
+        // 若表單已有申請單，執行軟性下架停用；若無申請單則可直接刪除
+        if ($form->requests()->exists()) {
+            $form->update(['is_active' => false]);
+            $msg = "表單「{$form->name}」已下架停用（既有申請單歷程完整保留）。";
+        } else {
+            $name = $form->name;
+            $form->delete();
+            $msg = "已成功刪除表單「{$name}」。";
+        }
+
+        return back()->with('success', $msg);
     }
 }

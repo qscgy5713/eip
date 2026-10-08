@@ -25,6 +25,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 表單簽核工作流
     Route::get('/forms', [FormRequestController::class, 'index'])->name('forms.index');
+    Route::post('/forms/templates', [FormRequestController::class, 'storeTemplate'])->name('forms.templates.store');
+    Route::delete('/forms/templates/{form}', [FormRequestController::class, 'destroyTemplate'])->name('forms.templates.destroy');
     Route::get('/forms/create/{form}', [FormRequestController::class, 'create'])->name('forms.create');
     Route::post('/forms/create/{form}', [FormRequestController::class, 'store'])->name('forms.store');
     Route::get('/forms/requests/{formRequest}', [FormRequestController::class, 'show'])->name('forms.show');
