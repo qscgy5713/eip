@@ -207,6 +207,7 @@ const formatSize = (bytes) => {
                     <thead>
                         <tr class="bg-gray-100 border-b border-gray-300 text-left font-bold text-gray-700">
                             <th class="p-2 border-r border-gray-300 text-center w-12">關卡</th>
+                            <th class="p-2 border-r border-gray-300 w-44">關卡職責 / 名稱</th>
                             <th class="p-2 border-r border-gray-300 w-36">審核人員</th>
                             <th class="p-2 border-r border-gray-300 w-24">審核結果</th>
                             <th class="p-2 border-r border-gray-300 w-40">審定時間</th>
@@ -217,6 +218,9 @@ const formatSize = (bytes) => {
                         <tr v-for="record in formRequest.approval_records" :key="record.id">
                             <td class="p-2 text-center font-bold font-mono border-r border-gray-300 bg-gray-50">
                                 {{ record.step }}
+                            </td>
+                            <td class="p-2 font-semibold text-gray-800 border-r border-gray-300">
+                                {{ record.step_title || ('關卡 ' + record.step) }}
                             </td>
                             <td class="p-2 border-r border-gray-300">
                                 <div class="font-bold text-gray-900">{{ record.approver?.name || '系統主管' }}</div>

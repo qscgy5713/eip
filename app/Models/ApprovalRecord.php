@@ -13,6 +13,7 @@ class ApprovalRecord extends Model
     protected $fillable = [
         'form_request_id',
         'step',
+        'step_title',
         'approver_id',
         'delegated_from_id',
         'status',

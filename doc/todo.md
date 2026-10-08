@@ -24,6 +24,7 @@
 - [x] 企業全景綜合行事曆看板（Calendar Hub：整合會議室借用、同仁休假/出勤單據、企業重大公告日程，支援月曆切換、三色事件標籤、彈窗明細與部門篩選）
 - [x] 電子簽核公文單據正式列印與 PDF 存證匯出（Print-Ready View：A4 版型、公文編號、申請資訊、審核簽署鏈歷程、電子核准印章、列印防偽留痕與 AuditLog 審計）
 - [x] 電子表單檢附證明文件與附件安全上傳/下載系統（支援請假就醫證明、公文單據等多檔上傳、10MB 限制與類型校驗、防越權 IDOR 下載保護、A4 列印存證留痕與 AuditLog 下載稽核）
+- [x] 多層級簽核與條件分支流程引擎（Workflow Engine：支援依請假天數 >3 天動態追加人資複核、報銷金額 >=10,000 元追加財務/管理員複核、巨額報支 >=50,000 總經理決行；前端響應式 Stepper 進度管線、公文列印多級印章鏈、自訂表單多級簽核模式與 111 項測試 100% 通過）
 
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
@@ -35,7 +36,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, AttendanceTest, AttendanceReportTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest, WebhookTest, DelegationTest, CalendarTest, FormPrintTest 等 96 項測試案例全數 100% 通過）
-- [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, SecurityAndIdorTest 等 111 項 Feature 測試 100% 通過，447 assertions）
+- [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

@@ -119,12 +119,91 @@ const formatSize = (bytes) => {
                     </div>
                 </div>
 
+                <!-- 多層級簽核流程進度條 (Approval Pipeline Stepper) -->
+                <div v-if="formRequest.workflow_snapshot && formRequest.workflow_snapshot.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                            <span>簽核流程進度鏈（共 {{ formRequest.total_steps || formRequest.workflow_snapshot.length }} 關）</span>
+                        </h3>
+                        <span class="text-xs text-gray-400">當前進度：關卡 {{ formRequest.current_step }} / {{ formRequest.total_steps || formRequest.workflow_snapshot.length }}</span>
+                    </div>
+
+                    <!-- 橫向/堆疊 Stepper 節點 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                        <div
+                            v-for="(st, idx) in formRequest.workflow_snapshot"
+                            :key="idx"
+                            :class="[
+                                'relative p-4 rounded-xl border transition flex flex-col justify-between',
+                                st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved')
+                                    ? 'bg-emerald-50/50 border-emerald-200'
+                                    : (st.step === formRequest.current_step && formRequest.status === 'pending'
+                                        ? 'bg-blue-50/70 border-blue-300 ring-2 ring-blue-100'
+                                        : (st.step === formRequest.current_step && formRequest.status === 'rejected'
+                                            ? 'bg-rose-50/50 border-rose-200'
+                                            : 'bg-gray-50/60 border-gray-200 opacity-60'))
+                            ]"
+                        >
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span
+                                        :class="[
+                                            'w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0',
+                                            st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved')
+                                                ? 'bg-emerald-600'
+                                                : (st.step === formRequest.current_step && formRequest.status === 'pending'
+                                                    ? 'bg-blue-600 animate-pulse'
+                                                    : (st.step === formRequest.current_step && formRequest.status === 'rejected'
+                                                        ? 'bg-rose-600'
+                                                        : 'bg-gray-400'))
+                                        ]"
+                                    >
+                                        {{ st.step }}
+                                    </span>
+                                    <span class="font-bold text-xs text-gray-900 truncate">{{ st.title }}</span>
+                                </div>
+                                <span
+                                    :class="[
+                                        'px-2 py-0.5 text-[10px] font-bold rounded-full',
+                                        st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved')
+                                            ? 'bg-emerald-100 text-emerald-800'
+                                            : (st.step === formRequest.current_step && formRequest.status === 'pending'
+                                                ? 'bg-blue-100 text-blue-800'
+                                                : (st.step === formRequest.current_step && formRequest.status === 'rejected'
+                                                    ? 'bg-rose-100 text-rose-800'
+                                                    : 'bg-gray-200 text-gray-600'))
+                                    ]"
+                                >
+                                    {{ st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved') ? '已核准' : (st.step === formRequest.current_step && formRequest.status === 'rejected' ? '已退件' : (st.step === formRequest.current_step ? '審核中' : '待流轉')) }}
+                                </span>
+                            </div>
+
+                            <div class="mt-3 text-xs space-y-1">
+                                <p class="text-gray-600 flex items-center space-x-1">
+                                    <span class="text-gray-400">審批人：</span>
+                                    <strong class="text-gray-800">{{ st.approver_name }}</strong>
+                                </p>
+                                <p v-if="st.condition_desc" class="text-[11px] text-gray-400 leading-tight">
+                                    {{ st.condition_desc }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 主管審批操作區塊 (僅當使用者為當前審批主管且單據審批中) -->
                 <div v-if="canApprove && formRequest.status === 'pending'" class="bg-amber-50/80 border border-amber-200 rounded-xl p-6 space-y-4">
-                    <h3 class="font-bold text-amber-900 text-base flex items-center space-x-2">
-                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                        <span>簽核審批動作</span>
-                    </h3>
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-amber-900 text-base flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                            <span>簽核審批動作</span>
+                        </h3>
+                        <span v-if="currentPendingRecord" class="text-xs font-semibold px-2.5 py-1 bg-amber-200/70 text-amber-900 rounded-lg">
+                            目前審批：{{ currentPendingRecord.step_title || ('關卡 ' + currentPendingRecord.step) }}
+                        </span>
+                    </div>
+
                     <div class="space-y-2">
                         <label class="block text-xs font-medium text-gray-600">審核意見 / 備註</label>
                         <textarea
@@ -142,7 +221,7 @@ const formatSize = (bytes) => {
                             class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-sm rounded-lg shadow-sm transition flex items-center space-x-1.5"
                         >
                             <svg v-if="approvalForm.processing && approvalForm.status === 'approved'" class="animate-spin -ml-1 mr-1 h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            <span>同意核准</span>
+                            <span>{{ formRequest.current_step < (formRequest.total_steps || 1) ? '同意並流轉至下一關' : '同意核准並結案' }}</span>
                         </button>
                         <button
                             type="button"
@@ -177,12 +256,12 @@ const formatSize = (bytes) => {
                             ></span>
                             <div class="flex items-center space-x-2 flex-wrap gap-y-1">
                                 <p class="text-sm font-semibold text-gray-900">
-                                    關卡 {{ rec.step }}：
+                                    {{ rec.step_title ? rec.step_title : ('關卡 ' + rec.step) }}：
                                     <template v-if="rec.delegated_from">
                                         代理人代簽（{{ rec.approver?.name }}，原主管：{{ rec.delegated_from?.name }}）
                                     </template>
                                     <template v-else>
-                                        主管審核（{{ rec.approver?.name }}）
+                                        審核（{{ rec.approver?.name }}）
                                     </template>
                                 </p>
                                 <span :class="['px-2 py-0.5 text-xs rounded', statusBadge(rec.status)]">

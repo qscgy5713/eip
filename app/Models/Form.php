@@ -15,11 +15,13 @@ class Form extends Model
         'code',
         'description',
         'fields_schema',
+        'workflow_config',
         'is_active',
     ];
 
     protected $casts = [
         'fields_schema' => 'array',
+        'workflow_config' => 'array',
         'is_active' => 'boolean',
     ];
 

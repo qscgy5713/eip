@@ -2,6 +2,32 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作「電子表單簽核」模組之**多層級簽核與條件分支流程引擎 (Multi-level & Conditional Workflow Engine)**：
+  - **資料庫擴充**：建立資料庫遷移 `2026_10_08_050000_add_multilevel_workflow_to_form_requests_table.php`：
+    - `forms` 表增加 `workflow_config` (JSONB)，支援自訂簽核關卡、角色與條件規則。
+    - `form_requests` 表增加 `total_steps` (integer) 與 `workflow_snapshot` (JSONB)，記錄單據發起時動態計算出的審核流水線快照。
+    - `approval_records` 表增加 `step_title` (string)，清楚標註各關卡名稱與職責。
+  - **核心業務引擎 (WorkflowService)**：
+    - 建立 `app/Services/WorkflowService.php` 統整簽核工作流邏輯。
+    - **條件分支規則 (Enterprise Conditional Rules)**：
+      - 請假單 (`LEAVE`)：請假天數 `days > 3` 天自動追加第 2 關「人資主管複核」。
+      - 費用報銷單 (`EXPENSE`)：金額 `amount >= 10,000` 元追加第 2 關「財務主管複核」；金額 `amount >= 50,000` 元追加第 3 關「執行長/總經理決行」。
+      - 加班單 (`OVERTIME`)：加班時數 `hours >= 8` 小時追加第 2 關「人資工時稽核」。
+      - 自訂表單：動態求值 `workflow_config`，支援任意欄位與運算子條件分支。
+    - **流程流轉推進 (Pipeline State Machine)**：
+      - 關卡逐級推進：當前關卡核准後，自動建立下一關 `ApprovalRecord`、更新 `current_step`、發送通知給下一關審批人及代理人，並即時通知申請同仁。
+      - 最終結案：當最後一關核准後，單據狀態正式變更為 `approved`，觸發 `form.approved` Webhook 與全流程結案通知。
+      - 任一駁回終止：任一關卡點擊駁回，單據總狀態立即標記為 `rejected`，流程終止，後續關卡不再流轉。
+  - **安全性與 IDOR 強化**：
+    - `FormRequest::canAccess` 擴展支援預定審核快照中之所有關卡主管與代理人。
+    - `FormRequestController::show` 與 `action` 嚴格限制僅當前處於 `pending` 關卡之審批人、代理人或管理者具備操作權，杜絕後續關卡跨級搶先審核之越權風險。
+  - **前端體驗升級 (Vue 3)**：
+    - `Forms/Show.vue`：加入高質感響應式 **Approval Pipeline Stepper** 流程進度條（已通過、審核中脈衝光、待流轉、已退件），審批按鈕依當前關卡自動切換「同意並流轉至下一關」或「同意核准並結案」。
+    - `Forms/Print.vue`：A4 公文正式列印表格完整呈現多關卡職責名稱 (`step_title`)、審核人員、電子核章與審查意見。
+    - `Forms/Index.vue`：待審列表與申請紀錄明確標示關卡進度（如「關卡 2：財務主管複核」、「審批中 (關卡 2/3)」）；自訂表單設計器新增單級、二級、三級簽核流程架構選項。
+  - **自動化測試覆蓋**：
+    - 建立 `tests/Feature/MultilevelWorkflowTest.php`，共 6 項 Feature 測試（短假單級、長假二級、大額報銷二級防搶審、中途駁回終止、自訂表單三級流轉、多級流程中的代理人代簽機制）。
+    - 全系統所有 Feature 測試擴充至 **111 項測試 100% 全數通過 (447 assertions)**。
 - 實作「電子表單與簽核」模組之**檢附證明文件與附件安全上傳/下載系統 (Form Attachments & Proof Documents Upload/Download)**：
   - **資料庫擴充**：建立資料庫遷移 `2026_10_08_040000_add_attachments_to_form_requests_table.php`，為 `form_requests` 表新增 `attachments` JSONB 欄位，支援動態陣列存儲附件中繼資料（原始檔名、儲存路徑、大小、MIME 類型與上傳時間）。
   - **後端安全防護**：

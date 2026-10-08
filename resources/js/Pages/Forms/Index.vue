@@ -24,6 +24,7 @@ const newForm = useForm({
     name: '',
     code: '',
     description: '',
+    workflow_type: 'single', // single, two_stage, three_stage
     fields: [
         { label: '申請原因', key: 'reason', type: 'textarea', options_str: '' },
         { label: '預計執行日期', key: 'target_date', type: 'date', options_str: '' },
@@ -33,6 +34,7 @@ const newForm = useForm({
 const openCreateFormModal = () => {
     newForm.reset();
     newForm.clearErrors();
+    newForm.workflow_type = 'single';
     newForm.fields = [
         { label: '申請原因說明', key: 'reason', type: 'textarea', options_str: '' },
         { label: '生效/執行日期', key: 'effective_date', type: 'date', options_str: '' },
@@ -72,11 +74,26 @@ const submitCustomForm = () => {
         return item;
     });
 
+    let workflowConfig = null;
+    if (newForm.workflow_type === 'two_stage') {
+        workflowConfig = [
+            { step: 1, title: '直屬主管初審', role: 'manager', description: '同部門直屬主管初審' },
+            { step: 2, title: '部門處長/管理員核定', role: 'admin', description: '管理決行審查' },
+        ];
+    } else if (newForm.workflow_type === 'three_stage') {
+        workflowConfig = [
+            { step: 1, title: '直屬主管初審', role: 'manager', description: '同部門直屬主管初審' },
+            { step: 2, title: '財務主管複核', role: 'finance', description: '財務核算與法規稽核' },
+            { step: 3, title: '執行長/總經理決行', role: 'admin', description: '公司最高主管決行' },
+        ];
+    }
+
     router.post(route('forms.templates.store'), {
         name: newForm.name,
         code: newForm.code.trim().toUpperCase(),
         description: newForm.description,
         fields_schema: formattedSchema,
+        workflow_config: workflowConfig,
     }, {
         onSuccess: () => {
             isCreateFormModalOpen.value = false;
@@ -185,6 +202,9 @@ const deleteForm = (formId, formName) => {
                             <div>
                                 <div class="flex items-center space-x-2">
                                     <p class="font-bold text-sm text-gray-900">{{ item.form_request?.title }}</p>
+                                    <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-blue-100 text-blue-800">
+                                        {{ item.step_title ? item.step_title : ('關卡 ' + item.step) }}
+                                    </span>
                                     <span
                                         v-if="item.is_delegated"
                                         class="px-2 py-0.5 text-[11px] font-bold rounded bg-purple-100 text-purple-700"
@@ -221,11 +241,13 @@ const deleteForm = (formId, formName) => {
                                         {{ req.title }}
                                     </Link>
                                 </div>
-                                <p class="text-xs text-gray-400">申請類別：{{ req.form?.name }} · 申請時間：{{ new Date(req.created_at).toLocaleString() }}</p>
+                                <p class="text-xs text-gray-400">
+                                    申請類別：{{ req.form?.name }} · 申請時間：{{ new Date(req.created_at).toLocaleString() }}
+                                </p>
                             </div>
                             <div class="flex items-center space-x-4">
                                 <span :class="['px-3 py-1 text-xs font-semibold rounded-full', statusBadge(req.status)]">
-                                    {{ req.status === 'approved' ? '已核准' : (req.status === 'rejected' ? '已駁回' : '審批中') }}
+                                    {{ req.status === 'approved' ? '已核准' : (req.status === 'rejected' ? '已駁回' : `審批中 (關卡 ${req.current_step}/${req.total_steps || 1})`) }}
                                 </span>
                                 <Link :href="route('forms.show', req.id)" class="text-xs font-medium text-blue-600 hover:underline">
                                     查看詳情 &rarr;
@@ -244,7 +266,7 @@ const deleteForm = (formId, formName) => {
                 <div class="flex items-center justify-between border-b pb-3">
                     <div>
                         <h3 class="text-lg font-bold text-gray-900">自訂新表單設計器</h3>
-                        <p class="text-xs text-gray-500 mt-0.5">定義表單代碼與動態欄位結構，儲存後即刻供全員申請</p>
+                        <p class="text-xs text-gray-500 mt-0.5">定義表單代碼、簽核流程層級與動態欄位結構</p>
                     </div>
                     <button @click="isCreateFormModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                 </div>
@@ -273,14 +295,27 @@ const deleteForm = (formId, formName) => {
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block font-medium text-gray-700 mb-1">表單用途說明 (選填)</label>
-                        <textarea
-                            v-model="newForm.description"
-                            rows="2"
-                            placeholder="如：提供同仁申請遠端辦公，每週以 2 日為限..."
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                        ></textarea>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-medium text-gray-700 mb-1">簽核流程層級架構</label>
+                            <select
+                                v-model="newForm.workflow_type"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                            >
+                                <option value="single">標準單級流程：部門直屬主管初審 (1 關)</option>
+                                <option value="two_stage">二級流程：直屬主管初審 &rarr; 處長/管理員核定 (2 關)</option>
+                                <option value="three_stage">三級流程：主管初審 &rarr; 財務主管複核 &rarr; 執行長決行 (3 關)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-medium text-gray-700 mb-1">表單用途說明 (選填)</label>
+                            <input
+                                type="text"
+                                v-model="newForm.description"
+                                placeholder="如：提供同仁申請遠端辦公..."
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                            />
+                        </div>
                     </div>
 
                     <!-- 動態欄位配置列表 -->
