@@ -40,6 +40,11 @@ class AnnouncementController extends Controller
     {
         $user = $request->user();
 
+        // 僅管理員可預覽未發布或草稿公告
+        if ($announcement->status !== 'published' && !$user->isAdmin()) {
+            abort(404, '此公告目前未公開或已被下架。');
+        }
+
         // 自動登記已讀狀態
         AnnouncementRead::firstOrCreate([
             'announcement_id' => $announcement->id,

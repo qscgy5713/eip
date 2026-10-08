@@ -73,7 +73,15 @@
 - 撰寫自動化測試套件 `tests/Feature/NotificationAndAuditTest.php`：
   - 涵蓋通知檢視、單則已讀、一鍵全讀、表單流程通知與日誌連鎖驗證、會議室通知與日誌驗證、管理員日誌存取與同仁 403 越權防護。
   - 主動 Code Review 發現種子資料通知疊加問題，及時透過測試環境資料隔離修復。
-  - 全套測試通過數躍升至 **60 項測試案例 100% 通過**（163 assertions）。
+- 完成 Phase 4「權限越權檢查 (IDOR Protection) 與安全性稽核加固」：
+  - 盤查表單簽核模組：於 `FormRequest` 模型實作 `canAccess(User $user)` 授權演算，於 `FormRequestController::show` 嚴格阻擋跨部門/非關係人未授權調閱（403 Forbidden）。
+  - 盤查公告模組：於 `AnnouncementController::show` 阻擋未公開/草稿狀態公告，僅系統管理員具備預覽授權。
+  - 盤查會議室與文件模組：確認預約取消、文件發布新版、文件安全下載與刪除之角色與擁有者防偽邊界。
+- 建置 Phase 4「CI/CD 自動化建置工作流」(GitHub Actions)：
+  - 建立 `.github/workflows/ci.yml`，支援每次代碼 Push 或 PR 至 `master` 分支時，自動啟動 PHP 8.4、安裝 Composer 與 NPM 依賴、打包前端資產並執行全套自動化測試套件。
+- 撰寫安全性自動化測試套件 `tests/Feature/SecurityAndIdorTest.php`：
+  - 涵蓋表單跨部門調閱阻擋、本人查閱、主管/管理員查閱、草稿公告隔離、同仁竄改會議室阻擋、取消他人會議室借用阻擋。
+  - 全系統累積 **66 項自動化 Feature/Unit 測試全數 100% 通過**（172 assertions）。
 
 ### 下一步
-- 詢問使用者是否同意提交 Git Commit 與 Git Push，確認後即可繼續推進 Phase 4「權限越權檢查 (IDOR) 與生產環境最佳化」。
+- 詢問使用者是否同意提交 Git Commit 與 Git Push，專案各階段里程碑已全面圓滿達成！

@@ -109,6 +109,12 @@ class FormRequestController extends Controller
     public function show(Request $request, EipFormRequest $formRequest): Response
     {
         $user = $request->user();
+
+        // 防範 IDOR 水平越權：僅限申請人、審核人、部門主管或系統管理員查閱
+        if (!$formRequest->canAccess($user)) {
+            abort(403, '您沒有權限檢閱此份申請單據。');
+        }
+
         $formRequest->load(['form', 'user.department', 'approvalRecords.approver']);
 
         $canApprove = $user->role === 'admin'

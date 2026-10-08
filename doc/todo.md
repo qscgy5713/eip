@@ -28,6 +28,6 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest 等 60 項測試案例全數 100% 通過）
-- [ ] 權限越權檢查 (IDOR) 與安全性稽核
-- [ ] 容器化 (Docker) 與 CI/CD 部署建置
+- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest 等 66 項測試案例全數 100% 通過）
+- [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗）
+- [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
