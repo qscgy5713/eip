@@ -70,4 +70,6 @@
 ## 階段 6：企業入口網全方位深化與終極體驗 (Enterprise Portal Deepening & Ultimate Experience)
 - [x] 全站快捷搜尋指揮中心 (Global Command Palette / Cmd+K 或 Ctrl+K Engine：支援在任何頁面隨時以快速鍵或導覽列搜尋框呼出指揮中心彈窗、跨模組模糊檢索【同仁通訊錄、表單單據、企業公告、會議室設施、知識文件庫、常用快捷導航】、分組徽章與即時防抖、鍵盤上下鍵流暢選取與 Enter 直達跳轉、嚴格過濾離職員工、草稿公告、機密密件與他人私密單據防止 IDOR 越權調閱)
 - [x] 表單公文線上歷史版本審批對比與版本回溯 (Form History Diff & Audit Trail Engine：針對退回修改之單據，每次重新送審自動於 revision_history 累加保存完整資料快照、提交時間、修訂人、修訂附言說明與補充附件；單據明細頁面提供「版本修訂歷程與差異對比 (Diff Viewer)」Modal，主管與申請人可直觀比對「原值 vs 新值」欄位紅色刪除線與綠色高亮差異，多版次自由切換，徹底消除審核核對痛點，全系統 223 項 Feature 測試 100% 通過，1292 assertions)
+- [x] 電子表單線上手寫數位簽章與公文壓印系統 (E-Signature & Digital Stamp Engine：提供 HTML5 Canvas 數位手寫簽名板 SignaturePad，支援滑鼠/觸控筆/觸控手寫平滑筆跡感應、清除重簽與 DataURL 生成；主管審批時可選擇附署親簽筆跡，審批歷程中展示手寫簽章印記小卡，A4 正式列印版於主管欄位直接壓印真實手寫簽名與電子核准防偽印章雙重背書，全系統 225 項 Feature 測試 100% 通過，1302 assertions)
+
 

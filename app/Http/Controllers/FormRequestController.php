@@ -341,6 +341,7 @@ class FormRequestController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:approved,rejected,revision_required',
             'comment' => $request->input('status') === 'revision_required' ? 'required|string|max:500' : 'nullable|string|max:500',
+            'signature' => 'nullable|string',
         ], [
             'comment.required' => '退回修改時必須填寫退回原因與修改指示。',
         ]);
@@ -372,7 +373,8 @@ class FormRequestController extends Controller
             $record,
             $user,
             $validated['status'],
-            $validated['comment'] ?? null
+            $validated['comment'] ?? null,
+            $validated['signature'] ?? null
         );
 
         return redirect()->back()->with('success', $result['message']);

@@ -227,6 +227,10 @@ const formatSize = (bytes) => {
                                 <div v-if="record.delegated_from" class="text-[10px] text-purple-700 font-semibold">
                                     (由 {{ record.delegated_from?.name }} 授權代理簽核)
                                 </div>
+                                <!-- 主管手寫簽名壓印 -->
+                                <div v-if="record.signature" class="mt-1">
+                                    <img :src="record.signature" alt="手寫簽名" class="h-7 max-w-28 object-contain mix-blend-multiply" />
+                                </div>
                             </td>
                             <td class="p-2 border-r border-gray-300 font-bold">
                                 <span v-if="record.status === 'approved'" class="text-emerald-700">核准通過</span>

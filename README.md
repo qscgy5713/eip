@@ -94,6 +94,10 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
 - 📝 **表單公文線上歷史版本審批對比與版本回溯 (Form History Diff & Audit Trail Engine)**：
   - **版本快照完整保存**：單據每次退回修改重新送審時，後端自動將修改前之欄位資料 (`previous_data`)、修改後之新資料 (`new_data`)、新補充之附件檔案清單 (`new_attachments`)、重送說明備註 (`resubmit_note`)、修訂時間與修訂同仁封裝為版本快照並累加存入 `revision_history`。
   - **前台直觀差異比對視窗 (Diff Viewer Modal)**：單據詳情頁面自動標註累計修訂次數，點擊「比對歷史修訂差異 (Diff)」即可開啟對照視窗，支援多版次 Tabs 切換，智慧標示每個變動欄位：紅色刪除線標註 `- 原值`，綠色粗體標註 `+ 新值`，主管審核退回件一目了然，徹底消除核對痛點。
+- ✍️ **電子表單線上手寫數位簽章與公文壓印系統 (E-Signature & Digital Stamp Engine)**：
+  - **HTML5 Canvas 數位手寫簽名板**：封裝獨立組件 `SignaturePad.vue`，具備 Retina 螢幕解析度適配，支援滑鼠拖曳、觸控筆與觸控螢幕手寫感應（貝茲平滑筆觸），提供水平簽署導引線與一鍵清除重簽。
+  - **審批歷程親筆筆跡印記**：主管審核時可選擇展開簽名板附署手寫親筆簽名，審核通過後自動存於 `approval_records.signature`，於前台歷程時間軸以專屬手寫簽章印記卡展示。
+  - **A4 正式列印手寫簽名壓印**：公文正式列印頁面於主管審核欄位直接壓印真實手寫簽名，並與企業電子核准防偽印章相互印證，達成現代無紙化高規格公文存證。
 - 🔒 **企業級資安防禦縱深與 CI/CD Pipeline (Security Hardened Architecture)**：
   - **私有磁碟嚴格隔離 (Private Storage Isolation)**：機密證明文件與未公開公告附件全數由 `public` 遷移至 `local` 私有儲存，徹底阻絕 Nginx 靜態檔案繞過 Controller 授權之資料外洩風險。
   - **跨物件歷史版本 IDOR 防護 (Scoped Route Model Binding)**：嚴格校驗歷史版本與當前文件之一致性隸屬，杜絕跨機密文件版本越權下載與預覽。
@@ -102,7 +106,7 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
   - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
   - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
-  - **全面測試覆蓋**：累積 **223 項自動化 Feature 測試 100% 覆蓋通過 (1292 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **全面測試覆蓋**：累積 **225 項自動化 Feature 測試 100% 覆蓋通過 (1302 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)

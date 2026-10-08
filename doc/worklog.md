@@ -2,6 +2,21 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**電子表單線上手寫數位簽章與公文壓印系統 (E-Signature & Digital Stamp Engine)**：
+  - **資料模型與簽核紀錄擴充 (`ApprovalRecord` 模型與 migration)**：
+    - 資料表新增 `signature` TEXT 欄位，在 `WorkflowService::processAction` 與 `FormRequestController::action` 中支援驗證與安全儲存審批主管之手寫簽章圖片 DataURL。
+  - **前端 HTML5 Canvas 數位手寫簽名板組件 (`SignaturePad.vue`)**：
+    - 具備 Retina 高解析度比率適配 (`window.devicePixelRatio`)，支援滑鼠拖曳、觸控筆與觸控螢幕平滑筆跡繪製（貝茲平滑連線演算法）。
+    - 支援簽署底線導引虛線、即時筆跡感應、清除重簽與透明背景 PNG DataURL 生成。
+  - **主管審批與單據詳情手寫簽章展示 (`Forms/Show.vue`)**：
+    - 主管審核卡片提供「手寫數位簽章 (附署親簽筆跡，選填)」開關與簽名板，主管點擊核准時可一併附署親簽筆跡。
+    - 審核歷程時間軸中醒目展示主管手寫簽章筆跡印記小卡，落實企業無紙化親筆簽署公信力。
+  - **正式公文列印手寫簽名壓印 (`Forms/Print.vue`)**：
+    - 在 A4 正式列印版面之「主管審核簽署歷程與審查意見 (Approval Trail)」表格中，主管名稱下方直接壓印手寫簽名，並與企業電子核准防偽印章相互印證，達到企業最高規格公文列印存證標準。
+  - **自動化測試與工程品質**：
+    - 新增 `tests/Feature/FormSignatureTest.php` 涵蓋主管手寫簽名核准與一般無簽名審批之完整流程測試 (10 assertions)。
+    - 全系統自動化測試累積達到 **225 項 Feature / Unit 測試 100% 全數通過 (1302 assertions)**。
+    - 前端 Vite 8.3.3 Client 順利建置 (1.60s)。
 - 實作**全站快捷搜尋指揮中心 (Global Command Palette / Cmd+K 或 Ctrl+K Engine)**：
   - **後端搜尋引擎 (`GlobalSearchController` & `/global-search`)**：
     - 支援全站多模組平行模糊檢索：同仁通訊錄、表單公文單據、企業正式公告、會議室設施空間、知識文件庫、常用快捷導航。

@@ -253,7 +253,8 @@ class WorkflowService
         ApprovalRecord $record,
         User $actionUser,
         string $status,
-        ?string $comment
+        ?string $comment,
+        ?string $signature = null
     ): array {
         $delegatedFromId = null;
         if ($record->approver_id !== $actionUser->id) {
@@ -263,6 +264,7 @@ class WorkflowService
         $record->update([
             'status' => $status,
             'comment' => $comment,
+            'signature' => $signature,
             'delegated_from_id' => $delegatedFromId,
             'actioned_at' => now(),
         ]);

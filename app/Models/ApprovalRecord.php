@@ -22,6 +22,7 @@ class ApprovalRecord extends Model
         'is_add_sign',
         'status',
         'comment',
+        'signature',
         'actioned_at',
     ];
 

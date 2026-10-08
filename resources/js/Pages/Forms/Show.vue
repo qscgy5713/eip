@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import SignaturePad from '@/Components/SignaturePad.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -13,9 +14,11 @@ const props = defineProps({
     },
 });
 
+const showSignatureCanvas = ref(false);
 const approvalForm = useForm({
     status: 'approved',
     comment: '',
+    signature: '',
 });
 
 const handleAction = (status) => {
@@ -463,6 +466,28 @@ const openDiffViewer = (rev = null) => {
                             class="w-full text-sm rounded-lg border-amber-200 focus:border-amber-500 focus:ring-amber-500 bg-white"
                         ></textarea>
                     </div>
+
+                    <!-- 電子手寫簽章區塊 (主管線上親簽) -->
+                    <div class="space-y-2 pt-2 border-t border-amber-200/60">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-bold text-gray-700 flex items-center space-x-1.5 cursor-pointer" @click="showSignatureCanvas = !showSignatureCanvas">
+                                <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                <span>手寫數位簽章 (附署親簽筆跡，選填)</span>
+                            </label>
+                            <button
+                                type="button"
+                                @click="showSignatureCanvas = !showSignatureCanvas"
+                                class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer"
+                            >
+                                {{ showSignatureCanvas ? '收合簽章板' : '+ 開啟簽章板手寫簽名' }}
+                            </button>
+                        </div>
+
+                        <div v-if="showSignatureCanvas" class="pt-1">
+                            <SignaturePad v-model="approvalForm.signature" :width="480" :height="140" />
+                        </div>
+                    </div>
+
                     <div class="flex flex-wrap items-center gap-3">
                         <!-- 一般關卡核准或加簽同意 -->
                         <button
@@ -572,6 +597,15 @@ const openDiffViewer = (rev = null) => {
                             </div>
                             <p v-if="rec.comment" class="text-xs text-gray-600 mt-1 bg-gray-50 p-2 rounded border border-gray-100">意見：{{ rec.comment }}</p>
                             <p v-if="rec.actioned_at" class="text-xs text-gray-400 mt-0.5">{{ new Date(rec.actioned_at).toLocaleString() }}</p>
+
+                            <!-- 手寫簽名印記展示 -->
+                            <div v-if="rec.signature" class="mt-2 inline-flex items-center gap-2 p-1.5 px-3 bg-indigo-50/70 border border-indigo-100 rounded-lg">
+                                <span class="text-2xs font-bold text-indigo-700 uppercase tracking-wider flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                    手寫簽章：
+                                </span>
+                                <img :src="rec.signature" alt="主管手寫簽名" class="h-8 max-w-40 object-contain mix-blend-multiply" />
+                            </div>
                         </div>
                     </div>
                 </div>
