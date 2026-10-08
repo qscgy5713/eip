@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\AuditLog;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -84,6 +85,13 @@ class AttendanceController extends Controller
             ]
         );
 
+        AuditLog::log(
+            action: 'clock_in',
+            description: "同仁 {$user->name} 完成了上班打卡（狀態：" . ($attendance->status === 'late' ? '遲到' : '正常') . "）",
+            auditable: $attendance,
+            details: ['time' => now()->toTimeString(), 'status' => $attendance->status]
+        );
+
         return redirect()->back()->with('success', '上班打卡成功！');
     }
 
@@ -98,6 +106,13 @@ class AttendanceController extends Controller
         $attendance->clock_out_location = $request->input('location', '辦公室網段');
         $attendance->calculateWorkHours();
         $attendance->save();
+
+        AuditLog::log(
+            action: 'clock_out',
+            description: "同仁 {$user->name} 完成了下班打卡（本日工時 {$attendance->work_hours} 小時）",
+            auditable: $attendance,
+            details: ['time' => now()->toTimeString(), 'work_hours' => $attendance->work_hours]
+        );
 
         return redirect()->back()->with('success', '下班打卡成功！今日工時已結算。');
     }

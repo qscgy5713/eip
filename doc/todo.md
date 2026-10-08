@@ -24,10 +24,10 @@
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
 - [x] 系統儀表板（待辦統計、未讀公告、進行中申請、即將到來會議、快捷打卡）
-- [ ] 第三方推播通知整合（Email / LINE / Slack）
-- [ ] 審計日誌與安全性加固
+- [x] 站內通知中心與推播通知整合（Laravel Notifications、導覽列小鈴鐺即時未讀數與下拉預覽、簽核/會議室/公告事件即時發送、一鍵全讀）
+- [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest 等 54 項測試案例全數 100% 通過）
+- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest 等 60 項測試案例全數 100% 通過）
 - [ ] 權限越權檢查 (IDOR) 與安全性稽核
 - [ ] 容器化 (Docker) 與 CI/CD 部署建置

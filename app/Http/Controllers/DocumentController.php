@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Department;
 use App\Models\Document;
 use App\Models\DocumentVersion;
@@ -114,6 +115,13 @@ class DocumentController extends Controller
             'changelog' => $validated['changelog'] ?? '初版文件建立上傳',
         ]);
 
+        AuditLog::log(
+            action: 'upload_document',
+            description: "上傳了新企業文件「{$document->title}」",
+            auditable: $document,
+            details: ['category' => $document->category, 'file_name' => $uploadedFile->getClientOriginalName()]
+        );
+
         return back()->with('success', "文件「{$document->title}」已成功上傳！");
     }
 
@@ -154,6 +162,13 @@ class DocumentController extends Controller
             'current_version' => $nextVersionNumber,
         ]);
 
+        AuditLog::log(
+            action: 'upload_document_version',
+            description: "為文件「{$document->title}」發布了新版本 {$validated['version_label']}",
+            auditable: $document,
+            details: ['version_number' => $nextVersionNumber, 'version_label' => $validated['version_label']]
+        );
+
         return back()->with('success', "文件「{$document->title}」新版本 {$validated['version_label']} 已成功發布！");
     }
 
@@ -193,6 +208,13 @@ class DocumentController extends Controller
 
         $document->increment('download_count');
 
+        AuditLog::log(
+            action: 'download_document',
+            description: "下載了企業文件「{$document->title}」({$targetVersion->version_label})",
+            auditable: $document,
+            details: ['version_label' => $targetVersion->version_label, 'file_name' => $targetVersion->file_name]
+        );
+
         return Storage::download($targetVersion->file_path, $targetVersion->file_name);
     }
 
@@ -214,6 +236,11 @@ class DocumentController extends Controller
 
         $title = $document->title;
         $document->delete();
+
+        AuditLog::log(
+            action: 'delete_document',
+            description: "刪除了文件「{$title}」及其歷史版本"
+        );
 
         return back()->with('success', "已刪除文件「{$title}」及其所有版本記錄。");
     }

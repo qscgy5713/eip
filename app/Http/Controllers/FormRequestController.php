@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApprovalRecord;
+use App\Models\AuditLog;
 use App\Models\Form;
 use App\Models\FormRequest as EipFormRequest;
 use App\Models\User;
+use App\Notifications\EipSystemNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -81,7 +83,25 @@ class FormRequestController extends Controller
                 'approver_id' => $approver->id,
                 'status' => 'pending',
             ]);
+
+            // 發送待簽核通知給主管
+            $approver->notify(new EipSystemNotification(
+                title: "【待簽核單據】{$form->name}",
+                message: "同仁 {$user->name} 提交了「{$formRequest->title}」，請至簽核中心進行審批。",
+                type: 'form_approval',
+                actionUrl: route('forms.show', $formRequest->id),
+                senderName: $user->name,
+                extra: ['form_request_id' => $formRequest->id]
+            ));
         }
+
+        // 記錄審計日誌
+        AuditLog::log(
+            action: 'submit_form_request',
+            description: "同仁 {$user->name} 發起了「{$form->name}」申請單（{$formRequest->title}）",
+            auditable: $formRequest,
+            details: ['form_id' => $form->id, 'form_code' => $form->code, 'title' => $formRequest->title]
+        );
 
         return redirect()->route('forms.show', $formRequest->id)->with('success', '申請單已成功送出！');
     }
@@ -132,6 +152,26 @@ class FormRequestController extends Controller
             'status' => $validated['status'],
         ]);
 
+        $statusText = $validated['status'] === 'approved' ? '核准通過' : '退件駁回';
+
+        // 記錄審計日誌
+        AuditLog::log(
+            action: $validated['status'] === 'approved' ? 'approve_form_request' : 'reject_form_request',
+            description: "主管 {$user->name} {$statusText}了申請單「{$formRequest->title}」",
+            auditable: $formRequest,
+            details: ['status' => $validated['status'], 'comment' => $validated['comment'] ?? null]
+        );
+
+        // 通知原申請同仁
+        $formRequest->user?->notify(new EipSystemNotification(
+            title: "【簽核結果】您的申請單「{$formRequest->title}」已{$statusText}",
+            message: "主管 {$user->name} 已完成審核（狀態：{$statusText}）。" . (!empty($validated['comment']) ? " 意見：{$validated['comment']}" : ''),
+            type: 'form_approval',
+            actionUrl: route('forms.show', $formRequest->id),
+            senderName: $user->name,
+            extra: ['status' => $validated['status']]
+        ));
+
         return redirect()->back()->with('success', '簽核狀態已更新！');
     }
 
@@ -164,6 +204,13 @@ class FormRequestController extends Controller
             'is_active' => true,
         ]);
 
+        AuditLog::log(
+            action: 'create_form_template',
+            description: "建立新表單種類範本「{$form->name}」({$form->code})",
+            auditable: $form,
+            details: ['code' => $form->code, 'fields_count' => count($validated['fields_schema'])]
+        );
+
         return back()->with('success', "已成功建立新表單範本「{$form->name}」！全體同仁現已可發起申請。");
     }
 
@@ -181,10 +228,20 @@ class FormRequestController extends Controller
         if ($form->requests()->exists()) {
             $form->update(['is_active' => false]);
             $msg = "表單「{$form->name}」已下架停用（既有申請單歷程完整保留）。";
+            AuditLog::log(
+                action: 'deactivate_form_template',
+                description: "下架停用表單種類範本「{$form->name}」({$form->code})",
+                auditable: $form
+            );
         } else {
             $name = $form->name;
+            $code = $form->code;
             $form->delete();
             $msg = "已成功刪除表單「{$name}」。";
+            AuditLog::log(
+                action: 'delete_form_template',
+                description: "徹底刪除表單種類範本「{$name}」({$code})"
+            );
         }
 
         return back()->with('success', $msg);

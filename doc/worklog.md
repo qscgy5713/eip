@@ -58,5 +58,22 @@
   - 擴充自動化測試案例：於 `tests/Feature/EipTest.php` 增設主管建立表單範本、一般同仁越權防護 (403) 與範本刪除/軟性停用測試。
   - 執行前端資產編譯（`npm run build`）與全套測試套件（`make test`），全系統 54 項 Feature/Unit 測試全數 100% 通過（146 assertions）。
 
+## 2026-10-08
+### 做了什麼
+- 完成 Phase 3「站內通知中心與事件推播引擎」(Notification Center)：
+  - 建立 Laravel `notifications` 資料表遷移，實作通用通知類別 `App\Notifications\EipSystemNotification`。
+  - 於 `HandleInertiaRequests` 中介層共享目前使用者未讀通知計數與最新通知摘要。
+  - 於導覽列 `AuthenticatedLayout.vue` 增設頂部「🔔 鈴鐺下拉選單」，具備紅點計數、未讀彈出預覽、快捷跳轉與一鍵標記已讀。
+  - 完成前端獨立通知中心頁面 `Notifications/Index.vue`，支援通知分類標籤、全部已讀、個別已讀、刪除與分頁導覽。
+  - 深度串接業務流程：表單申請時即時推播主管審批、主管審批（核准/駁回）時即時推播原同仁、會議室預約成功時即時發送確認通知。
+- 完成 Phase 3「系統審計稽核日誌」(Audit Trail & Security Log)：
+  - 建立 `audit_logs` 資料表與 Eloquent 模型，支援多態模型關聯、使用者、IP 位址、User-Agent 與詳細變更 JSONB。
+  - 於關鍵業務模組（上下班打卡、表單送單與審批、會議室預約與取消、文件上傳/發布新版/下載/刪除、自訂表單範本）全面埋點審計軌跡。
+  - 建立管理員專屬的審計日誌檢索頁面 `AuditLogs/Index.vue`，支援關鍵字即時檢索、動作類別統計與分頁導覽；同仁防越權 (403) 隔離。
+- 撰寫自動化測試套件 `tests/Feature/NotificationAndAuditTest.php`：
+  - 涵蓋通知檢視、單則已讀、一鍵全讀、表單流程通知與日誌連鎖驗證、會議室通知與日誌驗證、管理員日誌存取與同仁 403 越權防護。
+  - 主動 Code Review 發現種子資料通知疊加問題，及時透過測試環境資料隔離修復。
+  - 全套測試通過數躍升至 **60 項測試案例 100% 通過**（163 assertions）。
+
 ### 下一步
-- 詢問使用者是否同意執行 Git Commit 與 Git Push，確認後即可繼續推進 Phase 3「第三方推播通知整合 (Email / LINE / Slack)」或「審計日誌與安全性加固」。
+- 詢問使用者是否同意提交 Git Commit 與 Git Push，確認後即可繼續推進 Phase 4「權限越權檢查 (IDOR) 與生產環境最佳化」。

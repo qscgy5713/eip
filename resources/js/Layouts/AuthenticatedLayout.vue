@@ -75,12 +75,97 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     企業文件庫
                                 </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.role === 'admin'"
+                                    :href="route('audit-logs.index')"
+                                    :active="route().current('audit-logs.*')"
+                                >
+                                    系統日誌
+                                </NavLink>
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div class="hidden sm:ms-6 sm:flex sm:items-center gap-2">
+                            <!-- Notification Bell Dropdown -->
+                            <div class="relative">
+                                <Dropdown align="right" width="60">
+                                    <template #trigger>
+                                        <button
+                                            type="button"
+                                            class="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition focus:outline-none"
+                                            title="通知中心"
+                                        >
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                            </svg>
+                                            <span
+                                                v-if="$page.props.auth.unread_notifications_count > 0"
+                                                class="absolute top-1 right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full min-w-4.5 h-4.5"
+                                            >
+                                                {{ $page.props.auth.unread_notifications_count > 99 ? '99+' : $page.props.auth.unread_notifications_count }}
+                                            </span>
+                                        </button>
+                                    </template>
+
+                                    <template #content>
+                                        <div class="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
+                                            <span class="text-xs font-bold text-gray-700 uppercase tracking-wider">站內通知</span>
+                                            <Link
+                                                :href="route('notifications.index')"
+                                                class="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+                                            >
+                                                查看全部
+                                            </Link>
+                                        </div>
+
+                                        <div v-if="$page.props.auth.recent_notifications && $page.props.auth.recent_notifications.length > 0" class="divide-y divide-gray-100 max-h-80 overflow-y-auto">
+                                            <div
+                                                v-for="item in $page.props.auth.recent_notifications"
+                                                :key="item.id"
+                                                class="p-3 hover:bg-gray-50 transition text-left"
+                                            >
+                                                <div class="flex items-center justify-between mb-1">
+                                                    <span class="text-xs font-semibold text-gray-900 truncate max-w-44">{{ item.title }}</span>
+                                                    <span class="text-[10px] text-gray-400">{{ item.created_at }}</span>
+                                                </div>
+                                                <p class="text-xs text-gray-600 line-clamp-2">{{ item.message }}</p>
+                                                <div class="mt-2 flex items-center gap-2">
+                                                    <Link
+                                                        v-if="item.action_url"
+                                                        :href="item.action_url"
+                                                        class="text-[11px] text-indigo-600 font-semibold hover:underline"
+                                                    >
+                                                        前往檢視
+                                                    </Link>
+                                                    <Link
+                                                        :href="route('notifications.read', item.id)"
+                                                        method="post"
+                                                        as="button"
+                                                        class="text-[11px] text-gray-400 hover:text-gray-600 ml-auto"
+                                                    >
+                                                        標記已讀
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-else class="p-6 text-center text-xs text-gray-400">
+                                            目前沒有任何未讀通知
+                                        </div>
+
+                                        <div class="p-2 border-t border-gray-100 bg-gray-50 text-center">
+                                            <Link
+                                                :href="route('notifications.index')"
+                                                class="text-xs text-gray-600 hover:text-indigo-600 font-medium block"
+                                            >
+                                                進入個人通知中心 ➔
+                                            </Link>
+                                        </div>
+                                    </template>
+                                </Dropdown>
+                            </div>
+
                             <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
+                            <div class="relative ms-2">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
@@ -107,17 +192,26 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
+                                        <DropdownLink :href="route('notifications.index')">
+                                            🔔 通知中心
+                                        </DropdownLink>
+                                        <DropdownLink
+                                            v-if="$page.props.auth.user.role === 'admin'"
+                                            :href="route('audit-logs.index')"
+                                        >
+                                            🛡️ 系統審計日誌
+                                        </DropdownLink>
                                         <DropdownLink
                                             :href="route('profile.edit')"
                                         >
-                                            Profile
+                                            個人帳號設定
                                         </DropdownLink>
                                         <DropdownLink
                                             :href="route('logout')"
                                             method="post"
                                             as="button"
                                         >
-                                            Log Out
+                                            登出系統
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -218,6 +312,13 @@ const showingNavigationDropdown = ref(false);
                         >
                             企業文件庫
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.role === 'admin'"
+                            :href="route('audit-logs.index')"
+                            :active="route().current('audit-logs.*')"
+                        >
+                            系統日誌
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -236,8 +337,23 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
+                            <ResponsiveNavLink :href="route('notifications.index')">
+                                🔔 個人通知中心
+                                <span
+                                    v-if="$page.props.auth.unread_notifications_count > 0"
+                                    class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800"
+                                >
+                                    {{ $page.props.auth.unread_notifications_count }}
+                                </span>
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                v-if="$page.props.auth.user.role === 'admin'"
+                                :href="route('audit-logs.index')"
+                            >
+                                🛡️ 系統審計日誌
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
+                                個人帳號設定
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 :href="route('logout')"

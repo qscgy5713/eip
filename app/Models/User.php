@@ -62,6 +62,11 @@ class User extends Authenticatable
         return $this->hasMany(Document::class, 'uploader_id');
     }
 
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AuditLog::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

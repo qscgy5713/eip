@@ -8,11 +8,13 @@ use App\Models\Department;
 use App\Models\Form;
 use App\Models\FormRequest;
 use App\Models\ApprovalRecord;
+use App\Models\AuditLog;
 use App\Models\Document;
 use App\Models\DocumentVersion;
 use App\Models\MeetingRoom;
 use App\Models\RoomBooking;
 use App\Models\User;
+use App\Notifications\EipSystemNotification;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -589,6 +591,88 @@ class EipDatabaseSeeder extends Seeder
             'file_size' => 1024 * 1024 * 2, // 2 MB
             'mime_type' => 'application/pdf',
             'changelog' => '研發主管制訂初版機密規範',
+        ]);
+
+        // 9. 站內即時通知 (Notifications)
+        // 主管待簽核通知
+        $manager->notify(new EipSystemNotification(
+            title: '【待簽核單據】陳同仁 - 特休申請單',
+            message: '研發部陳同仁提交了 2 天特休假申請，請至簽核中心進行審核。',
+            type: 'form_approval',
+            actionUrl: "/forms/requests/{$req1->id}",
+            senderName: $employee->name
+        ));
+
+        $manager->notify(new EipSystemNotification(
+            title: '【待簽核單據】陳同仁 - 週末版本上線加班申請',
+            message: '研發部陳同仁提交了 4 小時週末版本發布加班申請，請進行審批。',
+            type: 'form_approval',
+            actionUrl: "/forms/requests/{$req2->id}",
+            senderName: $employee->name
+        ));
+
+        // 員工核准與會議通知
+        $employee->notify(new EipSystemNotification(
+            title: '【簽核結果】出差高鐵交通費報銷 已核准通過',
+            message: '主管張主管已核准您的出差高鐵報銷單（核准金額 $2,980 元），財務部將於次月統一核撥。',
+            type: 'form_approval',
+            actionUrl: "/forms/requests/{$req4->id}",
+            senderName: $manager->name
+        ));
+
+        $employee->notify(new EipSystemNotification(
+            title: '【會議室借用確認】第一會議室 (A棟 201)',
+            message: '您已成功預約「第一會議室 (A棟 201)」（主旨：Q4 產品路線圖評審會議）。',
+            type: 'meeting_room',
+            actionUrl: '/meeting-rooms',
+            senderName: '系統管理員'
+        ));
+
+        // 10. 審計稽核日誌 (Audit Trail)
+        AuditLog::create([
+            'user_id' => $employee->id,
+            'action' => 'clock_in',
+            'description' => "同仁 {$employee->name} 完成了上班打卡（狀態：正常）",
+            'ip_address' => '192.168.1.102',
+            'created_at' => now()->subHours(4),
+        ]);
+
+        AuditLog::create([
+            'user_id' => $employee->id,
+            'action' => 'submit_form_request',
+            'description' => "同仁 {$employee->name} 發起了「休假申請單」申請（{$req1->title}）",
+            'auditable_type' => FormRequest::class,
+            'auditable_id' => $req1->id,
+            'ip_address' => '192.168.1.102',
+            'created_at' => now()->subHours(3),
+        ]);
+
+        AuditLog::create([
+            'user_id' => $manager->id,
+            'action' => 'approve_form_request',
+            'description' => "主管 {$manager->name} 核准通過了申請單「{$req4->title}」",
+            'auditable_type' => FormRequest::class,
+            'auditable_id' => $req4->id,
+            'ip_address' => '192.168.1.88',
+            'created_at' => now()->subHours(2),
+        ]);
+
+        AuditLog::create([
+            'user_id' => $manager->id,
+            'action' => 'upload_document',
+            'description' => "主管 {$manager->name} 上傳了機密文件「{$doc3->title}」",
+            'auditable_type' => Document::class,
+            'auditable_id' => $doc3->id,
+            'ip_address' => '192.168.1.88',
+            'created_at' => now()->subHour(),
+        ]);
+
+        AuditLog::create([
+            'user_id' => $admin->id,
+            'action' => 'publish_announcement',
+            'description' => '總裁發布了全體重要公告「2026 年度全體員工健康檢查預約與公假說明」',
+            'ip_address' => '192.168.1.1',
+            'created_at' => now()->subMinutes(30),
         ]);
     }
 }

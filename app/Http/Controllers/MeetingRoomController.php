@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\MeetingRoom;
 use App\Models\RoomBooking;
+use App\Notifications\EipSystemNotification;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -107,7 +109,7 @@ class MeetingRoomController extends Controller
             ]);
         }
 
-        RoomBooking::create([
+        $booking = RoomBooking::create([
             'meeting_room_id' => $room->id,
             'user_id' => $request->user()->id,
             'title' => $validated['title'],
@@ -117,6 +119,27 @@ class MeetingRoomController extends Controller
             'attendees_count' => $validated['attendees_count'] ?? 1,
             'status' => 'confirmed',
         ]);
+
+        // 記錄審計日誌
+        AuditLog::log(
+            action: 'book_meeting_room',
+            description: "預約了會議室「{$room->name}」（{$validated['title']}）",
+            auditable: $booking,
+            details: [
+                'room' => $room->name,
+                'start_time' => $startTime->toDateTimeString(),
+                'end_time' => $endTime->toDateTimeString(),
+            ]
+        );
+
+        // 發送預約成功通知給借用同仁
+        $request->user()->notify(new EipSystemNotification(
+            title: "【會議室借用確認】{$room->name}",
+            message: "您已成功預約「{$room->name}」（時間：{$startTime->format('m/d H:i')} ~ {$endTime->format('H:i')}，主旨：{$validated['title']}）。",
+            type: 'meeting_room',
+            actionUrl: route('meeting-rooms.index', ['date' => $startTime->toDateString()]),
+            senderName: '系統管理員'
+        ));
 
         return back()->with('success', "已成功預約「{$room->name}」！");
     }
@@ -135,11 +158,20 @@ class MeetingRoomController extends Controller
             return back()->with('error', '該預約先前已被取消。');
         }
 
+        $reason = $request->input('reason', '同仁自行取消');
         $booking->update([
             'status' => 'cancelled',
             'cancelled_at' => now(),
-            'cancel_reason' => $request->input('reason', '同仁自行取消'),
+            'cancel_reason' => $reason,
         ]);
+
+        // 記錄審計日誌
+        AuditLog::log(
+            action: 'cancel_room_booking',
+            description: "取消了會議室「{$booking->meetingRoom?->name}」預約（原主旨：{$booking->title}）",
+            auditable: $booking,
+            details: ['reason' => $reason]
+        );
 
         return back()->with('success', '已成功取消會議預約。');
     }
