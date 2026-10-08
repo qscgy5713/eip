@@ -197,6 +197,16 @@ const openDateEventsModal = (dateStr, evList) => {
                     </p>
                 </div>
                 <div class="flex items-center gap-2">
+                    <a
+                        :href="route('calendar.export-ics', { month: currentMonth, type: selectedType, department_id: selectedDept || undefined })"
+                        class="px-3.5 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg shadow-sm hover:bg-emerald-100 transition inline-flex items-center gap-1.5"
+                        title="匯出 RFC 5545 標準 iCalendar 行事曆檔案，可直接匯入 Google 日曆、Apple Calendar 與 Outlook"
+                    >
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        <span>匯出 .ics</span>
+                    </a>
                     <Link
                         :href="route('meeting-rooms.index')"
                         class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition"
@@ -471,7 +481,19 @@ const openDateEventsModal = (dateStr, evList) => {
                     </template>
                 </div>
 
-                <div class="pt-3 border-t flex justify-end">
+                <div class="pt-3 border-t flex items-center justify-between">
+                    <div>
+                        <a
+                            v-if="selectedEvent.type === 'meeting'"
+                            :href="route('meeting-rooms.bookings.export-ics', selectedEvent.raw_id)"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold hover:bg-emerald-100 transition"
+                        >
+                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            <span>匯出會議 .ics</span>
+                        </a>
+                    </div>
                     <button
                         @click="selectedEvent = null"
                         class="px-4 py-2 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-200 transition"

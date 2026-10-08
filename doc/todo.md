@@ -41,6 +41,8 @@
 
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
+- [x] 企業文件知識庫中繼資料與密件權限配置管理 (Document Metadata & Restricted Roles Management：支援文件上傳者、主管與管理員線上即時維護文件標題、所屬分類、歸屬部門、備註說明，並支援動態配置密件存取角色白名單 restricted_roles，非授權職級同仁嚴格隔離防洩，包含 AuditLog 審計留痕與 IDOR 防越權更新校驗)
+- [x] iCalendar (.ics / RFC 5545) 標準行事曆匯出引擎 (iCalendar Export Engine：支援會議室單筆預約匯出 meeting-{id}.ics 附帶 VEVENT、ORGANIZER 與 ATTENDEE 邀請名冊，以及全景綜合行事曆依月份全量匯出 eip-calendar-{month}.ics，無縫聚合會議時段、請假差勤全天事件與企業正式公告日程，支援分類與部門多維篩選，可直接一鍵匯入 Google 日曆、Apple Calendar 與 Microsoft Outlook，全系統 202 項 Feature 測試 100% 通過，1133 assertions)
 - [x] 企業文件庫線上安全預覽引擎（支援 PDF 高解析度翻頁內嵌、圖片/文字檔直接預覽、Office 文件引導、新分頁全螢幕開啟與 AuditLog 預覽稽核）
 - [x] 頂部導覽列 (Header Bar) 自適應排版重構（修復字元跑版擠壓、響應式間距優化、管理員專屬項目收納為系統管理 Dropdown）
 - [x] 系統儀表板與個人工作台全景升級 (Dashboard & Daily Workspace Hub：待我審批無縫納入職務代理主管單據並醒目標示代理標籤、個人休假與補休可用額度摘要小卡、主管/人事/管理員專屬團隊今日出勤快報卡、五大高頻行政快捷導航工作列、即時會議提醒、全系統 182 項 Feature 測試 100% 通過)
@@ -49,7 +51,7 @@
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest, MeetingRoomAttendeesAndEquipmentTest 等 195 項 Feature 測試 100% 通過，1092 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest, AnnouncementManagementTest, MeetingRoomAttendeesAndEquipmentTest, DocumentUpdateAndIcsExportTest 等 202 項 Feature 測試 100% 通過，1133 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

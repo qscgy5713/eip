@@ -178,4 +178,85 @@ class CalendarController extends Controller
 
         return $events;
     }
+
+    /**
+     * 匯出指定月份之企業全景行事曆 iCalendar (.ics) 檔案
+     */
+    public function exportIcs(Request $request)
+    {
+        $user = $request->user();
+        $month = $request->input('month', now()->format('Y-m'));
+
+        $startDate = Carbon::parse($month . '-01')->startOfMonth()->startOfDay();
+        $endDate = Carbon::parse($month . '-01')->endOfMonth()->endOfDay();
+
+        $selectedType = $request->input('type', 'all');
+        $selectedDeptId = $request->input('department_id');
+
+        $events = $this->aggregateEvents($user, $startDate, $endDate, $selectedType, $selectedDeptId);
+
+        $dtStamp = now()->utc()->format('Ymd\THis\Z');
+
+        $ics = "BEGIN:VCALENDAR\r\n";
+        $ics .= "VERSION:2.0\r\n";
+        $ics .= "PRODID:-//EIP Portal//Corporate Calendar//TW\r\n";
+        $ics .= "CALSCALE:GREGORIAN\r\n";
+        $ics .= "METHOD:PUBLISH\r\n";
+        $ics .= "X-WR-CALNAME:EIP 企業行事曆 ({$month})\r\n";
+
+        foreach ($events as $event) {
+            $type = $event['type'];
+            $uid = "{$event['id']}@eip.local";
+
+            $ics .= "BEGIN:VEVENT\r\n";
+            $ics .= "UID:{$uid}\r\n";
+            $ics .= "DTSTAMP:{$dtStamp}\r\n";
+
+            if ($type === 'leave') {
+                $startDateStr = Carbon::parse($event['date'])->format('Ymd');
+                $endDateStr = Carbon::parse($event['end_date'] ?? $event['date'])->addDay()->format('Ymd');
+                $ics .= "DTSTART;VALUE=DATE:{$startDateStr}\r\n";
+                $ics .= "DTEND;VALUE=DATE:{$endDateStr}\r\n";
+            } else {
+                $startUtc = Carbon::parse($event['start'])->utc()->format('Ymd\THis\Z');
+                $endUtc = Carbon::parse($event['end'])->utc()->format('Ymd\THis\Z');
+                $ics .= "DTSTART:{$startUtc}\r\n";
+                $ics .= "DTEND:{$endUtc}\r\n";
+            }
+
+            $summary = str_replace(["\r", "\n"], ' ', $event['title']);
+            $ics .= "SUMMARY:{$summary}\r\n";
+
+            if (!empty($event['location'])) {
+                $loc = str_replace(["\r", "\n"], ' ', $event['location']);
+                $ics .= "LOCATION:{$loc}\r\n";
+            }
+
+            $descParts = [];
+            if (!empty($event['user_name'])) {
+                $descParts[] = "相關人員：" . $event['user_name'];
+            }
+            if (!empty($event['details'])) {
+                $descParts[] = "說明備註：" . $event['details'];
+            }
+            if (!empty($event['equipment_needed'])) {
+                $descParts[] = "借用設備：" . implode(', ', $event['equipment_needed']);
+            }
+            if (!empty($descParts)) {
+                $ics .= "DESCRIPTION:" . implode('\n', $descParts) . "\r\n";
+            }
+
+            $ics .= "STATUS:CONFIRMED\r\n";
+            $ics .= "END:VEVENT\r\n";
+        }
+
+        $ics .= "END:VCALENDAR\r\n";
+
+        $fileName = "eip-calendar-{$month}.ics";
+
+        return response($ics, 200, [
+            'Content-Type' => 'text/calendar; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
+    }
 }

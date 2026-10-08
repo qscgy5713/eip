@@ -2,6 +2,32 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**企業文件知識庫中繼資料與密件權限配置管理 (Document Metadata & Restricted Roles Management)**：
+  - **後端更新邏輯、密件權限配置與審計留痕 (`DocumentController::update`)**：
+    - 支援文件上傳者本人、主管與系統管理員維護文件資料；非授權同仁嘗試編輯時嚴格 403 阻擋。
+    - 支援修改文件標題 (`title`)、所屬分類代碼 (`category`：`policy` / `template` / `tech` / `training`)、歸屬部門 (`department_id`) 與備註說明 (`description`)。
+    - 支援動態配置密件存取角色白名單 (`restricted_roles`：`admin`, `manager`, `employee`, `hr`)，未勾選角色同仁將被嚴格權限隔離，無法下載與檢閱。
+    - 異動操作自動記錄 `AuditLog` 審計留痕（動作：`update_document`），詳錄變更前之分類與密件角色設定。
+  - **前端視圖體驗升級 (`Documents/Index.vue`)**：
+    - 文件列表卡片加入「編輯屬性」按鈕（僅在管理員或作者本人時呈現）。
+    - 建立專屬「編輯文件屬性與存取權限」彈窗 Modal，完整支援標題、分類、部門下拉、說明與角色核取方塊。
+- 實作**iCalendar (.ics / RFC 5545) 標準行事曆匯出引擎 (iCalendar Export Engine)**：
+  - **單筆會議匯出標準 iCalendar 檔案 (`MeetingRoomController::exportIcs`)**：
+    - 路由：`GET /meeting-rooms/bookings/{booking}/export-ics`。
+    - 輸出嚴格遵循 RFC 5545 標準之 `.ics` 格式：包含 `BEGIN:VCALENDAR`, `VERSION:2.0`, `PRODID`, `VEVENT`, `UID`, `SUMMARY`, `LOCATION`, `ORGANIZER` 與受邀出席同仁 `ATTENDEE` 列表。
+    - 支援檔名格式 `meeting-{id}.ics` 與 `text/calendar; charset=utf-8` MIME 標頭。
+  - **全景綜合行事曆月份聚合匯出 (`CalendarController::exportIcs`)**：
+    - 路由：`GET /calendar/export-ics?month=YYYY-MM&type=...&department_id=...`。
+    - 依月份完整聚合「會議室借用」、「同仁核准請假/差勤（全天事件 `DTSTART;VALUE=DATE:`）」與「企業正式公告日程」，並保留使用者之類型與部門篩選。
+    - 實作狀態隔離：未發布之草稿公告 (`status !== 'published'`) 自動排除，杜絕內部機密洩露。
+  - **前端無縫整合 (`Calendar/Index.vue` & `MeetingRooms/Index.vue`)**：
+    - 全景行事曆頁面頂部新增「📥 匯出 .ics」捷徑按鈕，點擊立即下載該月份之行事曆。
+    - 行事曆事件詳情彈窗與會議室預約列表卡片內，針對會議項目提供單筆「匯出會議 .ics」快捷按鈕。
+- **自動化測試與代碼品質**：
+  - 新增 `tests/Feature/DocumentUpdateAndIcsExportTest.php` 涵蓋 7 大 Feature 測試：管理員更新文件與密件角色、作者更新個人文件、非授權者阻擋 (403)、欄位驗證、單筆會議匯出 .ics (含與會同仁 ATTENDEE 與 ORGANIZER)、全景月份行事曆匯出 .ics (含會議、全天差勤與公告)、草稿公告排除隔離。
+  - 全系統自動化測試套件擴充至 **202 項 Feature / Unit 測試 100% 全數通過 (1133 assertions)**。
+  - 前端 Vite 建置 0 錯誤通過 (1.32s)。
+
 - 實作**會議室與會同仁邀請、設備需求借用與行事曆/工作台連鎖系統 (Meeting Attendees Invitation & Equipment Engine)**：
   - **資料庫遷移與 Model 關聯升級 (`room_booking_attendees` 樞紐表與 `equipment_needed` JSON 欄位)**：
     - 新增 `database/migrations/2026_10_08_110000_add_attendees_and_equipment_to_room_bookings_table.php`，建立 `room_booking_attendees` 樞紐表（外鍵約束、級聯刪除與唯一複合鍵），並於 `room_bookings` 表擴充 `equipment_needed` (jsonb)。

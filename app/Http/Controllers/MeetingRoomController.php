@@ -316,4 +316,67 @@ class MeetingRoomController extends Controller
 
         return back()->with('success', "會議室「{$meetingRoom->name}」資料已更新！");
     }
+
+    /**
+     * 匯出單一會議之 iCalendar (.ics) 檔案
+     */
+    public function exportIcs(Request $request, RoomBooking $booking)
+    {
+        $booking->load(['room', 'user', 'attendees']);
+
+        $dtStamp = now()->utc()->format('Ymd\THis\Z');
+        $dtStart = Carbon::parse($booking->start_time)->utc()->format('Ymd\THis\Z');
+        $dtEnd = Carbon::parse($booking->end_time)->utc()->format('Ymd\THis\Z');
+
+        $roomName = $booking->room?->name ?? '會議室';
+        $location = $booking->room ? "{$booking->room->location} ({$booking->room->name})" : '會議室';
+        $summary = "{$roomName} · {$booking->title}";
+
+        $descriptionLines = [
+            "會議主旨：{$booking->title}",
+            "發起人：{$booking->user?->name}",
+            "預約會議室：{$roomName}",
+            "與會總人數：{$booking->attendees_count} 人",
+        ];
+
+        if (!empty($booking->equipment_needed)) {
+            $descriptionLines[] = "借用設備：" . implode(', ', $booking->equipment_needed);
+        }
+
+        if ($booking->description) {
+            $descriptionLines[] = "備註說明：{$booking->description}";
+        }
+
+        $description = implode('\n', $descriptionLines);
+
+        $ics = "BEGIN:VCALENDAR\r\n";
+        $ics .= "VERSION:2.0\r\n";
+        $ics .= "PRODID:-//EIP Portal//Meeting Rooms//TW\r\n";
+        $ics .= "CALSCALE:GREGORIAN\r\n";
+        $ics .= "METHOD:PUBLISH\r\n";
+        $ics .= "BEGIN:VEVENT\r\n";
+        $ics .= "UID:booking-{$booking->id}@eip.local\r\n";
+        $ics .= "DTSTAMP:{$dtStamp}\r\n";
+        $ics .= "DTSTART:{$dtStart}\r\n";
+        $ics .= "DTEND:{$dtEnd}\r\n";
+        $ics .= "SUMMARY:{$summary}\r\n";
+        $ics .= "DESCRIPTION:{$description}\r\n";
+        $ics .= "LOCATION:{$location}\r\n";
+        if ($booking->user) {
+            $ics .= "ORGANIZER;CN={$booking->user->name}:mailto:{$booking->user->email}\r\n";
+        }
+        foreach ($booking->attendees as $att) {
+            $ics .= "ATTENDEE;ROLE=REQ-PARTICIPANT;CN={$att->name}:mailto:{$att->email}\r\n";
+        }
+        $ics .= "STATUS:CONFIRMED\r\n";
+        $ics .= "END:VEVENT\r\n";
+        $ics .= "END:VCALENDAR\r\n";
+
+        $fileName = "meeting-{$booking->id}.ics";
+
+        return response($ics, 200, [
+            'Content-Type' => 'text/calendar; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ]);
+    }
 }

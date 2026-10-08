@@ -375,14 +375,24 @@ const formatTime = (isoString) => {
                                                 <span class="font-bold text-gray-800 truncate">{{ b.title }}</span>
                                                 <span class="text-gray-400 text-[11px]">({{ b.attendees_count }}人)</span>
                                             </div>
-                                            <button
-                                                v-if="isAdmin || b.user_id === currentUser?.id"
-                                                @click="cancelBooking(b.id)"
-                                                class="text-rose-600 hover:text-rose-800 text-[11px] font-medium px-1.5 py-0.5 rounded hover:bg-rose-50"
-                                                title="取消此筆預約"
-                                            >
-                                                取消
-                                            </button>
+                                            <div class="flex items-center space-x-1 shrink-0">
+                                                <a
+                                                    :href="route('meeting-rooms.bookings.export-ics', b.id)"
+                                                    class="text-emerald-600 hover:text-emerald-800 text-[11px] font-medium px-1.5 py-0.5 rounded hover:bg-emerald-50 inline-flex items-center space-x-0.5"
+                                                    title="匯出 iCalendar (.ics) 日曆檔案"
+                                                >
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                                    <span>.ics</span>
+                                                </a>
+                                                <button
+                                                    v-if="isAdmin || b.user_id === currentUser?.id"
+                                                    @click="cancelBooking(b.id)"
+                                                    class="text-rose-600 hover:text-rose-800 text-[11px] font-medium px-1.5 py-0.5 rounded hover:bg-rose-50"
+                                                    title="取消此筆預約"
+                                                >
+                                                    取消
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <p class="text-blue-600 font-mono text-[11px]">

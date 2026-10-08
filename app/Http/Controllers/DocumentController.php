@@ -126,6 +126,45 @@ class DocumentController extends Controller
     }
 
     /**
+     * 更新文件資料與存取權限設定
+     */
+    public function update(Request $request, Document $document): RedirectResponse
+    {
+        if ($document->uploader_id !== $request->user()->id && !$request->user()->isAdmin() && !$request->user()->isManager()) {
+            abort(403, '您沒有權限編輯此文件。');
+        }
+
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:150'],
+            'category' => ['required', 'string', 'in:policy,template,tech,training'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'department_id' => ['nullable', 'exists:departments,id'],
+            'restricted_roles' => ['nullable', 'array'],
+            'restricted_roles.*' => ['string', 'in:admin,manager,employee,hr'],
+        ]);
+
+        $document->update([
+            'title' => $validated['title'],
+            'category' => $validated['category'],
+            'description' => $validated['description'] ?? null,
+            'department_id' => $validated['department_id'] ?? null,
+            'restricted_roles' => !empty($validated['restricted_roles']) ? array_values($validated['restricted_roles']) : null,
+        ]);
+
+        AuditLog::log(
+            action: 'update_document',
+            description: "更新了文件「{$document->title}」之設定資料",
+            auditable: $document,
+            details: [
+                'category' => $document->category,
+                'restricted_roles' => $document->restricted_roles,
+            ]
+        );
+
+        return back()->with('success', "文件「{$document->title}」資料已更新！");
+    }
+
+    /**
      * 上傳新修訂版本
      */
     public function uploadVersion(Request $request, Document $document): RedirectResponse

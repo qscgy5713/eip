@@ -78,9 +78,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/meeting-rooms/{meetingRoom}', [MeetingRoomController::class, 'updateRoom'])->name('meeting-rooms.update');
     Route::post('/meeting-rooms/bookings', [MeetingRoomController::class, 'storeBooking'])->name('meeting-rooms.bookings.store');
     Route::post('/meeting-rooms/bookings/{booking}/cancel', [MeetingRoomController::class, 'cancelBooking'])->name('meeting-rooms.bookings.cancel');
+    Route::get('/meeting-rooms/bookings/{booking}/export-ics', [MeetingRoomController::class, 'exportIcs'])->name('meeting-rooms.bookings.export-ics');
 
     // 企業綜合行事曆看板
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
+    Route::get('/calendar/export-ics', [CalendarController::class, 'exportIcs'])->name('calendar.export-ics');
 
     // 企業文件庫與檔案版本控制
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
@@ -89,6 +91,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/documents/{document}/versions', [DocumentController::class, 'versions'])->name('documents.versions.list');
     Route::get('/documents/{document}/download/{version?}', [DocumentController::class, 'download'])->name('documents.download');
     Route::get('/documents/{document}/preview/{version?}', [DocumentController::class, 'preview'])->name('documents.preview');
+    Route::put('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 
     // 站內通知中心

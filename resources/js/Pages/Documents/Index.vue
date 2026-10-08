@@ -139,6 +139,43 @@ const openHistoryModal = async (doc) => {
     }
 };
 
+// 編輯文件 Modal
+const isEditModalOpen = ref(false);
+const targetDocForEdit = ref(null);
+const editForm = useForm({
+    title: '',
+    category: 'policy',
+    description: '',
+    department_id: '',
+    restricted_roles: [],
+});
+
+const openEditModal = (doc) => {
+    targetDocForEdit.value = doc;
+    editForm.reset();
+    editForm.clearErrors();
+    editForm.title = doc.title;
+    editForm.category = doc.category;
+    editForm.description = doc.description || '';
+    editForm.department_id = doc.department_id || '';
+    editForm.restricted_roles = doc.restricted_roles ? [...doc.restricted_roles] : [];
+    isEditModalOpen.value = true;
+};
+
+const closeEditModal = () => {
+    isEditModalOpen.value = false;
+    targetDocForEdit.value = null;
+};
+
+const submitEdit = () => {
+    if (!targetDocForEdit.value) return;
+    editForm.put(route('documents.update', targetDocForEdit.value.id), {
+        onSuccess: () => {
+            closeEditModal();
+        },
+    });
+};
+
 // 刪除文件
 const deleteDoc = (docId) => {
     if (confirm('確定要刪除這份文件及其所有歷史版本嗎？此操作不可逆。')) {
@@ -345,6 +382,14 @@ const isText = (mimeType, fileName = '') => {
                                     title="發布新版本"
                                 >
                                     +新版
+                                </button>
+                                <button
+                                    v-if="canManage || doc.uploader_id === $page.props.auth.user.id"
+                                    @click="openEditModal(doc)"
+                                    class="text-gray-500 hover:text-amber-600"
+                                    title="編輯文件設定"
+                                >
+                                    編輯
                                 </button>
                                 <button
                                     v-if="$page.props.auth.user.role === 'admin' || doc.uploader_id === $page.props.auth.user.id"
@@ -714,6 +759,101 @@ const isText = (mimeType, fileName = '') => {
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 編輯文件設定 Modal -->
+        <div v-if="isEditModalOpen" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto">
+            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+                <div class="flex items-center justify-between border-b pb-3">
+                    <h3 class="text-lg font-bold text-gray-900">編輯文件屬性與存取權限</h3>
+                    <button @click="closeEditModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                </div>
+
+                <form @submit.prevent="submitEdit" class="space-y-4 text-xs">
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-1">文件標題 *</label>
+                        <input
+                            type="text"
+                            v-model="editForm.title"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500"
+                            required
+                        />
+                        <p v-if="editForm.errors.title" class="text-rose-500 mt-1">{{ editForm.errors.title }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-medium text-gray-700 mb-1">所屬分類 *</label>
+                            <select
+                                v-model="editForm.category"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500"
+                                required
+                            >
+                                <option value="policy">公司規章</option>
+                                <option value="template">表單範本</option>
+                                <option value="tech">技術規範</option>
+                                <option value="training">教育訓練</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-medium text-gray-700 mb-1">指定歸屬部門 (選填)</label>
+                            <select
+                                v-model="editForm.department_id"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500"
+                            >
+                                <option value="">全公司共用文件</option>
+                                <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-1">文件說明備註</label>
+                        <textarea
+                            v-model="editForm.description"
+                            rows="2"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500"
+                        ></textarea>
+                    </div>
+
+                    <!-- 角色存取限制 (密件保護) -->
+                    <div class="bg-amber-50/50 p-3 rounded-lg border border-amber-200/60">
+                        <label class="block font-medium text-amber-900 mb-1">密件存取限制 (僅允許特定角色調閱)</label>
+                        <p class="text-[11px] text-amber-700 mb-2">未勾選代表全體在職同仁均可公開查閱下載</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer">
+                                <input type="checkbox" value="manager" v-model="editForm.restricted_roles" class="rounded text-amber-600 focus:ring-amber-500" />
+                                <span>主管級 (Manager)</span>
+                            </label>
+                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer">
+                                <input type="checkbox" value="hr" v-model="editForm.restricted_roles" class="rounded text-amber-600 focus:ring-amber-500" />
+                                <span>人資行政 (HR)</span>
+                            </label>
+                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer">
+                                <input type="checkbox" value="admin" v-model="editForm.restricted_roles" class="rounded text-amber-600 focus:ring-amber-500" />
+                                <span>系統管理員 (Admin)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end space-x-3 pt-3 border-t">
+                        <button
+                            type="button"
+                            @click="closeEditModal"
+                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+                        >
+                            取消
+                        </button>
+                        <button
+                            type="submit"
+                            :disabled="editForm.processing"
+                            class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm disabled:opacity-50"
+                        >
+                            {{ editForm.processing ? '儲存中...' : '儲存變更' }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </AuthenticatedLayout>
