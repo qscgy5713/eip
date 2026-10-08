@@ -82,6 +82,13 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     系統日誌
                                 </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.role === 'admin'"
+                                    :href="route('webhooks.index')"
+                                    :active="route().current('webhooks.*')"
+                                >
+                                    整合設定
+                                </NavLink>
                             </div>
                         </div>
 
@@ -202,6 +209,12 @@ const showingNavigationDropdown = ref(false);
                                             🛡️ 系統審計日誌
                                         </DropdownLink>
                                         <DropdownLink
+                                            v-if="$page.props.auth.user.role === 'admin'"
+                                            :href="route('webhooks.index')"
+                                        >
+                                            ⚡ 外部整合 (Webhooks)
+                                        </DropdownLink>
+                                        <DropdownLink
                                             :href="route('profile.edit')"
                                         >
                                             個人帳號設定
@@ -319,6 +332,13 @@ const showingNavigationDropdown = ref(false);
                         >
                             系統日誌
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.role === 'admin'"
+                            :href="route('webhooks.index')"
+                            :active="route().current('webhooks.*')"
+                        >
+                            整合設定
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -351,6 +371,12 @@ const showingNavigationDropdown = ref(false);
                                 :href="route('audit-logs.index')"
                             >
                                 🛡️ 系統審計日誌
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                v-if="$page.props.auth.user.role === 'admin'"
+                                :href="route('webhooks.index')"
+                            >
+                                ⚡ 外部整合 (Webhooks)
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 個人帳號設定

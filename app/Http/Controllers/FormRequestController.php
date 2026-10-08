@@ -8,6 +8,7 @@ use App\Models\Form;
 use App\Models\FormRequest as EipFormRequest;
 use App\Models\User;
 use App\Notifications\EipSystemNotification;
+use App\Services\WebhookService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -103,6 +104,19 @@ class FormRequestController extends Controller
             details: ['form_id' => $form->id, 'form_code' => $form->code, 'title' => $formRequest->title]
         );
 
+        // 觸發外部生態 Webhook 事件
+        WebhookService::dispatch(
+            'form.submitted',
+            [
+                'form_request_id' => $formRequest->id,
+                'form_name' => $form->name,
+                'title' => $formRequest->title,
+                'applicant' => $user->name,
+                'department' => $user->department?->name ?? '公司同仁',
+            ],
+            "【簽核申請】{$user->name} 提交了「{$form->name}」（{$formRequest->title}）"
+        );
+
         return redirect()->route('forms.show', $formRequest->id)->with('success', '申請單已成功送出！');
     }
 
@@ -177,6 +191,20 @@ class FormRequestController extends Controller
             senderName: $user->name,
             extra: ['status' => $validated['status']]
         ));
+
+        // 觸發外部生態 Webhook 事件
+        $webhookEvent = $validated['status'] === 'approved' ? 'form.approved' : 'form.rejected';
+        WebhookService::dispatch(
+            $webhookEvent,
+            [
+                'form_request_id' => $formRequest->id,
+                'title' => $formRequest->title,
+                'status' => $validated['status'],
+                'approver' => $user->name,
+                'comment' => $validated['comment'] ?? null,
+            ],
+            "【簽核結果】主管 {$user->name} 已{$statusText}「{$formRequest->title}」"
+        );
 
         return redirect()->back()->with('success', '簽核狀態已更新！');
     }

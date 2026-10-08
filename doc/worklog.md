@@ -81,7 +81,15 @@
   - 建立 `.github/workflows/ci.yml`，支援每次代碼 Push 或 PR 至 `master` 分支時，自動啟動 PHP 8.4、安裝 Composer 與 NPM 依賴、打包前端資產並執行全套自動化測試套件。
 - 撰寫安全性自動化測試套件 `tests/Feature/SecurityAndIdorTest.php`：
   - 涵蓋表單跨部門調閱阻擋、本人查閱、主管/管理員查閱、草稿公告隔離、同仁竄改會議室阻擋、取消他人會議室借用阻擋。
-  - 全系統累積 **66 項自動化 Feature/Unit 測試全數 100% 通過**（172 assertions）。
+- 完成 Phase 3/4「外部通訊群組 Webhook 整合生態」(Slack / Discord / Teams 即時推播)：
+  - 建立 `webhooks` 資料表遷移與 Eloquent 模型，支援訂閱事件陣列與 `subscribesTo()` 判定。
+  - 實作 `WebhookService`：提供跨平台相容 Payload（Slack `text`、Discord `content`、通用 `data`）、HMAC-SHA256 數位簽章防偽與 3 秒超時安全容錯。
+  - 串接核心業務流程：表單申請送出 (`form.submitted`)、主管審核通過 (`form.approved`)、主管駁回退件 (`form.rejected`)、會議室預約成立 (`room.booked`) 全面支援 Webhook 自動推播。
+  - 實作 Webhook 管理後台 `Webhooks/Index.vue`：支援端點清單檢視、新增 Webhook、一鍵 Ping 連線測試、啟用/停用切換與刪除。
+  - 於 `AuthenticatedLayout.vue` 導覽列與下拉選單增設「整合設定 / 外部整合 (Webhooks)」入口（管理員專屬權限控制）。
+  - 撰寫自動化測試套件 `tests/Feature/WebhookTest.php`：涵蓋管理員存取、員工越權防護 (403)、端點建立/切換/刪除、連線測試 Ping、表單提交推播與會議室預約推播等 8 項測試。
+- 執行前端資產建置（`npm run build`）與全套測試套件（`php artisan test`）：
+  - 全系統累積 **74 項自動化 Feature/Unit 測試全數 100% 通過**（193 assertions）。
 
 ### 下一步
-- 詢問使用者是否同意提交 Git Commit 與 Git Push，專案各階段里程碑已全面圓滿達成！
+- 向使用者回報完整進度與成果，詢問是否同意執行 Git Commit 與 Git Push。

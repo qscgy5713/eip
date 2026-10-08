@@ -6,6 +6,7 @@ use App\Models\AuditLog;
 use App\Models\MeetingRoom;
 use App\Models\RoomBooking;
 use App\Notifications\EipSystemNotification;
+use App\Services\WebhookService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -140,6 +141,20 @@ class MeetingRoomController extends Controller
             actionUrl: route('meeting-rooms.index', ['date' => $startTime->toDateString()]),
             senderName: '系統管理員'
         ));
+
+        // 觸發外部生態 Webhook 事件
+        WebhookService::dispatch(
+            'room.booked',
+            [
+                'booking_id' => $booking->id,
+                'room' => $room->name,
+                'title' => $booking->title,
+                'user' => $request->user()->name,
+                'start_time' => $startTime->toDateTimeString(),
+                'end_time' => $endTime->toDateTimeString(),
+            ],
+            "【會議室借用】{$request->user()->name} 預約了「{$room->name}」（{$booking->title}）"
+        );
 
         return back()->with('success', "已成功預約「{$room->name}」！");
     }

@@ -25,9 +25,10 @@
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
 - [x] 系統儀表板（待辦統計、未讀公告、進行中申請、即將到來會議、快捷打卡）
 - [x] 站內通知中心與推播通知整合（Laravel Notifications、導覽列小鈴鐺即時未讀數與下拉預覽、簽核/會議室/公告事件即時發送、一鍵全讀）
+- [x] 外部通訊群組 Webhook 整合生態（Slack / Discord / Teams 即時推播、HMAC-SHA256 數位簽章防偽、雙向跨平台 Payload 相容、連線 Ping 測試與開關切換）
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest 等 66 項測試案例全數 100% 通過）
+- [x] 單元與整合測試（EipTest, AttendanceTest, MeetingRoomTest, DocumentTest, NotificationAndAuditTest, SecurityAndIdorTest, WebhookTest 等 74 項測試案例全數 100% 通過）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
