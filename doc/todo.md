@@ -35,18 +35,19 @@
 - [x] 忘刷/補打卡單結案自動同步考勤紀錄引擎 (Attendance Regularization Sync Engine：同仁提交「忘刷/補打卡單 CLOCK_ADJUST」經多級簽核核准結案時，系統自動查找或建立該員工當日 attendances 紀錄，智慧解析出勤時間，補齊上班或下班打卡時間，重新計算工時並將出勤狀態校正為 normal 正常出勤，寫入單號備註與 AuditLog 審計留痕，考勤首頁提供未簽退/遲到早退異常一鍵發起補打卡與日期自動預填)
 - [x] 休假管理中心與請假歷史對帳表系統 (Leave Balance Ledger & Apply Link：在休假額度中心 LeaveBalances/Index.vue 提供「發起請假申請」快捷按鈕與關聯表單，並於額度卡片下方建立「我的請假申請與扣抵明細對帳表」，完整列出近期請假單號、假別類型、請假期間、天數、事由、審批折抵狀態與單據詳情連結)
 - [x] 加班單核准結案自動折算補休額度引擎 (Overtime to Compensatory Leave Credit Engine：同仁提交「加班申請單 OVERTIME」選擇「換取補休時數」經多級簽核終審結案時，系統自動以法定 8 小時 = 1 天標準工時將加班時數精準折算為天數，自動在 leave_balances 累加補休 compensatory 額度、註記加班單號留痕、發送系統通知並記錄 AuditLog 審計日誌；休假中心整合「請假支出扣額」與「加班換補休入帳」雙頁籤對帳存摺)
+- [x] 表單申請主動撤回與作廢機制 (Form Request Withdrawal & Re-apply Engine：申請人本人或管理員於待審中一鍵撤回單據、請假額度自動 100% 釋放恢復、進行中待審記錄標記作廢、通知原審核主管、留存 AuditLog 與 Webhook 推播，並提供「複製重新申請」自動預填原單據欄位功能，全系統 182 項 Feature 測試 100% 通過)
 
 ## 階段 3：資產管理與生態整合
 - [x] 企業文件庫與檔案版本控制（分類資料夾、文件上傳、版本歷程回溯、下載權限控管、密件隔離）
 - [x] 企業文件庫線上安全預覽引擎（支援 PDF 高解析度翻頁內嵌、圖片/文字檔直接預覽、Office 文件引導、新分頁全螢幕開啟與 AuditLog 預覽稽核）
 - [x] 頂部導覽列 (Header Bar) 自適應排版重構（修復字元跑版擠壓、響應式間距優化、管理員專屬項目收納為系統管理 Dropdown）
-- [x] 系統儀表板與個人工作台全景升級 (Dashboard & Daily Workspace Hub：待我審批無縫納入職務代理主管單據並醒目標示代理標籤、個人休假與補休可用額度摘要小卡、主管/人事/管理員專屬團隊今日出勤快報卡、五大高頻行政快捷導航工作列、即時會議提醒、全系統 177 項 Feature 測試 100% 通過)
+- [x] 系統儀表板與個人工作台全景升級 (Dashboard & Daily Workspace Hub：待我審批無縫納入職務代理主管單據並醒目標示代理標籤、個人休假與補休可用額度摘要小卡、主管/人事/管理員專屬團隊今日出勤快報卡、五大高頻行政快捷導航工作列、即時會議提醒、全系統 182 項 Feature 測試 100% 通過)
 - [x] 站內通知中心與推播通知整合（Laravel Notifications、導覽列小鈴鐺即時未讀數與下拉預覽、簽核/會議室/公告事件即時發送、一鍵全讀）
 - [x] 外部通訊群組 Webhook 整合生態（Slack / Discord / Teams 即時推播、HMAC-SHA256 數位簽章防偽、雙向跨平台 Payload 相容、連線 Ping 測試與開關切換）
 - [x] 系統審計稽核日誌 (Audit Trail) 與安全性加固（操作人員、IP、動作分類、變更詳情 JSON、管理員專屬查詢篩選）
 
 ## 階段 4：測試與正式上線
-- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest 等 177 項 Feature 測試 100% 通過，950 assertions）
+- [x] 單元與整合測試（EipTest, MultilevelWorkflowTest, DelegationTest, FormPrintTest, CalendarTest, GeofencingAttendanceTest, AttendanceSettingTest, AttendanceAmendmentSyncTest, OvertimeCompensatoryCreditTest, SecurityAndIdorTest, OrgManagementTest, FormCollaborativeApprovalTest, LeaveBalanceTest, WebhookTest, DashboardTest, FormWithdrawalTest 等 182 項 Feature 測試 100% 通過，988 assertions）
 - [x] 權限越權檢查 (IDOR) 與安全性稽核（FormRequest canAccess 授權機制、草稿公告隔離、會議室/文件權限邊界校驗、公文列印調閱授權校驗、多級流程跨關卡搶審防護）
 - [x] 容器化 (Docker) 與 CI/CD 自動化建置（Docker Compose 容器編排 + GitHub Actions 自動化測試流程 `.github/workflows/ci.yml`）
 - [x] 前端 UI 視覺精緻化（移除雜亂 Emoji，全面替換為企業級 SVG 向量圖示與專業格式標籤）

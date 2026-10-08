@@ -14,6 +14,7 @@ const statusBadge = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-100 text-emerald-800';
         case 'rejected': return 'bg-rose-100 text-rose-800';
+        case 'withdrawn': return 'bg-gray-100 text-gray-700';
         default: return 'bg-amber-100 text-amber-800';
     }
 };
@@ -247,7 +248,7 @@ const deleteForm = (formId, formName) => {
                             </div>
                             <div class="flex items-center space-x-4">
                                 <span :class="['px-3 py-1 text-xs font-semibold rounded-full', statusBadge(req.status)]">
-                                    {{ req.status === 'approved' ? '已核准' : (req.status === 'rejected' ? '已駁回' : `審批中 (關卡 ${req.current_step}/${req.total_steps || 1})`) }}
+                                    {{ req.status === 'approved' ? '已核准' : (req.status === 'rejected' ? '已駁回' : (req.status === 'withdrawn' ? '已撤回' : `審批中 (關卡 ${req.current_step}/${req.total_steps || 1})`)) }}
                                 </span>
                                 <Link :href="route('forms.show', req.id)" class="text-xs font-medium text-blue-600 hover:underline">
                                     查看詳情 &rarr;

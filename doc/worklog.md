@@ -2,6 +2,28 @@
 
 ## 2026-10-08
 ### 做了什麼
+- 實作**表單申請主動撤回與作廢機制 (Form Request Withdrawal & Re-apply Engine)**：
+  - **申請人主動撤回與權限保護 (`WorkflowService::withdrawFormRequest` & `FormRequestController::withdraw`)**：
+    - 嚴格校驗單據狀態：僅限處於 `pending`（審核中）之申請單允許撤回；已核准 (`approved`) 或已駁回 (`rejected`) 之結案單據禁止撤回（回傳 422 錯誤）。
+    - 嚴格 IDOR 權限保護：僅限單據申請人本人 (`$formRequest->user_id === $operator->id`) 或系統管理員 (`$operator->isAdmin()`) 具備撤回權限，其餘人員阻擋 403。
+    - 單據狀態即時更新為 `withdrawn`（已撤回作廢）。
+  - **休假額度 100% 自動釋放恢復 (`LeaveBalanceService::releaseBalance`)**：
+    - 若撤回之單據為休假申請單 (`LEAVE`)，簽核引擎自動連鎖觸發 `releaseBalance($formRequest, approved: false)`。
+    - 將當前凍結之 `pending_days` 額度全數釋放扣除，且不累加 `used_days`，使同仁年度可用特休/補休天數立即原額恢復。
+  - **進行中待審記錄作廢與主管通知連鎖**：
+    - 將所有未決之待審記錄 (`ApprovalRecord` 狀態為 `pending`) 自動更新為 `withdrawn`，並記錄撤回原因備註。
+    - 主管待審批清單、首頁儀表板待辦計數立即動態移除該單據，徹底杜絕無效審核。
+    - 發送即時站內通知 (`EipSystemNotification`) 告知原審核主管該單據已由申請人撤回作廢。
+    - 記錄 `AuditLog` 審計留痕（動作：`withdraw_form_request`）並推播外部 Webhook (`form.withdrawn`)。
+  - **前端體驗與一鍵複製重新申請 (`Forms/Show.vue`, `Forms/Index.vue` & `Forms/Create.vue`)**：
+    - 單據詳情頁於頂部操作區提供「撤回申請」按鈕（僅在 pending 且為申請人/管理員時呈現）。
+    - 點擊彈出安全確認對話框 Modal，支援填寫選填撤回原因。
+    - 若單據為已撤回，頂部展示優雅灰色提示橫幅，且 Stepper 流程管線標記「已撤回作廢」。
+    - 提供「複製重新申請」快捷按鈕：點擊自動攜帶 `copy_from` 參數跳轉至申請頁面，自動預填原單據填寫內容，免除同仁重複輸入之痛點。
+  - **自動化測試與代碼品質**：
+    - 新增 `tests/Feature/FormWithdrawalTest.php` 涵蓋 5 大 Feature 測試：申請人主動撤回請假單且特休額度全額釋放、主管待審記錄作廢、IDOR 越權阻擋、已結案單據禁止撤回、`copy_from` 複製資料預填驗證。
+    - 全系統自動化測試套件擴充至 **182 項 Feature 測試 100% 全數通過 (988 assertions)**。
+    - 前端 Vite 建置 0 錯誤通過 (1.18s)。
 - 實作**首頁系統儀表板與個人工作台全景升級 (Dashboard & Daily Workspace Hub)**：
   - **待我審批無縫納入職務代理單據與代理標籤 (`DashboardController.php` & `Dashboard.vue`)**：
     - 首頁待我審批清單全面對齊代理權限，查詢登入者有效審核單據：`$validApproverIds = collect([$user->id])->merge($delegatorIds)->unique()`。

@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/forms/requests/{formRequest}/action', [FormRequestController::class, 'action'])->name('forms.action');
     Route::post('/forms/requests/{formRequest}/transfer', [FormRequestController::class, 'transfer'])->name('forms.transfer');
     Route::post('/forms/requests/{formRequest}/add-sign', [FormRequestController::class, 'addSign'])->name('forms.add-sign');
+    Route::post('/forms/requests/{formRequest}/withdraw', [FormRequestController::class, 'withdraw'])->name('forms.withdraw');
 
     // 主管審批中心與一鍵批次簽核
     Route::get('/approvals', [ApprovalHubController::class, 'index'])->name('approvals.index');

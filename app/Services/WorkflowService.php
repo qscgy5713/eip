@@ -773,4 +773,80 @@ class WorkflowService
             ]
         );
     }
+
+    /**
+     * 申請人主動撤回申請單 (Withdraw Form Request)
+     */
+    public function withdrawFormRequest(FormRequest $formRequest, User $operator, ?string $reason = null): array
+    {
+        if ($formRequest->status !== 'pending') {
+            abort(422, '該單據已非審批中狀態，無法進行撤回。');
+        }
+
+        // 僅限申請人本人或管理者可撤回
+        if ($formRequest->user_id !== $operator->id && !$operator->isAdmin()) {
+            abort(403, '您沒有權限撤回此份申請單據。');
+        }
+
+        $formRequest->update(['status' => 'withdrawn']);
+
+        // 若為休假單，立即釋放扣留凍結之額度 (Pending => Released)
+        if ($formRequest->form?->code === 'LEAVE') {
+            app(LeaveBalanceService::class)->releaseBalance($formRequest, approved: false);
+        }
+
+        // 作廢當前進行中的待審批記錄 (包含主審與加簽)
+        $pendingRecords = ApprovalRecord::where('form_request_id', $formRequest->id)
+            ->where('status', 'pending')
+            ->get();
+
+        foreach ($pendingRecords as $record) {
+            $record->update([
+                'status' => 'withdrawn',
+                'comment' => "【申請人撤回】" . ($reason ? "事由：{$reason}" : '申請人主動撤回作廢'),
+                'actioned_at' => now(),
+            ]);
+
+            // 通知原本負責審核的主管或受派人
+            $record->approver?->notify(new EipSystemNotification(
+                title: "【簽核撤回】同仁已撤回單據「{$formRequest->title}」",
+                message: "同仁 {$operator->name} 已主動撤回申請單「{$formRequest->title}」" . ($reason ? "，事由：{$reason}" : '') . "，該單據已作廢，無需再進行審批。",
+                type: 'form_withdrawn',
+                actionUrl: route('forms.show', $formRequest->id),
+                senderName: $operator->name,
+                extra: ['status' => 'withdrawn', 'form_request_id' => $formRequest->id]
+            ));
+        }
+
+        AuditLog::log(
+            action: 'withdraw_form_request',
+            description: "同仁 {$operator->name} 主動撤回了單據「{$formRequest->title}」" . ($reason ? "（事由：{$reason}）" : ''),
+            auditable: $formRequest,
+            details: [
+                'form_request_id' => $formRequest->id,
+                'request_no' => $formRequest->request_no,
+                'operator_id' => $operator->id,
+                'reason' => $reason,
+                'previous_status' => 'pending',
+                'new_status' => 'withdrawn',
+            ]
+        );
+
+        WebhookService::dispatch(
+            'form.withdrawn',
+            [
+                'form_request_id' => $formRequest->id,
+                'request_no' => $formRequest->request_no,
+                'title' => $formRequest->title,
+                'operator' => $operator->name,
+                'reason' => $reason,
+            ],
+            "【簽核撤回】同仁 {$operator->name} 已主動撤回「{$formRequest->title}」"
+        );
+
+        return [
+            'status' => 'withdrawn',
+            'message' => '申請單已成功撤回並作廢。',
+        ];
+    }
 }

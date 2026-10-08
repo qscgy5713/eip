@@ -69,6 +69,15 @@ class FormRequestController extends Controller
 
         $prefillParam = $request->query('prefill');
         $prefillData = is_array($prefillParam) ? $prefillParam : [];
+
+        // 支援從既有單據 (例如已撤回單據) 複製內容重新申請
+        if ($request->has('copy_from')) {
+            $sourceRequest = EipFormRequest::find($request->query('copy_from'));
+            if ($sourceRequest && $sourceRequest->canAccess($request->user())) {
+                $prefillData = array_merge($sourceRequest->data ?? [], $prefillData);
+            }
+        }
+
         if ($request->has('date') && !isset($prefillData['adjust_date'])) {
             $prefillData['adjust_date'] = (string) $request->query('date');
         }
@@ -539,5 +548,22 @@ class FormRequestController extends Controller
         }
 
         return back()->with('success', $msg);
+    }
+
+    /**
+     * 申請人主動撤回表單申請單據
+     */
+    public function withdraw(Request $request, EipFormRequest $formRequest): RedirectResponse
+    {
+        $user = $request->user();
+        $validated = $request->validate([
+            'reason' => 'nullable|string|max:500',
+        ]);
+
+        $workflowService = app(\App\Services\WorkflowService::class);
+        $result = $workflowService->withdrawFormRequest($formRequest, $user, $validated['reason'] ?? null);
+
+        return redirect()->route('forms.show', $formRequest->id)
+            ->with('success', $result['message']);
     }
 }

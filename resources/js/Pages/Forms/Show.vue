@@ -67,11 +67,33 @@ const submitAddSign = () => {
     });
 };
 
+// 申請人撤回 Modal
+const showWithdrawModal = ref(false);
+const withdrawForm = useForm({
+    reason: '',
+});
+
+const openWithdrawModal = () => {
+    withdrawForm.reset();
+    withdrawForm.clearErrors();
+    showWithdrawModal.value = true;
+};
+
+const submitWithdraw = () => {
+    withdrawForm.post(route('forms.withdraw', props.formRequest.id), {
+        onSuccess: () => {
+            showWithdrawModal.value = false;
+            withdrawForm.reset();
+        },
+    });
+};
+
 const statusBadge = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
         case 'rejected': return 'bg-rose-100 text-rose-800 border-rose-200';
         case 'transferred': return 'bg-purple-100 text-purple-800 border-purple-200';
+        case 'withdrawn': return 'bg-gray-100 text-gray-700 border-gray-300';
         default: return 'bg-amber-100 text-amber-800 border-amber-200';
     }
 };
@@ -98,6 +120,27 @@ const formatSize = (bytes) => {
 
         <div class="py-8">
             <div class="mx-auto max-w-4xl sm:px-6 lg:px-8 space-y-6">
+                <!-- 提示/成功訊息 -->
+                <div v-if="$page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center text-emerald-800 shadow-sm text-sm">
+                    <svg class="w-5 h-5 text-emerald-600 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>{{ $page.props.flash.success }}</span>
+                </div>
+
+                <!-- 單據已撤回提示橫幅 -->
+                <div v-if="formRequest.status === 'withdrawn'" class="p-4 bg-gray-50 border border-gray-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-gray-700 shadow-sm text-sm">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>此申請單已由申請人撤回並作廢。相關凍結之休假額度已全數釋放恢復。</span>
+                    </div>
+                    <Link
+                        v-if="formRequest.user_id === $page.props.auth.user.id"
+                        :href="route('forms.create', { form: formRequest.form_id, copy_from: formRequest.id })"
+                        class="text-xs font-semibold text-blue-600 underline hover:text-blue-800 shrink-0"
+                    >
+                        複製內容重新申請 &rarr;
+                    </Link>
+                </div>
+
                 <!-- 單據主要內容 -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-6">
                     <div class="flex items-start justify-between border-b border-gray-100 pb-5">
@@ -110,7 +153,7 @@ const formatSize = (bytes) => {
                                 <span>送出時間：{{ new Date(formRequest.created_at).toLocaleString() }}</span>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2.5 shrink-0">
+                        <div class="flex items-center space-x-2.5 shrink-0 flex-wrap gap-y-2">
                             <a
                                 :href="route('forms.print', formRequest.id)"
                                 target="_blank"
@@ -120,8 +163,32 @@ const formatSize = (bytes) => {
                                 <svg class="w-3.5 h-3.5 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                                 列印存證 / PDF
                             </a>
+
+                            <!-- 複製重新申請按鈕 (已撤回或已退件時同仁可一鍵複製) -->
+                            <Link
+                                v-if="formRequest.user_id === $page.props.auth.user.id && (formRequest.status === 'withdrawn' || formRequest.status === 'rejected')"
+                                :href="route('forms.create', { form: formRequest.form_id, copy_from: formRequest.id })"
+                                class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg shadow-sm hover:bg-blue-100 transition"
+                                title="複製原單據內容發起新申請"
+                            >
+                                <svg class="w-3.5 h-3.5 mr-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+                                複製重新申請
+                            </Link>
+
+                            <!-- 主動撤回按鈕 (審批中且為申請人本人或管理員) -->
+                            <button
+                                v-if="formRequest.status === 'pending' && ($page.props.auth.user.id === formRequest.user_id || $page.props.auth.user.role === 'admin')"
+                                type="button"
+                                @click="openWithdrawModal"
+                                class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-lg shadow-sm hover:bg-rose-100 transition"
+                                title="主動撤回此申請單據並釋放額度"
+                            >
+                                <svg class="w-3.5 h-3.5 mr-1 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                撤回申請
+                            </button>
+
                             <span :class="['px-3 py-1.5 text-xs font-bold rounded-lg border', statusBadge(formRequest.status)]">
-                                {{ formRequest.status === 'approved' ? '已核准' : (formRequest.status === 'rejected' ? '已駁回' : '審批中') }}
+                                {{ formRequest.status === 'approved' ? '已核准' : (formRequest.status === 'rejected' ? '已駁回' : (formRequest.status === 'withdrawn' ? '已撤回' : '審批中')) }}
                             </span>
                         </div>
                     </div>
@@ -480,6 +547,53 @@ const formatSize = (bytes) => {
                                     class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm"
                                 >
                                     發送加簽邀請
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- ================= 撤回申請 Modal ================= -->
+                <div v-if="showWithdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+                        <div class="flex items-center space-x-3 text-rose-600 border-b border-gray-100 pb-3">
+                            <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-gray-900">確認撤回申請單</h3>
+                                <p class="text-xs text-gray-500">撤回後單據立即作廢並終止簽核</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50 p-3 rounded-lg border border-amber-200">
+                            提醒：撤回後此公文將標記為已作廢，主管待審批清單將自動移除此單據；若此申請包含休假，已凍結之請假額度將立即釋放恢復。
+                        </p>
+
+                        <form @submit.prevent="submitWithdraw" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">撤回原因說明（可選）</label>
+                                <textarea
+                                    v-model="withdrawForm.reason"
+                                    rows="3"
+                                    placeholder="例：行程變更取消、日期時間填寫有誤重新申請..."
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-rose-500 focus:ring-rose-500"
+                                ></textarea>
+                            </div>
+
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                                <button
+                                    type="button"
+                                    @click="showWithdrawModal = false"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                >
+                                    取消
+                                </button>
+                                <button
+                                    type="submit"
+                                    :disabled="withdrawForm.processing"
+                                    class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold shadow-sm disabled:opacity-50"
+                                >
+                                    {{ withdrawForm.processing ? '撤回中...' : '確定撤回單據' }}
                                 </button>
                             </div>
                         </form>
