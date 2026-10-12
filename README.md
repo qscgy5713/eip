@@ -236,6 +236,12 @@ docker compose exec app php artisan migrate --force
 docker compose exec app php artisan db:seed --force
 ```
 
+新模組（訂餐、工單、派車、訪客、內訓、專案、資產等）的示範資料可另外填入（可重複執行）：
+
+```bash
+docker compose exec app php artisan db:seed --class=DemoModulesSeeder --force
+```
+
 ### 3. 前端熱重載 (開發時可選)
 ```bash
 npm run dev

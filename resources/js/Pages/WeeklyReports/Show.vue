@@ -65,7 +65,7 @@ const getStatusBadge = (status) => {
                             </span>
                         </h2>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            {{ report.year }} 年 第 {{ report.week_number }} 週 ({{ report.start_date }} ~ {{ report.end_date }}) · {{ report.department?.name }} · {{ report.user?.job_title || '同仁' }}
+                            {{ report.year }} 年 第 {{ report.week_number }} 週 ({{ String(report.start_date).slice(0, 10) }} ~ {{ String(report.end_date).slice(0, 10) }}) · {{ report.department?.name }} · {{ report.user?.job_title || '同仁' }}
                         </p>
                     </div>
                 </div>

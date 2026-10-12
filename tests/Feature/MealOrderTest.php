@@ -250,4 +250,38 @@ class MealOrderTest extends TestCase
             'type' => \App\Notifications\EipSystemNotification::class,
         ]);
     }
+
+    public function test_show_page_exposes_props_the_frontend_reads(): void
+    {
+        $order = MealOrder::create([
+            'creator_id' => $this->user->id,
+            'title' => '週三下午茶',
+            'store_name' => '迷客夏',
+            'cutoff_time' => now()->addHours(3),
+            'subsidy_per_person' => 50,
+            'status' => 'open',
+        ]);
+        \App\Models\MealOrderItem::create([
+            'meal_order_id' => $order->id,
+            'user_id' => $this->colleague->id,
+            'item_name' => '玉露青茶',
+            'specification' => '中杯 / 無糖去冰',
+            'unit_price' => 40,
+            'quantity' => 2,
+            'subtotal' => 80,
+        ]);
+
+        $this->actingAs($this->user)->get(route('meal-orders.show', $order))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->component('MealOrders/Show')
+                ->has('summaryItems', 1)
+                ->where('summaryItems.0.total_quantity', 2)
+                ->where('summaryItems.0.options', '中杯 / 無糖去冰')
+                ->has('userSettlements', 1)
+                ->where('userSettlements.0.user_name', $this->colleague->name)
+                ->where('userSettlements.0.total_amount', 80)
+                ->where('userSettlements.0.is_fully_paid', false)
+                ->has('myItems', 0));
+    }
 }

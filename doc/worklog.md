@@ -1,6 +1,13 @@
 # 工作日誌 (Worklog)
 
 ## 2026-10-12
+### 示範資料與詳情頁驗證
+- 新增 `database/seeders/DemoModulesSeeder.php`（可重複執行）：為訂餐、工單、派車、訪客、內訓、專案、資產、週報、投票、薪資單補示範資料；執行 `php artisan db:seed --class=DemoModulesSeeder`。
+- **修正 bug**：`MealOrders/Show` 前端讀取 `userSettlements`、`summaryItems[].total_quantity/options`、`userSettlements[].user_name/total_amount/is_fully_paid`，但後端欄位名稱與結構不一致，造成整頁空白（先前測試只斷言 HTTP 200 而漏掉）。已調整 `MealOrderController@show` 並新增 `test_show_page_exposes_props_the_frontend_reads` 迴歸測試。
+- **修正顯示**：週報 Show/Edit/Index 的週期原本顯示 `2026-10-12T00:00:00.000000Z`，改為 `YYYY-MM-DD`。
+- 已用瀏覽器檢視 tickets、vehicles、trainings、visitor-reservations、meal-orders、projects、assets、weekly-reports、polls、payslips 詳情頁，皆可正常渲染；全系統 331 項測試通過。
+- 待留意：Forms/Show 仍顯示原始英文欄位鍵（`Days`、`End_date`），屬資料層問題；資產詳情的借出日期格式（`2026/10/2`）與預計歸還（`2026-11-01`）不一致。
+
 ### 全站視覺改版：現代 SaaS 簡潔風
 - **修正既有 bug**：Dashboard 連到不存在的路由 `organization.index`、`knowledge.index` 造成整頁空白，改為 `org-management.index`、`documents.index`。
 - **導覽列**：高頻項目留主列，其餘收進「更多應用」分組下拉；啟用狀態改為淡底膠囊、黏頂半透明；使用者名稱不再折行；左上改為品牌標誌。

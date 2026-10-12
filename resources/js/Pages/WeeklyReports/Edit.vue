@@ -39,7 +39,7 @@ const submitUpdate = (asDraft = false) => {
                         </span>
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        週期時間：{{ report.start_date }} ~ {{ report.end_date }}
+                        週期時間：{{ String(report.start_date).slice(0, 10) }} ~ {{ String(report.end_date).slice(0, 10) }}
                     </p>
                 </div>
                 <Link

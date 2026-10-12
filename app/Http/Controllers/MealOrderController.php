@@ -129,13 +129,16 @@ class MealOrderController extends Controller
                 $summary[$key] = [
                     'item_name' => $item->item_name,
                     'specification' => $item->specification ?: '標準',
+                    'options' => $item->specification ?: '標準',
                     'unit_price' => (float) $item->unit_price,
                     'quantity' => 0,
+                    'total_quantity' => 0,
                     'total_amount' => 0,
                     'users' => [],
                 ];
             }
             $summary[$key]['quantity'] += $item->quantity;
+            $summary[$key]['total_quantity'] += $item->quantity;
             $summary[$key]['total_amount'] += (float) $item->subtotal;
             $summary[$key]['users'][] = $item->user->name . ($item->quantity > 1 ? " x{$item->quantity}" : '');
         }
@@ -148,8 +151,11 @@ class MealOrderController extends Controller
             if (! isset($settlements[$uid])) {
                 $settlements[$uid] = [
                     'user' => $item->user,
+                    'user_id' => $uid,
+                    'user_name' => $item->user->name,
                     'items_count' => 0,
                     'total_spend' => 0,
+                    'total_amount' => 0,
                     'subsidy' => $subsidy,
                     'net_payable' => 0,
                     'all_paid' => true,
@@ -159,6 +165,7 @@ class MealOrderController extends Controller
             }
             $settlements[$uid]['items_count'] += $item->quantity;
             $settlements[$uid]['total_spend'] += (float) $item->subtotal;
+            $settlements[$uid]['total_amount'] += (float) $item->subtotal;
             $settlements[$uid]['items'][] = $item;
             if ($item->payment_status !== 'paid') {
                 $settlements[$uid]['all_paid'] = false;
@@ -168,6 +175,7 @@ class MealOrderController extends Controller
 
         foreach ($settlements as $uid => &$s) {
             $s['net_payable'] = max(0, $s['total_spend'] - $subsidy);
+            $s['is_fully_paid'] = $s['all_paid'];
         }
         unset($s);
 
@@ -177,7 +185,7 @@ class MealOrderController extends Controller
         return Inertia::render('MealOrders/Show', [
             'order' => $mealOrder,
             'summaryItems' => array_values($summary),
-            'settlements' => array_values($settlements),
+            'userSettlements' => array_values($settlements),
             'myItems' => $myItems,
             'canManage' => $mealOrder->canManage($user),
         ]);

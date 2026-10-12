@@ -315,7 +315,7 @@ const getStatusBadge = (status) => {
                                         </span>
                                     </div>
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                        {{ rep.year }} 年第 {{ rep.week_number }} 週 ({{ rep.start_date }} ~ {{ rep.end_date }})
+                                        {{ rep.year }} 年第 {{ rep.week_number }} 週 ({{ String(rep.start_date).slice(0, 10) }} ~ {{ String(rep.end_date).slice(0, 10) }})
                                     </p>
                                 </div>
                             </div>
