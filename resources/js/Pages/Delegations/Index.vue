@@ -106,7 +106,7 @@ const getStatusBadge = (delegation) => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8 px-4">
                 <!-- 狀態提示卡片 -->
-                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-5 text-indigo-900 text-xs flex items-start space-x-3">
+                <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-5 text-indigo-900 dark:bg-indigo-900/20 dark:text-indigo-100 dark:border-indigo-700/50 text-xs flex items-start space-x-3">
                     <svg class="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <div class="space-y-1">
                         <p class="font-bold">職務代理機制說明：</p>

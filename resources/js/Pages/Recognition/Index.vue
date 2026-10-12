@@ -115,7 +115,7 @@ const removePost = async (post) => {
         <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <div
                 v-if="$page.props.flash?.success"
-                class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 shadow-sm text-sm"
+                class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100 dark:border-emerald-700/50 shadow-sm text-sm"
             >
                 {{ $page.props.flash.success }}
             </div>

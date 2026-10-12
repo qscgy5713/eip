@@ -359,7 +359,7 @@ const getStatusBadge = (order) => {
                             <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">外送起送門檻 ($)</label>
                             <input
                                 v-model="form.minimum_order_amount"
-                                type="number"
+                                type="number" step="any"
                                 min="0"
                                 placeholder="例：300 (免運/外送)"
                                 class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
@@ -369,7 +369,7 @@ const getStatusBadge = (order) => {
                             <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">公司補助每人 ($)</label>
                             <input
                                 v-model="form.subsidy_per_person"
-                                type="number"
+                                type="number" step="any"
                                 min="0"
                                 placeholder="例：50 (福委補助)"
                                 class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"

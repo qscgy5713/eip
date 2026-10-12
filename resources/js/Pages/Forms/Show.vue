@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SignaturePad from '@/Components/SignaturePad.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     formRequest: Object,
@@ -29,7 +30,15 @@ const approvalForm = useForm({
     signature: '',
 });
 
-const handleAction = (status) => {
+const handleAction = async (status) => {
+    if (status === 'rejected') {
+        if (!approvalForm.comment?.trim()) {
+            approvalForm.setError('comment', '駁回時必須填寫審核意見，讓申請人知道原因。');
+            return;
+        }
+        if (!(await confirmDialog('確定駁回此申請單？駁回後簽核流程將終止，無法復原。', { title: '駁回申請單' }))) return;
+    }
+    approvalForm.clearErrors('comment');
     approvalForm.status = status;
     approvalForm.post(route('forms.action', props.formRequest.id));
 };
@@ -206,7 +215,7 @@ const openDiffViewer = (rev = null) => {
         <div class="py-8">
             <div class="mx-auto max-w-4xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 提示/成功訊息 -->
-                <div v-if="$page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center text-emerald-800 shadow-sm text-sm">
+                <div v-if="$page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100 dark:border-emerald-700/50 shadow-sm text-sm">
                     <svg class="w-5 h-5 text-emerald-600 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span>{{ $page.props.flash.success }}</span>
                 </div>
@@ -474,6 +483,7 @@ const openDiffViewer = (rev = null) => {
                             :placeholder="currentPendingRecord?.is_add_sign ? '請輸入會辦審查意見...' : '請輸入審核意見（可選）...'"
                             class="w-full text-sm rounded-lg border-amber-200 focus:border-amber-500 focus:ring-amber-500 bg-white dark:bg-gray-800"
                         ></textarea>
+                        <p v-if="approvalForm.errors.comment" class="text-xs text-red-600">{{ approvalForm.errors.comment }}</p>
                     </div>
 
                     <!-- 電子手寫簽章區塊 (主管線上親簽) -->
@@ -873,6 +883,7 @@ const openDiffViewer = (rev = null) => {
                                     <input
                                         v-else
                                         :type="['number', 'date'].includes(fieldDef(key)?.type) ? fieldDef(key).type : 'text'"
+                                        :step="fieldDef(key)?.type === 'number' ? 'any' : undefined"
                                         v-model="resubmitForm.fields[key]"
                                         class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 dark:border-gray-700"
                                     />
@@ -1006,7 +1017,7 @@ const openDiffViewer = (rev = null) => {
                                         <span class="font-bold shrink-0 text-red-500">- 原值:</span>
                                         <span class="line-through break-all whitespace-pre-wrap">{{ chg.oldVal }}</span>
                                     </div>
-                                    <div class="flex items-start gap-2 text-emerald-800 bg-emerald-50/70 p-2 rounded-lg">
+                                    <div class="flex items-start gap-2 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100 bg-emerald-50/70 p-2 rounded-lg">
                                         <span class="font-bold shrink-0 text-emerald-600">+ 新值:</span>
                                         <span class="font-semibold break-all whitespace-pre-wrap">{{ chg.newVal }}</span>
                                     </div>

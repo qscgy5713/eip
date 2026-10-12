@@ -241,7 +241,7 @@ const getStatusBadge = (order) => {
                             <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">單價 ($) *</label>
                             <input
                                 v-model="addItemForm.unit_price"
-                                type="number"
+                                type="number" step="any"
                                 min="0"
                                 required
                                 placeholder="例：55"

@@ -386,10 +386,10 @@ class FormRequestController extends Controller
         $user = $request->user();
         $validated = $request->validate([
             'status' => 'required|in:approved,rejected,revision_required',
-            'comment' => $request->input('status') === 'revision_required' ? 'required|string|max:500' : 'nullable|string|max:500',
+            'comment' => in_array($request->input('status'), ['revision_required', 'rejected'], true) ? 'required|string|max:500' : 'nullable|string|max:500',
             'signature' => 'nullable|string',
         ], [
-            'comment.required' => '退回修改時必須填寫退回原因與修改指示。',
+            'comment.required' => $request->input('status') === 'rejected' ? '駁回時必須填寫審核意見，讓申請人知道原因。' : '退回修改時必須填寫退回原因與修改指示。',
         ]);
 
         $delegatorIds = $user->delegatedToMe()->currentlyActive()->pluck('user_id');

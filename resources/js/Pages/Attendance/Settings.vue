@@ -78,14 +78,14 @@ const submit = () => {
         <div class="py-8">
             <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 px-4">
                 <!-- 成功/錯誤訊息橫幅 -->
-                <div v-if="$page.props.flash?.success" class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center text-emerald-800 shadow-sm">
+                <div v-if="$page.props.flash?.success" class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100 dark:border-emerald-700/50 shadow-sm">
                     <svg class="w-5 h-5 mr-3 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span class="text-sm font-medium">{{ $page.props.flash.success }}</span>
                 </div>
 
-                <div v-if="$page.props.flash?.error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center text-red-800 shadow-sm">
+                <div v-if="$page.props.flash?.error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center text-red-800 dark:bg-red-900/20 dark:text-red-100 dark:border-red-700/50 shadow-sm">
                     <svg class="w-5 h-5 mr-3 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -194,7 +194,7 @@ const submit = () => {
                             </div>
 
                             <!-- 全遠端提示橫幅 -->
-                            <div v-if="!form.office_lat || !form.office_lng" class="p-3 bg-indigo-50 border border-indigo-200 rounded-lg text-xs text-indigo-800 flex items-center space-x-2">
+                            <div v-if="!form.office_lat || !form.office_lng" class="p-3 bg-indigo-50 border border-indigo-200 rounded-lg text-xs text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-100 dark:border-indigo-700/50 flex items-center space-x-2">
                                 <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span>目前未指定座標：系統將啟用<strong>「全遠端自由打卡」</strong>模式，同仁打卡全數判定為遠端模式，無需設定距離限制，亦不會強制要求填寫外勤事由。</span>
                             </div>
@@ -280,7 +280,7 @@ const submit = () => {
                         </div>
 
                         <!-- 規範說明卡片 -->
-                        <div class="p-4 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-start space-x-3 text-amber-900 text-xs leading-relaxed">
+                        <div class="p-4 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-start space-x-3 text-amber-900 dark:bg-amber-900/20 dark:text-amber-100 dark:border-amber-700/50 text-xs leading-relaxed">
                             <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>

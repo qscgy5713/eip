@@ -611,12 +611,12 @@ const statusLabel = (status) => {
         <div class="py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 <!-- 提示/錯誤訊息 -->
-                <div v-if="$page.props.errors?.error" class="p-4 bg-red-50 border border-red-200 rounded-xl flex items-center text-red-800 text-sm shadow-sm">
+                <div v-if="$page.props.errors?.error" class="p-4 bg-red-50 border border-red-200 rounded-xl flex items-center text-red-800 dark:bg-red-900/20 dark:text-red-100 dark:border-red-700/50 text-sm shadow-sm">
                     <svg class="w-5 h-5 text-red-600 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <span>{{ $page.props.errors.error }}</span>
                 </div>
 
-                <div v-if="$page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center text-emerald-800 text-sm shadow-sm">
+                <div v-if="$page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100 dark:border-emerald-700/50 text-sm shadow-sm">
                     <svg class="w-5 h-5 text-emerald-600 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <span>{{ $page.props.flash.success }}</span>
                 </div>
@@ -820,7 +820,7 @@ const statusLabel = (status) => {
                             'p-4 rounded-xl border-2 border-dashed transition-all flex items-center justify-between gap-4',
                             isOverRootDropZone
                                 ? 'bg-indigo-100 border-indigo-500 scale-[1.01] shadow-lg text-indigo-900'
-                                : 'bg-indigo-50/70 border-indigo-300 text-indigo-800'
+                                : 'bg-indigo-50/70 border-indigo-300 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-100 dark:border-indigo-700/50'
                         ]"
                     >
                         <div class="flex items-center gap-3">

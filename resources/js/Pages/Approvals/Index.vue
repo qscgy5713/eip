@@ -578,8 +578,8 @@ const extractDataSummary = (data, formCode) => {
                             :class="[
                                 'p-3 rounded-lg text-xs border',
                                 batchActionType === 'approved'
-                                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                                    : 'bg-red-50 text-red-800 border-red-200'
+                                    ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100 dark:border-emerald-700/50 border-emerald-200'
+                                    : 'bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-100 dark:border-red-700/50 border-red-200'
                             ]"
                         >
                             <p class="font-semibold">

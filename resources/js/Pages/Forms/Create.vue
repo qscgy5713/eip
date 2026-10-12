@@ -172,6 +172,7 @@ const submit = () => {
                             <input
                                 v-else
                                 :type="field.type || 'text'"
+                                :step="field.type === 'number' ? 'any' : undefined"
                                 v-model="formState.fields[field.key]"
                                 class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm dark:border-gray-700"
                             />

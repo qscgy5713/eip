@@ -358,7 +358,7 @@ const formatTime = (isoString) => {
                                 <!-- 空閒狀態 -->
                                 <div
                                     v-if="!room.bookings || room.bookings.length === 0"
-                                    class="p-4 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-800 text-xs flex items-center space-x-2"
+                                    class="p-4 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100 dark:border-emerald-700/50 text-xs flex items-center space-x-2"
                                 >
                                     <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                                     <span>此日全時段空閒，可直接預約借用。</span>

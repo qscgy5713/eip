@@ -176,7 +176,7 @@ const submit = () => {
                             <div>
                                 <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">認證學分 (點) *</label>
                                 <input
-                                    type="number"
+                                    type="number" step="any"
                                     v-model="form.credits"
                                     min="1"
                                     required

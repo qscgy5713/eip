@@ -516,23 +516,23 @@ const submitBatchPublish = async () => {
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">底薪/本薪</label>
-                                <input v-model.number="form.base_salary" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.base_salary" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">職務/專業加給</label>
-                                <input v-model.number="form.allowance" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.allowance" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">績效/業務獎金</label>
-                                <input v-model.number="form.bonus" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.bonus" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">加班費</label>
-                                <input v-model.number="form.overtime_pay" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.overtime_pay" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">其他應發 (津貼等)</label>
-                                <input v-model.number="form.other_additions" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.other_additions" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                         </div>
                     </div>
@@ -546,23 +546,23 @@ const submitBatchPublish = async () => {
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">勞保自付額</label>
-                                <input v-model.number="form.labor_insurance" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.labor_insurance" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">健保自付額</label>
-                                <input v-model.number="form.health_insurance" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.health_insurance" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">勞退自提額</label>
-                                <input v-model.number="form.pension_self" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.pension_self" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">代扣所得稅</label>
-                                <input v-model.number="form.tax_withholding" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.tax_withholding" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
                                 <label class="text-[11px] text-gray-500 dark:text-gray-400">其他扣款 (請假/福利)</label>
-                                <input v-model.number="form.other_deductions" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
+                                <input v-model.number="form.other_deductions" type="number" step="any" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                         </div>
                     </div>

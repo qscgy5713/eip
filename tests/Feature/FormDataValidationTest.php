@@ -69,4 +69,19 @@ class FormDataValidationTest extends TestCase
             'data' => ['leave_type' => '事假', 'start_date' => '2026-11-05', 'end_date' => '2026-11-01', 'days' => 1],
         ])->assertSessionHasErrors('data.end_date');
     }
+
+    public function test_reject_requires_a_comment(): void
+    {
+        $this->submit(['expense_type' => '辦公耗材', 'amount' => 100])->assertSessionHasNoErrors();
+        $formRequest = FormRequest::where('user_id', $this->employee()->id)->latest('id')->first();
+        $manager = User::where('email', 'manager@eip.local')->first();
+
+        $this->actingAs($manager)->post(route('forms.action', $formRequest->id), ['status' => 'rejected'])
+            ->assertSessionHasErrors('comment');
+        $this->assertSame('pending', $formRequest->fresh()->status);
+
+        $this->actingAs($manager)->post(route('forms.action', $formRequest->id), ['status' => 'rejected', 'comment' => '預算不足'])
+            ->assertSessionHasNoErrors();
+        $this->assertSame('rejected', $formRequest->fresh()->status);
+    }
 }

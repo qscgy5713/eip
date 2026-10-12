@@ -391,7 +391,7 @@ const printDispatchOrder = () => {
                     <div>
                         <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">出發儀表里程 (km) *</label>
                         <input
-                            type="number"
+                            type="number" step="any"
                             v-model="startForm.start_mileage"
                             required
                             min="0"
@@ -428,7 +428,7 @@ const printDispatchOrder = () => {
                     <div>
                         <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">歸還儀表里程 (km) *</label>
                         <input
-                            type="number"
+                            type="number" step="any"
                             v-model="returnForm.end_mileage"
                             required
                             :min="dispatch.start_mileage || dispatch.vehicle.current_mileage"

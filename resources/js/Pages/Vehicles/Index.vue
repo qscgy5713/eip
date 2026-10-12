@@ -497,7 +497,7 @@ const handleExport = () => {
                             歸還時儀表板總里程數 (km) <span class="text-red-500">*</span>
                         </label>
                         <input
-                            type="number"
+                            type="number" step="any"
                             v-model="endMileage"
                             :min="activeDispatch?.start_mileage || 0"
                             required

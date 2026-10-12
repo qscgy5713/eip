@@ -816,7 +816,7 @@ const overtimeStatusLabel = (status, isComp) => {
                     </div>
 
                     <div class="mt-4 space-y-4">
-                        <div class="p-3 bg-amber-50 rounded-lg text-xs text-amber-800 border border-amber-200">
+                        <div class="p-3 bg-amber-50 rounded-lg text-xs text-amber-800 dark:bg-amber-900/20 dark:text-amber-100 dark:border-amber-700/50 border border-amber-200">
                             此功能將為選定範圍內尚未建立該年度配額的同仁，自動帶入系統標準法定天數（預設特休 7 天、病假 30 天、事假 14 天）。已有配額之同仁將完整予以保留。
                         </div>
 

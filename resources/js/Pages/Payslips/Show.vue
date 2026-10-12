@@ -110,11 +110,11 @@ const handlePrint = () => {
                             </div>
                             <div>
                                 <span class="text-gray-400 block">所屬部門</span>
-                                <span class="font-bold text-gray-900 dark:text-white print:text-black">{{ payslip.user?.department?.name || '研發資訊部' }}</span>
+                                <span class="font-bold text-gray-900 dark:text-white print:text-black">{{ payslip.user?.department?.name || '—' }}</span>
                             </div>
                             <div>
                                 <span class="text-gray-400 block">職務職稱</span>
-                                <span class="font-bold text-gray-900 dark:text-white print:text-black">{{ payslip.user?.job_title || '全端資深工程師' }}</span>
+                                <span class="font-bold text-gray-900 dark:text-white print:text-black">{{ payslip.user?.job_title || '—' }}</span>
                             </div>
                             <div>
                                 <span class="text-gray-400 block">員工編號 / 帳號</span>

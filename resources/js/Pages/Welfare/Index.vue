@@ -95,10 +95,10 @@ const submitReward = () => {
         </template>
 
         <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            <div v-if="$page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 shadow-sm text-sm">
+            <div v-if="$page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-100 dark:border-emerald-700/50 shadow-sm text-sm">
                 {{ $page.props.flash.success }}
             </div>
-            <div v-if="$page.props.errors?.error" class="p-4 bg-red-50 border border-red-200 rounded-xl text-red-800 shadow-sm text-sm">
+            <div v-if="$page.props.errors?.error" class="p-4 bg-red-50 border border-red-200 rounded-xl text-red-800 dark:bg-red-900/20 dark:text-red-100 dark:border-red-700/50 shadow-sm text-sm">
                 {{ $page.props.errors.error }}
             </div>
 
