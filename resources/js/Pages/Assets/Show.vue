@@ -274,7 +274,7 @@ const statusLabel = (status) => {
                                 <div v-if="asset.active_loan" class="space-y-2 text-xs text-gray-600 dark:text-gray-400">
                                     <div class="flex items-center justify-between">
                                         <span class="text-gray-400">借出時間：</span>
-                                        <span class="font-mono">{{ new Date(asset.active_loan.borrowed_at).toLocaleDateString() }}</span>
+                                        <span class="font-mono">{{ new Date(asset.active_loan.borrowed_at).toLocaleDateString('sv-SE') }}</span>
                                     </div>
                                     <div v-if="asset.active_loan.expected_return_date" class="flex items-center justify-between">
                                         <span class="text-gray-400">預計歸還：</span>
@@ -333,9 +333,9 @@ const statusLabel = (status) => {
                             </div>
 
                             <div class="text-right text-[11px] text-gray-400 space-y-0.5 shrink-0">
-                                <div>借出：<span class="font-mono text-gray-600 dark:text-gray-300">{{ new Date(loan.borrowed_at).toLocaleDateString() }}</span></div>
+                                <div>借出：<span class="font-mono text-gray-600 dark:text-gray-300">{{ new Date(loan.borrowed_at).toLocaleDateString('sv-SE') }}</span></div>
                                 <div v-if="loan.returned_at">
-                                    歸還：<span class="font-mono text-emerald-600 dark:text-emerald-400">{{ new Date(loan.returned_at).toLocaleDateString() }}</span>
+                                    歸還：<span class="font-mono text-emerald-600 dark:text-emerald-400">{{ new Date(loan.returned_at).toLocaleDateString('sv-SE') }}</span>
                                 </div>
                                 <div v-else-if="loan.expected_return_date">
                                     預計：<span class="font-mono text-indigo-600 dark:text-indigo-400">{{ loan.expected_return_date.substring(0, 10) }}</span>

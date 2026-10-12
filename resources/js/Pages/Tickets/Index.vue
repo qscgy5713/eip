@@ -294,7 +294,7 @@ const getStatusBadge = (s) => {
                                         </span>
                                     </td>
                                     <td class="py-3 px-4 text-gray-400 whitespace-nowrap">
-                                        {{ new Date(ticket.created_at).toLocaleDateString() }}
+                                        {{ new Date(ticket.created_at).toLocaleDateString('sv-SE') }}
                                     </td>
                                     <td class="py-3 px-4 text-right whitespace-nowrap">
                                         <Link

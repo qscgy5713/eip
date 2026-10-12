@@ -83,7 +83,7 @@ const updateCourseStatus = (newStatus) => {
                             </span>
                         </div>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            領域：{{ course.category_label }} · 主辦：{{ course.creator?.name }} · 建立於 {{ new Date(course.created_at).toLocaleDateString() }}
+                            領域：{{ course.category_label }} · 主辦：{{ course.creator?.name }} · 建立於 {{ new Date(course.created_at).toLocaleDateString('sv-SE') }}
                         </p>
                     </div>
                 </div>

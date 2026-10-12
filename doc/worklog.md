@@ -6,7 +6,11 @@
 - **修正 bug**：`MealOrders/Show` 前端讀取 `userSettlements`、`summaryItems[].total_quantity/options`、`userSettlements[].user_name/total_amount/is_fully_paid`，但後端欄位名稱與結構不一致，造成整頁空白（先前測試只斷言 HTTP 200 而漏掉）。已調整 `MealOrderController@show` 並新增 `test_show_page_exposes_props_the_frontend_reads` 迴歸測試。
 - **修正顯示**：週報 Show/Edit/Index 的週期原本顯示 `2026-10-12T00:00:00.000000Z`，改為 `YYYY-MM-DD`。
 - 已用瀏覽器檢視 tickets、vehicles、trainings、visitor-reservations、meal-orders、projects、assets、weekly-reports、polls、payslips 詳情頁，皆可正常渲染；全系統 331 項測試通過。
-- 待留意：Forms/Show 仍顯示原始英文欄位鍵（`Days`、`End_date`），屬資料層問題；資產詳情的借出日期格式（`2026/10/2`）與預計歸還（`2026-11-01`）不一致。
+
+### 後續修正
+- **表單詳情**：`Forms/Show` 依範本 `fields_schema` 顯示中文欄位標籤（詳情、重送編輯、修改比對三處），找不到時退回原鍵值。
+- **日期格式**：全站 `toLocaleDateString()` 統一改為 `'sv-SE'`（`YYYY-MM-DD`），解決資產頁 `2026/10/2` 與 `2026-11-01` 混用。
+- **錯誤頁**：新增 `Pages/Error.vue`，於 `bootstrap/app.php` 對 403/404/419（及非 debug 的 500/503）以 Inertia 呈現中文錯誤頁，JSON/API 請求維持原樣；新增 `tests/Feature/ErrorPageTest.php`。全系統 333 項測試通過。
 
 ### 全站視覺改版：現代 SaaS 簡潔風
 - **修正既有 bug**：Dashboard 連到不存在的路由 `organization.index`、`knowledge.index` 造成整頁空白，改為 `org-management.index`、`documents.index`。

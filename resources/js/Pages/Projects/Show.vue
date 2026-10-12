@@ -216,7 +216,7 @@ const submitEditProject = () => {
                             </div>
                             <div v-if="project.due_date">
                                 <span class="font-medium text-gray-700 dark:text-gray-300">預計結案：</span>
-                                <span class="font-mono">{{ new Date(project.due_date).toLocaleDateString() }}</span>
+                                <span class="font-mono">{{ new Date(project.due_date).toLocaleDateString('sv-SE') }}</span>
                             </div>
                         </div>
                     </div>

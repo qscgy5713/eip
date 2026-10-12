@@ -446,7 +446,7 @@ const statusBadge = (status) => {
                                             {{ item.title }}
                                         </Link>
                                     </div>
-                                    <p class="text-xs text-gray-400 dark:text-gray-500">發布者：{{ item.author?.name }} · {{ new Date(item.published_at).toLocaleDateString() }}</p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500">發布者：{{ item.author?.name }} · {{ new Date(item.published_at).toLocaleDateString('sv-SE') }}</p>
                                 </div>
                                 <span v-if="!item.is_read" class="w-2 h-2 rounded-full bg-red-500 shrink-0 mt-2" title="未讀"></span>
                             </div>
@@ -532,7 +532,7 @@ const statusBadge = (status) => {
                                     <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
                                         <span class="truncate">專案：{{ task.project?.name }}</span>
                                         <span v-if="task.due_date" :class="task.is_overdue ? 'text-rose-600 dark:text-rose-400 font-bold shrink-0' : 'shrink-0'">
-                                            · {{ task.is_overdue ? '已逾期：' : '截止：' }}{{ new Date(task.due_date).toLocaleDateString() }}
+                                            · {{ task.is_overdue ? '已逾期：' : '截止：' }}{{ new Date(task.due_date).toLocaleDateString('sv-SE') }}
                                         </span>
                                     </div>
                                 </div>
@@ -1057,7 +1057,7 @@ const statusBadge = (status) => {
                                         </p>
                                         <p class="text-blue-700 dark:text-blue-300 mt-0.5 font-mono flex items-center">
                                             <svg class="w-3.5 h-3.5 mr-1 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                            {{ new Date(b.start_time).toLocaleDateString() }} {{ new Date(b.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }} ~ {{ new Date(b.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }}
+                                            {{ new Date(b.start_time).toLocaleDateString('sv-SE') }} {{ new Date(b.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }} ~ {{ new Date(b.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }}
                                         </p>
                                     </div>
                                     <Link :href="route('meeting-rooms.index')" class="text-xs text-blue-600 dark:text-blue-300 font-medium px-2 py-1 bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700/60 rounded hover:bg-blue-50 dark:hover:bg-gray-600">

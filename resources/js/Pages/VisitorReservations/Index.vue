@@ -265,7 +265,7 @@ const handleExport = () => {
                                 </td>
                                 <td class="px-5 py-4 whitespace-nowrap">
                                     <div class="font-semibold text-gray-800 dark:text-gray-200">
-                                        {{ new Date(reservation.visit_date).toLocaleDateString() }}
+                                        {{ new Date(reservation.visit_date).toLocaleDateString('sv-SE') }}
                                     </div>
                                     <div class="text-gray-400 text-2xs">
                                         {{ reservation.expected_arrival_time ? `預計 ${reservation.expected_arrival_time}` : '全日預約' }}

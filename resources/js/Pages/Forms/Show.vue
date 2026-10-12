@@ -14,6 +14,12 @@ const props = defineProps({
     },
 });
 
+// 以表單範本的欄位定義取得中文標籤;找不到時退回原始鍵值
+const fieldLabel = (key) => {
+    const field = (props.formRequest?.form?.fields_schema || []).find((f) => f.key === key);
+    return field?.label || key;
+};
+
 const showSignatureCanvas = ref(false);
 const approvalForm = useForm({
     status: 'approved',
@@ -295,7 +301,7 @@ const openDiffViewer = (rev = null) => {
                     <!-- 動態欄位展示 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50/70 p-5 rounded-lg border border-gray-100 dark:bg-gray-800/60 dark:border-gray-700">
                         <div v-for="(val, key) in formRequest.data" :key="key" class="space-y-0.5">
-                            <p class="text-xs font-semibold text-gray-400 capitalize">{{ key }}</p>
+                            <p class="text-xs font-semibold text-gray-400">{{ fieldLabel(key) }}</p>
                             <p class="text-sm font-medium text-gray-900 whitespace-pre-line dark:text-gray-100">{{ val }}</p>
                         </div>
                     </div>
@@ -847,7 +853,7 @@ const openDiffViewer = (rev = null) => {
                             <!-- 動態欄位編輯表單 -->
                             <div class="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
                                 <div v-for="(val, key) in resubmitForm.data" :key="key" class="space-y-1">
-                                    <label class="block text-xs font-semibold text-gray-700 capitalize dark:text-gray-300">{{ key }}</label>
+                                    <label class="block text-xs font-semibold text-gray-700 capitalize dark:text-gray-300">{{ fieldLabel(key) }}</label>
                                     <input
                                         type="text"
                                         v-model="resubmitForm.data[key]"
@@ -975,7 +981,7 @@ const openDiffViewer = (rev = null) => {
                                 class="border border-gray-200 rounded-xl overflow-hidden text-xs dark:border-gray-700"
                             >
                                 <div class="px-3.5 py-2 bg-gray-100 font-bold text-gray-700 capitalize border-b border-gray-200 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300">
-                                    {{ chg.key }}
+                                    {{ fieldLabel(chg.key) }}
                                 </div>
                                 <div class="p-3 space-y-2 font-mono">
                                     <div class="flex items-start gap-2 text-rose-700 bg-rose-50/70 p-2 rounded-lg">

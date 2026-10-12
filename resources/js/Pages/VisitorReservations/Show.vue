@@ -143,7 +143,7 @@ const printPass = () => {
                         <div>
                             <p class="text-gray-400 font-medium">預約來訪日期</p>
                             <p class="font-bold text-gray-900 dark:text-gray-100 text-sm mt-1">
-                                {{ new Date(reservation.visit_date).toLocaleDateString() }}
+                                {{ new Date(reservation.visit_date).toLocaleDateString('sv-SE') }}
                             </p>
                         </div>
                         <div>
