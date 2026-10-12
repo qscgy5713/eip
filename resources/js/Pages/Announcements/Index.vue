@@ -53,7 +53,7 @@ const priorityBadge = (priority) => {
     switch (priority) {
         case 'urgent': return 'bg-red-100 text-red-800 border-red-200';
         case 'high': return 'bg-amber-100 text-amber-800 border-amber-200';
-        case 'low': return 'bg-slate-100 text-slate-700 border-slate-200';
+        case 'low': return 'bg-gray-100 text-gray-700 border-gray-200';
         default: return 'bg-indigo-100 text-indigo-800 border-indigo-200';
     }
 };
@@ -209,7 +209,7 @@ const submitAnnouncement = () => {
                                 <span v-if="item.status === 'draft'" class="px-2 py-0.5 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-300 rounded">
                                     草稿
                                 </span>
-                                <span class="px-2 py-0.5 text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 rounded dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300">
+                                <span class="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200 rounded dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300">
                                     {{ categoryName(item.category) }}
                                 </span>
                                 <span :class="['px-2 py-0.5 text-xs font-medium border rounded', priorityBadge(item.priority)]">

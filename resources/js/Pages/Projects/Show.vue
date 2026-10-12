@@ -95,7 +95,7 @@ const deleteTask = async (task) => {
 };
 
 const columns = [
-    { key: 'todo', label: '待處理', color: 'border-slate-400 text-slate-700 dark:text-slate-300', bg: 'bg-slate-50/80 dark:bg-slate-900/40' },
+    { key: 'todo', label: '待處理', color: 'border-gray-400 text-gray-700 dark:text-gray-300', bg: 'bg-gray-50/80 dark:bg-gray-900/40' },
     { key: 'in_progress', label: '進行中', color: 'border-indigo-500 text-indigo-700 dark:text-indigo-300', bg: 'bg-indigo-50/50 dark:bg-indigo-950/20' },
     { key: 'review', label: '待審查', color: 'border-amber-500 text-amber-700 dark:text-amber-300', bg: 'bg-amber-50/50 dark:bg-amber-950/20' },
     { key: 'done', label: '已完成', color: 'border-emerald-500 text-emerald-700 dark:text-emerald-300', bg: 'bg-emerald-50/50 dark:bg-emerald-950/20' },

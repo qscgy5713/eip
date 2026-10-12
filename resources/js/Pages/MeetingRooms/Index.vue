@@ -265,7 +265,7 @@ const formatTime = (isoString) => {
                 </div>
 
                 <!-- 我的近期有效預約橫幅 (含發起與受邀出席) -->
-                <div v-if="myBookings && myBookings.length > 0" class="bg-gradient-to-r from-indigo-900 to-indigo-900 rounded-xl p-5 text-white shadow-xs">
+                <div v-if="myBookings && myBookings.length > 0" class="bg-gradient-to-r from-gray-900 to-indigo-950 rounded-xl p-5 text-white shadow-xs">
                     <div class="flex items-center justify-between mb-3 border-b border-indigo-700/50 pb-2">
                         <div class="flex items-center space-x-2">
                             <span class="w-2.5 h-2.5 bg-indigo-400 rounded-full animate-pulse"></span>
@@ -323,7 +323,7 @@ const formatTime = (isoString) => {
                         class="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden flex flex-col dark:bg-gray-800 dark:border-gray-700"
                     >
                         <!-- 會議室頭部卡片 -->
-                        <div class="p-5 border-b border-gray-100 bg-slate-50/50 dark:border-gray-700 dark:bg-gray-800/60">
+                        <div class="p-5 border-b border-gray-100 bg-gray-50/50 dark:border-gray-700 dark:bg-gray-800/60">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ room.name }}</h3>
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800">

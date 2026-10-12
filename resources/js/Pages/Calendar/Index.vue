@@ -324,7 +324,7 @@ const openDateEventsModal = (dateStr, evList) => {
                             :class="[
                                 'min-h-[120px] sm:min-h-[140px] p-2 flex flex-col justify-between transition group',
                                 day.isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50/50 text-gray-400 dark:bg-gray-800/60',
-                                day.isWeekend && day.isCurrentMonth ? 'bg-slate-50/40 dark:bg-gray-800/60' : '',
+                                day.isWeekend && day.isCurrentMonth ? 'bg-gray-50/40 dark:bg-gray-800/60' : '',
                             ]"
                         >
                             <!-- 日期數字列 -->

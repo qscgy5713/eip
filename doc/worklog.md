@@ -9,6 +9,7 @@
 - **不可自審**:`WorkflowService::processAction` 擋下審核自己提出的單(僅在沒有其他在職主管/管理員時放行以免卡死);審批中心與儀表板不再列出自己的單。
 - **公告編輯**:公告詳情頁新增「編輯公告」modal(附件僅能追加)。
 - **更正**:全站搜尋本來就含內訓課程,先前判斷錯誤。
+- **補充(色系/時區/popup 驗證)**:156 處 `slate` 灰改為 `gray`;各頁飽和藍色大色塊(考勤打卡、儀表板薪資橫幅、薪資單明細、會議室、訪客通行卡、組織/通訊錄卡片標頭)統一為儀表板同款 `from-gray-900 to-indigo-950`,考勤下班鈕由琥珀改 indigo。考勤實測打卡:以台北時間寫入、09:30 後判遲到,新增 `test_late_status_follows_taipei_local_time_not_utc`。popup 於 10 個頁面實際點擊驗證(停權、刪除文件/代理/貼文、取消報名、核准派車、結單、催繳、訪客簽退),皆為站內對話框,無原生彈窗。
 
 ### 補測與對話框統一
 - **站內 popup 取代原生對話框**:新增 `Components/useDialog.js`(`confirmDialog` / `alertDialog` / `promptDialog`,Promise 版)與 `DialogHost.vue`(掛在 `AuthenticatedLayout`,支援 Esc、Enter、危險操作紅色按鈕、深色模式)。全站 40 多處原生 `confirm/alert/prompt`(含審批中心駁回原因)改為 `await confirmDialog(...)`。原生對話框會讓瀏覽器自動化卡死,也和站內風格不一致。

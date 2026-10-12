@@ -226,7 +226,7 @@ const submitBatchPublish = async () => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 px-4">
 
                 <!-- 隱私安全告示 -->
-                <div class="p-4 rounded-xl bg-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm border border-slate-800">
+                <div class="p-4 rounded-xl bg-gray-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm border border-gray-800">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -241,7 +241,7 @@ const submitBatchPublish = async () => {
                         <select
                             v-model="filterYear"
                             @change="handleFilter"
-                            class="text-xs rounded-lg bg-slate-800 border-slate-700 text-white focus:ring-emerald-500 focus:border-emerald-500 py-1.5"
+                            class="text-xs rounded-lg bg-gray-800 border-gray-700 text-white focus:ring-emerald-500 focus:border-emerald-500 py-1.5"
                         >
                             <option v-for="yr in years" :key="yr" :value="yr.toString()">{{ yr }} 年度</option>
                         </select>

@@ -232,7 +232,7 @@ const closeMembersDrawer = () => {
                         <!-- 畫布搜尋框 -->
                         <div class="flex-1 max-w-xs sm:max-w-sm w-full mx-auto md:mx-0">
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                                 </div>
                                 <input
@@ -240,13 +240,13 @@ const closeMembersDrawer = () => {
                                     @input="handleCanvasSearchInput"
                                     type="text"
                                     placeholder="搜尋部門、主管或同仁姓名..."
-                                    class="w-full pl-9 pr-10 py-1.5 text-xs bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-lg focus:ring-1 focus:ring-indigo-500 transition placeholder:text-slate-400 dark:bg-gray-800/60 dark:border-gray-700"
+                                    class="w-full pl-9 pr-10 py-1.5 text-xs bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 focus:border-indigo-500 rounded-lg focus:ring-1 focus:ring-indigo-500 transition placeholder:text-gray-400 dark:bg-gray-800/60 dark:border-gray-700"
                                 />
                                 <div v-if="canvasSearch" class="absolute inset-y-0 right-0 pr-2 flex items-center">
                                     <button
                                         @click="clearCanvasSearch"
                                         type="button"
-                                        class="p-1 text-slate-400 hover:text-slate-600 rounded transition"
+                                        class="p-1 text-gray-400 hover:text-gray-600 rounded transition"
                                         title="清除搜尋"
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -302,14 +302,14 @@ const closeMembersDrawer = () => {
 
                     <!-- 樹狀圖唯讀大畫布 -->
                     <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-                        <div class="p-8 sm:p-12 overflow-x-auto min-h-[550px] bg-radial from-slate-50/50 to-white flex justify-center">
+                        <div class="p-8 sm:p-12 overflow-x-auto min-h-[550px] bg-radial from-gray-50/50 to-white flex justify-center">
                             <div
                                 :style="{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }"
                                 class="transition-transform duration-150 inline-flex flex-col items-center select-none"
                             >
                                 <!-- 頂層企業總部全景根節點 -->
                                 <div class="flex flex-col items-center">
-                                    <div class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-800 text-white shadow-md border border-indigo-900/10 flex items-center gap-3">
+                                    <div class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-gray-900 to-indigo-950 text-white shadow-md border border-indigo-900/10 flex items-center gap-3">
                                         <div class="w-9 h-9 rounded-xl bg-white/15 text-white flex items-center justify-center font-bold shadow-2xs dark:bg-gray-800">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                         </div>
@@ -319,7 +319,7 @@ const closeMembersDrawer = () => {
                                         </div>
                                     </div>
 
-                                    <div v-if="departmentTree.length > 0" class="w-0.5 h-8 bg-slate-300"></div>
+                                    <div v-if="departmentTree.length > 0" class="w-0.5 h-8 bg-gray-300"></div>
                                 </div>
 
                                 <!-- 所有頂層部門並排迴圈 (唯讀模式) -->
@@ -348,24 +348,24 @@ const closeMembersDrawer = () => {
 
         <!-- ================= 部門同仁名冊抽屜 (唯讀模式) ================= -->
         <div v-if="showMembersDrawer && activeDrawerDept" class="fixed inset-0 z-50 overflow-hidden">
-            <div @click="closeMembersDrawer" class="absolute inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity"></div>
+            <div @click="closeMembersDrawer" class="absolute inset-0 bg-gray-900/40 backdrop-blur-xs transition-opacity"></div>
 
             <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
                 <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col dark:bg-gray-800">
-                    <div class="p-6 bg-slate-50 border-b border-slate-200 flex items-start justify-between dark:bg-gray-800/60 dark:border-gray-700">
+                    <div class="p-6 bg-gray-50 border-b border-gray-200 flex items-start justify-between dark:bg-gray-800/60 dark:border-gray-700">
                         <div>
                             <div class="flex items-center gap-2">
                                 <span class="px-2 py-0.5 text-2xs font-bold font-mono rounded bg-indigo-100 text-indigo-700">
                                     {{ activeDrawerDept.code }}
                                 </span>
-                                <h3 class="text-base font-extrabold text-slate-900 dark:text-gray-100">{{ activeDrawerDept.name }}</h3>
+                                <h3 class="text-base font-extrabold text-gray-900 dark:text-gray-100">{{ activeDrawerDept.name }}</h3>
                             </div>
-                            <p class="text-xs text-slate-500 mt-1 dark:text-gray-400">
-                                部門主管：<span class="font-semibold text-slate-700 dark:text-gray-300">{{ activeDrawerDept.leader?.name ? `${activeDrawerDept.leader.name} (${activeDrawerDept.leader.job_title || '主管'})` : '未指定' }}</span> ·
+                            <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">
+                                部門主管：<span class="font-semibold text-gray-700 dark:text-gray-300">{{ activeDrawerDept.leader?.name ? `${activeDrawerDept.leader.name} (${activeDrawerDept.leader.job_title || '主管'})` : '未指定' }}</span> ·
                                 在職成員：<span class="font-bold text-indigo-600">{{ activeDrawerDept.users?.length || 0 }}</span> 人
                             </p>
                         </div>
-                        <button @click="closeMembersDrawer" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200/60 transition">
+                        <button @click="closeMembersDrawer" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-200/60 transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
@@ -375,34 +375,34 @@ const closeMembersDrawer = () => {
                             <div
                                 v-for="member in activeDrawerDept.users"
                                 :key="member.id"
-                                class="p-3.5 rounded-xl border border-slate-200 bg-white shadow-2xs flex items-center gap-3 dark:bg-gray-800 dark:border-gray-700"
+                                class="p-3.5 rounded-xl border border-gray-200 bg-white shadow-2xs flex items-center gap-3 dark:bg-gray-800 dark:border-gray-700"
                             >
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
                                     {{ member.name.charAt(0) }}
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-1.5">
-                                        <h5 class="font-bold text-slate-900 text-xs truncate dark:text-gray-100">{{ member.name }}</h5>
+                                        <h5 class="font-bold text-gray-900 text-xs truncate dark:text-gray-100">{{ member.name }}</h5>
                                         <span v-if="member.id === activeDrawerDept.leader_id" class="px-1.5 py-0.5 text-3xs font-extrabold rounded bg-amber-100 text-amber-800">
                                             主管
                                         </span>
                                     </div>
-                                    <p class="text-3xs text-slate-500 mt-0.5 truncate dark:text-gray-400">{{ member.job_title || '未配置職稱' }} · 工號: {{ member.employee_no || '-' }}</p>
-                                    <p class="text-3xs font-mono text-slate-400 truncate">{{ member.email }}</p>
-                                    <p v-if="member.phone" class="text-3xs text-slate-400 truncate">{{ member.phone }}</p>
+                                    <p class="text-3xs text-gray-500 mt-0.5 truncate dark:text-gray-400">{{ member.job_title || '未配置職稱' }} · 工號: {{ member.employee_no || '-' }}</p>
+                                    <p class="text-3xs font-mono text-gray-400 truncate">{{ member.email }}</p>
+                                    <p v-if="member.phone" class="text-3xs text-gray-400 truncate">{{ member.phone }}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div v-else class="text-center py-10 text-slate-400 space-y-2 border border-dashed border-slate-200 rounded-xl bg-slate-50/50 dark:bg-gray-800/60 dark:border-gray-700">
+                        <div v-else class="text-center py-10 text-gray-400 space-y-2 border border-dashed border-gray-200 rounded-xl bg-gray-50/50 dark:bg-gray-800/60 dark:border-gray-700">
                             <p class="text-xs">此部門目前尚無分配同仁</p>
                         </div>
                     </div>
 
-                    <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-end dark:bg-gray-800/60 dark:border-gray-700">
+                    <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-end dark:bg-gray-800/60 dark:border-gray-700">
                         <button
                             @click="closeMembersDrawer"
-                            class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-semibold transition dark:text-gray-300"
+                            class="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-xs font-semibold transition dark:text-gray-300"
                         >
                             關閉
                         </button>

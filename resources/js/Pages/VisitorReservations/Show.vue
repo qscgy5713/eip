@@ -104,7 +104,7 @@ const printPass = () => {
             <!-- 數位訪客通行卡本體 (支援實體列印) -->
             <div class="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 shadow-xl overflow-hidden print:border-2 print:border-black print:shadow-none">
                 <!-- 卡片頂部漸層橫幅 -->
-                <div class="bg-gradient-to-r from-indigo-600 via-indigo-600 to-indigo-700 p-6 sm:p-8 text-white relative">
+                <div class="bg-gradient-to-r from-gray-900 to-indigo-950 p-6 sm:p-8 text-white relative">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <span class="inline-block px-2.5 py-0.5 rounded-full text-2xs font-extrabold bg-white/20 backdrop-blur-xs dark:bg-gray-800">

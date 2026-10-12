@@ -197,7 +197,7 @@ const handlePrint = () => {
                     </div>
 
                     <!-- 實發總計結算 (Net Pay Highlight) -->
-                    <div class="rounded-xl bg-gradient-to-r from-emerald-900 to-indigo-900 text-white p-6 my-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm print:bg-none print:border-2 print:border-black print:text-black">
+                    <div class="rounded-xl bg-gradient-to-r from-gray-900 to-indigo-950 text-white p-6 my-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm print:bg-none print:border-2 print:border-black print:text-black">
                         <div>
                             <span class="text-xs font-bold text-emerald-300 print:text-black">實際發放金額 (NET PAYABLE)</span>
                             <p class="text-xs text-emerald-100 print:text-gray-600 mt-0.5">應發金額減除各項法定扣繳後之轉帳淨額</p>

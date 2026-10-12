@@ -582,7 +582,7 @@ const statusLabel = (status) => {
                 <div class="flex items-center gap-2.5">
                     <a
                         :href="route('org-management.export-roster')"
-                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 hover:text-indigo-600 text-xs font-semibold rounded-lg border border-slate-300 shadow-2xs transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-gray-50 text-gray-700 hover:text-indigo-600 text-xs font-semibold rounded-lg border border-gray-300 shadow-2xs transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                         title="匯出全公司組織與人員編制表為 Excel 相容之 CSV 格式"
                     >
                         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -736,7 +736,7 @@ const statusLabel = (status) => {
                         <!-- 中間：畫布即時關鍵字搜尋與高亮 (僅樹狀圖顯示) -->
                         <div v-if="orgViewMode === 'chart'" class="flex-1 max-w-xs sm:max-w-sm w-full mx-auto md:mx-0">
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                                 </div>
                                 <input
@@ -744,17 +744,17 @@ const statusLabel = (status) => {
                                     @input="handleCanvasSearchInput"
                                     type="text"
                                     placeholder="搜尋部門、主管或同仁姓名/帳號..."
-                                    class="w-full pl-9 pr-16 py-1.5 text-xs bg-slate-50 hover:bg-white focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-lg focus:ring-1 focus:ring-indigo-500 transition placeholder:text-slate-400 dark:bg-gray-800/60 dark:border-gray-700"
+                                    class="w-full pl-9 pr-16 py-1.5 text-xs bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 focus:border-indigo-500 rounded-lg focus:ring-1 focus:ring-indigo-500 transition placeholder:text-gray-400 dark:bg-gray-800/60 dark:border-gray-700"
                                 />
                                 <div class="absolute inset-y-0 right-0 pr-2 flex items-center gap-1">
-                                    <span v-if="canvasSearch.trim()" class="text-3xs px-1.5 py-0.5 rounded font-mono font-bold" :class="matchingDepts.length > 0 ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-500 dark:bg-gray-700 dark:text-gray-400'">
+                                    <span v-if="canvasSearch.trim()" class="text-3xs px-1.5 py-0.5 rounded font-mono font-bold" :class="matchingDepts.length > 0 ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'">
                                         {{ matchingDepts.length }} 部門
                                     </span>
                                     <button
                                         v-if="canvasSearch"
                                         @click="clearCanvasSearch"
                                         type="button"
-                                        class="p-1 text-slate-400 hover:text-slate-600 rounded transition"
+                                        class="p-1 text-gray-400 hover:text-gray-600 rounded transition"
                                         title="清除搜尋"
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -846,20 +846,20 @@ const statusLabel = (status) => {
                     <!-- ================= 視圖 1: 互動視覺組織樹 (Chart View) ================= -->
                     <div v-if="orgViewMode === 'chart'" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                         <!-- 視覺畫布說明列 -->
-                        <div class="px-6 py-3.5 bg-slate-50 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-400">
+                        <div class="px-6 py-3.5 bg-gray-50 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500 dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-400">
                             <div class="flex items-center gap-4">
                                 <span class="flex items-center gap-1.5">
                                     <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"/></svg>
                                     <strong>按住卡片直接拖曳</strong>：放置到另一部門即可重新配置上下級隸屬關係
                                 </span>
-                                <span class="hidden md:inline text-slate-300">|</span>
+                                <span class="hidden md:inline text-gray-300">|</span>
                                 <span class="hidden md:inline">具備自動防呆：嚴格禁止將部門拖曳設置為自己或其子孫部門</span>
                             </div>
-                            <span class="font-mono text-3xs text-slate-400">目前畫布縮放：{{ zoomLevel }}%</span>
+                            <span class="font-mono text-3xs text-gray-400">目前畫布縮放：{{ zoomLevel }}%</span>
                         </div>
 
                         <!-- 樹狀圖可拖曳縮放大畫布 -->
-                        <div ref="chartCanvas" class="p-8 sm:p-12 overflow-auto min-h-[550px] bg-radial from-slate-50/50 to-white">
+                        <div ref="chartCanvas" class="p-8 sm:p-12 overflow-auto min-h-[550px] bg-radial from-gray-50/50 to-white">
                             <div
                                 ref="chartTree"
                                 :style="{ zoom: zoomLevel / 100 }"
@@ -867,7 +867,7 @@ const statusLabel = (status) => {
                             >
                                 <!-- 頂層企業總部全景根節點 -->
                                 <div class="flex flex-col items-center">
-                                    <div class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-800 text-white shadow-md border border-indigo-900/10 flex items-center gap-3">
+                                    <div class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-gray-900 to-indigo-950 text-white shadow-md border border-indigo-900/10 flex items-center gap-3">
                                         <div class="w-9 h-9 rounded-xl bg-white/15 text-white flex items-center justify-center font-bold shadow-2xs dark:bg-gray-800">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                         </div>
@@ -886,7 +886,7 @@ const statusLabel = (status) => {
                                     </div>
 
                                     <!-- 總部向下主幹中線 -->
-                                    <div v-if="departmentTree.length > 0" class="w-0.5 h-8 bg-slate-300"></div>
+                                    <div v-if="departmentTree.length > 0" class="w-0.5 h-8 bg-gray-300"></div>
                                 </div>
 
                                 <!-- 所有頂層部門並排迴圈 -->
@@ -917,7 +917,7 @@ const statusLabel = (status) => {
                                 </div>
 
                                 <!-- 空白狀態 -->
-                                <div v-else class="text-center py-12 text-slate-400 space-y-3">
+                                <div v-else class="text-center py-12 text-gray-400 space-y-3">
                                     <p class="text-sm font-medium">目前尚未建立任何部門架構</p>
                                     <button
                                         @click="openCreateDeptModal"
@@ -950,7 +950,7 @@ const statusLabel = (status) => {
 
                             <div class="mt-6 space-y-4">
                                 <!-- 頂層部門節點迴圈 -->
-                                <div v-for="rootDept in departmentTree" :key="rootDept.id" class="border border-gray-200 rounded-xl overflow-hidden bg-slate-50/50 dark:border-gray-700 dark:bg-gray-800/60">
+                                <div v-for="rootDept in departmentTree" :key="rootDept.id" class="border border-gray-200 rounded-xl overflow-hidden bg-gray-50/50 dark:border-gray-700 dark:bg-gray-800/60">
                                     <!-- 頂層部門卡片標題 -->
                                     <div class="p-4 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 dark:bg-gray-800 dark:border-gray-700">
                                         <div class="flex items-center gap-3">
@@ -965,7 +965,7 @@ const statusLabel = (status) => {
                                                 <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">
                                                     主管：<span class="font-medium text-gray-700 dark:text-gray-300">{{ rootDept.leader?.name ? `${rootDept.leader.name} (${rootDept.leader.job_title || '主管'})` : '未指定' }}</span> ·
                                                     直屬同仁：<button @click="openMembersDrawer(rootDept)" class="font-semibold text-indigo-600 hover:underline">{{ rootDept.users_count || (rootDept.users?.length || 0) }} 人</button>
-                                                    <span v-if="rootDept.total_headcount !== undefined" class="text-2xs text-slate-500 font-medium ml-1.5 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-gray-700 dark:text-gray-400">
+                                                    <span v-if="rootDept.total_headcount !== undefined" class="text-2xs text-gray-500 font-medium ml-1.5 px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                                         全體編制 {{ rootDept.total_headcount }} 人
                                                     </span>
                                                 </p>
@@ -1003,7 +1003,7 @@ const statusLabel = (status) => {
                                     </div>
 
                                     <!-- 子部門樹狀卡片清單 (若有) -->
-                                    <div v-if="rootDept.childrenNodes?.length > 0" class="p-4 space-y-3 bg-slate-50/70 border-t border-gray-100 dark:border-gray-700 dark:bg-gray-800/60">
+                                    <div v-if="rootDept.childrenNodes?.length > 0" class="p-4 space-y-3 bg-gray-50/70 border-t border-gray-100 dark:border-gray-700 dark:bg-gray-800/60">
                                         <div
                                             v-for="subDept in rootDept.childrenNodes"
                                             :key="subDept.id"
@@ -1021,7 +1021,7 @@ const statusLabel = (status) => {
                                                     <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">
                                                         主管：<span class="text-gray-700 dark:text-gray-300">{{ subDept.leader?.name ? `${subDept.leader.name} (${subDept.leader.job_title || '主管'})` : '未指定' }}</span> ·
                                                         直屬：<button @click="openMembersDrawer(subDept)" class="font-semibold text-indigo-600 hover:underline">{{ subDept.users_count || (subDept.users?.length || 0) }} 人</button>
-                                                        <span v-if="subDept.total_headcount !== undefined" class="text-2xs text-slate-500 font-medium ml-1.5 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-gray-700 dark:text-gray-400">
+                                                        <span v-if="subDept.total_headcount !== undefined" class="text-2xs text-gray-500 font-medium ml-1.5 px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                                                             全 {{ subDept.total_headcount }} 人
                                                         </span>
                                                     </p>
@@ -1197,7 +1197,7 @@ const statusLabel = (status) => {
                                     <tr v-for="user in users.data" :key="user.id" class="hover:bg-gray-50/80 transition">
                                         <td class="px-4 py-3">
                                             <div class="flex items-center gap-2.5">
-                                                <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs dark:text-gray-300">
+                                                <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-700 font-bold flex items-center justify-center text-xs dark:text-gray-300">
                                                     {{ user.name.charAt(0) }}
                                                 </div>
                                                 <div>
@@ -1291,7 +1291,7 @@ const statusLabel = (status) => {
         </div>
 
         <!-- ================= 新增/編輯部門 Modal ================= -->
-        <div v-if="showDeptModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div v-if="showDeptModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-xs">
             <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 animate-scale-in dark:bg-gray-800">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">
@@ -1396,7 +1396,7 @@ const statusLabel = (status) => {
         </div>
 
         <!-- ================= 新增/編輯員工 Modal ================= -->
-        <div v-if="showUserModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div v-if="showUserModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-xs">
             <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-5 animate-scale-in dark:bg-gray-800">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">
@@ -1524,7 +1524,7 @@ const statusLabel = (status) => {
         </div>
 
         <!-- ================= 重設密碼 Modal ================= -->
-        <div v-if="showResetPwdModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div v-if="showResetPwdModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-xs">
             <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 animate-scale-in dark:bg-gray-800">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">重設同仁登入密碼</h3>
@@ -1581,25 +1581,25 @@ const statusLabel = (status) => {
         <!-- ================= 部門在職同仁名冊抽屜 (Slide-over Drawer) ================= -->
         <div v-if="showMembersDrawer && activeDrawerDept" class="fixed inset-0 z-50 overflow-hidden">
             <!-- 背景遮罩 -->
-            <div @click="closeMembersDrawer" class="absolute inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity"></div>
+            <div @click="closeMembersDrawer" class="absolute inset-0 bg-gray-900/40 backdrop-blur-xs transition-opacity"></div>
 
             <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
                 <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col dark:bg-gray-800">
                     <!-- 抽屜頂部 -->
-                    <div class="p-6 bg-slate-50 border-b border-slate-200 flex items-start justify-between dark:bg-gray-800/60 dark:border-gray-700">
+                    <div class="p-6 bg-gray-50 border-b border-gray-200 flex items-start justify-between dark:bg-gray-800/60 dark:border-gray-700">
                         <div>
                             <div class="flex items-center gap-2">
                                 <span class="px-2 py-0.5 text-2xs font-bold font-mono rounded bg-indigo-100 text-indigo-700">
                                     {{ activeDrawerDept.code }}
                                 </span>
-                                <h3 class="text-base font-extrabold text-slate-900 dark:text-gray-100">{{ activeDrawerDept.name }}</h3>
+                                <h3 class="text-base font-extrabold text-gray-900 dark:text-gray-100">{{ activeDrawerDept.name }}</h3>
                             </div>
-                            <p class="text-xs text-slate-500 mt-1 dark:text-gray-400">
-                                部門主管：<span class="font-semibold text-slate-700 dark:text-gray-300">{{ activeDrawerDept.leader?.name ? `${activeDrawerDept.leader.name} (${activeDrawerDept.leader.job_title || '主管'})` : '未指定' }}</span> ·
+                            <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">
+                                部門主管：<span class="font-semibold text-gray-700 dark:text-gray-300">{{ activeDrawerDept.leader?.name ? `${activeDrawerDept.leader.name} (${activeDrawerDept.leader.job_title || '主管'})` : '未指定' }}</span> ·
                                 在職成員：<span class="font-bold text-indigo-600">{{ activeDrawerDept.users?.length || 0 }}</span> 人
                             </p>
                         </div>
-                        <button @click="closeMembersDrawer" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200/60 transition">
+                        <button @click="closeMembersDrawer" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-200/60 transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
@@ -1624,13 +1624,13 @@ const statusLabel = (status) => {
                                         placeholder="輸入姓名、帳號 (Email) 或工號搜尋同仁..."
                                         empty-message="查無符合搜尋條件的同仁"
                                     />
-                                    <p v-if="availableMembersForDrawer.length === 0" class="text-3xs text-slate-500 mt-1 dark:text-gray-400">
+                                    <p v-if="availableMembersForDrawer.length === 0" class="text-3xs text-gray-500 mt-1 dark:text-gray-400">
                                         公司目前無其他可指派之在職同仁
                                     </p>
                                 </div>
 
                                 <div class="flex items-center justify-between gap-2 pt-1">
-                                    <p class="text-3xs text-slate-500 dark:text-gray-400">
+                                    <p class="text-3xs text-gray-500 dark:text-gray-400">
                                         若為新人，請先至「員工維護」建立帳號
                                     </p>
                                     <button
@@ -1648,14 +1648,14 @@ const statusLabel = (status) => {
                         <!-- 區塊 2：現有部門成員清單 -->
                         <div>
                             <div class="flex items-center justify-between mb-3">
-                                <h4 class="text-xs font-bold text-slate-700 dark:text-gray-300">目前所屬同仁 ({{ activeDrawerDept.users?.length || 0 }} 人)</h4>
+                                <h4 class="text-xs font-bold text-gray-700 dark:text-gray-300">目前所屬同仁 ({{ activeDrawerDept.users?.length || 0 }} 人)</h4>
                             </div>
 
                             <div v-if="activeDrawerDept.users && activeDrawerDept.users.length > 0" class="space-y-2.5">
                                 <div
                                     v-for="member in activeDrawerDept.users"
                                     :key="member.id"
-                                    class="p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-300 transition shadow-2xs flex items-center justify-between gap-3 dark:bg-gray-800 dark:border-gray-700"
+                                    class="p-3 rounded-xl border border-gray-200 bg-white hover:border-indigo-300 transition shadow-2xs flex items-center justify-between gap-3 dark:bg-gray-800 dark:border-gray-700"
                                 >
                                     <div class="flex items-center gap-3 min-w-0">
                                         <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
@@ -1663,7 +1663,7 @@ const statusLabel = (status) => {
                                         </div>
                                         <div class="min-w-0">
                                             <div class="flex items-center gap-1.5">
-                                                <h5 class="font-bold text-slate-900 text-xs truncate dark:text-gray-100">{{ member.name }}</h5>
+                                                <h5 class="font-bold text-gray-900 text-xs truncate dark:text-gray-100">{{ member.name }}</h5>
                                                 <span v-if="member.id === activeDrawerDept.leader_id" class="px-1.5 py-0.5 text-3xs font-extrabold rounded bg-amber-100 text-amber-800">
                                                     主管
                                                 </span>
@@ -1671,8 +1671,8 @@ const statusLabel = (status) => {
                                                     {{ roleLabel(member.role) }}
                                                 </span>
                                             </div>
-                                            <p class="text-3xs text-slate-500 mt-0.5 truncate dark:text-gray-400">{{ member.job_title || '未配置職稱' }} · {{ member.employee_no || '無工號' }}</p>
-                                            <p class="text-3xs font-mono text-slate-400 truncate">{{ member.email }}</p>
+                                            <p class="text-3xs text-gray-500 mt-0.5 truncate dark:text-gray-400">{{ member.job_title || '未配置職稱' }} · {{ member.employee_no || '無工號' }}</p>
+                                            <p class="text-3xs font-mono text-gray-400 truncate">{{ member.email }}</p>
                                         </div>
                                     </div>
 
@@ -1681,7 +1681,7 @@ const statusLabel = (status) => {
                                         <button
                                             v-if="member.id !== activeDrawerDept.leader_id"
                                             @click="setDepartmentLeader(activeDrawerDept, member)"
-                                            class="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition"
+                                            class="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition"
                                             title="指派此同仁為此部門主管"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
@@ -1697,14 +1697,14 @@ const statusLabel = (status) => {
 
                                         <button
                                             @click="openEditUserModal(member); closeMembersDrawer();"
-                                            class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
+                                            class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
                                             title="編輯人事資料"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                         </button>
                                         <button
                                             @click="removeMemberFromDept(activeDrawerDept, member)"
-                                            class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                                            class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                                             title="將同仁移出此部門"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6"/></svg>
@@ -1714,18 +1714,18 @@ const statusLabel = (status) => {
                             </div>
 
                             <!-- 無成員提示 -->
-                            <div v-else class="text-center py-8 text-slate-400 space-y-2 border border-dashed border-slate-200 rounded-xl bg-slate-50/50 dark:bg-gray-800/60 dark:border-gray-700">
-                                <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto dark:bg-gray-700">
+                            <div v-else class="text-center py-8 text-gray-400 space-y-2 border border-dashed border-gray-200 rounded-xl bg-gray-50/50 dark:bg-gray-800/60 dark:border-gray-700">
+                                <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto dark:bg-gray-700">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                                 </div>
                                 <p class="text-xs">此部門目前尚無分配同仁</p>
-                                <p class="text-3xs text-slate-400">請於上方下拉選單選取已建立之公司在職同仁加入！</p>
+                                <p class="text-3xs text-gray-400">請於上方下拉選單選取已建立之公司在職同仁加入！</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- 抽屜底部 -->
-                    <div class="p-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center dark:bg-gray-800/60 dark:border-gray-700">
+                    <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center dark:bg-gray-800/60 dark:border-gray-700">
                         <button
                             @click="openCreateChildDeptModal(activeDrawerDept); closeMembersDrawer();"
                             class="px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 border border-indigo-200 rounded-lg transition flex items-center gap-1"
@@ -1735,7 +1735,7 @@ const statusLabel = (status) => {
                         </button>
                         <button
                             @click="closeMembersDrawer"
-                            class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-semibold transition dark:text-gray-300"
+                            class="px-4 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-xs font-semibold transition dark:text-gray-300"
                         >
                             關閉
                         </button>

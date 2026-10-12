@@ -42,6 +42,24 @@ class AttendanceTest extends TestCase
         $this->assertEquals('台北辦公室', $attendance->clock_in_location);
     }
 
+    public function test_late_status_follows_taipei_local_time_not_utc(): void
+    {
+        $this->assertSame('Asia/Taipei', config('app.timezone'));
+        $user = User::factory()->create(['role' => 'employee']);
+
+        // UTC 01:20 = 台北 09:20,準時;UTC 01:40 = 台北 09:40,遲到
+        $this->travelTo(\Carbon\Carbon::parse('2026-10-14 01:20:00', 'UTC'));
+        $this->actingAs($user)->post('/attendance/clock-in', ['location' => '台北辦公室']);
+        $first = Attendance::where('user_id', $user->id)->first();
+        $this->assertSame('normal', $first->status);
+        $this->assertSame('09:20', $first->clock_in_at->format('H:i'));
+        $first->delete();
+
+        $this->travelTo(\Carbon\Carbon::parse('2026-10-14 01:40:00', 'UTC'));
+        $this->actingAs($user)->post('/attendance/clock-in', ['location' => '台北辦公室']);
+        $this->assertSame('late', Attendance::where('user_id', $user->id)->first()->status);
+    }
+
     public function test_user_can_clock_out_and_calculate_work_hours(): void
     {
         $user = User::where('email', 'employee@eip.local')->first();

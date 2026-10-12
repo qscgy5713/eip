@@ -618,7 +618,7 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- ================= 轉簽派審 Modal ================= -->
-                <div v-if="showTransferModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                <div v-if="showTransferModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-xs">
                     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
                         <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">協同轉簽派審</h3>
@@ -678,7 +678,7 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- ================= 會辦加簽 Modal ================= -->
-                <div v-if="showAddSignModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                <div v-if="showAddSignModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-xs">
                     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
                         <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">發起會辦加簽</h3>
@@ -737,7 +737,7 @@ const openDiffViewer = (rev = null) => {
                     </div>
                 </div>
                 <!-- ================= 撤回申請 Modal ================= -->
-                <div v-if="showWithdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                <div v-if="showWithdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-xs">
                     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
                         <div class="flex items-center space-x-3 text-red-600 border-b border-gray-100 pb-3 dark:border-gray-700">
                             <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
@@ -785,7 +785,7 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- ================= 主管退回修改 Modal ================= -->
-                <div v-if="showRevisionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+                <div v-if="showRevisionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-xs">
                     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
                         <div class="flex items-center space-x-3 text-amber-600 border-b border-gray-100 pb-3 dark:border-gray-700">
                             <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
@@ -834,7 +834,7 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- ================= 申請人修改表單並重新提交 Modal ================= -->
-                <div v-if="showResubmitModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
+                <div v-if="showResubmitModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-xs overflow-y-auto">
                     <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 my-8 dark:bg-gray-800">
                         <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
                             <div class="flex items-center space-x-2 text-amber-700">
