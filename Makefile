@@ -1,4 +1,4 @@
-.PHONY: help init up down restart build ps logs bash test migrate migrate-fresh seed cache-clear npm-dev npm-build
+.PHONY: help init up down restart build ps logs bash test migrate migrate-fresh seed cache-clear npm-dev npm-build backup db-restore
 
 # 預設目標顯示說明
 .DEFAULT_GOAL := help
@@ -78,3 +78,25 @@ npm-dev: ## 啟動 Vite 前端熱重載開發伺服器
 
 npm-build: ## 編譯前端生產環境靜態資產 (Vue / CSS)
 	npm run build
+
+##@ 備份與還原
+BACKUP_DIR ?= backups
+BACKUP_KEEP ?= 14
+
+backup: ## 備份 PostgreSQL 與上傳檔案到 backups/(保留最近 14 份,可用 BACKUP_KEEP 調整)
+	@mkdir -p $(BACKUP_DIR)
+	@ts=$$(date +%Y%m%d_%H%M%S); \
+	docker compose exec -T db sh -c 'pg_dump -U "$$POSTGRES_USER" "$$POSTGRES_DB"' | gzip > $(BACKUP_DIR)/eip_db_$$ts.sql.gz && \
+	test -s $(BACKUP_DIR)/eip_db_$$ts.sql.gz && gzip -t $(BACKUP_DIR)/eip_db_$$ts.sql.gz && \
+	tar -czf $(BACKUP_DIR)/eip_files_$$ts.tar.gz -C storage/app . && \
+	echo "$(GREEN)備份完成:$(BACKUP_DIR)/eip_db_$$ts.sql.gz、$(BACKUP_DIR)/eip_files_$$ts.tar.gz$(RESET)"
+	@ls -1t $(BACKUP_DIR)/eip_db_*.sql.gz 2>/dev/null | tail -n +$$(($(BACKUP_KEEP)+1)) | xargs -I{} rm -f {}
+	@ls -1t $(BACKUP_DIR)/eip_files_*.tar.gz 2>/dev/null | tail -n +$$(($(BACKUP_KEEP)+1)) | xargs -I{} rm -f {}
+
+db-restore: ## 從備份還原資料庫(會覆蓋現有資料!用法:make db-restore FILE=backups/eip_db_xxx.sql.gz CONFIRM=yes)
+	@test -n "$(FILE)" || (echo "請指定 FILE=備份檔路徑" && exit 1)
+	@test -f "$(FILE)" || (echo "找不到檔案 $(FILE)" && exit 1)
+	@test "$(CONFIRM)" = "yes" || (echo "這會覆蓋現有資料庫。確認要還原請加上 CONFIRM=yes" && exit 1)
+	@docker compose exec -T db sh -c 'psql -U "$$POSTGRES_USER" -d postgres -c "DROP DATABASE IF EXISTS \"$$POSTGRES_DB\" WITH (FORCE)" -c "CREATE DATABASE \"$$POSTGRES_DB\" OWNER \"$$POSTGRES_USER\""'
+	@gunzip -c "$(FILE)" | docker compose exec -T db sh -c 'psql -q -o /dev/null -v ON_ERROR_STOP=1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
+	@echo "$(GREEN)還原完成。$(RESET)"

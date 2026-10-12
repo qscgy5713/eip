@@ -92,5 +92,7 @@
 - [x] 真實 Email 通知 (佇列寄信頻道、個人/全站開關、queue worker 容器)
 - [x] 表單統計報表中心 (請假/加班/報銷/請購月統計、部門篩選、CSV 匯出)
 - [x] 正式上線前置範本：`.env.production.example`、`docker/nginx/production.conf.example`(HTTPS、HSTS、CSP)、部署清單(doc/plan.md);郵件已用 Gmail SMTP 驗證、queue worker 容器已加
-- [ ] 實際部署時:換成真實網域/憑證、刪除預設測試帳號、設定資料庫備份
+- [x] 待簽核逾期提醒(排程指令 + scheduler 容器)
+- [x] 備份/還原指令 `make backup` / `make db-restore`
+- [ ] 實際部署時:換成真實網域/憑證、刪除預設測試帳號、用 cron 定時執行 `make backup`
 - [x] CSP 改用 nonce,移除腳本的 unsafe-inline
