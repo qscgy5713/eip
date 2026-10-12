@@ -1496,7 +1496,7 @@ const statusLabel = (status) => {
                             v-model="userForm.password"
                             type="password"
                             required
-                            placeholder="至少 8 位字元"
+                            placeholder="至少 8 位,需含英文字母與數字"
                             class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
                         <p class="text-2xs text-gray-400 mt-1">建立帳號後系統將自動為同仁初始化法定年度休假額度。</p>
@@ -1542,7 +1542,7 @@ const statusLabel = (status) => {
                             v-model="pwdForm.password"
                             type="password"
                             required
-                            placeholder="至少 8 位字元"
+                            placeholder="至少 8 位,需含英文字母與數字"
                             class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
                         <p v-if="pwdForm.errors.password" class="text-2xs text-red-600 mt-1">{{ pwdForm.errors.password }}</p>

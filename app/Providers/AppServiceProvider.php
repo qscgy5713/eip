@@ -7,6 +7,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
 
         // JSON 日期帶上應用時區位移(如 2026-10-12T00:00:00+08:00),前端截取 YYYY-MM-DD 才不會因 UTC 轉換差一天
         Carbon::serializeUsing(fn (Carbon $date) => $date->format('Y-m-d\TH:i:sP'));
+
+        // 密碼強度:至少 8 碼且同時包含英文字母與數字
+        Password::defaults(fn () => Password::min(8)->letters()->numbers());
 
         // 系統信件使用繁體中文
         ResetPassword::toMailUsing(function (object $notifiable, string $token) {

@@ -570,7 +570,7 @@ class OrgManagementController extends Controller
             'job_title' => 'nullable|string|max:50',
             'role' => 'required|string|in:admin,manager,employee,hr',
             'phone' => 'nullable|string|max:30',
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', Password::defaults()],
         ]);
 
         // 防範垂直越權：非系統管理員禁止建立 admin 角色帳號 (SEC-04)
@@ -671,7 +671,7 @@ class OrgManagementController extends Controller
         }
 
         $validated = $request->validate([
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', Password::defaults(), 'confirmed'],
         ]);
 
         $user->update([
