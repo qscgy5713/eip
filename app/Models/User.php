@@ -135,6 +135,16 @@ class User extends Authenticatable
         return $this->hasMany(Task::class, 'assignee_id');
     }
 
+    public function heldAssets(): HasMany
+    {
+        return $this->hasMany(Asset::class, 'current_holder_id');
+    }
+
+    public function assetLoans(): HasMany
+    {
+        return $this->hasMany(AssetLoan::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

@@ -25,7 +25,7 @@ const flatItems = computed(() => {
     }
 
     // 各分組搜尋結果
-    const groupKeys = ['employees', 'forms', 'announcements', 'meeting_rooms', 'documents', 'polls', 'projects'];
+    const groupKeys = ['employees', 'forms', 'announcements', 'meeting_rooms', 'documents', 'polls', 'projects', 'assets'];
     for (const key of groupKeys) {
         const group = searchResults.value[key];
         if (group && group.items && group.items.length > 0) {
@@ -242,6 +242,7 @@ defineExpose({
                                         item.type === 'announcement' ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400' :
                                         item.type === 'meeting_room' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' :
                                         item.type === 'project' ? 'bg-violet-100 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400' :
+                                        item.type === 'asset' ? 'bg-teal-100 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400' :
                                         'bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400'
                                     ]"
                                 >
@@ -257,6 +258,8 @@ defineExpose({
                                     <svg v-else-if="item.type === 'meeting_room'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                     <!-- 專案圖示 -->
                                     <svg v-else-if="item.type === 'project'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                                    <!-- 資產設備圖示 -->
+                                    <svg v-else-if="item.type === 'asset'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                     <!-- 文件圖示 -->
                                     <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                                 </div>

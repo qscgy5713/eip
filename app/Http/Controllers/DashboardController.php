@@ -163,6 +163,18 @@ class DashboardController extends Controller
                 return $task;
             });
 
+        // 10. 我保管/借用的公務資產
+        $myAssets = \App\Models\Asset::with(['department:id,name', 'activeLoan'])
+            ->where('current_holder_id', $user->id)
+            ->where('status', 'in_use')
+            ->take(4)
+            ->get()
+            ->map(function ($asset) {
+                $asset->is_overdue = $asset->activeLoan?->isOverdue() ?? false;
+                $asset->expected_return_date = $asset->activeLoan?->expected_return_date?->toDateString();
+                return $asset;
+            });
+
         return Inertia::render('Dashboard', [
             'announcements' => $announcements,
             'pendingApprovals' => $pendingApprovals,
@@ -173,11 +185,13 @@ class DashboardController extends Controller
             'teamAttendanceSnapshot' => $teamAttendanceSnapshot,
             'activePolls' => $activePolls,
             'myTasks' => $myTasks,
+            'myAssets' => $myAssets,
             'stats' => [
                 'unreadAnnouncementsCount' => Announcement::where('status', 'published')->whereDoesntHave('reads', fn($q) => $q->where('user_id', $user->id))->count(),
                 'pendingApprovalsCount' => $totalPendingApprovalsCount,
                 'myPendingRequestsCount' => FormRequest::where('user_id', $user->id)->where('status', 'pending')->count(),
                 'myPendingTasksCount' => \App\Models\Task::where('assignee_id', $user->id)->whereIn('status', ['todo', 'in_progress', 'review'])->count(),
+                'myHeldAssetsCount' => \App\Models\Asset::where('current_holder_id', $user->id)->count(),
             ],
         ]);
     }

@@ -276,6 +276,34 @@ class GlobalSearchController extends Controller
             ];
         }
 
+        // 9. 檢索固定資產與公務設備 (Assets)
+        $assets = \App\Models\Asset::where(function ($q) use ($query) {
+                $q->where('asset_tag', 'like', "%{$query}%")
+                  ->orWhere('name', 'like', "%{$query}%")
+                  ->orWhere('serial_number', 'like', "%{$query}%")
+                  ->orWhere('location', 'like', "%{$query}%");
+            })
+            ->latest()
+            ->limit(5)
+            ->get()
+            ->map(function ($ast) {
+                return [
+                    'id' => $ast->id,
+                    'title' => "[{$ast->asset_tag}] {$ast->name}",
+                    'subtitle' => "分類: {$ast->category_label} · 地點: " . ($ast->location ?: '未標註') . " · 狀態: {$ast->status_label}",
+                    'url' => route('assets.show', $ast->id),
+                    'badge' => '資產',
+                    'type' => 'asset',
+                ];
+            });
+
+        if ($assets->isNotEmpty()) {
+            $results['assets'] = [
+                'title' => '固定資產與設備',
+                'items' => $assets,
+            ];
+        }
+
         return response()->json([
             'query' => $query,
             'results' => $results,
@@ -288,6 +316,14 @@ class GlobalSearchController extends Controller
     private function getQuickShortcuts(User $user): array
     {
         $shortcuts = [
+            [
+                'id' => 'quick-assets',
+                'title' => '固定資產與公務設備借調',
+                'subtitle' => '查詢在庫公務設備、借調登記與個人保管名冊',
+                'url' => route('assets.index'),
+                'badge' => '資產',
+                'type' => 'shortcut',
+            ],
             [
                 'id' => 'quick-projects',
                 'title' => '專案管理與任務協同看板',

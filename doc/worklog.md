@@ -2,6 +2,28 @@
 
 ## 2026-10-12
 ### 做了什麼
+- 實作**企業固定資產與公務設備借調管理系統 (Corporate Asset & Equipment Management Hub)**：
+  - **資料架構與資料表設計 (`Asset`, `AssetLoan` 模型與 migration)**：
+    - `assets`：資產唯一標籤編號 (`asset_tag` 如 `AST-2026-0001`)、名稱 (`name`)、五大分類 (`category`: `it_hardware`, `office_equipment`, `av_media`, `vehicles`, `peripherals`)、原廠序號 (`serial_number`)、規格說明 (`specification`)、存放地點 (`location`)、四態生命週期 (`status`: `available`, `in_use`, `maintenance`, `retired`)、目前保管人 (`current_holder_id`)、歸屬部門 (`department_id`)、採購日期 (`purchase_date`)、採購金額 (`purchase_cost`)、備註 (`notes`)。
+    - `asset_loans`：借調履歷表，紀錄資產關聯 (`asset_id`)、借調同仁 (`user_id`)、經辦/操作同仁 (`handled_by`)、借出時間 (`borrowed_at`)、預計歸還日期 (`expected_return_date`)、實際歸還時間 (`returned_at`)、狀態 (`status`: `borrowed`, `returned`)、借用用途說明 (`purpose`)、驗收歸還備註 (`return_notes`)。
+    - `User` 模型擴充：增加 `heldAssets()` 與 `assetLoans()` 關聯。
+  - **後端業務邏輯、防呆與權限機制 (`AssetController`)**：
+    - **資產登錄與自動序號生成**：主管與管理員專屬登錄；若未自訂編號則後端自動按當年度流水號推算 `AST-YYYY-XXXX`；一般同仁嘗試建立回傳 403 Forbidden。
+    - **借出登記與原子性事務**：`DB::transaction` 同步將資產狀態標記為 `in_use` 並綁定當前保管人；支援同仁為本人借調或管理員代其他同仁借調；他人代登記自動觸發站內系統通知 `EipSystemNotification`。重複借出防呆阻擋。
+    - **歸還驗收閉環**：僅限當前保管人本人或主管/管理員操作；填寫驗收備註；標記 `returned_at` 與狀態轉為 `returned`；資產狀態恢復為 `available` 並清除保管人。
+    - **防呆刪除保護**：借用中或仍有保管人的公務設備嚴格禁止刪除，防止資產責任斷鏈。
+    - **完整審計留痕**：建立、更新、刪除、借出與歸還驗收均完整記錄於 `AuditLog`。
+  - **前端視圖與互動元件 (`Assets/Index.vue`, `Assets/Show.vue`)**：
+    - **資產總覽 (`Assets/Index.vue`)**：總資產數、在庫可借、借出使用中、保養維修與報廢除役 5 大指標卡片；五大分類與生命週期狀態雙向篩選 Tabs；即時關鍵字模糊搜尋；我的借用快捷過濾；登錄資產 Modal、借調登記 Modal、歸還驗收 Modal；完整深色模式適配。
+    - **資產詳情與全景檔案 (`Assets/Show.vue`)**：資產完整規格卡片、目前保管人資訊卡片；歷史借調時間軸 (Loan Timeline)；在線編輯資產 Modal；借調與歸還驗收快捷操作；防呆刪除按鈕。
+  - **個人工作台與企業入口網生態整合**：
+    - **個人工作台 Dashboard (`Dashboard.vue`, `DashboardController`)**：主體區塊整合「我保管的公務資產 (My Held Corporate Assets)」卡片，顯示借出資產標籤、名稱、預計歸還日與逾期警告紅字徽章；快捷導覽列擴充為 7 欄並加入「資產設備」直達入口。
+    - **全站搜尋指揮中心 (`GlobalSearchController`, `CommandPalette.vue`)**：`Cmd+K` 支援資產標籤、名稱、原廠序號與地點模糊檢索；新增資產設備專屬圖示與導航。
+    - **主導覽列 (`AuthenticatedLayout.vue`)**：桌機與手機導覽列全面加入「資產設備」入口與深色適配。
+  - **品質驗證與自動化測試**：
+    - 新增 `tests/Feature/AssetManagementTest.php` 涵蓋 11 項測試（68 assertions），覆蓋權限、自動編號、借出流轉、代登記通知、防重複借出、借出中防刪除、歸還驗收、逾期判定、Dashboard 工作台載入與全站搜尋。
+    - 全系統 Feature / Unit 自動化測試達到 **256 項測試 100% 通過 (1,484 assertions)**。
+    - 前端 Vite 打包編譯無警告無錯誤。
 - 實作**企業專案管理與協同任務看板系統 (Project Management & Task Kanban Hub)**：
   - **資料架構與資料表設計 (`Project`, `ProjectMember`, `Task` 模型與 migration)**：
     - `projects`：儲存專案唯一代碼 (`code`, 如 `ERP-2026`)、專案名稱 (`name`)、詳細描述 (`description`)、負責主管 (`owner_id`)、隸屬部門 (`department_id`)、優先級 (`priority`: urgent/high/medium/low)、生命週期狀態 (`status`: active/on_hold/completed/archived)、起訖日期 (`start_date`, `due_date`)。

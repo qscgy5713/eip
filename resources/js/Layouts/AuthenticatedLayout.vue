@@ -120,6 +120,13 @@ const commandPaletteRef = ref(null);
                                 >
                                     專案看板
                                 </NavLink>
+                                <NavLink
+                                    :href="route('assets.index')"
+                                    :active="route().current('assets.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    資產設備
+                                </NavLink>
 
                                 <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
@@ -452,6 +459,12 @@ const commandPaletteRef = ref(null);
                             :active="route().current('projects.*')"
                         >
                             專案看板
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('assets.index')"
+                            :active="route().current('assets.*')"
+                        >
+                            資產設備
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"

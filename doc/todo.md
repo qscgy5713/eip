@@ -74,5 +74,7 @@
 - [x] 企業同仁投票與意見調查系統 (Polls & Survey Engine：支援管理員/主管/人事建立投票活動、設定單選或複選、匿名或記名投票機制、截止時間與動態增減選項；一人一票嚴密防呆機制；匿名投票資料庫選項與投票者端到端解耦徹底保護隱私；長條圖即時統計得票分佈與最高票冠軍徽章；記名投票主管專屬名冊查看；整合儀表板 Dashboard 活躍投票小卡、全站搜尋 Cmd+K 與 AuditLog 審計日誌，全系統 235 項 Feature 測試 100% 通過，1348 assertions)
 - [x] 全站深色模式與主題切換引擎 (Dark Mode & Theme Engine：支援淺色 / 深色 / 跟隨系統三段即時切換、LocalStorage 偏好記憶與系統偏好 media query 自動同步、Blade head 前端原生防閃爍 Anti-FOUC 腳本、全站導覽列與行動選單 ThemeToggle 組件、指揮中心與個人工作台儀表板卡片全面深色適配、通用表單與對話框組件反色高對比調校)
 - [x] 企業專案管理與協同任務看板系統 (Project Management & Task Kanban Hub：支援多專案跨部門管理、多對多成員權限隔離與負責人指派、四欄式工作任務看板 Todo/In Progress/Review/Done、任務優先級與工時估算、截止日逾期警告標記、被指派人站內系統通知 EipSystemNotification、個人工作台 Dashboard「我的專案任務」卡片整合、全站快捷搜尋 Cmd+K 模糊檢索與 AuditLog 審計日誌留痕，全系統 245 項 Feature 測試 100% 通過，1410 assertions)
+- [x] 企業固定資產與公務設備借調管理系統 (Corporate Asset & Equipment Management Hub：支援 IT資訊硬體/辦公OA/視聽攝影/公務車輛/週邊耗材五大分類、唯一資產標籤 AST-YYYY-XXXX 自動編號、原廠序號/地點/部門/金額/規格登錄；在庫可借/借出中/維修中/報廢除役四態生命週期；個人線上借用登記與管理員代為指派借調；代登記連鎖站內系統通知 EipSystemNotification；歸還驗收閉環與備註紀錄；借調履歷時間軸；借出中刪除與重複借出前後端防呆；個人工作台 Dashboard「我保管的公務資產」小卡與逾期未還警示標籤；7欄行動快捷列；全站指揮中心 Cmd+K 模糊檢索導航；全系統 256 項 Feature 測試 100% 通過，1484 assertions)
+
 
 

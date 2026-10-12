@@ -113,6 +113,12 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **四欄式直立任務看板 (Four-Column Kanban Board)**：支援「待辦事項 (Todo)」、「進行中 (In Progress)」、「待審查 (Review)」、「已完成 (Done)」四欄任務動態流轉；支援快速狀態前進/後退按鈕、預估與實際工時管理、截止日逾期警告標記。
   - **任務指派與系統通知閉環**：建立或重新指派任務自動連鎖發送 `EipSystemNotification` 站內通知並附帶直達連結；任務流轉至 Done 自動記錄完成時間戳記 `completed_at`，退回則自動重置為 null。
   - **個人工作台與全站搜尋聯動**：個人工作台儀表板 (Dashboard) 內嵌「我的專案任務」卡片，即時追蹤個人未完成任務與逾期警示；全站指揮中心 (`Cmd+K`) 支援專案代碼與名稱模糊檢索與鍵盤導航直達。
+- 💻 **企業固定資產與公務設備借調管理系統 (Corporate Asset & Equipment Management Hub)**：
+  - **資產全景建檔與分類**：支援 IT 資訊硬體、辦公 OA、視聽攝影、公務車輛、週邊耗材五大分類，唯一資產標籤自動編號 (`AST-YYYY-XXXX`)、原廠序號、規格配置、存放地點、歸屬部門、採購日期與金額登錄。
+  - **四態全生命週期管理**：在庫可借 (`available`)、借出使用中 (`in_use`)、維護保養中 (`maintenance`)、報廢除役 (`retired`)，雙向即時流轉。
+  - **線上借調登記與他人代登記**：支援同仁本人線上登記借用，或主管/管理員代其他同仁登記借調；代登記自動連鎖發送站內系統通知 (`EipSystemNotification`) 告知借調人；重複借出與非在庫借出嚴格防呆。
+  - **歸還驗收閉環與歷史時間軸**：僅限當前保管人或主管/管理員操作歸還驗收；填寫驗收備註，安全解除保管人並恢復在庫狀態；完整記錄借調履歷時間軸 (Loan Timeline)；借出中使用中資產禁止刪除保護。
+  - **個人工作台與指揮中心生態整合**：個人工作台儀表板 (Dashboard) 內嵌「我保管的公務資產」小卡與逾期未還警示標籤；7 欄快捷行動列直達；全站指揮中心 (`Cmd+K`) 模糊檢索資產標籤、名稱、序號與地點；全站深色模式適配。
 - 🔒 **企業級資安防禦縱深與 CI/CD Pipeline (Security Hardened Architecture)**：
   - **私有磁碟嚴格隔離 (Private Storage Isolation)**：機密證明文件與未公開公告附件全數由 `public` 遷移至 `local` 私有儲存，徹底阻絕 Nginx 靜態檔案繞過 Controller 授權之資料外洩風險。
   - **跨物件歷史版本 IDOR 防護 (Scoped Route Model Binding)**：嚴格校驗歷史版本與當前文件之一致性隸屬，杜絕跨機密文件版本越權下載與預覽。
@@ -121,7 +127,7 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
   - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
   - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
-  - **全面測試覆蓋**：累積 **245 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1,410 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **全面測試覆蓋**：累積 **256 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1,484 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)

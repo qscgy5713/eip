@@ -13,6 +13,7 @@ defineProps({
     teamAttendanceSnapshot: Object,
     activePolls: Array,
     myTasks: Array,
+    myAssets: Array,
 });
 
 const clockInForm = useForm({
@@ -147,7 +148,7 @@ const statusBadge = (status) => {
                 </div>
 
                 <!-- 常用快捷行動列 (Quick Action Bar) -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
                     <Link :href="route('forms.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition flex items-center space-x-3 group">
                         <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -164,6 +165,15 @@ const statusBadge = (status) => {
                         <div>
                             <p class="text-xs font-bold text-gray-800 dark:text-gray-200">專案看板</p>
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">任務協同與進度</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('assets.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-teal-400 dark:hover:border-teal-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">資產設備</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">借調與保管清冊</p>
                         </div>
                     </Link>
                     <Link :href="route('meeting-rooms.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
@@ -406,6 +416,55 @@ const statusBadge = (status) => {
                             </div>
                             <div v-if="!myTasks || myTasks.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
                                 目前無指派給您的待辦專案任務
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 我保管的公務資產 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span>
+                                <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">我借用的公務資產</h3>
+                                <span v-if="stats.myHeldAssetsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300">
+                                    {{ stats.myHeldAssetsCount }} 件在席
+                                </span>
+                            </div>
+                            <Link :href="route('assets.index', { my_assets: true })" class="text-sm text-teal-600 dark:text-teal-400 font-semibold hover:underline">
+                                我的資產清冊 &rarr;
+                            </Link>
+                        </div>
+                        <div class="mt-4 space-y-2.5">
+                            <div
+                                v-for="asset in myAssets"
+                                :key="asset.id"
+                                class="p-3 rounded-lg bg-teal-50/40 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/50 flex items-center justify-between gap-3 text-xs"
+                            >
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-teal-100 dark:bg-teal-900/60 text-teal-700 dark:text-teal-300 shrink-0">
+                                            {{ asset.asset_tag }}
+                                        </span>
+                                        <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                            {{ asset.name }}
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
+                                        <span class="truncate">地點：{{ asset.location || '總部辦公室' }}</span>
+                                        <span v-if="asset.expected_return_date" :class="asset.is_overdue ? 'text-rose-600 dark:text-rose-400 font-bold shrink-0' : 'shrink-0'">
+                                            · {{ asset.is_overdue ? '已逾期應還：' : '預計歸還：' }}{{ asset.expected_return_date }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <Link
+                                    :href="route('assets.show', asset.id)"
+                                    class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-50 dark:hover:bg-gray-600 transition shrink-0"
+                                >
+                                    查看
+                                </Link>
+                            </div>
+                            <div v-if="!myAssets || myAssets.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                                目前無由您名下保管借調之公務資產
                             </div>
                         </div>
                     </div>
