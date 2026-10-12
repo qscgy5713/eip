@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WelfareReward extends Model
 {
+    use \App\Models\Concerns\SerializesLocalDates;
     use HasFactory;
 
     public const CATEGORIES = [

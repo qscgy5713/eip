@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Document extends Model
 {
+    use \App\Models\Concerns\SerializesLocalDates;
     use HasFactory;
 
     protected $fillable = [

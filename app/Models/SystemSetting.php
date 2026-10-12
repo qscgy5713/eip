@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 class SystemSetting extends Model
 {
+    use \App\Models\Concerns\SerializesLocalDates;
     use HasFactory;
 
     protected $primaryKey = 'key';

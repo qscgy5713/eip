@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class AuditLog extends Model
 {
+    use \App\Models\Concerns\SerializesLocalDates;
     protected $fillable = [
         'user_id',
         'action',

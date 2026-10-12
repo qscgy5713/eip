@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LeaveBalance extends Model
 {
+    use \App\Models\Concerns\SerializesLocalDates;
     use HasFactory;
 
     public const TYPE_ANNUAL = 'annual';
