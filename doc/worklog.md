@@ -15,6 +15,7 @@
 - **深色模式**：Trainings/Vehicles 共 4 檔使用了不存在的 `dark:bg-gray-750`，卡片在深色下仍是淺色；於 `tailwind.config.js` 的 gray 補上 `750` (#262e40)。
 - **手機版**：以 340px iframe 檢查訂餐、工單、派車、資產、訪客、內訓、專案詳情；僅派車詳情卡片標題被右側「事由」擠成兩行，改為可換行並讓標題不折斷。
 - **Inertia useForm 衝突**：`Forms/Create`、`Forms/Show`（重新提交）把欄位命名為 `data`，與 `useForm` 內建的 `data()` 方法衝突（主控台警告「fields will be overwritten」，欄位可能被覆蓋）。前端改用 `fields`，送出前以 `transform` 轉回後端需要的 `data`，後端契約不變。
+- **薪資單列表契約**：以腳本比對所有 Inertia 頁面「前端宣告的 props」與「後端實際傳遞的鍵」，只有 `Payslips/Index` 不一致：前端要 `stats`/`years`/`isHrAdmin`，後端沒傳，導致統計卡永遠 $0、年度下拉為空，且 HR 預設進個人視圖而看不到建立/編輯/批次發布。後端補齊三個 props，HR/管理員預設進全員管理視圖（`?view=my` 可看自己的）並支援 `user_id` 篩選；新增 `test_index_exposes_props_the_frontend_reads_for_employee_and_hr`，全系統 334 項測試通過。
 - 已瀏覽檢視 tickets/vehicles/visitor-reservations/assets/projects/polls/weekly-reports 列表與 tickets/vehicles/visitor 詳情，無其他異常。
 
 ### 全站視覺改版：現代 SaaS 簡潔風

@@ -237,4 +237,37 @@ class PayslipTest extends TestCase
             ->where('latestPayslip.net_pay', '48000.00')
         );
     }
+
+    public function test_index_exposes_props_the_frontend_reads_for_employee_and_hr(): void
+    {
+        $employee = User::factory()->create(['role' => 'employee']);
+        $hr = User::factory()->create(['role' => 'hr']);
+
+        Payslip::create([
+            'user_id' => $employee->id,
+            'year' => now()->year,
+            'month' => 1,
+            'period' => now()->year.'-01',
+            'base_salary' => 60000,
+            'status' => 'published',
+        ]);
+
+        $this->actingAs($employee)->get(route('payslips.index'))
+            ->assertInertia(fn ($page) => $page
+                ->where('isHrAdmin', false)
+                ->where('stats.count', 1)
+                ->has('stats.total_net')
+                ->has('stats.total_gross')
+                ->has('stats.total_deductions')
+                ->where('years.0', now()->year));
+
+        // HR 預設進入全員管理視圖,可看到他人薪資單與管理功能
+        $this->actingAs($hr)->get(route('payslips.index'))
+            ->assertInertia(fn ($page) => $page
+                ->where('isHrAdmin', true)
+                ->where('view', 'manage')
+                ->where('stats.count', 1)
+                ->has('users')
+                ->has('payslips.data', 1));
+    }
 }

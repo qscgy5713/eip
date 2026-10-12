@@ -20,7 +20,8 @@ class PayslipController extends Controller
     {
         $user = $request->user();
         $canManage = $user->isHr() || $user->isAdmin();
-        $view = $request->input('view', 'my'); // 'my' 或 'manage'
+        // HR / 管理員預設進入全員管理視圖 (前端的建立/編輯/批次發布都在此視圖),可用 ?view=my 看自己的
+        $view = $request->input('view', $canManage ? 'manage' : 'my'); // 'my' 或 'manage'
         if ($view === 'manage' && ! $canManage) {
             $view = 'my';
         }
@@ -44,6 +45,9 @@ class PayslipController extends Controller
             }
             if ($request->filled('department_id')) {
                 $query->whereHas('user', fn ($uq) => $uq->where('department_id', $request->department_id));
+            }
+            if ($request->filled('user_id')) {
+                $query->where('user_id', $request->user_id);
             }
             if ($request->filled('search')) {
                 $search = trim($request->search);
@@ -71,6 +75,14 @@ class PayslipController extends Controller
                 'total_gross_pay' => (float) $statsPayslips->sum('total_earnings'),
             ];
 
+            // 前端統計卡片使用的鍵名
+            $stats = [
+                'total_net' => $manageStats['total_net_pay'],
+                'total_gross' => $manageStats['total_gross_pay'],
+                'total_deductions' => (float) $statsPayslips->sum('total_deductions'),
+                'count' => $manageStats['total_count'],
+            ];
+
             $departments = Department::orderBy('name')->get(['id', 'name']);
             $users = User::where('status', 'active')->orderBy('name')->get(['id', 'name', 'employee_no', 'email', 'job_title']);
 
@@ -79,6 +91,9 @@ class PayslipController extends Controller
                 'view' => 'manage',
                 'canManage' => true,
                 'manageStats' => $manageStats,
+                'stats' => $stats,
+                'years' => $this->availableYears(),
+                'isHrAdmin' => true,
                 'departments' => $departments,
                 'users' => $users,
                 'filters' => [
@@ -87,6 +102,7 @@ class PayslipController extends Controller
                     'month' => $selectedMonth,
                     'status' => $request->status ?? 'all',
                     'department_id' => $request->department_id ?? '',
+                    'user_id' => $request->user_id ?? '',
                     'search' => $request->search ?? '',
                 ],
             ]);
@@ -125,6 +141,15 @@ class PayslipController extends Controller
             'view' => 'my',
             'canManage' => $canManage,
             'myStats' => $myStats,
+            'stats' => [
+                'total_net' => $myStats['annual_net_total'],
+                'total_gross' => $myStats['annual_gross_total'],
+                'total_deductions' => $myStats['annual_deductions_total'],
+                'count' => $myStats['count'],
+            ],
+            'years' => $this->availableYears(),
+            'isHrAdmin' => false,
+            'users' => [],
             'filters' => [
                 'view' => 'my',
                 'year' => $selectedYear,
@@ -156,6 +181,22 @@ class PayslipController extends Controller
             'payslip' => $payslip,
             'canManage' => $user->isHr() || $user->isAdmin(),
         ]);
+    }
+
+    /**
+     * 年度下拉選單:資料庫中出現過的年份,至少包含今年
+     */
+    private function availableYears(): array
+    {
+        return Payslip::query()
+            ->select('year')
+            ->distinct()
+            ->pluck('year')
+            ->push(Carbon::now()->year)
+            ->unique()
+            ->sortDesc()
+            ->values()
+            ->all();
     }
 
     /**
