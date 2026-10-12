@@ -16,6 +16,9 @@
 - **手機版**：以 340px iframe 檢查訂餐、工單、派車、資產、訪客、內訓、專案詳情；僅派車詳情卡片標題被右側「事由」擠成兩行，改為可換行並讓標題不折斷。
 - **Inertia useForm 衝突**：`Forms/Create`、`Forms/Show`（重新提交）把欄位命名為 `data`，與 `useForm` 內建的 `data()` 方法衝突（主控台警告「fields will be overwritten」，欄位可能被覆蓋）。前端改用 `fields`，送出前以 `transform` 轉回後端需要的 `data`，後端契約不變。
 - **薪資單列表契約**：以腳本比對所有 Inertia 頁面「前端宣告的 props」與「後端實際傳遞的鍵」，只有 `Payslips/Index` 不一致：前端要 `stats`/`years`/`isHrAdmin`，後端沒傳，導致統計卡永遠 $0、年度下拉為空，且 HR 預設進個人視圖而看不到建立/編輯/批次發布。後端補齊三個 props，HR/管理員預設進全員管理視圖（`?view=my` 可看自己的）並支援 `user_id` 篩選；新增 `test_index_exposes_props_the_frontend_reads_for_employee_and_hr`，全系統 334 項測試通過。
+- **寫入流程實測（瀏覽器，開發資料庫，測試資料已清除）**：請假送單 → 退回修改後重新提交 → 撤回；薪資單建立（預覽計算正確）→ 批次發布 → 刪除；訂餐點餐 → 取消品項。全部成功且主控台無錯誤，並確認 `useForm` 的 `fields`→`data` 轉換後資料完整寫入資料庫。
+- **訂餐詳情「小計」顯示 `$非數值`**：廚房彙總表前端讀 `item.subtotal`，後端彙總列只有 `total_amount`；後端補 `subtotal`，測試加斷言。
+- 待留意：薪資管理視圖的統計卡把草稿也計入「年度實發累計 / 累計發放期數」（HR 視角可能預期只算已發布）。
 - 已瀏覽檢視 tickets/vehicles/visitor-reservations/assets/projects/polls/weekly-reports 列表與 tickets/vehicles/visitor 詳情，無其他異常。
 
 ### 全站視覺改版：現代 SaaS 簡潔風

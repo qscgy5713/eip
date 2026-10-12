@@ -147,12 +147,14 @@ class MealOrderController extends Controller
                     'quantity' => 0,
                     'total_quantity' => 0,
                     'total_amount' => 0,
+                    'subtotal' => 0, // 前端彙總表讀取的鍵名,與 total_amount 同值
                     'users' => [],
                 ];
             }
             $summary[$key]['quantity'] += $item->quantity;
             $summary[$key]['total_quantity'] += $item->quantity;
             $summary[$key]['total_amount'] += (float) $item->subtotal;
+            $summary[$key]['subtotal'] += (float) $item->subtotal;
             $summary[$key]['users'][] = $item->user->name . ($item->quantity > 1 ? " x{$item->quantity}" : '');
         }
 

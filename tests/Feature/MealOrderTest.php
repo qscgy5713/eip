@@ -279,6 +279,7 @@ class MealOrderTest extends TestCase
             ->assertInertia(fn ($page) => $page
                 ->component('MealOrders/Show')
                 ->has('summaryItems', 1)
+                ->where('summaryItems.0.subtotal', fn ($v) => $v > 0)
                 ->where('summaryItems.0.total_quantity', 2)
                 ->where('summaryItems.0.options', '中杯 / 無糖去冰')
                 ->has('userSettlements', 1)
