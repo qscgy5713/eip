@@ -118,6 +118,23 @@ class User extends Authenticatable
         return $this->hasMany(PollVoter::class);
     }
 
+    public function ownedProjects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'owner_id');
+    }
+
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'project_members')
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    public function assignedTasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'assignee_id');
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

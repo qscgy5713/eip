@@ -150,6 +150,19 @@ class DashboardController extends Controller
             return $poll;
         });
 
+        // 9. 我的進行中專案任務
+        $myTasks = \App\Models\Task::with(['project:id,code,name'])
+            ->where('assignee_id', $user->id)
+            ->whereIn('status', ['todo', 'in_progress', 'review'])
+            ->orderByRaw("CASE WHEN due_date IS NOT NULL AND due_date < ? THEN 0 ELSE 1 END", [now()->toDateString()])
+            ->orderBy('due_date')
+            ->take(4)
+            ->get()
+            ->map(function ($task) {
+                $task->is_overdue = $task->isOverdue();
+                return $task;
+            });
+
         return Inertia::render('Dashboard', [
             'announcements' => $announcements,
             'pendingApprovals' => $pendingApprovals,
@@ -159,10 +172,12 @@ class DashboardController extends Controller
             'myLeaveSummary' => $myLeaveSummary,
             'teamAttendanceSnapshot' => $teamAttendanceSnapshot,
             'activePolls' => $activePolls,
+            'myTasks' => $myTasks,
             'stats' => [
                 'unreadAnnouncementsCount' => Announcement::where('status', 'published')->whereDoesntHave('reads', fn($q) => $q->where('user_id', $user->id))->count(),
                 'pendingApprovalsCount' => $totalPendingApprovalsCount,
                 'myPendingRequestsCount' => FormRequest::where('user_id', $user->id)->where('status', 'pending')->count(),
+                'myPendingTasksCount' => \App\Models\Task::where('assignee_id', $user->id)->whereIn('status', ['todo', 'in_progress', 'review'])->count(),
             ],
         ]);
     }

@@ -12,6 +12,7 @@ defineProps({
     myLeaveSummary: Object,
     teamAttendanceSnapshot: Object,
     activePolls: Array,
+    myTasks: Array,
 });
 
 const clockInForm = useForm({
@@ -146,7 +147,7 @@ const statusBadge = (status) => {
                 </div>
 
                 <!-- 常用快捷行動列 (Quick Action Bar) -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                     <Link :href="route('forms.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition flex items-center space-x-3 group">
                         <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -154,6 +155,15 @@ const statusBadge = (status) => {
                         <div>
                             <p class="text-xs font-bold text-gray-800 dark:text-gray-200">表單申辦</p>
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">請假、加班、簽呈</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('projects.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-violet-400 dark:hover:border-violet-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 flex items-center justify-center group-hover:bg-violet-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">專案看板</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">任務協同與進度</p>
                         </div>
                     </Link>
                     <Link :href="route('meeting-rooms.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
@@ -183,7 +193,7 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">同仁分機與主管</p>
                         </div>
                     </Link>
-                    <Link :href="route('knowledge.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-md transition flex items-center space-x-3 group col-span-2 sm:col-span-1">
+                    <Link :href="route('knowledge.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-md transition flex items-center space-x-3 group">
                         <div class="w-9 h-9 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
@@ -347,6 +357,55 @@ const statusBadge = (status) => {
                             </div>
                             <div v-if="!activePolls || activePolls.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
                                 目前尚無進行中的同仁投票活動
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 我的專案任務專區 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2.5 h-2.5 bg-violet-500 rounded-full"></span>
+                                <h3 class="font-bold text-gray-900 dark:text-gray-100 text-lg">我的專案任務</h3>
+                                <span v-if="stats.myPendingTasksCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300">
+                                    {{ stats.myPendingTasksCount }} 件待辦
+                                </span>
+                            </div>
+                            <Link :href="route('projects.index')" class="text-sm text-violet-600 dark:text-violet-400 font-semibold hover:underline">
+                                專案看板 &rarr;
+                            </Link>
+                        </div>
+                        <div class="mt-4 space-y-2.5">
+                            <div
+                                v-for="task in myTasks"
+                                :key="task.id"
+                                class="p-3 rounded-lg bg-violet-50/40 dark:bg-violet-950/20 border border-violet-100 dark:border-violet-900/50 flex items-center justify-between gap-3 text-xs"
+                            >
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-violet-100 dark:bg-violet-900/60 text-violet-700 dark:text-violet-300 shrink-0">
+                                            {{ task.project?.code }}
+                                        </span>
+                                        <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                            {{ task.title }}
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
+                                        <span class="truncate">專案：{{ task.project?.name }}</span>
+                                        <span v-if="task.due_date" :class="task.is_overdue ? 'text-rose-600 dark:text-rose-400 font-bold shrink-0' : 'shrink-0'">
+                                            · {{ task.is_overdue ? '已逾期：' : '截止：' }}{{ new Date(task.due_date).toLocaleDateString() }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <Link
+                                    :href="route('projects.show', task.project_id)"
+                                    class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-800 hover:bg-violet-50 dark:hover:bg-gray-600 transition shrink-0"
+                                >
+                                    看板
+                                </Link>
+                            </div>
+                            <div v-if="!myTasks || myTasks.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                                目前無指派給您的待辦專案任務
                             </div>
                         </div>
                     </div>

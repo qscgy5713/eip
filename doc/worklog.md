@@ -2,6 +2,39 @@
 
 ## 2026-10-12
 ### 做了什麼
+- 實作**企業專案管理與協同任務看板系統 (Project Management & Task Kanban Hub)**：
+  - **資料架構與資料表設計 (`Project`, `ProjectMember`, `Task` 模型與 migration)**：
+    - `projects`：儲存專案唯一代碼 (`code`, 如 `ERP-2026`)、專案名稱 (`name`)、詳細描述 (`description`)、負責主管 (`owner_id`)、隸屬部門 (`department_id`)、優先級 (`priority`: urgent/high/medium/low)、生命週期狀態 (`status`: active/on_hold/completed/archived)、起訖日期 (`start_date`, `due_date`)。
+    - `project_members`：中介資料表，支援專案多對多成員配置 (`user_id`, `role`: lead/member/viewer)，具備唯一索引約束 `unique(project_id, user_id)` 防止重複加入。
+    - `tasks`：儲存所屬專案 (`project_id`)、任務標題 (`title`)、內容說明 (`description`)、四欄式任務狀態 (`status`: todo/in_progress/review/done)、指派負責人 (`assignee_id`)、建立者 (`creator_id`)、工時管理 (`estimated_hours`, `actual_hours`)、截止日期 (`due_date`)、完成時間戳記 (`completed_at`) 與排序權重 (`sort_order`)。
+    - `User` 模型擴充：定義 `ownedProjects()`, `projects()` 與 `assignedTasks()` 關聯。
+  - **後端業務邏輯與權限隔離保護 (`ProjectController`, `TaskController`)**：
+    - **專案清單與發起限制**：一般同仁與主管僅能檢視自己為負責人或成員之專案（管理者具全域檢視權限）；專案發起嚴格限定主管 (`manager`) 或管理員 (`admin`)，發起時自動將負責人指派為 `lead`。
+    - **看板授權與 IDOR 越權防護**：非專案成員或非管理者存取專案看板詳情直接回傳 403 Forbidden，杜絕企業專案機密資訊外洩。
+    - **任務指派與通知聯動**：建立或重新指派任務時，若被指派同仁非操作者本人，系統自動觸發發送 `EipSystemNotification` 站內通知並附帶直達看板連結與專案代碼標記。
+    - **任務狀態切換與工時閉環**：任務流轉為 `done` 時自動記錄 `completed_at = now()`；若經審查退回非完成狀態，自動重置為 `null`，確保結案時間統計真實性。
+    - **審計軌跡**：專案建立/更新/刪除、任務建立/修改/狀態切換均完整留存 `AuditLog` 審計日誌。
+  - **前端視圖與互動體驗 (`Projects/Index.vue`, `Projects/Show.vue`)**：
+    - **專案清單總覽頁面 (`Projects/Index.vue`)**：卡片式專案陳列、狀態篩選分頁 Tabs、動態進度百分比進度長條圖、成員頭像微縮圓圈、逾期警告標記；發起專案 Modal 與編輯專案 Modal（支援非原生成員勾選配置）。
+    - **四欄式直立任務看板 (`Projects/Show.vue`)**：
+      - 「待辦事項 (Todo)」、「進行中 (In Progress)」、「待審查 (Review)」、「已完成 (Done)」四欄式排版，各欄位計數徽章。
+      - 任務卡片即時顯示優先級標籤、預估與實際工時、指派人頭像微縮圈、截止日期與逾期紅字標記。
+      - 快速狀態流轉按鈕（前進/後退），支援主管與成員一鍵點擊快速推進或退回。
+      - 新增與編輯任務 Modal：支援任務名稱、詳細描述、指派同仁、優先級、預估工時、實際工時與截止日期輸入。
+      - 專案摘要資訊頂部面板：總任務數、已完成數、進度長條圖、團隊成員名冊展開。
+  - **個人工作台與企業生態整合**：
+    - **個人工作台儀表板 (`Dashboard.vue`, `DashboardController`)**：主體區塊整合「我的專案任務 (My Assigned Tasks)」卡片，即時列出指派給當前同仁且未完成之專案任務、所屬專案代碼、截止日期與逾期標籤，並可一鍵跳轉專案看板；快捷導覽列擴充為 6 欄並納入「專案看板」直達入口。
+    - **全站快捷搜尋指揮中心 (`GlobalSearchController`, `CommandPalette.vue`)**：`Cmd+K` 支援專案代碼與名稱即時模糊檢索，嚴格排除非成員無權調閱之專案；全站快捷導航加入專案看板入口並配置專屬圖示與鍵盤導航。
+    - **主導覽列 (`AuthenticatedLayout.vue`)**：桌機與手機端選單正式納入「專案看板」入口。
+    - **全站深色模式適配**：專案清單、看板四欄位、任務卡片、編輯 Modal 與 Dashboard 任務卡片全面適配深色模式與 Tailwind CSS 現代化視覺。
+  - **主動 Code Review 發現與深度修復優化**：
+    - **修復任務逾期判定邊界 Bug**：`Task::isOverdue()` 原採用 `$this->due_date->isPast()`，導致當天截止的任務在白天即被誤判為已逾期；修正為 `$this->due_date->endOfDay()->isPast()`，僅昨日及更早前才視為逾期；前端 `Show.vue` 改用 ISO 標準純日期比對 (`substring(0, 10) < toLocaleDateString('en-CA')`)，杜絕時區轉換偏移。
+    - **權限與成員連鎖強化**：`TaskController@store` 與 `update` 在指派任務時，若被指派同仁尚非成員，自動以 `role => member` 關聯寫入 `project_members`；`Project::canAccess()` 與 `ProjectController@index`、`GlobalSearchController` 全面支援任務被指派人可見性，徹底防止指派後跳 403 阻擋。
+    - **操作閉環深化**：`Projects/Index.vue` 編輯彈窗加入「刪除此專案」紅色操作按鈕與防呆確認；`Projects/Show.vue` 看板頂部提供「專案設定」按鈕與彈窗，支援在看板直接調整專案狀態、優先級、起訖日與成員。
+  - **自動化測試與工程品質驗證**：
+    - 新增 `tests/Feature/ProjectManagementTest.php` 涵蓋 10 項完整測試（56 assertions），包含發起專案、403 防護、IDOR 阻擋、任務指派、生命週期時間戳記、專案編輯、Dashboard 工作台整合、全站搜尋、自動加入專案成員與截止日邊界逾期判定。
+    - 全系統自動化測試累積達到 **245 項 Feature / Unit 測試 100% 全數通過 (1,410 assertions)**。
+    - 前端 Vite 8.3.3 Client 順利建置完成 (1.41s)。
 - 實作**全站深色模式 (Dark Mode) 與主題切換引擎 (Theme Engine)**：
   - **Tailwind 配置與原生 Anti-FOUC 防閃爍架構**：
     - `tailwind.config.js`：啟用 `darkMode: 'class'` 策略，由 HTML 根節點之 `dark` class 精確控制全站樣式。

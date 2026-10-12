@@ -113,6 +113,13 @@ const commandPaletteRef = ref(null);
                                 >
                                     同仁投票
                                 </NavLink>
+                                <NavLink
+                                    :href="route('projects.index')"
+                                    :active="route().current('projects.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    專案看板
+                                </NavLink>
 
                                 <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
@@ -439,6 +446,12 @@ const commandPaletteRef = ref(null);
                             :active="route().current('polls.*')"
                         >
                             同仁投票
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('projects.index')"
+                            :active="route().current('projects.*')"
+                        >
+                            專案看板
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"

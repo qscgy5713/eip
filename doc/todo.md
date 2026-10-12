@@ -73,5 +73,6 @@
 - [x] 電子表單線上手寫數位簽章與公文壓印系統 (E-Signature & Digital Stamp Engine：提供 HTML5 Canvas 數位手寫簽名板 SignaturePad，支援滑鼠/觸控筆/觸控手寫平滑筆跡感應、清除重簽與 DataURL 生成；主管審批時可選擇附署親簽筆跡，審批歷程中展示手寫簽章印記小卡，A4 正式列印版於主管欄位直接壓印真實手寫簽名與電子核准防偽印章雙重背書，全系統 225 項 Feature 測試 100% 通過，1302 assertions)
 - [x] 企業同仁投票與意見調查系統 (Polls & Survey Engine：支援管理員/主管/人事建立投票活動、設定單選或複選、匿名或記名投票機制、截止時間與動態增減選項；一人一票嚴密防呆機制；匿名投票資料庫選項與投票者端到端解耦徹底保護隱私；長條圖即時統計得票分佈與最高票冠軍徽章；記名投票主管專屬名冊查看；整合儀表板 Dashboard 活躍投票小卡、全站搜尋 Cmd+K 與 AuditLog 審計日誌，全系統 235 項 Feature 測試 100% 通過，1348 assertions)
 - [x] 全站深色模式與主題切換引擎 (Dark Mode & Theme Engine：支援淺色 / 深色 / 跟隨系統三段即時切換、LocalStorage 偏好記憶與系統偏好 media query 自動同步、Blade head 前端原生防閃爍 Anti-FOUC 腳本、全站導覽列與行動選單 ThemeToggle 組件、指揮中心與個人工作台儀表板卡片全面深色適配、通用表單與對話框組件反色高對比調校)
+- [x] 企業專案管理與協同任務看板系統 (Project Management & Task Kanban Hub：支援多專案跨部門管理、多對多成員權限隔離與負責人指派、四欄式工作任務看板 Todo/In Progress/Review/Done、任務優先級與工時估算、截止日逾期警告標記、被指派人站內系統通知 EipSystemNotification、個人工作台 Dashboard「我的專案任務」卡片整合、全站快捷搜尋 Cmd+K 模糊檢索與 AuditLog 審計日誌留痕，全系統 245 項 Feature 測試 100% 通過，1410 assertions)
 
 

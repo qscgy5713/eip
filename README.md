@@ -108,6 +108,11 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **三段即時主題切換**：支援淺色 (Light ☀️)、深色 (Dark 🌙) 與跟隨系統 (System 💻) 三段即時無縫切換，並自動監聽系統 `prefers-color-scheme` 媒體查詢狀態變更。
   - **原生 Anti-FOUC 防白光閃爍架構**：Blade 模板 `<head>` 最前端注入純原生 JavaScript 早期判定腳本，在頁面渲染與 CSS/JS bundle 載入前精確掛載 `dark` 根節點 class，徹底消除重新整理時白光閃爍。
   - **全站佈局與高對比視覺調校**：全站頂部導覽列、行動版漢堡選單、訪客登入頁面右上角均掛載專屬 `ThemeToggle` 組件；儀表板所有行政小卡、指揮中心對話框、表單輸入框 (`TextInput`)、標籤 (`InputLabel`)、核取方塊 (`Checkbox`) 與對話框 (`Modal`) 均完成 Tailwind `dark:` 深度適配。
+- 📌 **企業專案管理與協同任務看板系統 (Project Management & Task Kanban Hub)**：
+  - **多專案全景與成員權限隔離**：支援跨部門專案發起（限主管與管理員）、代碼編號管理、專案起訖日與優先級；多對多專案成員配置與中介角色授權 (`lead`/`member`/`viewer`)；嚴格 IDOR 權限隔離，非成員與無權人員全面阻擋調閱專案與看板。
+  - **四欄式直立任務看板 (Four-Column Kanban Board)**：支援「待辦事項 (Todo)」、「進行中 (In Progress)」、「待審查 (Review)」、「已完成 (Done)」四欄任務動態流轉；支援快速狀態前進/後退按鈕、預估與實際工時管理、截止日逾期警告標記。
+  - **任務指派與系統通知閉環**：建立或重新指派任務自動連鎖發送 `EipSystemNotification` 站內通知並附帶直達連結；任務流轉至 Done 自動記錄完成時間戳記 `completed_at`，退回則自動重置為 null。
+  - **個人工作台與全站搜尋聯動**：個人工作台儀表板 (Dashboard) 內嵌「我的專案任務」卡片，即時追蹤個人未完成任務與逾期警示；全站指揮中心 (`Cmd+K`) 支援專案代碼與名稱模糊檢索與鍵盤導航直達。
 - 🔒 **企業級資安防禦縱深與 CI/CD Pipeline (Security Hardened Architecture)**：
   - **私有磁碟嚴格隔離 (Private Storage Isolation)**：機密證明文件與未公開公告附件全數由 `public` 遷移至 `local` 私有儲存，徹底阻絕 Nginx 靜態檔案繞過 Controller 授權之資料外洩風險。
   - **跨物件歷史版本 IDOR 防護 (Scoped Route Model Binding)**：嚴格校驗歷史版本與當前文件之一致性隸屬，杜絕跨機密文件版本越權下載與預覽。
@@ -116,7 +121,7 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
   - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
   - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
-  - **全面測試覆蓋**：累積 **235 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1348 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **全面測試覆蓋**：累積 **245 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1,410 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)

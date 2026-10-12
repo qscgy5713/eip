@@ -237,6 +237,45 @@ class GlobalSearchController extends Controller
             ];
         }
 
+        // 8. 檢索專案與任務 (Projects)
+        $projectQuery = \App\Models\Project::with(['owner']);
+        if ($user->role !== 'admin') {
+            $projectQuery->where(function ($q) use ($user) {
+                $q->where('owner_id', $user->id)
+                  ->orWhereHas('members', function ($mq) use ($user) {
+                      $mq->where('user_id', $user->id);
+                  })
+                  ->orWhereHas('tasks', function ($tq) use ($user) {
+                      $tq->where('assignee_id', $user->id);
+                  });
+            });
+        }
+        $projects = $projectQuery->where(function ($q) use ($query) {
+                $q->where('code', 'like', "%{$query}%")
+                  ->orWhere('name', 'like', "%{$query}%")
+                  ->orWhere('description', 'like', "%{$query}%");
+            })
+            ->latest()
+            ->limit(5)
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'id' => $p->id,
+                    'title' => "[{$p->code}] {$p->name}",
+                    'subtitle' => "負責人: {$p->owner?->name} · 狀態: {$p->status}",
+                    'url' => route('projects.show', $p->id),
+                    'badge' => '專案',
+                    'type' => 'project',
+                ];
+            });
+
+        if ($projects->isNotEmpty()) {
+            $results['projects'] = [
+                'title' => '專案協同看板',
+                'items' => $projects,
+            ];
+        }
+
         return response()->json([
             'query' => $query,
             'results' => $results,
@@ -249,6 +288,14 @@ class GlobalSearchController extends Controller
     private function getQuickShortcuts(User $user): array
     {
         $shortcuts = [
+            [
+                'id' => 'quick-projects',
+                'title' => '專案管理與任務協同看板',
+                'subtitle' => '跨部門任務看板、流轉與工時進度',
+                'url' => route('projects.index'),
+                'badge' => '專案',
+                'type' => 'shortcut',
+            ],
             [
                 'id' => 'quick-polls',
                 'title' => '企業投票與意見調查',

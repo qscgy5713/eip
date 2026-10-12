@@ -25,7 +25,7 @@ const flatItems = computed(() => {
     }
 
     // 各分組搜尋結果
-    const groupKeys = ['employees', 'forms', 'announcements', 'meeting_rooms', 'documents', 'polls'];
+    const groupKeys = ['employees', 'forms', 'announcements', 'meeting_rooms', 'documents', 'polls', 'projects'];
     for (const key of groupKeys) {
         const group = searchResults.value[key];
         if (group && group.items && group.items.length > 0) {
@@ -236,12 +236,13 @@ defineExpose({
                                 <div
                                     :class="[
                                         'p-2 rounded-lg shrink-0 transition',
-                                        item.type === 'shortcut' ? 'bg-indigo-100 text-indigo-600' :
-                                        item.type === 'employee' ? 'bg-blue-100 text-blue-600' :
-                                        item.type === 'form' ? 'bg-amber-100 text-amber-700' :
-                                        item.type === 'announcement' ? 'bg-rose-100 text-rose-600' :
-                                        item.type === 'meeting_room' ? 'bg-emerald-100 text-emerald-600' :
-                                        'bg-purple-100 text-purple-600'
+                                        item.type === 'shortcut' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
+                                        item.type === 'employee' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400' :
+                                        item.type === 'form' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400' :
+                                        item.type === 'announcement' ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400' :
+                                        item.type === 'meeting_room' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' :
+                                        item.type === 'project' ? 'bg-violet-100 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400' :
+                                        'bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400'
                                     ]"
                                 >
                                     <!-- 捷徑圖示 -->
@@ -254,6 +255,8 @@ defineExpose({
                                     <svg v-else-if="item.type === 'announcement'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
                                     <!-- 會議室圖示 -->
                                     <svg v-else-if="item.type === 'meeting_room'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                    <!-- 專案圖示 -->
+                                    <svg v-else-if="item.type === 'project'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                                     <!-- 文件圖示 -->
                                     <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                                 </div>
