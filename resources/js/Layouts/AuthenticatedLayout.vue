@@ -635,7 +635,7 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                                 method="post"
                                 as="button"
                             >
-                                Log Out
+                                登出系統
                             </ResponsiveNavLink>
                         </div>
                     </div>
