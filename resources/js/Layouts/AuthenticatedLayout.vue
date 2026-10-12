@@ -134,6 +134,13 @@ const commandPaletteRef = ref(null);
                                 >
                                     工作週報
                                 </NavLink>
+                                <NavLink
+                                    :href="route('payslips.index')"
+                                    :active="route().current('payslips.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    薪資明細
+                                </NavLink>
 
                                 <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
@@ -478,6 +485,12 @@ const commandPaletteRef = ref(null);
                             :active="route().current('weekly-reports.*')"
                         >
                             工作週報
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('payslips.index')"
+                            :active="route().current('payslips.*')"
+                        >
+                            薪資明細
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"

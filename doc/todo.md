@@ -76,6 +76,7 @@
 - [x] 企業專案管理與協同任務看板系統 (Project Management & Task Kanban Hub：支援多專案跨部門管理、多對多成員權限隔離與負責人指派、四欄式工作任務看板 Todo/In Progress/Review/Done、任務優先級與工時估算、截止日逾期警告標記、被指派人站內系統通知 EipSystemNotification、個人工作台 Dashboard「我的專案任務」卡片整合、全站快捷搜尋 Cmd+K 模糊檢索與 AuditLog 審計日誌留痕，全系統 245 項 Feature 測試 100% 通過，1410 assertions)
 - [x] 企業固定資產與公務設備借調管理系統 (Corporate Asset & Equipment Management Hub：支援 IT資訊硬體/辦公OA/視聽攝影/公務車輛/週邊耗材五大分類、唯一資產標籤 AST-YYYY-XXXX 自動編號、原廠序號/地點/部門/金額/規格登錄；在庫可借/借出中/維修中/報廢除役四態生命週期；個人線上借用登記與管理員代為指派借調；代登記連鎖站內系統通知 EipSystemNotification；歸還驗收閉環與備註紀錄；借調履歷時間軸；借出中刪除與重複借出前後端防呆；個人工作台 Dashboard「我保管的公務資產」小卡與逾期未還警示標籤；7欄行動快捷列；全站指揮中心 Cmd+K 模糊檢索導航；全系統 256 項 Feature 測試 100% 通過，1484 assertions)
 - [x] 企業工作週報與團隊協同簡報系統 (Weekly Digest & Team Briefing Hub：支援年度/ISO週次管理、重點摘要/具體成果/下週計畫/支援需求四大維度、草稿與正式提交生命週期；專案看板本週完成任務一鍵智慧帶入；提交自動通知部門主管；主管與團隊點評討論區、點評自動標記 reviewed 並通知作者；主管所轄部門未繳交同仁名冊與一鍵催繳通知；個人工作台 Dashboard 本週週報卡片與未交警示、8 欄快捷行動列；全站 Cmd+K 模糊檢索與 AuditLog 留痕；全系統 267 項 Feature 測試 100% 通過，1548 assertions)
+- [x] 個人機密薪資條與薪酬明細存摺系統 (Confidential Payslips & Compensation Hub：支援應發項目【本薪/職務加給/績效獎金/加班費/其他應發】與應扣項目【勞保自付額/健保自付額/勞退自提/代扣所得稅/其他扣除】雙欄對帳與實發金額自動精確試算；草稿與已發布生命週期；HR/Admin 一鍵批次發布指定月份全體同仁薪資單並自動發送 EipSystemNotification 站內系統通知；一般同仁只能查閱本人已發布薪資條防止水平越權 (IDOR)；每次調閱強制寫入 AuditLog 審計留痕；前端辦公室「防窺遮罩模式 (Privacy Shield)」一鍵隱藏/顯示金額；A4 正式員工薪資明細單 (Payslip Voucher) 純白列印與 PDF 匯出版面；個人工作台 Dashboard「最新薪資條已送達」即時通知橫幅與 9 欄快捷行動列；全站指揮中心 Cmd+K 模糊檢索與權限過濾；全系統 275 項 Feature 測試 100% 通過，1595 assertions)
 
 
 

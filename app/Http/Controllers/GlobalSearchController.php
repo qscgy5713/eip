@@ -342,6 +342,46 @@ class GlobalSearchController extends Controller
             ];
         }
 
+        // 11. 檢索薪資單 (Payslips - 具備嚴密身分隔離)
+        $payslipsQuery = \App\Models\Payslip::query();
+        if ($user->isAdmin() || $user->isHr()) {
+            $payslipsQuery->with('user')->where(function ($q) use ($query) {
+                $q->whereHas('user', fn ($uq) => $uq->where('name', 'like', "%{$query}%")->orWhere('employee_no', 'like', "%{$query}%"))
+                  ->orWhere('year', 'like', "%{$query}%")
+                  ->orWhere('month', 'like', "%{$query}%");
+            });
+        } else {
+            $payslipsQuery->where('user_id', $user->id)
+                ->where('status', 'published')
+                ->where(function ($q) use ($query) {
+                    $q->where('year', 'like', "%{$query}%")
+                      ->orWhere('month', 'like', "%{$query}%");
+                });
+        }
+
+        $payslips = $payslipsQuery->latest('year')
+            ->latest('month')
+            ->limit(5)
+            ->get()
+            ->map(function ($p) use ($user) {
+                $owner = ($user->isAdmin() || $user->isHr()) ? ($p->user?->name . ' · ') : '';
+                return [
+                    'id' => $p->id,
+                    'title' => "{$owner}{$p->period_label} 薪資單",
+                    'subtitle' => "實發金額: NT$ " . number_format($p->net_pay) . " · 狀態: {$p->status_label}",
+                    'url' => route('payslips.show', $p->id),
+                    'badge' => '薪資',
+                    'type' => 'payslip',
+                ];
+            });
+
+        if ($payslips->isNotEmpty()) {
+            $results['payslips'] = [
+                'title' => '薪資單據與所得明細',
+                'items' => $payslips,
+            ];
+        }
+
         return response()->json([
             'query' => $query,
             'results' => $results,
@@ -354,6 +394,14 @@ class GlobalSearchController extends Controller
     private function getQuickShortcuts(User $user): array
     {
         $shortcuts = [
+            [
+                'id' => 'quick-payslips',
+                'title' => '個人薪資條與薪酬明細',
+                'subtitle' => '安全查閱每月發放明細、實發薪資與年度扣繳',
+                'url' => route('payslips.index'),
+                'badge' => '薪資',
+                'type' => 'shortcut',
+            ],
             [
                 'id' => 'quick-weekly-reports',
                 'title' => '工作週報與協同簡報',

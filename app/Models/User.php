@@ -155,6 +155,11 @@ class User extends Authenticatable
         return $this->hasMany(WeeklyReportComment::class);
     }
 
+    public function payslips(): HasMany
+    {
+        return $this->hasMany(Payslip::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

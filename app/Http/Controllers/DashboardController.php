@@ -184,6 +184,13 @@ class DashboardController extends Controller
             ->where('week_number', $currentWeek)
             ->first();
 
+        // 12. 最近一期已發布之機密薪資單
+        $latestPayslip = \App\Models\Payslip::where('user_id', $user->id)
+            ->where('status', 'published')
+            ->orderByDesc('year')
+            ->orderByDesc('month')
+            ->first(['id', 'year', 'month', 'net_pay', 'status', 'published_at']);
+
         return Inertia::render('Dashboard', [
             'announcements' => $announcements,
             'pendingApprovals' => $pendingApprovals,
@@ -197,6 +204,7 @@ class DashboardController extends Controller
             'myAssets' => $myAssets,
             'myWeeklyReport' => $myWeeklyReport,
             'currentWeekNumber' => $currentWeek,
+            'latestPayslip' => $latestPayslip,
             'stats' => [
                 'unreadAnnouncementsCount' => Announcement::where('status', 'published')->whereDoesntHave('reads', fn($q) => $q->where('user_id', $user->id))->count(),
                 'pendingApprovalsCount' => $totalPendingApprovalsCount,

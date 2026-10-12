@@ -2,6 +2,27 @@
 
 ## 2026-10-12
 ### 做了什麼
+- 實作**個人機密薪資條與薪酬明細存摺系統 (Confidential Payslips & Compensation Hub)**：
+  - **資料架構與資料表設計 (`Payslip` 模型與 migration)**：
+    - `payslips`：所屬同仁 (`user_id`)、年度 (`year`)、月份 (`month`)、應發項目【底薪/本薪 (`base_salary`)、職務加給 (`allowance`)、績效獎金 (`performance_bonus`)、加班費 (`overtime_pay`)、其他應發 (`other_earnings`)、應發總額 (`total_earnings`)】、應扣項目【勞保自付額 (`labor_insurance`)、健保自付額 (`health_insurance`)、勞退自提額 (`pension_contribution`)、代扣所得稅 (`tax_withholding`)、其他扣款 (`other_deductions`)、應扣總額 (`total_deductions`)】、實發淨額 (`net_pay`)、發放狀態 (`status`: draft, published)、人資附註說明 (`notes`)、正式發布時間 (`published_at`)，設定 `unique(user_id, year, month)` 嚴格防呆防止同仁同月重複建單。
+    - `Payslip` 模型封裝：`computeTotals()` 自動小數點精度計算總額、`canAccess()` IDOR 水平越權隔離判定、Eloquent Mutators (`period`, `gross_pay`, `bonus`, `other_additions`, `pension_self`, `note`) 無縫相容雙向格式、Accessors (`status_label`, `period_label`, `period`, `gross_pay`)。
+    - `User` 模型擴充：定義 `payslips()` 關聯。
+  - **後端業務邏輯、權限保護與批次發布 (`PayslipController`)**：
+    - **雙視圖架構**：一般同仁預設檢視個人已發布存摺（`view=my`）；HR 與管理員專屬切換全員管理視圖（`view=manage`），支援部門、年份、月份、發布狀態與姓名/工號多維過濾篩選。
+    - **IDOR 水平越權阻擋與草稿隔離**：非本人或非已發布薪資單嚴格拒絕調閱（回傳 403 Forbidden）；調閱時即時記錄詳細 `AuditLog` 審計留痕。
+    - **單筆建立與修改**：HR / 管理員在線維護薪資條，系統自動試算總合與防呆重複校驗。
+    - **一鍵批次發布與站內通知**：HR / 管理員可一鍵將指定月份所有草稿薪資單發布為正式發放，並即時對全體對應同仁推播 `EipSystemNotification` 站內系統通知。
+  - **前端視圖與互動元件 (`Payslips/Index.vue`, `Payslips/Show.vue`)**：
+    - **薪資明細存摺與管理看板 (`Payslips/Index.vue`)**：辦公室一鍵防窺遮罩模式（Privacy Shield）隱藏所有金額顯示為 `••••••`；年度實發/應發/法定扣除與期數統計小卡；一般同仁歷史發放清單；HR/Admin 全員管理看板、單筆建立/編輯 Modal（含即時動態雙欄計算）與批次發布 Modal；深色模式全面適配。
+    - **正式薪資單 A4 列印與憑單版型 (`Payslips/Show.vue`)**：公司正式抬頭憑單 (Payslip Voucher)、單據流水號、員工職稱部屬資訊、應發 Earnings 與應扣 Deductions 雙欄精確對帳、Net Pay 實發強調卡、人資經辦/財務覆核/同仁收執三方簽章戳記欄位；一鍵防窺遮罩切換；`@media print` 純白列印與隱藏導覽元素。
+  - **個人工作台與全站生態整合**：
+    - **個人工作台 Dashboard (`Dashboard.vue`, `DashboardController`)**：當有最新發布薪資單時，頂部打卡區下方呈現「薪酬已發放」通知橫幅，支援一鍵防窺金額切換與直達明細；快捷行動列擴充為 9 欄並加入「薪資明細」捷徑。
+    - **全站搜尋指揮中心 (`GlobalSearchController`, `CommandPalette.vue`)**：`Cmd+K` 支援薪資模糊檢索，嚴格依使用者權限過濾他人薪資，提供薪資專屬綠色金幣圖示與直達捷徑。
+    - **全站導覽列 (`AuthenticatedLayout.vue`)**：桌機與手機導覽列全面納入「薪資明細」入口。
+  - **品質驗證與自動化測試**：
+    - 新增 `tests/Feature/PayslipTest.php` 涵蓋 8 項測試（41 assertions），覆蓋權限、IDOR 隔離、草稿防護、AuditLog 記錄、自動金額計算、批次發布與通知派發、Dashboard 工作台最新薪資條整合。
+    - 全系統自動化測試累積達到 **275 項 Feature / Unit 測試 100% 全數通過 (1,595 assertions)**。
+    - 前端 Vite 打包編譯無警告無錯誤。
 - 實作**企業工作週報與團隊協同簡報系統 (Weekly Digest & Team Briefing Hub)**：
   - **資料架構與資料表設計 (`WeeklyReport`, `WeeklyReportComment` 模型與 migration)**：
     - `weekly_reports`：紀錄所屬同仁 (`user_id`)、所屬部門 (`department_id`)、年度 (`year`)、ISO 週次 (`week_number`)、起訖日期 (`start_date`, `end_date`)、本週重點概述 (`summary`)、具體完成事項 (`achievements`)、下週工作計畫 (`plans_next_week`)、遭遇阻礙或支援需求 (`challenges_or_support`)、生命週期狀態 (`status`: draft, submitted, reviewed)、正式提交時間戳記 (`submitted_at`)，設定 `unique(user_id, year, week_number)` 嚴格防呆防重複建立。

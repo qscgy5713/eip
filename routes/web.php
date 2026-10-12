@@ -17,6 +17,7 @@ use App\Http\Controllers\MeetingRoomController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrgManagementController;
+use App\Http\Controllers\PayslipController;
 use App\Http\Controllers\PollController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -141,6 +142,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/weekly-reports/{weeklyReport}', [WeeklyReportController::class, 'destroy'])->name('weekly-reports.destroy');
     Route::post('/weekly-reports/{weeklyReport}/comment', [WeeklyReportController::class, 'comment'])->name('weekly-reports.comment');
     Route::post('/weekly-reports/remind', [WeeklyReportController::class, 'remind'])->name('weekly-reports.remind');
+
+    // 機密薪資單與薪酬查詢系統
+    Route::get('/payslips', [PayslipController::class, 'index'])->name('payslips.index');
+    Route::post('/payslips', [PayslipController::class, 'store'])->name('payslips.store');
+    Route::post('/payslips/publish-batch', [PayslipController::class, 'publishBatch'])->name('payslips.publishBatch');
+    Route::get('/payslips/{payslip}', [PayslipController::class, 'show'])->name('payslips.show');
+    Route::put('/payslips/{payslip}', [PayslipController::class, 'update'])->name('payslips.update');
+    Route::delete('/payslips/{payslip}', [PayslipController::class, 'destroy'])->name('payslips.destroy');
 
     // 站內通知中心
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

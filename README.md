@@ -125,6 +125,13 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **主管批閱點評閉環與狀態流轉**：草稿暫存 (`draft`)、正式提交 (`submitted`) 與主管已點評 (`reviewed`)；提交時自動通知所屬部門主管；主管與團隊點評討論區 (Comments Timeline) 支援線上回饋，點評後自動連鎖通知作者；主管審閱後週報鎖定防擅自竄改。
   - **主管團隊週報管理與一鍵催繳**：主管視圖即時呈現部門全員週報已交率、已繳交同仁與未繳交名冊，支援「🔔 一鍵催繳提醒」即時推播站內通知。
   - **個人工作台與生態深度整合**：工作台 (Dashboard) 內嵌「本週工作週報」專屬卡片與未交警示；8 欄快捷行動列；全站指揮中心 (`Cmd+K`) 支援週報內容與週次模糊檢索；全站深色模式適配。
+- 💰 **個人機密薪資條與薪酬明細存摺系統 (Confidential Payslips & Compensation Hub)**：
+  - **精確雙欄對帳與自動試算**：支援應發項目【本薪/職務加給/績效獎金/加班費/其他應發】與應扣項目【勞保自付額/健保自付額/勞退自提/代扣所得稅/其他扣除】雙欄對帳，實發金額 (`net_pay`) 自動精準試算。
+  - **嚴格 IDOR 水平越權隔離與草稿防護**：一般同仁僅能查閱個人且已發布之薪資條；草稿薪資條僅限人資與管理員可見；每次調閱強制記錄 `AuditLog` 審計留痕。
+  - **辦公室防窺遮罩模式 (Privacy Shield)**：一鍵切換防窺遮罩模式，所有薪資金額即刻隱藏為 `••••••`，貼近真實辦公室防路過窺視需求。
+  - **A4 正式員工薪資單列印 (Payslip Voucher)**：提供公司正式抬頭憑單版型、雙欄對帳清冊與製表人/財務覆核/同仁收執簽核欄位，支援純白 `@media print` 列印與 PDF 存證。
+  - **一鍵批次發布與系統通知**：HR/Admin 可一鍵發布指定月份全員薪資單，連鎖推播 `EipSystemNotification` 站內系統通知。
+  - **個人工作台與全站生態整合**：個人工作台 (Dashboard) 最新薪資條到帳橫幅（支援一鍵防窺切換）、9 欄快捷行動列；全站指揮中心 (`Cmd+K`) 模糊檢索與權限過濾；全站深色模式適配。
 - 🔒 **企業級資安防禦縱深與 CI/CD Pipeline (Security Hardened Architecture)**：
   - **私有磁碟嚴格隔離 (Private Storage Isolation)**：機密證明文件與未公開公告附件全數由 `public` 遷移至 `local` 私有儲存，徹底阻絕 Nginx 靜態檔案繞過 Controller 授權之資料外洩風險。
   - **跨物件歷史版本 IDOR 防護 (Scoped Route Model Binding)**：嚴格校驗歷史版本與當前文件之一致性隸屬，杜絕跨機密文件版本越權下載與預覽。
@@ -133,7 +140,7 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
   - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
   - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
-  - **全面測試覆蓋**：累積 **267 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1,548 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **全面測試覆蓋**：累積 **275 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1,595 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)
