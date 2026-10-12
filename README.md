@@ -104,6 +104,10 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **端到端匿名隱私保護架構**：匿名投票時，`poll_votes.user_id` 一律存入 `null`，投票選項與投票者身分端到端徹底解耦，即使是資料庫管理員亦無法逆向追蹤同仁具體選項，落實真正的企業匿名保障。
   - **視覺化統計與主管名冊展開**：投票結果提供動態進度長條圖 (Progress bar)、票數與百分比統計、最高票 👑 冠軍高亮徽章；若為記名投票，具管理權限者可折疊展開各選項之具名同仁名冊。
   - **生態深度整合**：工作台儀表板 (Dashboard) 內嵌活躍投票小卡、全站搜尋 (Cmd+K) 模糊檢索與全方位 `AuditLog` 審計留痕。
+- 🌙 **全站深色模式與主題切換引擎 (Dark Mode & Theme Engine)**：
+  - **三段即時主題切換**：支援淺色 (Light ☀️)、深色 (Dark 🌙) 與跟隨系統 (System 💻) 三段即時無縫切換，並自動監聽系統 `prefers-color-scheme` 媒體查詢狀態變更。
+  - **原生 Anti-FOUC 防白光閃爍架構**：Blade 模板 `<head>` 最前端注入純原生 JavaScript 早期判定腳本，在頁面渲染與 CSS/JS bundle 載入前精確掛載 `dark` 根節點 class，徹底消除重新整理時白光閃爍。
+  - **全站佈局與高對比視覺調校**：全站頂部導覽列、行動版漢堡選單、訪客登入頁面右上角均掛載專屬 `ThemeToggle` 組件；儀表板所有行政小卡、指揮中心對話框、表單輸入框 (`TextInput`)、標籤 (`InputLabel`)、核取方塊 (`Checkbox`) 與對話框 (`Modal`) 均完成 Tailwind `dark:` 深度適配。
 - 🔒 **企業級資安防禦縱深與 CI/CD Pipeline (Security Hardened Architecture)**：
   - **私有磁碟嚴格隔離 (Private Storage Isolation)**：機密證明文件與未公開公告附件全數由 `public` 遷移至 `local` 私有儲存，徹底阻絕 Nginx 靜態檔案繞過 Controller 授權之資料外洩風險。
   - **跨物件歷史版本 IDOR 防護 (Scoped Route Model Binding)**：嚴格校驗歷史版本與當前文件之一致性隸屬，杜絕跨機密文件版本越權下載與預覽。

@@ -25,7 +25,7 @@ const flatItems = computed(() => {
     }
 
     // 各分組搜尋結果
-    const groupKeys = ['employees', 'forms', 'announcements', 'meeting_rooms', 'documents'];
+    const groupKeys = ['employees', 'forms', 'announcements', 'meeting_rooms', 'documents', 'polls'];
     for (const key of groupKeys) {
         const group = searchResults.value[key];
         if (group && group.items && group.items.length > 0) {
@@ -147,10 +147,10 @@ defineExpose({
         @click.self="close"
     >
         <div
-            class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-100 overflow-hidden transform transition-all flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150"
+            class="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden transform transition-all flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150"
         >
             <!-- 搜尋輸入列 -->
-            <div class="relative flex items-center px-4 border-b border-gray-100 bg-gray-50/50">
+            <div class="relative flex items-center px-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/80">
                 <svg
                     class="w-5 h-5 text-gray-400 shrink-0 ml-1 mr-3"
                     fill="none"
@@ -169,8 +169,8 @@ defineExpose({
                     ref="searchInput"
                     v-model="searchQuery"
                     type="text"
-                    placeholder="搜尋同仁、表單單號、公告、會議室或文件... (支援上下鍵導航)"
-                    class="w-full py-4 text-sm bg-transparent border-0 focus:ring-0 focus:outline-none text-gray-900 placeholder-gray-400"
+                    placeholder="搜尋同仁、表單單號、公告、會議室、文件或投票... (支援上下鍵導航)"
+                    class="w-full py-4 text-sm bg-transparent border-0 focus:ring-0 focus:outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                     @input="handleInput"
                 />
 
@@ -186,7 +186,7 @@ defineExpose({
                 <button
                     type="button"
                     @click="close"
-                    class="px-2 py-1 text-2xs font-semibold text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-md transition"
+                    class="px-2 py-1 text-2xs font-semibold text-gray-500 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600 rounded-md transition"
                 >
                     ESC
                 </button>
@@ -199,13 +199,13 @@ defineExpose({
                     v-if="!isLoading && searchQuery.trim() !== '' && flatItems.length === 0"
                     class="py-12 text-center"
                 >
-                    <div class="inline-flex p-3 bg-gray-100 rounded-full text-gray-400 mb-3">
+                    <div class="inline-flex p-3 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-400 dark:text-gray-300 mb-3">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
-                    <p class="text-sm font-semibold text-gray-700">找不到符合「{{ searchQuery }}」的項目</p>
-                    <p class="text-xs text-gray-400 mt-1">請嘗試縮短關鍵字、搜尋其他同仁姓名或單號。</p>
+                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">找不到符合「{{ searchQuery }}」的項目</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">請嘗試縮短關鍵字、搜尋其他同仁姓名或單號。</p>
                 </div>
 
                 <!-- 扁平列表渲染 -->
@@ -214,7 +214,7 @@ defineExpose({
                         <!-- 當分組改變時，顯示分組標題 -->
                         <div
                             v-if="idx === 0 || item.group !== flatItems[idx - 1].group"
-                            class="px-3 pt-3 pb-1 text-2xs font-bold uppercase tracking-wider text-gray-400 flex items-center justify-between"
+                            class="px-3 pt-3 pb-1 text-2xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 flex items-center justify-between"
                         >
                             <span>{{ item.group }}</span>
                         </div>
@@ -227,8 +227,8 @@ defineExpose({
                             :class="[
                                 'flex items-center justify-between p-3 rounded-xl cursor-pointer transition select-none group',
                                 selectedIndex === idx
-                                    ? 'bg-indigo-50 border border-indigo-200 text-indigo-900 shadow-xs'
-                                    : 'hover:bg-gray-50 border border-transparent text-gray-800'
+                                    ? 'bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200 shadow-xs'
+                                    : 'hover:bg-gray-50 dark:hover:bg-gray-700/50 border border-transparent text-gray-800 dark:text-gray-200'
                             ]"
                         >
                             <div class="flex items-center space-x-3 min-w-0 mr-3">
@@ -259,22 +259,22 @@ defineExpose({
                                 </div>
 
                                 <div class="truncate">
-                                    <p class="text-xs font-bold truncate">{{ item.title }}</p>
-                                    <p class="text-2xs text-gray-500 truncate mt-0.5">{{ item.subtitle }}</p>
+                                    <p class="text-xs font-bold truncate text-gray-900 dark:text-gray-100">{{ item.title }}</p>
+                                    <p class="text-2xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{{ item.subtitle }}</p>
                                 </div>
                             </div>
 
                             <div class="flex items-center space-x-2 shrink-0">
                                 <span
                                     v-if="item.badge"
-                                    class="text-2xs font-semibold px-2 py-0.5 rounded-md bg-gray-100 text-gray-600"
+                                    class="text-2xs font-semibold px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
                                 >
                                     {{ item.badge }}
                                 </span>
                                 <svg
                                     :class="[
                                         'w-4 h-4 transition',
-                                        selectedIndex === idx ? 'text-indigo-600 translate-x-0.5' : 'text-gray-300'
+                                        selectedIndex === idx ? 'text-indigo-600 dark:text-indigo-400 translate-x-0.5' : 'text-gray-300 dark:text-gray-600'
                                     ]"
                                     fill="none"
                                     stroke="currentColor"
@@ -289,23 +289,23 @@ defineExpose({
             </div>
 
             <!-- 底部鍵盤操作指引列 -->
-            <div class="px-4 py-2.5 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-2xs text-gray-400">
+            <div class="px-4 py-2.5 bg-gray-50 dark:bg-gray-800/90 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-2xs text-gray-400 dark:text-gray-500">
                 <div class="flex items-center space-x-4">
                     <span class="flex items-center space-x-1">
-                        <kbd class="px-1.5 py-0.5 bg-white border border-gray-200 rounded font-mono text-gray-600">↑</kbd>
-                        <kbd class="px-1.5 py-0.5 bg-white border border-gray-200 rounded font-mono text-gray-600">↓</kbd>
+                        <kbd class="px-1.5 py-0.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded font-mono text-gray-600 dark:text-gray-300">↑</kbd>
+                        <kbd class="px-1.5 py-0.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded font-mono text-gray-600 dark:text-gray-300">↓</kbd>
                         <span>選擇</span>
                     </span>
                     <span class="flex items-center space-x-1">
-                        <kbd class="px-1.5 py-0.5 bg-white border border-gray-200 rounded font-mono text-gray-600">↵</kbd>
+                        <kbd class="px-1.5 py-0.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded font-mono text-gray-600 dark:text-gray-300">↵</kbd>
                         <span>跳轉</span>
                     </span>
                     <span class="flex items-center space-x-1">
-                        <kbd class="px-1.5 py-0.5 bg-white border border-gray-200 rounded font-mono text-gray-600">esc</kbd>
+                        <kbd class="px-1.5 py-0.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded font-mono text-gray-600 dark:text-gray-300">esc</kbd>
                         <span>關閉</span>
                     </span>
                 </div>
-                <div class="text-gray-400">
+                <div class="text-gray-400 dark:text-gray-500">
                     EIP 全站快捷指揮中心
                 </div>
             </div>

@@ -1,5 +1,28 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-12
+### 做了什麼
+- 實作**全站深色模式 (Dark Mode) 與主題切換引擎 (Theme Engine)**：
+  - **Tailwind 配置與原生 Anti-FOUC 防閃爍架構**：
+    - `tailwind.config.js`：啟用 `darkMode: 'class'` 策略，由 HTML 根節點之 `dark` class 精確控制全站樣式。
+    - `resources/views/app.blade.php`：在 `<head>` 區塊最前端注入純原生 JavaScript Anti-FOUC 腳本，於瀏覽器渲染與 Vue bundle 載入前，即刻依據 `localStorage.getItem('theme')` 或系統媒體查詢 `window.matchMedia('(prefers-color-scheme: dark)')` 判定並掛載 `dark` class，杜絕頁面重新整理時白光閃爍。
+  - **響應式主題管理狀態 (`resources/js/Composables/useTheme.js`)**：
+    - 建立 Vue 3 Composable 單例模式，支援 `light`（淺色）、`dark`（深色）、`system`（跟隨系統）三種狀態。
+    - 支援 `prefers-color-scheme` 媒體查詢動態監聽，當處於跟隨系統模式且使用者切換作業系統主題時，畫面無需重新整理即刻無縫切換。
+    - 持久化儲存同仁偏好設定至 `localStorage.theme`。
+  - **前端主題切換器組件 (`resources/js/Components/ThemeToggle.vue`)**：
+    - 提供細緻質感的太陽 ☀️、月亮 🌙 與電腦 💻 向量 SVG 圖示。
+    - 支援下拉選單與選取狀態高亮徽章，支援點擊外部或按下 Escape 鍵自動收合。
+    - 掛載於 `AuthenticatedLayout.vue` 桌機頂部導覽列及手機版漢堡選單內，並於 `GuestLayout.vue` 訪客登入頁面右上角掛載。
+  - **全站主要佈局與核心頁面深色適配**：
+    - `AuthenticatedLayout.vue`：全域背景 (`dark:bg-gray-900`)、導覽列 (`dark:bg-gray-800 dark:border-gray-700`)、文字與頁首 Header。
+    - `CommandPalette.vue`：全站搜尋視窗、搜尋列、分組清單項目、鍵盤快捷徽章全面適配深色模式，並修正投票分組鍵盤導航。
+    - `Dashboard.vue`：打卡區、快捷行動列、出勤快報卡、統計指標卡片、最新公告、同仁投票調查、待我審批、最近申請與即將進行之會議等所有卡片均適配深色背景、邊框與高對比文字。
+    - 通用組件：`NavLink.vue`、`ResponsiveNavLink.vue`、`Dropdown.vue`、`DropdownLink.vue`、`TextInput.vue`、`InputLabel.vue`、`Checkbox.vue`、`Modal.vue`、`PrimaryButton.vue`、`SecondaryButton.vue`。
+  - **工程品質與自動化驗證**：
+    - 前端 Vite 8.3.3 Client 順利編譯無誤 (`npm run build`)。
+    - 後端全系統 235 項測試持續 100% 通過 (1,348 assertions)。
+
 ## 2026-10-08
 ### 做了什麼
 - 實作**企業同仁投票與意見調查系統 (Polls & Survey Engine)**：

@@ -6,6 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import CommandPalette from '@/Components/CommandPalette.vue';
+import ThemeToggle from '@/Components/ThemeToggle.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
@@ -14,9 +15,9 @@ const commandPaletteRef = ref(null);
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-150">
             <nav
-                class="border-b border-gray-100 bg-white"
+                class="border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-800 transition-colors duration-150"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
@@ -26,7 +27,7 @@ const commandPaletteRef = ref(null);
                             <div class="flex shrink-0 items-center mr-2 lg:mr-4">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
+                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-100"
                                     />
                                 </Link>
                             </div>
@@ -159,15 +160,18 @@ const commandPaletteRef = ref(null);
                             <button
                                 type="button"
                                 @click="commandPaletteRef?.open()"
-                                class="inline-flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 rounded-lg transition text-left cursor-pointer focus:outline-none"
+                                class="inline-flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/60 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg transition text-left cursor-pointer focus:outline-none"
                                 title="全站快捷搜尋 (Cmd+K / Ctrl+K)"
                             >
-                                <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-3.5 h-3.5 text-gray-400 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
-                                <span class="hidden md:inline font-normal text-gray-500">搜尋全站...</span>
-                                <kbd class="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono font-semibold text-gray-500 bg-white border border-gray-200 rounded">⌘K</kbd>
+                                <span class="hidden md:inline font-normal text-gray-500 dark:text-gray-400">搜尋全站...</span>
+                                <kbd class="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono font-semibold text-gray-500 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded">⌘K</kbd>
                             </button>
+
+                            <!-- 深色模式主題切換器 -->
+                            <ThemeToggle />
 
                             <!-- Notification Bell Dropdown -->
                             <div class="relative">
@@ -175,7 +179,7 @@ const commandPaletteRef = ref(null);
                                     <template #trigger>
                                         <button
                                             type="button"
-                                            class="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition focus:outline-none"
+                                            class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/60 rounded-full transition focus:outline-none"
                                             title="通知中心"
                                         >
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,32 +195,32 @@ const commandPaletteRef = ref(null);
                                     </template>
 
                                     <template #content>
-                                        <div class="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
-                                            <span class="text-xs font-bold text-gray-700 uppercase tracking-wider">站內通知</span>
+                                        <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                                            <span class="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">站內通知</span>
                                             <Link
                                                 :href="route('notifications.index')"
-                                                class="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+                                                class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium"
                                             >
                                                 查看全部
                                             </Link>
                                         </div>
 
-                                        <div v-if="$page.props.auth.recent_notifications && $page.props.auth.recent_notifications.length > 0" class="divide-y divide-gray-100 max-h-80 overflow-y-auto">
+                                        <div v-if="$page.props.auth.recent_notifications && $page.props.auth.recent_notifications.length > 0" class="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto">
                                             <div
                                                 v-for="item in $page.props.auth.recent_notifications"
                                                 :key="item.id"
-                                                class="p-3 hover:bg-gray-50 transition text-left"
+                                                class="p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition text-left"
                                             >
                                                 <div class="flex items-center justify-between mb-1">
-                                                    <span class="text-xs font-semibold text-gray-900 truncate max-w-44">{{ item.title }}</span>
-                                                    <span class="text-[10px] text-gray-400">{{ item.created_at }}</span>
+                                                    <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 truncate max-w-44">{{ item.title }}</span>
+                                                    <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ item.created_at }}</span>
                                                 </div>
-                                                <p class="text-xs text-gray-600 line-clamp-2">{{ item.message }}</p>
+                                                <p class="text-xs text-gray-600 dark:text-gray-300 line-clamp-2">{{ item.message }}</p>
                                                 <div class="mt-2 flex items-center gap-2">
                                                     <Link
                                                         v-if="item.action_url"
                                                         :href="item.action_url"
-                                                        class="text-[11px] text-indigo-600 font-semibold hover:underline"
+                                                        class="text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold hover:underline"
                                                     >
                                                         前往檢視
                                                     </Link>
@@ -224,21 +228,21 @@ const commandPaletteRef = ref(null);
                                                         :href="route('notifications.read', item.id)"
                                                         method="post"
                                                         as="button"
-                                                        class="text-[11px] text-gray-400 hover:text-gray-600 ml-auto"
+                                                        class="text-[11px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 ml-auto"
                                                     >
                                                         標記已讀
                                                     </Link>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-else class="p-6 text-center text-xs text-gray-400">
+                                        <div v-else class="p-6 text-center text-xs text-gray-400 dark:text-gray-500">
                                             目前沒有任何未讀通知
                                         </div>
 
-                                        <div class="p-2 border-t border-gray-100 bg-gray-50 text-center">
+                                        <div class="p-2 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/40 text-center">
                                             <Link
                                                 :href="route('notifications.index')"
-                                                class="text-xs text-gray-600 hover:text-indigo-600 font-medium block"
+                                                class="text-xs text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium block"
                                             >
                                                 前往通知中心
                                             </Link>
@@ -254,7 +258,7 @@ const commandPaletteRef = ref(null);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                                class="inline-flex items-center rounded-md border border-transparent dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium leading-4 text-gray-500 dark:text-gray-300 transition duration-150 ease-in-out hover:text-gray-700 dark:hover:text-gray-100 focus:outline-none"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -468,17 +472,21 @@ const commandPaletteRef = ref(null);
 
                     <!-- Responsive Settings Options -->
                     <div
-                        class="border-t border-gray-200 pb-1 pt-4"
+                        class="border-t border-gray-200 dark:border-gray-700 pb-1 pt-4"
                     >
-                        <div class="px-4">
-                            <div
-                                class="text-base font-medium text-gray-800"
-                            >
-                                {{ $page.props.auth.user.name }}
+                        <div class="px-4 flex items-center justify-between">
+                            <div>
+                                <div
+                                    class="text-base font-medium text-gray-800 dark:text-gray-200"
+                                >
+                                    {{ $page.props.auth.user.name }}
+                                </div>
+                                <div class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {{ $page.props.auth.user.email }}
+                                </div>
                             </div>
-                            <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
-                            </div>
+                            <!-- 手機版主題切換開關 -->
+                            <ThemeToggle />
                         </div>
 
                         <div class="mt-3 space-y-1">
@@ -529,7 +537,7 @@ const commandPaletteRef = ref(null);
 
             <!-- Page Heading -->
             <header
-                class="bg-white shadow"
+                class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-900/40 border-b border-gray-100 dark:border-gray-700/60 transition-colors duration-150"
                 v-if="$slots.header"
             >
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
