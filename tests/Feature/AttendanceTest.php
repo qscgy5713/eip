@@ -26,6 +26,17 @@ class AttendanceTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_cannot_clock_out_without_clock_in_time(): void
+    {
+        $user = User::factory()->create(['role' => 'employee']);
+        Attendance::create(['user_id' => $user->id, 'date' => now()->toDateString(), 'status' => 'normal']);
+
+        $this->actingAs($user)->post('/attendance/clock-out', ['location' => '台北辦公室'])
+            ->assertSessionHas('error');
+
+        $this->assertNull(Attendance::where('user_id', $user->id)->first()->clock_out_at);
+    }
+
     public function test_user_can_clock_in(): void
     {
         $user = User::factory()->create([

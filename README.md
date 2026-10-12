@@ -175,7 +175,7 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
   - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
   - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
-  - **全面測試覆蓋**：累積 **357 項自動化 Feature / Unit 測試 100% 覆蓋通過 (2,127 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **全面測試覆蓋**：累積 **359 項自動化 Feature / Unit 測試 100% 覆蓋通過 (2,133 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)
@@ -265,7 +265,7 @@ npm run dev
 ```bash
 docker compose exec app php artisan test
 ```
-*目前全系統 357 項 Feature / Unit 測試 100% 全數通過 (2,127 assertions)*。
+*目前全系統 359 項 Feature / Unit 測試 100% 全數通過 (2,133 assertions)*。
 
 ## 文檔索引
 - [系統架構與實施規劃 (Plan)](file:///Users/yujuchen/www/eip/doc/plan.md)

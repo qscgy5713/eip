@@ -266,6 +266,26 @@ class DocumentTest extends TestCase
         ]);
     }
 
+    public function test_html_document_is_never_rendered_inline_on_preview(): void
+    {
+        $fakePath = 'documents/evil.html';
+        Storage::disk('local')->put($fakePath, '<!doctype html><html><body><script>alert(1)</script></body></html>');
+
+        $doc = Document::create(['title' => '惡意頁面', 'category' => 'policy', 'uploader_id' => $this->manager->id, 'current_version' => 1]);
+        $ver = DocumentVersion::create([
+            'document_id' => $doc->id, 'uploader_id' => $this->manager->id, 'version_number' => 1, 'version_label' => 'v1.0',
+            'file_path' => $fakePath, 'file_name' => 'evil.html', 'file_size' => 100,
+            'mime_type' => 'application/pdf', // 上傳者謊報型別也不可信
+        ]);
+
+        $response = $this->actingAs($this->employee)->get("/documents/{$doc->id}/preview/{$ver->id}");
+
+        $response->assertStatus(200);
+        $this->assertStringContainsString('attachment', $response->headers->get('content-disposition'));
+        $this->assertStringNotContainsString('html', (string) $response->headers->get('content-type'));
+        $this->assertSame('nosniff', $response->headers->get('x-content-type-options'));
+    }
+
     public function test_regular_employee_cannot_preview_restricted_document(): void
     {
         $fakePath = 'documents/secret_plan.pdf';

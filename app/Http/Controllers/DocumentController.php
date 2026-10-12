@@ -290,12 +290,23 @@ class DocumentController extends Controller
         );
 
         $filePath = Storage::path($targetVersion->file_path);
-        $mimeType = $targetVersion->mime_type ?: Storage::mimeType($targetVersion->file_path) ?: 'application/octet-stream';
+        // 以伺服器偵測的型別為準(不信任上傳者提供的 MIME);僅 PDF/圖片(不含 SVG)/純文字可內嵌預覽,
+        // 其餘(HTML、SVG、Office 等)一律改為下載,避免上傳惡意 HTML/SVG 於本站網域執行 (儲存型 XSS)
+        $detected = Storage::mimeType($targetVersion->file_path) ?: 'application/octet-stream';
+        $inlineSafe = in_array($detected, ['application/pdf', 'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'text/plain'], true);
+        $disposition = $inlineSafe ? 'inline' : 'attachment';
 
-        return response()->file($filePath, [
-            'Content-Type' => $mimeType,
-            'Content-Disposition' => 'inline; filename="' . rawurlencode($targetVersion->file_name) . '"',
-        ]);
+        $headers = [
+            'Content-Type' => $inlineSafe ? $detected : 'application/octet-stream',
+            'Content-Disposition' => $disposition . '; filename="' . rawurlencode($targetVersion->file_name) . '"',
+            'X-Content-Type-Options' => 'nosniff',
+        ];
+        // sandbox CSP 會使瀏覽器內建 PDF 檢視器無法載入,故 PDF 以外才加
+        if ($detected !== 'application/pdf') {
+            $headers['Content-Security-Policy'] = 'sandbox';
+        }
+
+        return response()->file($filePath, $headers);
     }
 
     /**

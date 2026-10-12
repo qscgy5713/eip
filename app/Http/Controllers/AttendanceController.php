@@ -167,7 +167,7 @@ class AttendanceController extends Controller
 
         $attendance = Attendance::where('user_id', $user->id)->whereDate('date', $today)->first();
 
-        if (!$attendance) {
+        if (!$attendance || !$attendance->clock_in_at) {
             return redirect()->back()->with('error', '今日尚無上班打卡紀錄，請先填寫忘刷/補打卡申請單或先執行上班打卡。');
         }
 
