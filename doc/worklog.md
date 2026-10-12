@@ -11,6 +11,9 @@
 - **表單詳情**：`Forms/Show` 依範本 `fields_schema` 顯示中文欄位標籤（詳情、重送編輯、修改比對三處），找不到時退回原鍵值。
 - **日期格式**：全站 `toLocaleDateString()` 統一改為 `'sv-SE'`（`YYYY-MM-DD`），解決資產頁 `2026/10/2` 與 `2026-11-01` 混用。
 - **錯誤頁**：新增 `Pages/Error.vue`，於 `bootstrap/app.php` 對 403/404/419（及非 debug 的 500/503）以 Inertia 呈現中文錯誤頁，JSON/API 請求維持原樣；新增 `tests/Feature/ErrorPageTest.php`。全系統 333 項測試通過。
+- **訂餐列表統計**：`MealOrders/Index` 讀取 `openOrders/todayOrders/myJoinedCount/myPendingPayable`，後端原本回傳不同鍵名，造成卡片數字空白與「$非數值」。後端對齊（待繳金額為各未結清訂單小計扣補助、最低 0），並強化 index 測試斷言。
+- **深色模式**：Trainings/Vehicles 共 4 檔使用了不存在的 `dark:bg-gray-750`，卡片在深色下仍是淺色；於 `tailwind.config.js` 的 gray 補上 `750` (#262e40)。
+- 已瀏覽檢視 tickets/vehicles/visitor-reservations/assets/projects/polls/weekly-reports 列表與 tickets/vehicles/visitor 詳情，無其他異常。
 
 ### 全站視覺改版：現代 SaaS 簡潔風
 - **修正既有 bug**：Dashboard 連到不存在的路由 `organization.index`、`knowledge.index` 造成整頁空白，改為 `org-management.index`、`documents.index`。

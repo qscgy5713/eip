@@ -46,17 +46,29 @@ class MealOrderController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        // 統計指標
-        $todayOpenCount = MealOrder::where('status', 'open')
+        // 統計指標 (鍵名需與 MealOrders/Index.vue 讀取的一致)
+        $openOrders = MealOrder::where('status', 'open')
             ->where('cutoff_time', '>', Carbon::now())
             ->count();
 
-        $myUnpaidCount = MealOrderItem::where('user_id', $user->id)
+        $todayOrders = MealOrder::whereDate('created_at', Carbon::today())->count();
+
+        $myJoinedCount = MealOrderItem::where('user_id', $user->id)
+            ->distinct('meal_order_id')
+            ->count('meal_order_id');
+
+        // 待繳金額:每個尚未結清的訂單,同仁品項小計扣除公司補助 (最低為 0) 後加總
+        $myPendingPayable = MealOrderItem::with('order:id,subsidy_per_person')
+            ->where('user_id', $user->id)
             ->where('payment_status', 'unpaid')
             ->whereHas('order', fn ($oq) => $oq->whereIn('status', ['open', 'closed']))
-            ->count();
+            ->get()
+            ->groupBy('meal_order_id')
+            ->sum(function ($items) {
+                $subsidy = (float) $items->first()->order->subsidy_per_person;
 
-        $completedCount = MealOrder::where('status', 'completed')->count();
+                return max(0, (float) $items->sum('subtotal') - $subsidy);
+            });
 
         return Inertia::render('MealOrders/Index', [
             'orders' => $orders,
@@ -66,9 +78,10 @@ class MealOrderController extends Controller
                 'search' => $search,
             ],
             'stats' => [
-                'todayOpenCount' => $todayOpenCount,
-                'myUnpaidCount' => $myUnpaidCount,
-                'completedCount' => $completedCount,
+                'openOrders' => $openOrders,
+                'todayOrders' => $todayOrders,
+                'myJoinedCount' => $myJoinedCount,
+                'myPendingPayable' => round($myPendingPayable, 0),
             ],
         ]);
     }

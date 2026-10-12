@@ -43,7 +43,10 @@ class MealOrderTest extends TestCase
         $response->assertInertia(fn ($page) => $page
             ->component('MealOrders/Index')
             ->has('orders.data', 1)
-            ->has('stats')
+            ->where('stats.openOrders', 1)
+            ->where('stats.todayOrders', 1)
+            ->where('stats.myJoinedCount', 0)
+            ->where('stats.myPendingPayable', 0)
         );
     }
 
