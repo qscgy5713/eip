@@ -129,4 +129,38 @@ class RouteSweepTest extends TestCase
 
         $this->assertSame([], $failures, implode("\n", $failures));
     }
+
+    /** 以格式不合的查詢參數(分頁負數、陣列、非數字 id、非法日期/月份)造訪所有列表頁,不得 5xx。(字串搜尋走 PostgreSQL ilike,SQLite 測試庫不支援,故不在此列) */
+    public function test_list_pages_survive_garbage_query_parameters(): void
+    {
+        $this->seed(EipDatabaseSeeder::class);
+        $admin = User::where('email', 'admin@eip.local')->firstOrFail();
+
+        $uris = collect(Route::getRoutes())
+            ->filter(fn ($r) => in_array('GET', $r->methods(), true))
+            ->map(fn ($r) => $r->uri())
+            ->reject(fn ($u) => str_contains($u, '{') || str_starts_with($u, '_') || str_starts_with($u, 'api')
+                || str_starts_with($u, 'storage') || in_array($u, ['up', 'logout', 'sanctum/csrf-cookie'], true))
+            ->unique()->values();
+
+        $queries = [
+            ['page' => '-1'], ['page' => 'abc'], ['page' => '999999'], ['page' => ['x']],
+            ['search' => ["a' OR 1=1 --"]],
+            ['start_date' => 'not-a-date', 'end_date' => '2026-13-45'], ['month' => 'xx', 'year' => '-5', 'week' => '99999'],
+            ['status' => ['a' => ['b']], 'category' => 'zzz', 'scope' => 'hack', 'sort' => 'password; DROP TABLE users'],
+            ['department_id' => 'abc', 'user_id' => '1 OR 1=1', 'per_page' => '100000'],
+        ];
+
+        $failures = [];
+        foreach ($uris as $uri) {
+            foreach ($queries as $query) {
+                $status = $this->actingAs($admin)->get('/'.$uri.'?'.http_build_query($query))->getStatusCode();
+                if ($status >= 500) {
+                    $failures[] = "/$uri ".json_encode($query, JSON_UNESCAPED_UNICODE)." => $status";
+                }
+            }
+        }
+
+        $this->assertSame([], array_slice($failures, 0, 30), implode("\n", array_slice($failures, 0, 30)));
+    }
 }
