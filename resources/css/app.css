@@ -91,6 +91,17 @@
         @apply text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-50 leading-tight;
     }
 
+    /* 窄螢幕：標頭按鈕不在字中間折行，改為整排換行 */
+    .page-header a,
+    .page-header button {
+        white-space: nowrap;
+    }
+
+    .page-header div.flex {
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+    }
+
     .page-header h2 + p {
         @apply mt-1.5 text-sm text-gray-500 dark:text-gray-400;
     }

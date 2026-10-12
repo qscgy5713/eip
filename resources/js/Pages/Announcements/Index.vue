@@ -150,7 +150,7 @@ const submitAnnouncement = () => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 篩選列：分類與發布狀態 -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 pb-4 dark:border-gray-700">
                     <!-- 分類切換標籤 -->

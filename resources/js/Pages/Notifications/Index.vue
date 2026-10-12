@@ -70,7 +70,7 @@ const getTypeBadge = (type) => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-5xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-5xl sm:px-6 lg:px-8 px-4">
                 <!-- 通知列表容器 -->
                 <div class="bg-white shadow-sm sm:rounded-xl border border-gray-200 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                     <div v-if="notifications.data.length === 0" class="py-16 text-center text-gray-500 dark:text-gray-400">

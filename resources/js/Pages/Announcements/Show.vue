@@ -55,7 +55,7 @@ const priorityBadge = (priority) => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-5xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-5xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 提示/成功訊息 -->
                 <div v-if="$page.props.flash?.success" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center text-emerald-800 shadow-sm text-sm">
                     <svg class="w-5 h-5 text-emerald-600 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>

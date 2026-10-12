@@ -155,7 +155,7 @@ const getStatusBadge = (order) => {
         </template>
 
         <div class="py-6">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 提示/說明橫幅與門檻統計 -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-xs">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

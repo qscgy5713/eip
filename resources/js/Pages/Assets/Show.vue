@@ -192,7 +192,7 @@ const statusLabel = (status) => {
         </template>
 
         <div class="py-6">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 資產全景檔案卡片 -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- 左側主規格資訊 -->

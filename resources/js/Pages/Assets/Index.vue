@@ -210,7 +210,7 @@ const statusLabel = (status) => {
         </template>
 
         <div class="py-6">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 頂部統計指標卡片 -->
                 <div class="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
                     <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-xs">

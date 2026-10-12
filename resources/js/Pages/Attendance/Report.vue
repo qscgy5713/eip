@@ -112,7 +112,7 @@ const getExportDetailsUrl = () => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8 px-4">
                 <!-- 篩選列 -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 dark:bg-gray-800 dark:border-gray-700">
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-center">

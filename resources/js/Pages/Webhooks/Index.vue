@@ -77,7 +77,7 @@ const deleteWebhook = (id, name) => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- Webhook 支援格式說明卡片 -->
                 <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-5 flex items-start gap-4">
                     <div class="p-2 bg-indigo-600 text-white rounded-lg flex-shrink-0">

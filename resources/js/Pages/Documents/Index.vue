@@ -251,7 +251,7 @@ const isText = (mimeType, fileName = '') => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 分類標籤頁與篩選列 -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 space-y-4 dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex flex-wrap items-center gap-2 border-b border-gray-100 pb-3 dark:border-gray-700">

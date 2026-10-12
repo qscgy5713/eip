@@ -142,7 +142,7 @@ const closeMembersDrawer = () => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- ================= 視圖 1: 同仁名冊清單 (List View) ================= -->
                 <div v-if="viewMode === 'list'" class="space-y-6">
                     <!-- 搜尋與部門篩選列 -->

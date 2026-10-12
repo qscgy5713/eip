@@ -226,7 +226,7 @@ const formatTime = (isoString) => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 日期選擇控制列 -->
                 <div class="bg-white rounded-xl shadow-xs border border-gray-100 p-4 flex flex-col sm:flex-row items-center justify-between gap-4 dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex items-center space-x-2">

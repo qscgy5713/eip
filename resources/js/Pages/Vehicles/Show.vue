@@ -180,7 +180,7 @@ const printDispatchOrder = () => {
                         <template v-if="dispatch.status === 'approved'">
                             <button
                                 @click="showStartModal = true"
-                                class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium text-sm rounded-lg shadow-sm transition inline-flex items-center gap-1.5"
+                                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-lg shadow-sm transition inline-flex items-center gap-1.5"
                             >
                                  交付鑰匙 · 領車出發
                             </button>
@@ -406,7 +406,7 @@ const printDispatchOrder = () => {
                         <button
                             type="submit"
                             :disabled="startForm.processing"
-                            class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-medium"
+                            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium"
                         >
                             確認領車出發
                         </button>

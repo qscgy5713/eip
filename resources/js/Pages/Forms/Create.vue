@@ -80,7 +80,7 @@ const submit = () => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-3xl sm:px-6 lg:px-8 px-4">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 dark:bg-gray-800 dark:border-gray-700">
                     <div class="mb-6 pb-4 border-b border-gray-100 dark:border-gray-700">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ form.name }}</h3>

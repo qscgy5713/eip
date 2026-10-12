@@ -253,7 +253,7 @@ const typeLabel = (type) => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 今日即時打卡卡片 -->
                 <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl shadow-lg p-6 sm:p-8 text-white space-y-5">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-6">

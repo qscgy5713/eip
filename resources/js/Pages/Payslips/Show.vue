@@ -79,7 +79,7 @@ const handlePrint = () => {
         </template>
 
         <div class="py-8">
-            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6 px-4">
 
                 <!-- 正式薪資單 A4 憑單容器 -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8 sm:p-12 print:p-0 print:border-none print:shadow-none print:bg-white text-gray-800 dark:text-gray-200 print:text-black">

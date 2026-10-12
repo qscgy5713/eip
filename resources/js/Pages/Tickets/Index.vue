@@ -85,7 +85,7 @@ const getStatusBadge = (s) => {
         </template>
 
         <div class="py-6">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 統計看板 -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs flex items-center justify-between">

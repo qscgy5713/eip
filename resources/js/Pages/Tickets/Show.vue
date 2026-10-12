@@ -131,7 +131,7 @@ const getStatusBadge = (s) => {
         </template>
 
         <div class="py-6">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 視覺化進度管線 Stepper -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-xs">
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-xs">

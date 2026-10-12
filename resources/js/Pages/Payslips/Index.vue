@@ -222,7 +222,7 @@ const submitBatchPublish = () => {
         </template>
 
         <div class="py-8">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 px-4">
 
                 <!-- 隱私安全告示 -->
                 <div class="p-4 rounded-xl bg-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm border border-slate-800">

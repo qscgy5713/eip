@@ -198,7 +198,7 @@ const submitEditProject = () => {
         </template>
 
         <div class="py-6">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 專案概況列 -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div class="space-y-1.5 flex-1">

@@ -68,7 +68,7 @@ const formatActionBadge = (action) => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 篩選器與搜尋工具列 -->
                 <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">

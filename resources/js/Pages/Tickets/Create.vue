@@ -57,7 +57,7 @@ const submit = () => {
         </template>
 
         <div class="py-6">
-            <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-3xl sm:px-6 lg:px-8 px-4">
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 shadow-xs">
                     <form @submit.prevent="submit" class="space-y-5 text-xs">
                         <div>

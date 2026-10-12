@@ -142,7 +142,7 @@ const deleteForm = (formId, formName) => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8 px-4">
                 <!-- 可發起表單區塊 -->
                 <div>
                     <div class="flex items-center justify-between mb-4">

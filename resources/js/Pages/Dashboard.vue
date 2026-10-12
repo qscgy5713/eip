@@ -104,7 +104,7 @@ const statusBadge = (status) => {
         </template>
 
         <div class="py-8">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 提示/錯誤訊息 -->
                 <div v-if="$page.props.flash?.error" class="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-xl flex items-center justify-between text-rose-800 dark:text-rose-300 shadow-sm text-sm">
                     <div class="flex items-center space-x-2">
