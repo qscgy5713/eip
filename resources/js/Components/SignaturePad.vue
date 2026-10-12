@@ -128,7 +128,7 @@ watch(() => props.modelValue, (newVal) => {
 
 <template>
     <div class="space-y-2">
-        <div class="relative border-2 border-dashed border-gray-300 hover:border-indigo-400 bg-white rounded-xl overflow-hidden shadow-inner transition select-none flex items-center justify-center">
+        <div class="relative border-2 border-dashed border-gray-300 hover:border-indigo-400 bg-white rounded-xl overflow-hidden shadow-inner transition select-none flex items-center justify-center dark:bg-gray-800 dark:border-gray-700">
             <canvas
                 ref="canvasRef"
                 class="cursor-crosshair touch-none"
@@ -160,7 +160,7 @@ watch(() => props.modelValue, (newVal) => {
             <button
                 type="button"
                 @click="clear"
-                class="px-2.5 py-1 text-2xs font-semibold text-gray-600 hover:text-red-600 bg-gray-100 hover:bg-gray-200 rounded-md transition"
+                class="px-2.5 py-1 text-2xs font-semibold text-gray-600 hover:text-red-600 bg-gray-100 hover:bg-gray-200 rounded-md transition dark:bg-gray-700 dark:text-gray-400"
             >
                 清除重簽
             </button>

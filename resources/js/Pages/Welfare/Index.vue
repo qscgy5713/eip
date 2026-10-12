@@ -104,7 +104,7 @@ const submitReward = () => {
             <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
                 <p class="text-xs text-gray-500 dark:text-gray-400">我的福利點數存摺</p>
                 <p class="text-3xl font-black text-amber-600 dark:text-amber-400 mt-0.5 font-mono">
-                    {{ wallet.reward_points }} <span class="text-sm font-normal text-gray-500">點</span>
+                    {{ wallet.reward_points }} <span class="text-sm font-normal text-gray-500 dark:text-gray-400">點</span>
                 </p>
             </div>
 
@@ -140,7 +140,7 @@ const submitReward = () => {
                             <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300">
                                 {{ reward.category_label }}
                             </span>
-                            <span v-if="!reward.is_active" class="text-[11px] font-bold text-gray-500">已下架</span>
+                            <span v-if="!reward.is_active" class="text-[11px] font-bold text-gray-500 dark:text-gray-400">已下架</span>
                             <span v-else-if="reward.is_sold_out" class="text-[11px] font-bold text-red-600">已兌換完畢</span>
                             <span v-else-if="reward.stock > 0" class="text-[11px] text-gray-400">剩餘 {{ reward.stock }}</span>
                         </div>
@@ -153,7 +153,7 @@ const submitReward = () => {
                             <button
                                 v-if="canManage"
                                 type="button"
-                                class="text-xs text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
+                                class="text-xs text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-400"
                                 @click="toggleReward(reward)"
                             >
                                 {{ reward.is_active ? '下架' : '上架' }}
@@ -169,7 +169,15 @@ const submitReward = () => {
                         </div>
                     </div>
                 </div>
-                <div v-if="rewards.length === 0" class="col-span-full py-10 text-center text-sm text-gray-400">商城目前沒有商品</div>
+                <div
+                    v-if="rewards.length === 0"
+                    class="col-span-full rounded-xl border border-dashed border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-6 py-12 text-center"
+                >
+                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">商城目前沒有商品</p>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        {{ canManage ? '點右上角「上架新商品」，為同仁準備第一份福利。' : '人資上架商品後，就能在這裡用福利點數兌換。' }}
+                    </p>
+                </div>
             </div>
 
             <!-- 我的兌換紀錄 -->
@@ -181,7 +189,7 @@ const submitReward = () => {
                     </div>
                     <div class="flex items-center gap-3 shrink-0">
                         <span class="px-2 py-0.5 text-[11px] font-bold rounded border" :class="statusStyle[r.status]">{{ r.status_label }}</span>
-                        <button v-if="r.status === 'pending'" type="button" class="text-xs text-gray-500 hover:text-red-600" @click="cancelRedemption(r)">
+                        <button v-if="r.status === 'pending'" type="button" class="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400" @click="cancelRedemption(r)">
                             取消兌換
                         </button>
                     </div>
@@ -206,7 +214,7 @@ const submitReward = () => {
                             <button type="button" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white" @click="fulfill(r)">
                                 核銷發放
                             </button>
-                            <button type="button" class="text-xs text-gray-500 hover:text-red-600" @click="cancelRedemption(r)">取消退點</button>
+                            <button type="button" class="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400" @click="cancelRedemption(r)">取消退點</button>
                         </template>
                     </div>
                 </div>

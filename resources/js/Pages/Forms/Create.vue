@@ -75,16 +75,16 @@ const submit = () => {
             <div class="flex items-center space-x-3">
                 <Link :href="route('forms.index')" class="text-sm text-blue-600 hover:underline">&larr; 返回簽核中心</Link>
                 <span class="text-gray-300">/</span>
-                <h2 class="text-xl font-bold leading-tight text-gray-800">發起申請：{{ form.name }}</h2>
+                <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">發起申請：{{ form.name }}</h2>
             </div>
         </template>
 
         <div class="py-8">
             <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-                    <div class="mb-6 pb-4 border-b border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900">{{ form.name }}</h3>
-                        <p class="text-sm text-gray-500 mt-1">{{ form.description }}</p>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="mb-6 pb-4 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ form.name }}</h3>
+                        <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">{{ form.description }}</p>
                     </div>
 
                     <form @submit.prevent="submit" class="space-y-6">
@@ -118,10 +118,10 @@ const submit = () => {
                                 <div
                                     v-for="b in leaveBalances"
                                     :key="b.id"
-                                    class="bg-white/90 p-2 rounded-lg border border-indigo-100/60"
+                                    class="bg-white/90 p-2 rounded-lg border border-indigo-100/60 dark:bg-gray-800"
                                 >
-                                    <div class="text-[11px] text-gray-500">{{ b.type_label }}</div>
-                                    <div class="font-bold text-gray-900 mt-0.5">
+                                    <div class="text-[11px] text-gray-500 dark:text-gray-400">{{ b.type_label }}</div>
+                                    <div class="font-bold text-gray-900 mt-0.5 dark:text-gray-100">
                                         <span class="text-indigo-600 text-sm">{{ b.available_days }}</span>
                                         <span class="text-gray-400 text-[10px]"> / {{ b.allocated_days }}天</span>
                                     </div>
@@ -140,24 +140,24 @@ const submit = () => {
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">申請主旨 / 標題 <span class="text-rose-500">*</span></label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1 dark:text-gray-300">申請主旨 / 標題 <span class="text-rose-500">*</span></label>
                             <input
                                 v-model="formState.title"
                                 type="text"
                                 required
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
                             />
                             <p v-if="formState.errors.title" class="text-xs text-rose-600 mt-1">{{ formState.errors.title }}</p>
                         </div>
 
                         <!-- 動態欄位 -->
                         <div v-for="field in form.fields_schema" :key="field.key" class="space-y-1">
-                            <label class="block text-sm font-semibold text-gray-700">{{ field.label }}</label>
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
 
                             <select
                                 v-if="field.type === 'select'"
                                 v-model="formState.data[field.key]"
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
                             >
                                 <option v-for="opt in field.options" :key="opt" :value="opt">{{ opt }}</option>
                             </select>
@@ -166,39 +166,39 @@ const submit = () => {
                                 v-else-if="field.type === 'textarea'"
                                 v-model="formState.data[field.key]"
                                 rows="3"
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
                             ></textarea>
 
                             <input
                                 v-else
                                 :type="field.type || 'text'"
                                 v-model="formState.data[field.key]"
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm"
+                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
                             />
 
                             <p v-if="formState.errors['data.' + field.key]" class="text-xs text-rose-600 mt-1">{{ formState.errors['data.' + field.key] }}</p>
                         </div>
 
                         <!-- 證明文件與附件上傳 -->
-                        <div class="pt-4 border-t border-gray-100">
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1 dark:text-gray-300">
                                 檢附證明文件 / 附件 (選填)
                             </label>
-                            <p class="text-xs text-gray-500 mb-3">
+                            <p class="text-xs text-gray-500 mb-3 dark:text-gray-400">
                                 如請假證明（就醫證明、訃聞、公文）、單據收據或申請相關說明文件。支援 PDF、JPG、PNG、Word、Excel、ZIP，單檔最大 10MB。
                             </p>
 
-                            <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors bg-gray-50/50">
+                            <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors bg-gray-50/50 dark:bg-gray-800/60 dark:border-gray-700">
                                 <div class="space-y-1 text-center">
                                     <svg class="mx-auto h-10 w-10 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <div class="flex text-sm text-gray-600 justify-center">
+                                    <div class="flex text-sm text-gray-600 justify-center dark:text-gray-400">
                                         <label for="file-upload" class="relative cursor-pointer rounded-md font-semibold text-blue-600 hover:text-blue-500 focus-within:outline-none">
                                             <span>點擊選擇檔案</span>
                                             <input id="file-upload" name="file-upload" type="file" multiple class="sr-only" @change="handleFileChange" />
                                         </label>
-                                        <p class="pl-1 text-gray-500">或拖曳檔案至此</p>
+                                        <p class="pl-1 text-gray-500 dark:text-gray-400">或拖曳檔案至此</p>
                                     </div>
                                     <p class="text-xs text-gray-400">可選取多個檔案</p>
                                 </div>
@@ -206,14 +206,14 @@ const submit = () => {
 
                             <!-- 已選擇附件清單 -->
                             <div v-if="formState.attachments.length > 0" class="mt-4 space-y-2">
-                                <div class="text-xs font-semibold text-gray-500">已準備上傳的檔案 ({{ formState.attachments.length }})：</div>
-                                <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white">
+                                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400">已準備上傳的檔案 ({{ formState.attachments.length }})：</div>
+                                <ul class="divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700 dark:divide-gray-700">
                                     <li v-for="(file, idx) in formState.attachments" :key="idx" class="flex items-center justify-between py-2.5 px-4 text-sm">
                                         <div class="flex items-center space-x-3 truncate">
                                             <svg class="h-5 w-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
-                                            <span class="font-medium text-gray-700 truncate">{{ file.name }}</span>
+                                            <span class="font-medium text-gray-700 truncate dark:text-gray-300">{{ file.name }}</span>
                                             <span class="text-xs text-gray-400">({{ formatSize(file.size) }})</span>
                                         </div>
                                         <button
@@ -232,8 +232,8 @@ const submit = () => {
                             </div>
                         </div>
 
-                        <div class="pt-4 border-t border-gray-100 flex justify-end space-x-3">
-                            <Link :href="route('forms.index')" class="px-5 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        <div class="pt-4 border-t border-gray-100 flex justify-end space-x-3 dark:border-gray-700">
+                            <Link :href="route('forms.index')" class="px-5 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:border-gray-700">
                                 取消
                             </Link>
                             <button

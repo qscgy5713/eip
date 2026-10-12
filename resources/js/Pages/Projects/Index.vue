@@ -390,7 +390,7 @@ const statusLabel = (status) => {
                                     type="checkbox"
                                     :value="u.id"
                                     v-model="form.member_ids"
-                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-700"
                                 />
                                 <span>{{ u.name }} <span class="text-gray-400">({{ u.job_title || u.email }})</span></span>
                             </label>
@@ -473,7 +473,7 @@ const statusLabel = (status) => {
                                     type="checkbox"
                                     :value="u.id"
                                     v-model="editForm.member_ids"
-                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-700"
                                 />
                                 <span>{{ u.name }} <span class="text-gray-400">({{ u.job_title || u.email }})</span></span>
                             </label>

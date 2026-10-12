@@ -91,7 +91,7 @@ const toggleVotersList = (optionId) => {
                 <div class="flex items-center gap-3">
                     <Link
                         :href="route('polls.index')"
-                        class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors dark:text-gray-400"
                         title="返回投票清單"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,10 +99,10 @@ const toggleVotersList = (optionId) => {
                         </svg>
                     </Link>
                     <div>
-                        <h2 class="text-xl font-bold leading-tight text-gray-800">
+                        <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">
                             {{ poll.title }}
                         </h2>
-                        <p class="text-xs text-gray-500 mt-0.5">
+                        <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">
                             發起人：{{ poll.creator?.name }} · {{ poll.created_at }}
                         </p>
                     </div>
@@ -129,8 +129,8 @@ const toggleVotersList = (optionId) => {
         <div class="py-8">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 <!-- 狀態橫幅與基本資訊 -->
-                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                    <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-gray-100">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-gray-100 dark:border-gray-700">
                         <div class="flex flex-wrap items-center gap-2">
                             <span
                                 v-if="!poll.is_closed"
@@ -141,7 +141,7 @@ const toggleVotersList = (optionId) => {
                             </span>
                             <span
                                 v-else
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200"
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400"
                             >
                                 已截止
                             </span>
@@ -158,9 +158,9 @@ const toggleVotersList = (optionId) => {
                             </span>
                         </div>
 
-                        <div class="text-xs text-gray-500">
+                        <div class="text-xs text-gray-500 dark:text-gray-400">
                             <span v-if="poll.ends_at">
-                                截止期限：<strong class="text-gray-700">{{ poll.ends_at }}</strong>
+                                截止期限：<strong class="text-gray-700 dark:text-gray-300">{{ poll.ends_at }}</strong>
                             </span>
                             <span v-else>
                                 截止期限：由發起人手動關閉
@@ -168,22 +168,22 @@ const toggleVotersList = (optionId) => {
                         </div>
                     </div>
 
-                    <div v-if="poll.description" class="mt-4 text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                    <div v-if="poll.description" class="mt-4 text-sm text-gray-600 leading-relaxed whitespace-pre-line dark:text-gray-400">
                         {{ poll.description }}
                     </div>
 
                     <!-- 統計概覽數據列 -->
-                    <div class="mt-6 pt-4 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
-                        <div class="bg-gray-50/80 p-3 rounded-lg border border-gray-100">
-                            <div class="text-xs text-gray-500">累計參與同仁</div>
-                            <div class="text-xl font-bold text-gray-900 mt-0.5">{{ voters_count }} <span class="text-xs font-normal text-gray-500">人</span></div>
+                    <div class="mt-6 pt-4 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-3 gap-4 text-center dark:border-gray-700">
+                        <div class="bg-gray-50/80 p-3 rounded-lg border border-gray-100 dark:bg-gray-800/60 dark:border-gray-700">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">累計參與同仁</div>
+                            <div class="text-xl font-bold text-gray-900 mt-0.5 dark:text-gray-100">{{ voters_count }} <span class="text-xs font-normal text-gray-500 dark:text-gray-400">人</span></div>
                         </div>
-                        <div class="bg-gray-50/80 p-3 rounded-lg border border-gray-100">
-                            <div class="text-xs text-gray-500">總投出票數</div>
-                            <div class="text-xl font-bold text-indigo-600 mt-0.5">{{ total_votes }} <span class="text-xs font-normal text-gray-500">票</span></div>
+                        <div class="bg-gray-50/80 p-3 rounded-lg border border-gray-100 dark:bg-gray-800/60 dark:border-gray-700">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">總投出票數</div>
+                            <div class="text-xl font-bold text-indigo-600 mt-0.5">{{ total_votes }} <span class="text-xs font-normal text-gray-500 dark:text-gray-400">票</span></div>
                         </div>
-                        <div class="col-span-2 sm:col-span-1 bg-gray-50/80 p-3 rounded-lg border border-gray-100 flex flex-col justify-center">
-                            <div class="text-xs text-gray-500">我的狀態</div>
+                        <div class="col-span-2 sm:col-span-1 bg-gray-50/80 p-3 rounded-lg border border-gray-100 flex flex-col justify-center dark:bg-gray-800/60 dark:border-gray-700">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">我的狀態</div>
                             <div class="text-sm font-bold mt-0.5">
                                 <span v-if="has_voted" class="text-emerald-600 flex items-center justify-center gap-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -203,17 +203,17 @@ const toggleVotersList = (optionId) => {
                 </div>
 
                 <!-- 核心互動區：投票介面 或 即時結果長條圖 -->
-                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 sm:p-8 dark:bg-gray-800 dark:border-gray-700">
                     <!-- 1. 進行中 且 尚未投票：展示投票選取面板 -->
                     <div v-if="!has_voted && !poll.is_closed">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                            <h3 class="text-base font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100">
                                 <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                 </svg>
                                 請投下您寶貴的一票
                             </h3>
-                            <span class="text-xs text-gray-500">
+                            <span class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ poll.is_multiple_choice ? '（可勾選多個選項）' : '（單選，僅能選一項）' }}
                             </span>
                         </div>
@@ -226,7 +226,7 @@ const toggleVotersList = (optionId) => {
                                 :class="[
                                     selectedOptions.includes(option.id)
                                         ? 'border-indigo-600 bg-indigo-50/60 ring-2 ring-indigo-500/20'
-                                        : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50',
+                                        : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50 dark:bg-gray-800 dark:border-gray-700',
                                     'p-4 rounded-xl border cursor-pointer transition-all flex items-center justify-between group'
                                 ]"
                             >
@@ -235,7 +235,7 @@ const toggleVotersList = (optionId) => {
                                         :class="[
                                             selectedOptions.includes(option.id)
                                                 ? 'bg-indigo-600 border-indigo-600 text-white'
-                                                : 'border-gray-300 bg-white group-hover:border-gray-400',
+                                                : 'border-gray-300 bg-white group-hover:border-gray-400 dark:bg-gray-800 dark:border-gray-700',
                                             poll.is_multiple_choice ? 'rounded-md' : 'rounded-full',
                                             'w-5 h-5 border flex items-center justify-center transition-colors'
                                         ]"
@@ -244,7 +244,7 @@ const toggleVotersList = (optionId) => {
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
-                                    <span class="text-sm font-medium text-gray-800">
+                                    <span class="text-sm font-medium text-gray-800 dark:text-gray-100">
                                         {{ option.option_text }}
                                     </span>
                                 </div>
@@ -255,8 +255,8 @@ const toggleVotersList = (optionId) => {
                             {{ voteForm.errors.vote }}
                         </div>
 
-                        <div class="mt-8 pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <span class="text-xs text-gray-500">
+                        <div class="mt-8 pt-4 border-t border-gray-100 flex items-center justify-between dark:border-gray-700">
+                            <span class="text-xs text-gray-500 dark:text-gray-400">
                                 已選取 <strong class="text-indigo-600 font-semibold">{{ selectedOptions.length }}</strong> 項
                             </span>
                             <PrimaryButton
@@ -272,13 +272,13 @@ const toggleVotersList = (optionId) => {
                     <div v-else>
                         <div class="flex items-center justify-between mb-6">
                             <div>
-                                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100">
                                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                     </svg>
                                     即時得票統計分析
                                 </h3>
-                                <p class="text-xs text-gray-500 mt-1">
+                                <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">
                                     {{ has_voted ? '您已完成投票，以下為全員即時票選分佈' : '此活動已結束，以下為最終票選結果' }}
                                 </p>
                             </div>
@@ -288,11 +288,11 @@ const toggleVotersList = (optionId) => {
                             <div
                                 v-for="option in options"
                                 :key="option.id"
-                                class="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+                                class="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors dark:bg-gray-800/60 dark:border-gray-700"
                             >
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-sm font-semibold text-gray-900">
+                                        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">
                                             {{ option.option_text }}
                                         </span>
                                         <!-- 最高票徽章 -->
@@ -310,7 +310,7 @@ const toggleVotersList = (optionId) => {
                                             ✓ 我的選擇
                                         </span>
                                     </div>
-                                    <div class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                                    <div class="text-sm font-bold text-gray-700 flex items-center gap-2 dark:text-gray-300">
                                         <span class="text-indigo-600">{{ option.votes_count }} 票</span>
                                         <span class="text-gray-400">({{ option.percentage }}%)</span>
                                     </div>
@@ -330,7 +330,7 @@ const toggleVotersList = (optionId) => {
                                 </div>
 
                                 <!-- 若具名投票且具管理權限，可展開查看投票人明細 -->
-                                <div v-if="!poll.is_anonymous && can_manage && option.voters && option.voters.length > 0" class="mt-3 pt-2 border-t border-gray-200/60">
+                                <div v-if="!poll.is_anonymous && can_manage && option.voters && option.voters.length > 0" class="mt-3 pt-2 border-t border-gray-200/60 dark:border-gray-700">
                                     <button
                                         @click="toggleVotersList(option.id)"
                                         class="text-xs text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1"
@@ -351,7 +351,7 @@ const toggleVotersList = (optionId) => {
                                         <span
                                             v-for="voter in option.voters"
                                             :key="voter.id"
-                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-white text-gray-700 border border-gray-200 shadow-2xs"
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-white text-gray-700 border border-gray-200 shadow-2xs dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                                         >
                                             {{ voter.name }} ({{ voter.employee_no }})
                                         </span>
@@ -367,8 +367,8 @@ const toggleVotersList = (optionId) => {
         <!-- 提前結束投票確認 Modal -->
         <Modal :show="showCloseConfirmModal" @close="showCloseConfirmModal = false" max-width="md">
             <div class="p-6">
-                <h3 class="text-lg font-bold text-gray-900">確定要提前結束此投票嗎？</h3>
-                <p class="text-sm text-gray-500 mt-2">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">確定要提前結束此投票嗎？</h3>
+                <p class="text-sm text-gray-500 mt-2 dark:text-gray-400">
                     結束後將無法再接收同仁的新選票，但所有人仍可繼續查看最終統計結果。
                 </p>
                 <div class="mt-6 flex justify-end gap-3">
@@ -381,8 +381,8 @@ const toggleVotersList = (optionId) => {
         <!-- 刪除投票確認 Modal -->
         <Modal :show="showDeleteConfirmModal" @close="showDeleteConfirmModal = false" max-width="md">
             <div class="p-6">
-                <h3 class="text-lg font-bold text-gray-900">確定要永久刪除此投票活動嗎？</h3>
-                <p class="text-sm text-gray-500 mt-2">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">確定要永久刪除此投票活動嗎？</h3>
+                <p class="text-sm text-gray-500 mt-2 dark:text-gray-400">
                     此動作將刪除包含所有選項與已投票資料，且無法復原。
                 </p>
                 <div class="mt-6 flex justify-end gap-3">

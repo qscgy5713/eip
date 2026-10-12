@@ -81,13 +81,13 @@ const getExportDetailsUrl = () => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800">考勤月報統計與工時結算</h2>
-                    <p class="text-xs text-gray-500 mt-1">HR 與主管專屬：出勤統計、異常工時排查與 Excel 報表匯出</p>
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">考勤月報統計與工時結算</h2>
+                    <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">HR 與主管專屬：出勤統計、異常工時排查與 Excel 報表匯出</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <Link
                         :href="route('attendance.index')"
-                        class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition"
+                        class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
                         &larr; 返回每日打卡
                     </Link>
@@ -114,16 +114,16 @@ const getExportDetailsUrl = () => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
                 <!-- 篩選列 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 dark:bg-gray-800 dark:border-gray-700">
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-center">
                         <!-- 月份切換 -->
                         <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">統計月份</label>
+                            <label class="block text-xs font-medium text-gray-500 mb-1 dark:text-gray-400">統計月份</label>
                             <div class="flex items-center space-x-1">
                                 <button
                                     type="button"
                                     @click="changeMonth(-1)"
-                                    class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-xs font-bold"
+                                    class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-xs font-bold dark:text-gray-400 dark:border-gray-700"
                                     title="上個月"
                                 >
                                     &larr;
@@ -132,12 +132,12 @@ const getExportDetailsUrl = () => {
                                     v-model="month"
                                     type="month"
                                     @change="applyFilter"
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-gray-800"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-gray-800 dark:text-gray-100 dark:border-gray-700"
                                 />
                                 <button
                                     type="button"
                                     @click="changeMonth(1)"
-                                    class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-xs font-bold"
+                                    class="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-600 text-xs font-bold dark:text-gray-400 dark:border-gray-700"
                                     title="下個月"
                                 >
                                     &rarr;
@@ -147,11 +147,11 @@ const getExportDetailsUrl = () => {
 
                         <!-- 部門篩選 -->
                         <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">部門</label>
+                            <label class="block text-xs font-medium text-gray-500 mb-1 dark:text-gray-400">部門</label>
                             <select
                                 v-model="departmentId"
                                 @change="applyFilter"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             >
                                 <option value="">全部部門</option>
                                 <option v-for="dept in departments" :key="dept.id" :value="dept.id">
@@ -162,13 +162,13 @@ const getExportDetailsUrl = () => {
 
                         <!-- 員工搜尋 -->
                         <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">員工搜尋</label>
+                            <label class="block text-xs font-medium text-gray-500 mb-1 dark:text-gray-400">員工搜尋</label>
                             <input
                                 v-model="search"
                                 type="text"
                                 placeholder="姓名 / 工號 / Email..."
                                 @keyup.enter="applyFilter"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             />
                         </div>
 
@@ -183,7 +183,7 @@ const getExportDetailsUrl = () => {
                             <button
                                 type="button"
                                 @click="search = ''; departmentId = ''; applyFilter();"
-                                class="py-2 px-3 border border-gray-300 text-gray-600 hover:bg-gray-50 text-xs rounded-lg transition"
+                                class="py-2 px-3 border border-gray-300 text-gray-600 hover:bg-gray-50 text-xs rounded-lg transition dark:text-gray-400 dark:border-gray-700"
                                 title="清除條件"
                             >
                                 重設
@@ -194,51 +194,51 @@ const getExportDetailsUrl = () => {
 
                 <!-- 4 大 KPI 統計概覽卡片 -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4 dark:bg-gray-800 dark:border-gray-700">
                         <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 font-medium">在職統計人數</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">{{ summaryStats.total_users }} <span class="text-xs font-normal text-gray-400">人</span></p>
+                            <p class="text-xs text-gray-500 font-medium dark:text-gray-400">在職統計人數</p>
+                            <p class="text-xl font-bold text-gray-900 mt-0.5 dark:text-gray-100">{{ summaryStats.total_users }} <span class="text-xs font-normal text-gray-400">人</span></p>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4 dark:bg-gray-800 dark:border-gray-700">
                         <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 font-medium">總工時累計</p>
-                            <p class="text-xl font-bold text-gray-900 mt-0.5">{{ summaryStats.total_work_hours }} <span class="text-xs font-normal text-gray-400">小時</span></p>
+                            <p class="text-xs text-gray-500 font-medium dark:text-gray-400">總工時累計</p>
+                            <p class="text-xl font-bold text-gray-900 mt-0.5 dark:text-gray-100">{{ summaryStats.total_work_hours }} <span class="text-xs font-normal text-gray-400">小時</span></p>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4 dark:bg-gray-800 dark:border-gray-700">
                         <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 font-medium">全體遲到人次</p>
+                            <p class="text-xs text-gray-500 font-medium dark:text-gray-400">全體遲到人次</p>
                             <p class="text-xl font-bold text-amber-700 mt-0.5">{{ summaryStats.total_late_count }} <span class="text-xs font-normal text-gray-400">次</span></p>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4 dark:bg-gray-800 dark:border-gray-700">
                         <div class="p-3 bg-rose-50 text-rose-600 rounded-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs text-gray-500 font-medium">全體早退人次</p>
+                            <p class="text-xs text-gray-500 font-medium dark:text-gray-400">全體早退人次</p>
                             <p class="text-xl font-bold text-rose-700 mt-0.5">{{ summaryStats.total_early_leave_count }} <span class="text-xs font-normal text-gray-400">次</span></p>
                         </div>
                     </div>
                 </div>
 
                 <!-- 員工考勤彙總表 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-5 border-b border-gray-100 flex items-center justify-between">
-                        <h3 class="font-bold text-base text-gray-900">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                    <div class="p-5 border-b border-gray-100 flex items-center justify-between dark:border-gray-700">
+                        <h3 class="font-bold text-base text-gray-900 dark:text-gray-100">
                             {{ month }} 月份各員工作勤明細表 (共 {{ userReports.length }} 員)
                         </h3>
                         <span class="text-xs text-gray-400">點擊列右側可展開每日打卡打點紀錄</span>
@@ -247,7 +247,7 @@ const getExportDetailsUrl = () => {
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
-                                <tr class="bg-gray-50/80 text-gray-500 border-b border-gray-100">
+                                <tr class="bg-gray-50/80 text-gray-500 border-b border-gray-100 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-400">
                                     <th class="py-3 px-4 font-semibold">工號 / 員工姓名</th>
                                     <th class="py-3 px-4 font-semibold">部門 / 職稱</th>
                                     <th class="py-3 px-4 font-semibold text-center">出勤天數</th>
@@ -257,18 +257,18 @@ const getExportDetailsUrl = () => {
                                     <th class="py-3 px-4 font-semibold text-center">每日明細</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                 <template v-for="u in userReports" :key="u.id">
                                     <tr class="hover:bg-gray-50/80 transition cursor-pointer" @click="toggleExpand(u.id)">
                                         <td class="py-3 px-4">
-                                            <div class="font-bold text-gray-900">{{ u.name }}</div>
+                                            <div class="font-bold text-gray-900 dark:text-gray-100">{{ u.name }}</div>
                                             <div class="text-[11px] text-gray-400 font-mono">{{ u.employee_no || '-' }}</div>
                                         </td>
-                                        <td class="py-3 px-4 text-gray-600">
+                                        <td class="py-3 px-4 text-gray-600 dark:text-gray-400">
                                             <div>{{ u.department }}</div>
                                             <div class="text-[11px] text-gray-400">{{ u.job_title }}</div>
                                         </td>
-                                        <td class="py-3 px-4 text-center font-bold text-gray-800">
+                                        <td class="py-3 px-4 text-center font-bold text-gray-800 dark:text-gray-100">
                                             {{ u.present_days }} 天
                                         </td>
                                         <td class="py-3 px-4 text-center font-bold text-indigo-700">
@@ -299,7 +299,7 @@ const getExportDetailsUrl = () => {
                                     <!-- 展開子列：每日打卡紀錄 -->
                                     <tr v-if="expandedUsers.has(u.id)" class="bg-indigo-50/30">
                                         <td colspan="7" class="p-4">
-                                            <div class="bg-white rounded-lg border border-indigo-100 p-4 shadow-sm">
+                                            <div class="bg-white rounded-lg border border-indigo-100 p-4 shadow-sm dark:bg-gray-800">
                                                 <h4 class="font-bold text-xs text-indigo-950 mb-3 flex items-center justify-between">
                                                     <span>{{ u.name }} 當月每日出勤軌跡 (共 {{ u.daily_records.length }} 筆)</span>
                                                     <span class="text-gray-400 font-normal">平均每日工時：{{ u.present_days > 0 ? (u.total_hours / u.present_days).toFixed(1) : 0 }} 小時</span>
@@ -308,7 +308,7 @@ const getExportDetailsUrl = () => {
                                                 <div v-if="u.daily_records.length > 0" class="overflow-x-auto">
                                                     <table class="w-full text-left text-xs">
                                                         <thead>
-                                                            <tr class="border-b border-gray-100 text-gray-400 text-[11px]">
+                                                            <tr class="border-b border-gray-100 text-gray-400 text-[11px] dark:border-gray-700">
                                                                 <th class="py-2 px-3">日期</th>
                                                                 <th class="py-2 px-3">上班打卡</th>
                                                                 <th class="py-2 px-3">下班打卡</th>
@@ -319,10 +319,10 @@ const getExportDetailsUrl = () => {
                                                         </thead>
                                                         <tbody class="divide-y divide-gray-50">
                                                             <tr v-for="day in u.daily_records" :key="day.id" class="hover:bg-gray-50/50">
-                                                                <td class="py-2 px-3 font-mono font-medium text-gray-700">{{ day.date }}</td>
-                                                                <td class="py-2 px-3 font-mono text-gray-600">{{ day.clock_in }}</td>
-                                                                <td class="py-2 px-3 font-mono text-gray-600">{{ day.clock_out }}</td>
-                                                                <td class="py-2 px-3 text-center font-bold text-gray-800">{{ day.work_hours }}h</td>
+                                                                <td class="py-2 px-3 font-mono font-medium text-gray-700 dark:text-gray-300">{{ day.date }}</td>
+                                                                <td class="py-2 px-3 font-mono text-gray-600 dark:text-gray-400">{{ day.clock_in }}</td>
+                                                                <td class="py-2 px-3 font-mono text-gray-600 dark:text-gray-400">{{ day.clock_out }}</td>
+                                                                <td class="py-2 px-3 text-center font-bold text-gray-800 dark:text-gray-100">{{ day.work_hours }}h</td>
                                                                 <td class="py-2 px-3 text-center">
                                                                     <span :class="['px-2 py-0.5 rounded text-[10px]', getStatusBadge(day.status).class]">
                                                                         {{ getStatusBadge(day.status).text }}

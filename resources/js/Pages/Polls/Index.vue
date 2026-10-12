@@ -72,13 +72,13 @@ const submitCreate = () => {
         <template #header>
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800 flex items-center gap-2">
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 flex items-center gap-2 dark:text-gray-100">
                         <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                         </svg>
                         企業同仁投票與意見調查
                     </h2>
-                    <p class="text-sm text-gray-500 mt-1">
+                    <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">
                         參與福利委員會活動票選、部門聚餐調查與內部重要決策意見徵詢
                     </p>
                 </div>
@@ -99,13 +99,13 @@ const submitCreate = () => {
         <div class="py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 <!-- 篩選標籤頁籤 -->
-                <div class="flex border-b border-gray-200 space-x-6 text-sm font-medium">
+                <div class="flex border-b border-gray-200 space-x-6 text-sm font-medium dark:border-gray-700">
                     <button
                         @click="setFilter('active')"
                         :class="[
                             currentStatus === 'active'
                                 ? 'border-indigo-600 text-indigo-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400',
                             'pb-4 border-b-2 transition-colors flex items-center gap-1.5'
                         ]"
                     >
@@ -117,7 +117,7 @@ const submitCreate = () => {
                         :class="[
                             currentStatus === 'closed'
                                 ? 'border-indigo-600 text-indigo-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400',
                             'pb-4 border-b-2 transition-colors'
                         ]"
                     >
@@ -128,7 +128,7 @@ const submitCreate = () => {
                         :class="[
                             currentStatus === 'my'
                                 ? 'border-indigo-600 text-indigo-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400',
                             'pb-4 border-b-2 transition-colors'
                         ]"
                     >
@@ -139,7 +139,7 @@ const submitCreate = () => {
                         :class="[
                             currentStatus === 'all'
                                 ? 'border-indigo-600 text-indigo-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400',
                             'pb-4 border-b-2 transition-colors'
                         ]"
                     >
@@ -152,7 +152,7 @@ const submitCreate = () => {
                     <div
                         v-for="poll in polls.data"
                         :key="poll.id"
-                        class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group"
+                        class="bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group dark:bg-gray-800 dark:border-gray-700"
                     >
                         <div class="p-6">
                             <!-- 狀態與屬性徽章 -->
@@ -167,7 +167,7 @@ const submitCreate = () => {
                                     </span>
                                     <span
                                         v-else
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200"
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400"
                                     >
                                         已截止
                                     </span>
@@ -186,19 +186,19 @@ const submitCreate = () => {
                             </div>
 
                             <!-- 標題與說明 -->
-                            <h3 class="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                            <h3 class="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-1 dark:text-gray-100">
                                 <Link :href="route('polls.show', poll.id)">
                                     {{ poll.title }}
                                 </Link>
                             </h3>
-                            <p class="text-sm text-gray-500 mt-2 line-clamp-2 min-h-[40px]">
+                            <p class="text-sm text-gray-500 mt-2 line-clamp-2 min-h-[40px] dark:text-gray-400">
                                 {{ poll.description || '無詳細說明' }}
                             </p>
 
                             <!-- 選項數與參與狀況 -->
-                            <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">
                                 <div>
-                                    提供 <span class="font-semibold text-gray-700">{{ poll.options_count }}</span> 項選擇
+                                    提供 <span class="font-semibold text-gray-700 dark:text-gray-300">{{ poll.options_count }}</span> 項選擇
                                 </div>
                                 <div class="flex items-center gap-1.5">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -210,7 +210,7 @@ const submitCreate = () => {
                         </div>
 
                         <!-- 底部行動列 -->
-                        <div class="px-6 py-3.5 bg-gray-50/70 border-t border-gray-100 flex items-center justify-between">
+                        <div class="px-6 py-3.5 bg-gray-50/70 border-t border-gray-100 flex items-center justify-between dark:bg-gray-800/60 dark:border-gray-700">
                             <div class="flex items-center gap-2">
                                 <span
                                     v-if="poll.has_voted"
@@ -243,14 +243,14 @@ const submitCreate = () => {
                 </div>
 
                 <!-- 空狀態提示 -->
-                <div v-else class="bg-white rounded-xl border border-gray-200 p-12 text-center">
+                <div v-else class="bg-white rounded-xl border border-gray-200 p-12 text-center dark:bg-gray-800 dark:border-gray-700">
                     <div class="w-16 h-16 mx-auto mb-4 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
-                    <h3 class="text-base font-bold text-gray-900">目前沒有符合條件的投票活動</h3>
-                    <p class="text-sm text-gray-500 mt-1">
+                    <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">目前沒有符合條件的投票活動</h3>
+                    <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">
                         {{ currentStatus === 'active' ? '目前尚無進行中的投票活動，稍後請再回來查看。' : '查無相應的投票歷史記錄。' }}
                     </p>
                     <div v-if="can_create && currentStatus === 'active'" class="mt-6">
@@ -271,8 +271,8 @@ const submitCreate = () => {
         <!-- 發起投票活動 Modal -->
         <Modal :show="showCreateModal" @close="closeCreateModal" max-width="2xl">
             <div class="p-6">
-                <div class="flex items-center justify-between pb-4 border-b border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100">
                         <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -307,30 +307,30 @@ const submitCreate = () => {
                             id="poll-desc"
                             v-model="form.description"
                             rows="2"
-                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm"
+                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm dark:border-gray-700"
                             placeholder="請填寫此投票的目的、備註或相關規則..."
                         ></textarea>
                         <InputError class="mt-1" :message="form.errors.description" />
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                        <div class="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-100 dark:bg-gray-800/60 dark:border-gray-700">
                             <label class="flex items-center cursor-pointer">
                                 <input
                                     type="checkbox"
                                     v-model="form.is_multiple_choice"
-                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:border-gray-700"
                                 />
-                                <span class="ml-2 text-sm text-gray-700 font-medium">允許複選（可投多項）</span>
+                                <span class="ml-2 text-sm text-gray-700 font-medium dark:text-gray-300">允許複選（可投多項）</span>
                             </label>
 
                             <label class="flex items-center cursor-pointer">
                                 <input
                                     type="checkbox"
                                     v-model="form.is_anonymous"
-                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:border-gray-700"
                                 />
-                                <span class="ml-2 text-sm text-gray-700 font-medium">匿名投票（保密投票人名冊）</span>
+                                <span class="ml-2 text-sm text-gray-700 font-medium dark:text-gray-300">匿名投票（保密投票人名冊）</span>
                             </label>
                         </div>
 
@@ -392,7 +392,7 @@ const submitCreate = () => {
                         <InputError class="mt-1" :message="form.errors.options" />
                     </div>
 
-                    <div class="pt-4 border-t border-gray-100 flex justify-end gap-3">
+                    <div class="pt-4 border-t border-gray-100 flex justify-end gap-3 dark:border-gray-700">
                         <SecondaryButton @click="closeCreateModal">取消</SecondaryButton>
                         <PrimaryButton :disabled="form.processing">
                             確認發起投票

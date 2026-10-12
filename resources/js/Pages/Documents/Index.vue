@@ -231,10 +231,10 @@ const isText = (mimeType, fileName = '') => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800">
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">
                         企業知識文件庫
                     </h2>
-                    <p class="text-xs text-gray-500 mt-1">
+                    <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">
                         內部規章、表單範本、技術規格集中管理與多版本歷程回溯
                     </p>
                 </div>
@@ -253,8 +253,8 @@ const isText = (mimeType, fileName = '') => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
                 <!-- 分類標籤頁與篩選列 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 space-y-4">
-                    <div class="flex flex-wrap items-center gap-2 border-b border-gray-100 pb-3">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 space-y-4 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex flex-wrap items-center gap-2 border-b border-gray-100 pb-3 dark:border-gray-700">
                         <button
                             v-for="cat in categories"
                             :key="cat.key"
@@ -263,7 +263,7 @@ const isText = (mimeType, fileName = '') => {
                                 'px-4 py-2 text-xs font-medium rounded-lg transition flex items-center space-x-1.5',
                                 selectedCategory === cat.key
                                     ? 'bg-indigo-600 text-white shadow-sm'
-                                    : 'text-gray-600 hover:bg-gray-100'
+                                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400'
                             ]"
                         >
                             <span>{{ cat.label }}</span>
@@ -277,21 +277,21 @@ const isText = (mimeType, fileName = '') => {
                                 v-model="search"
                                 @keyup.enter="applyFilters"
                                 placeholder="搜尋文件標題或說明內容 (按 Enter 搜尋)..."
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 pl-9 py-2"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 pl-9 py-2 dark:border-gray-700"
                             />
                             <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         </div>
                         <select
                             v-model="selectedDept"
                             @change="applyFilters"
-                            class="text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-2 w-full sm:w-44"
+                            class="text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-2 w-full sm:w-44 dark:border-gray-700"
                         >
                             <option value="">全公司共用文件</option>
                             <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
                         </select>
                         <button
                             @click="applyFilters"
-                            class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition shrink-0"
+                            class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition shrink-0 dark:bg-gray-700 dark:text-gray-300"
                         >
                             套用篩選
                         </button>
@@ -303,7 +303,7 @@ const isText = (mimeType, fileName = '') => {
                     <div
                         v-for="doc in documents.data"
                         :key="doc.id"
-                        class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between overflow-hidden group"
+                        class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between overflow-hidden group dark:bg-gray-800 dark:border-gray-700"
                     >
                         <div class="p-5 space-y-3">
                             <div class="flex items-start justify-between gap-3">
@@ -312,11 +312,11 @@ const isText = (mimeType, fileName = '') => {
                                         {{ getFileInfo(doc.latest_version?.mime_type, doc.latest_version?.file_name).tag }}
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-sm text-gray-900 group-hover:text-blue-600 transition line-clamp-1">
+                                        <h3 class="font-bold text-sm text-gray-900 group-hover:text-blue-600 transition line-clamp-1 dark:text-gray-100">
                                             {{ doc.title }}
                                         </h3>
                                         <div class="flex items-center space-x-2 mt-0.5">
-                                            <span class="px-2 py-0.5 text-[10px] font-semibold bg-gray-100 text-gray-600 rounded">
+                                            <span class="px-2 py-0.5 text-[10px] font-semibold bg-gray-100 text-gray-600 rounded dark:bg-gray-700 dark:text-gray-400">
                                                 {{ doc.latest_version?.version_label || `v${doc.current_version}.0` }}
                                             </span>
                                             <span v-if="doc.department" class="text-[11px] text-gray-400">
@@ -334,7 +334,7 @@ const isText = (mimeType, fileName = '') => {
                                 </span>
                             </div>
 
-                            <p class="text-xs text-gray-500 line-clamp-2 min-h-[32px]">
+                            <p class="text-xs text-gray-500 line-clamp-2 min-h-[32px] dark:text-gray-400">
                                 {{ doc.description || '無特別說明備註。' }}
                             </p>
 
@@ -346,7 +346,7 @@ const isText = (mimeType, fileName = '') => {
                         </div>
 
                         <!-- 底部操作列 -->
-                        <div class="bg-gray-50/70 px-5 py-3 border-t border-gray-100 flex items-center justify-between text-xs">
+                        <div class="bg-gray-50/70 px-5 py-3 border-t border-gray-100 flex items-center justify-between text-xs dark:bg-gray-800/60 dark:border-gray-700">
                             <div class="flex items-center space-x-1.5">
                                 <button
                                     type="button"
@@ -367,7 +367,7 @@ const isText = (mimeType, fileName = '') => {
                                 </a>
                                 <button
                                     @click="openHistoryModal(doc)"
-                                    class="text-gray-500 hover:text-gray-800 px-1.5 py-1.5"
+                                    class="text-gray-500 hover:text-gray-800 px-1.5 py-1.5 dark:text-gray-400"
                                     title="查看歷史修訂版本"
                                 >
                                     歷程 ({{ doc.versions_count }})
@@ -378,7 +378,7 @@ const isText = (mimeType, fileName = '') => {
                                 <button
                                     v-if="canManage || doc.uploader_id === $page.props.auth.user.id"
                                     @click="openNewVersionModal(doc)"
-                                    class="text-gray-500 hover:text-blue-600"
+                                    class="text-gray-500 hover:text-blue-600 dark:text-gray-400"
                                     title="發布新版本"
                                 >
                                     +新版
@@ -386,7 +386,7 @@ const isText = (mimeType, fileName = '') => {
                                 <button
                                     v-if="canManage || doc.uploader_id === $page.props.auth.user.id"
                                     @click="openEditModal(doc)"
-                                    class="text-gray-500 hover:text-amber-600"
+                                    class="text-gray-500 hover:text-amber-600 dark:text-gray-400"
                                     title="編輯文件設定"
                                 >
                                     編輯
@@ -405,11 +405,11 @@ const isText = (mimeType, fileName = '') => {
                 </div>
 
                 <!-- 空狀態提示 -->
-                <div v-else class="bg-white rounded-xl border border-gray-100 p-12 text-center space-y-3">
-                    <div class="w-12 h-12 mx-auto rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-400 mb-2">
+                <div v-else class="bg-white rounded-xl border border-gray-100 p-12 text-center space-y-3 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="w-12 h-12 mx-auto rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center text-gray-400 mb-2 dark:bg-gray-800/60 dark:border-gray-700">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
                     </div>
-                    <h3 class="font-bold text-gray-700 text-base">目前尚無符合條件的文件</h3>
+                    <h3 class="font-bold text-gray-700 text-base dark:text-gray-300">目前尚無符合條件的文件</h3>
                     <p class="text-xs text-gray-400">您可以切換分類標籤，或點擊右上角「上傳新文件」建立第一份文件。</p>
                 </div>
             </div>
@@ -417,20 +417,20 @@ const isText = (mimeType, fileName = '') => {
 
         <!-- 上傳新文件 Modal -->
         <div v-if="isUploadModalOpen" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto">
-            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
-                    <h3 class="text-lg font-bold text-gray-900">上傳新文件至企業文件庫</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">上傳新文件至企業文件庫</h3>
                     <button @click="isUploadModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitUpload" class="space-y-4 text-sm">
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">文件標題</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">文件標題</label>
                         <input
                             type="text"
                             v-model="uploadForm.title"
                             placeholder="如：2026 年度員工出勤及加班管理要點"
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                             required
                         />
                         <p v-if="uploadForm.errors.title" class="text-xs text-rose-500 mt-1">{{ uploadForm.errors.title }}</p>
@@ -438,10 +438,10 @@ const isText = (mimeType, fileName = '') => {
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">文件分類</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">文件分類</label>
                             <select
                                 v-model="uploadForm.category"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                                 required
                             >
                                 <option value="policy">公司規章制度</option>
@@ -451,10 +451,10 @@ const isText = (mimeType, fileName = '') => {
                             </select>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">所屬部門</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">所屬部門</label>
                             <select
                                 v-model="uploadForm.department_id"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                             >
                                 <option value="">全公司共用</option>
                                 <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
@@ -464,18 +464,18 @@ const isText = (mimeType, fileName = '') => {
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">版本號標記</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">版本號標記</label>
                             <input
                                 type="text"
                                 v-model="uploadForm.version_label"
                                 placeholder="如：v1.0"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                             />
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">機密權限</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">機密權限</label>
                             <div class="mt-2 flex items-center space-x-2">
-                                <label class="flex items-center space-x-1.5 text-xs text-gray-700">
+                                <label class="flex items-center space-x-1.5 text-xs text-gray-700 dark:text-gray-300">
                                     <input
                                         type="checkbox"
                                         :checked="uploadForm.restricted_roles.length > 0"
@@ -489,21 +489,21 @@ const isText = (mimeType, fileName = '') => {
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">文件摘要說明 (選填)</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">文件摘要說明 (選填)</label>
                         <textarea
                             v-model="uploadForm.description"
                             rows="2"
                             placeholder="簡述此份文件的主要內容與適用範圍..."
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">選取檔案 (支援 PDF, Word, Excel, PPT, 圖片，最大 50MB)</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">選取檔案 (支援 PDF, Word, Excel, PPT, 圖片，最大 50MB)</label>
                         <input
                             type="file"
                             @change="handleFileChange"
-                            class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:border-gray-700"
                             required
                         />
                         <p v-if="uploadForm.errors.file" class="text-xs text-rose-500 mt-1">{{ uploadForm.errors.file }}</p>
@@ -513,7 +513,7 @@ const isText = (mimeType, fileName = '') => {
                         <button
                             type="button"
                             @click="isUploadModalOpen = false"
-                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400"
                         >
                             取消
                         </button>
@@ -531,9 +531,9 @@ const isText = (mimeType, fileName = '') => {
 
         <!-- 發布新版本 Modal -->
         <div v-if="isNewVersionModalOpen" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
-                    <h3 class="text-base font-bold text-gray-900">
+                    <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">
                         發布新修訂版本：{{ targetDocForVersion?.title }}
                     </h3>
                     <button @click="isNewVersionModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
@@ -541,32 +541,32 @@ const isText = (mimeType, fileName = '') => {
 
                 <form @submit.prevent="submitNewVersion" class="space-y-4 text-sm">
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">新版本標籤</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">新版本標籤</label>
                         <input
                             type="text"
                             v-model="newVersionForm.version_label"
                             placeholder="如：v1.1, v2.0"
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                             required
                         />
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">修訂紀錄說明</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">修訂紀錄說明</label>
                         <textarea
                             v-model="newVersionForm.changelog"
                             rows="2"
                             placeholder="如：依據最新法令修正第 3 條津貼計算公式..."
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">上傳新檔案</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">上傳新檔案</label>
                         <input
                             type="file"
                             @change="handleNewVersionFileChange"
-                            class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:border-gray-700"
                             required
                         />
                     </div>
@@ -575,7 +575,7 @@ const isText = (mimeType, fileName = '') => {
                         <button
                             type="button"
                             @click="isNewVersionModalOpen = false"
-                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400"
                         >
                             取消
                         </button>
@@ -593,10 +593,10 @@ const isText = (mimeType, fileName = '') => {
 
         <!-- 歷史版本歷程 Modal -->
         <div v-if="isHistoryModalOpen" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl space-y-4">
+            <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <div>
-                        <h3 class="text-base font-bold text-gray-900">
+                        <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">
                             版本歷程回溯：{{ historyDoc?.title }}
                         </h3>
                         <p class="text-xs text-gray-400 mt-0.5">點擊各版本下載圖示即可下載當時的檔案版本</p>
@@ -609,17 +609,17 @@ const isText = (mimeType, fileName = '') => {
                     <div
                         v-for="ver in historyVersions"
                         :key="ver.id"
-                        class="p-4 rounded-xl border border-gray-100 bg-gray-50/50 flex items-center justify-between"
+                        class="p-4 rounded-xl border border-gray-100 bg-gray-50/50 flex items-center justify-between dark:bg-gray-800/60 dark:border-gray-700"
                     >
                         <div>
                             <div class="flex items-center space-x-2">
                                 <span class="px-2 py-0.5 bg-blue-100 text-blue-800 font-mono font-bold text-xs rounded">
                                     {{ ver.version_label }}
                                 </span>
-                                <span class="text-xs font-medium text-gray-900">{{ ver.file_name }}</span>
+                                <span class="text-xs font-medium text-gray-900 dark:text-gray-100">{{ ver.file_name }}</span>
                                 <span class="text-[11px] text-gray-400">({{ ver.formatted_size }})</span>
                             </div>
-                            <p class="text-xs text-gray-600 mt-1">變更紀錄：{{ ver.changelog || '初版建立' }}</p>
+                            <p class="text-xs text-gray-600 mt-1 dark:text-gray-400">變更紀錄：{{ ver.changelog || '初版建立' }}</p>
                             <p class="text-[10px] text-gray-400 mt-0.5">
                                 上傳同仁：{{ ver.uploader?.name }} · {{ new Date(ver.created_at).toLocaleString() }}
                             </p>
@@ -636,7 +636,7 @@ const isText = (mimeType, fileName = '') => {
                             </button>
                             <a
                                 :href="route('documents.download', { document: historyDoc.id, version: ver.id })"
-                                class="px-2.5 py-1.5 text-xs font-semibold text-blue-600 bg-white border border-blue-200 hover:bg-blue-50 rounded-lg transition"
+                                class="px-2.5 py-1.5 text-xs font-semibold text-blue-600 bg-white border border-blue-200 hover:bg-blue-50 rounded-lg transition dark:bg-gray-800"
                                 title="下載此歷史版本"
                             >
                                 下載此版
@@ -649,16 +649,16 @@ const isText = (mimeType, fileName = '') => {
 
         <!-- 線上預覽 Modal -->
         <div v-if="isPreviewModalOpen" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden">
-            <div class="bg-white rounded-2xl max-w-5xl w-full h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-gray-100">
+            <div class="bg-white rounded-2xl max-w-5xl w-full h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
                 <!-- 預覽視窗頂部標題列 -->
-                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 dark:bg-gray-800/60 dark:border-gray-700">
                     <div class="flex items-center space-x-3 min-w-0">
                         <div :class="['w-8 h-8 rounded-lg border flex items-center justify-center text-xs font-bold font-mono shrink-0', getFileInfo(previewVersion?.mime_type, previewVersion?.file_name).color]">
                             {{ getFileInfo(previewVersion?.mime_type, previewVersion?.file_name).tag }}
                         </div>
                         <div class="truncate">
                             <div class="flex items-center space-x-2">
-                                <h3 class="text-sm font-bold text-gray-900 truncate" :title="previewDoc?.title">
+                                <h3 class="text-sm font-bold text-gray-900 truncate dark:text-gray-100" :title="previewDoc?.title">
                                     {{ previewDoc?.title }}
                                 </h3>
                                 <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-100 text-blue-700 rounded">
@@ -675,10 +675,10 @@ const isText = (mimeType, fileName = '') => {
                         <a
                             :href="previewUrl"
                             target="_blank"
-                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                             title="開新分頁全螢幕檢視"
                         >
-                            <svg class="w-3.5 h-3.5 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            <svg class="w-3.5 h-3.5 mr-1 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             <span>新分頁開啟</span>
                         </a>
                         <a
@@ -701,18 +701,18 @@ const isText = (mimeType, fileName = '') => {
                 </div>
 
                 <!-- 預覽主體內容區 -->
-                <div class="flex-1 bg-gray-100 p-2 sm:p-4 overflow-auto flex items-center justify-center">
+                <div class="flex-1 bg-gray-100 p-2 sm:p-4 overflow-auto flex items-center justify-center dark:bg-gray-700">
                     <!-- PDF 內嵌預覽 -->
                     <iframe
                         v-if="isPdf(previewVersion?.mime_type, previewVersion?.file_name)"
                         :src="previewUrl"
-                        class="w-full h-full border-0 rounded-lg bg-white shadow-sm"
+                        class="w-full h-full border-0 rounded-lg bg-white shadow-sm dark:bg-gray-800"
                     ></iframe>
 
                     <!-- 圖片預覽 -->
                     <div
                         v-else-if="isImage(previewVersion?.mime_type, previewVersion?.file_name)"
-                        class="max-w-full max-h-full flex items-center justify-center p-4 bg-white rounded-lg shadow-sm"
+                        class="max-w-full max-h-full flex items-center justify-center p-4 bg-white rounded-lg shadow-sm dark:bg-gray-800"
                     >
                         <img
                             :src="previewUrl"
@@ -725,20 +725,20 @@ const isText = (mimeType, fileName = '') => {
                     <iframe
                         v-else-if="isText(previewVersion?.mime_type, previewVersion?.file_name)"
                         :src="previewUrl"
-                        class="w-full h-full border rounded-lg bg-white shadow-sm p-2 font-mono text-xs"
+                        class="w-full h-full border rounded-lg bg-white shadow-sm p-2 font-mono text-xs dark:bg-gray-800"
                     ></iframe>
 
                     <!-- 其他不支援原生預覽的格式 (如 Word, Excel, PPT, ZIP) -->
                     <div
                         v-else
-                        class="max-w-md w-full bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center space-y-4"
+                        class="max-w-md w-full bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center space-y-4 dark:bg-gray-800 dark:border-gray-700"
                     >
                         <div :class="['w-16 h-16 mx-auto rounded-2xl border flex items-center justify-center text-lg font-bold font-mono', getFileInfo(previewVersion?.mime_type, previewVersion?.file_name).color]">
                             {{ getFileInfo(previewVersion?.mime_type, previewVersion?.file_name).tag }}
                         </div>
                         <div>
-                            <h4 class="font-bold text-gray-800 text-base">{{ previewVersion?.file_name }}</h4>
-                            <p class="text-xs text-gray-500 mt-1">此格式（Office 文件或壓縮檔）需由本地端對應應用程式檢視</p>
+                            <h4 class="font-bold text-gray-800 text-base dark:text-gray-100">{{ previewVersion?.file_name }}</h4>
+                            <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">此格式（Office 文件或壓縮檔）需由本地端對應應用程式檢視</p>
                             <p class="text-[11px] text-gray-400 mt-0.5">檔案大小：{{ previewVersion?.formatted_size }}</p>
                         </div>
                         <div class="pt-2 flex justify-center space-x-3">
@@ -752,7 +752,7 @@ const isText = (mimeType, fileName = '') => {
                             <a
                                 :href="previewUrl"
                                 target="_blank"
-                                class="px-4 py-2 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                                class="px-4 py-2 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                             >
                                 嘗試於新分頁開啟
                             </a>
@@ -764,19 +764,19 @@ const isText = (mimeType, fileName = '') => {
 
         <!-- 編輯文件設定 Modal -->
         <div v-if="isEditModalOpen" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto">
-            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
-                    <h3 class="text-lg font-bold text-gray-900">編輯文件屬性與存取權限</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">編輯文件屬性與存取權限</h3>
                     <button @click="closeEditModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitEdit" class="space-y-4 text-xs">
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">文件標題 *</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">文件標題 *</label>
                         <input
                             type="text"
                             v-model="editForm.title"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                             required
                         />
                         <p v-if="editForm.errors.title" class="text-rose-500 mt-1">{{ editForm.errors.title }}</p>
@@ -784,10 +784,10 @@ const isText = (mimeType, fileName = '') => {
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">所屬分類 *</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">所屬分類 *</label>
                             <select
                                 v-model="editForm.category"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                                 required
                             >
                                 <option value="policy">公司規章</option>
@@ -797,10 +797,10 @@ const isText = (mimeType, fileName = '') => {
                             </select>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">指定歸屬部門 (選填)</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">指定歸屬部門 (選填)</label>
                             <select
                                 v-model="editForm.department_id"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                             >
                                 <option value="">全公司共用文件</option>
                                 <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
@@ -809,11 +809,11 @@ const isText = (mimeType, fileName = '') => {
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">文件說明備註</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">文件說明備註</label>
                         <textarea
                             v-model="editForm.description"
                             rows="2"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 
@@ -822,15 +822,15 @@ const isText = (mimeType, fileName = '') => {
                         <label class="block font-medium text-amber-900 mb-1">密件存取限制 (僅允許特定角色調閱)</label>
                         <p class="text-[11px] text-amber-700 mb-2">未勾選代表全體在職同仁均可公開查閱下載</p>
                         <div class="grid grid-cols-2 gap-2">
-                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer">
+                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer dark:text-gray-300">
                                 <input type="checkbox" value="manager" v-model="editForm.restricted_roles" class="rounded text-amber-600 focus:ring-amber-500" />
                                 <span>主管級 (Manager)</span>
                             </label>
-                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer">
+                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer dark:text-gray-300">
                                 <input type="checkbox" value="hr" v-model="editForm.restricted_roles" class="rounded text-amber-600 focus:ring-amber-500" />
                                 <span>人資行政 (HR)</span>
                             </label>
-                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer">
+                            <label class="flex items-center space-x-2 text-gray-700 cursor-pointer dark:text-gray-300">
                                 <input type="checkbox" value="admin" v-model="editForm.restricted_roles" class="rounded text-amber-600 focus:ring-amber-500" />
                                 <span>系統管理員 (Admin)</span>
                             </label>
@@ -841,7 +841,7 @@ const isText = (mimeType, fileName = '') => {
                         <button
                             type="button"
                             @click="closeEditModal"
-                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400"
                         >
                             取消
                         </button>

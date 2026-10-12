@@ -71,7 +71,7 @@ const printPass = () => {
                         @click="printPass"
                         class="px-3.5 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-xs font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-xs transition inline-flex items-center gap-1.5"
                     >
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                         </svg>
                         列印通行識別卡
@@ -106,7 +106,7 @@ const printPass = () => {
                 <div class="bg-gradient-to-r from-sky-600 via-indigo-600 to-blue-700 p-6 sm:p-8 text-white relative">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full text-2xs font-extrabold bg-white/20 backdrop-blur-xs">
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-2xs font-extrabold bg-white/20 backdrop-blur-xs dark:bg-gray-800">
                                 VIP VISITOR PASS · 數位貴賓通行證
                             </span>
                             <h2 class="text-2xl sm:text-3xl font-black mt-2 tracking-tight">
@@ -121,7 +121,7 @@ const printPass = () => {
                         </div>
 
                         <!-- 唯一通行代碼卡塊 -->
-                        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center shrink-0">
+                        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center shrink-0 dark:bg-gray-800">
                             <p class="text-2xs text-sky-200 font-mono">Reservation Code</p>
                             <p class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5">
                                 {{ reservation.reservation_code }}

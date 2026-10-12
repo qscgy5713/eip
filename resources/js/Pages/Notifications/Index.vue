@@ -46,11 +46,11 @@ const getTypeBadge = (type) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center">
+                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center dark:text-gray-100">
                         <svg class="w-6 h-6 mr-2 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                         個人通知中心
                     </h2>
-                    <p class="text-sm text-gray-500 mt-1">
+                    <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">
                         掌握待簽核單據、審查結果、會議室借用確認與重要內部公佈資訊
                     </p>
                 </div>
@@ -58,7 +58,7 @@ const getTypeBadge = (type) => {
                     <button
                         v-if="unreadCount > 0"
                         @click="markAllAsRead"
-                        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition"
+                        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
                         <svg class="w-4 h-4 mr-1.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -72,16 +72,16 @@ const getTypeBadge = (type) => {
         <div class="py-8">
             <div class="mx-auto max-w-5xl sm:px-6 lg:px-8">
                 <!-- 通知列表容器 -->
-                <div class="bg-white shadow-sm sm:rounded-xl border border-gray-200 overflow-hidden">
-                    <div v-if="notifications.data.length === 0" class="py-16 text-center text-gray-500">
+                <div class="bg-white shadow-sm sm:rounded-xl border border-gray-200 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                    <div v-if="notifications.data.length === 0" class="py-16 text-center text-gray-500 dark:text-gray-400">
                         <svg class="mx-auto h-12 w-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                         </svg>
-                        <div class="text-base font-medium text-gray-700">目前沒有任何通知</div>
+                        <div class="text-base font-medium text-gray-700 dark:text-gray-300">目前沒有任何通知</div>
                         <p class="text-sm text-gray-400 mt-1">有新的簽核待辦或公佈事項時會即時顯示在此處</p>
                     </div>
 
-                    <ul v-else class="divide-y divide-gray-100">
+                    <ul v-else class="divide-y divide-gray-100 dark:divide-gray-700">
                         <li
                             v-for="item in notifications.data"
                             :key="item.id"
@@ -116,7 +116,7 @@ const getTypeBadge = (type) => {
                                         <h3
                                             :class="[
                                                 'text-base leading-snug truncate',
-                                                !item.read_at ? 'font-bold text-gray-900' : 'font-medium text-gray-700'
+                                                !item.read_at ? 'font-bold text-gray-900 dark:text-gray-100' : 'font-medium text-gray-700 dark:text-gray-300'
                                             ]"
                                         >
                                             {{ item.title }}
@@ -126,7 +126,7 @@ const getTypeBadge = (type) => {
                                         </span>
                                     </div>
 
-                                    <p class="text-sm text-gray-600 line-clamp-2 mt-1">
+                                    <p class="text-sm text-gray-600 line-clamp-2 mt-1 dark:text-gray-400">
                                         {{ item.message }}
                                     </p>
 
@@ -148,7 +148,7 @@ const getTypeBadge = (type) => {
                                         <button
                                             v-if="!item.read_at"
                                             @click="markAsRead(item.id)"
-                                            class="text-gray-500 hover:text-gray-700"
+                                            class="text-gray-500 hover:text-gray-700 dark:text-gray-400"
                                         >
                                             標記為已讀
                                         </button>
@@ -168,9 +168,9 @@ const getTypeBadge = (type) => {
                     <!-- 分頁導覽 -->
                     <div
                         v-if="notifications.links && notifications.links.length > 3"
-                        class="px-6 py-4 border-t border-gray-100 flex items-center justify-between"
+                        class="px-6 py-4 border-t border-gray-100 flex items-center justify-between dark:border-gray-700"
                     >
-                        <div class="text-sm text-gray-500">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">
                             顯示第 {{ notifications.from || 0 }} 至 {{ notifications.to || 0 }} 筆，共 {{ notifications.total }} 則通知
                         </div>
                         <div class="flex gap-1">
@@ -183,13 +183,13 @@ const getTypeBadge = (type) => {
                                         'px-3 py-1.5 text-xs rounded-md border font-medium transition',
                                         link.active
                                             ? 'bg-indigo-600 text-white border-indigo-600'
-                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300'
                                     ]"
                                 />
                                 <span
                                     v-else
                                     v-html="link.label"
-                                    class="px-3 py-1.5 text-xs rounded-md border border-gray-100 text-gray-300"
+                                    class="px-3 py-1.5 text-xs rounded-md border border-gray-100 text-gray-300 dark:border-gray-700"
                                 />
                             </template>
                         </div>

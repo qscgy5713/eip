@@ -82,13 +82,13 @@ const getStatusBadge = (delegation) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800">簽核職務代理人設定</h2>
-                    <p class="text-xs text-gray-500 mt-1">設定出差休假時的簽核代簽人，確保行政表單審批流暢運作</p>
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">簽核職務代理人設定</h2>
+                    <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">設定出差休假時的簽核代簽人，確保行政表單審批流暢運作</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <Link
                         :href="route('forms.index')"
-                        class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition"
+                        class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
                         &larr; 返回表單簽核
                     </Link>
@@ -116,14 +116,14 @@ const getStatusBadge = (delegation) => {
                 </div>
 
                 <!-- 區塊 1: 我指派的職務代理人 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4 dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-base font-bold text-gray-900 flex items-center space-x-2">
+                        <h3 class="text-base font-bold text-gray-900 flex items-center space-x-2 dark:text-gray-100">
                             <span>我指派的代理人 ({{ myDelegations.length }})</span>
                         </h3>
                     </div>
 
-                    <div v-if="myDelegations.length > 0" class="divide-y divide-gray-100">
+                    <div v-if="myDelegations.length > 0" class="divide-y divide-gray-100 dark:divide-gray-700">
                         <div
                             v-for="item in myDelegations"
                             :key="item.id"
@@ -131,14 +131,14 @@ const getStatusBadge = (delegation) => {
                         >
                             <div class="space-y-1">
                                 <div class="flex items-center space-x-3">
-                                    <span class="font-bold text-sm text-gray-900">{{ item.delegate?.name }}</span>
-                                    <span class="text-xs text-gray-500 font-mono">{{ item.delegate?.email }}</span>
-                                    <span class="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">{{ item.delegate?.department?.name || '無部門' }}</span>
+                                    <span class="font-bold text-sm text-gray-900 dark:text-gray-100">{{ item.delegate?.name }}</span>
+                                    <span class="text-xs text-gray-500 font-mono dark:text-gray-400">{{ item.delegate?.email }}</span>
+                                    <span class="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ item.delegate?.department?.name || '無部門' }}</span>
                                     <span :class="['px-2.5 py-0.5 text-xs rounded-full', getStatusBadge(item).class]">
                                         {{ getStatusBadge(item).text }}
                                     </span>
                                 </div>
-                                <div class="text-xs text-gray-500 flex items-center space-x-4">
+                                <div class="text-xs text-gray-500 flex items-center space-x-4 dark:text-gray-400">
                                     <span class="flex items-center">
                                         <svg class="w-3.5 h-3.5 mr-1 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                         代理期間：{{ item.start_date }} ~ {{ item.end_date }}
@@ -173,12 +173,12 @@ const getStatusBadge = (delegation) => {
                 </div>
 
                 <!-- 區塊 2: 別人指派我為代理人的記錄 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                    <h3 class="text-base font-bold text-gray-900 flex items-center space-x-2">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4 dark:bg-gray-800 dark:border-gray-700">
+                    <h3 class="text-base font-bold text-gray-900 flex items-center space-x-2 dark:text-gray-100">
                         <span>指派我為代理人之主管 ({{ delegatedToMe.length }})</span>
                     </h3>
 
-                    <div v-if="delegatedToMe.length > 0" class="divide-y divide-gray-100">
+                    <div v-if="delegatedToMe.length > 0" class="divide-y divide-gray-100 dark:divide-gray-700">
                         <div
                             v-for="item in delegatedToMe"
                             :key="item.id"
@@ -186,14 +186,14 @@ const getStatusBadge = (delegation) => {
                         >
                             <div class="space-y-1">
                                 <div class="flex items-center space-x-3">
-                                    <span class="font-bold text-sm text-gray-900">{{ item.user?.name }}</span>
-                                    <span class="text-xs text-gray-500 font-mono">{{ item.user?.email }}</span>
-                                    <span class="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">{{ item.user?.department?.name || '無部門' }}</span>
+                                    <span class="font-bold text-sm text-gray-900 dark:text-gray-100">{{ item.user?.name }}</span>
+                                    <span class="text-xs text-gray-500 font-mono dark:text-gray-400">{{ item.user?.email }}</span>
+                                    <span class="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{{ item.user?.department?.name || '無部門' }}</span>
                                     <span :class="['px-2.5 py-0.5 text-xs rounded-full', getStatusBadge(item).class]">
                                         {{ getStatusBadge(item).text }}
                                     </span>
                                 </div>
-                                <div class="text-xs text-gray-500 flex items-center space-x-4">
+                                <div class="text-xs text-gray-500 flex items-center space-x-4 dark:text-gray-400">
                                     <span class="flex items-center">
                                         <svg class="w-3.5 h-3.5 mr-1 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                         代理區間：{{ item.start_date }} ~ {{ item.end_date }}
@@ -224,21 +224,21 @@ const getStatusBadge = (delegation) => {
 
         <!-- 新增代理人 Modal -->
         <div v-if="isModalOpen" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto">
-            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-5 my-8">
+            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-5 my-8 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900">設定簽核職務代理人</h3>
-                        <p class="text-xs text-gray-500 mt-0.5">指定同仁在特定日期區間內擁有您的待審表單代理簽核權限</p>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">設定簽核職務代理人</h3>
+                        <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">指定同仁在特定日期區間內擁有您的待審表單代理簽核權限</p>
                     </div>
                     <button @click="closeModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitDelegation" class="space-y-4 text-sm">
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">指派代理同仁 *</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">指派代理同仁 *</label>
                         <select
                             v-model="form.delegate_id"
-                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             required
                         >
                             <option v-for="user in availableDelegates" :key="user.id" :value="user.id">
@@ -250,21 +250,21 @@ const getStatusBadge = (delegation) => {
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">代理開始日期 *</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">代理開始日期 *</label>
                             <input
                                 v-model="form.start_date"
                                 type="date"
-                                class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 required
                             />
                             <p v-if="form.errors.start_date" class="text-xs text-rose-500 mt-1">{{ form.errors.start_date }}</p>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">代理結束日期 *</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">代理結束日期 *</label>
                             <input
                                 v-model="form.end_date"
                                 type="date"
-                                class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 required
                             />
                             <p v-if="form.errors.end_date" class="text-xs text-rose-500 mt-1">{{ form.errors.end_date }}</p>
@@ -272,12 +272,12 @@ const getStatusBadge = (delegation) => {
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">代理事由說明 (可選)</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">代理事由說明 (可選)</label>
                         <input
                             v-model="form.reason"
                             type="text"
                             placeholder="如：出差拜訪客戶、休假出國..."
-                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
                         <p v-if="form.errors.reason" class="text-xs text-rose-500 mt-1">{{ form.errors.reason }}</p>
                     </div>
@@ -286,7 +286,7 @@ const getStatusBadge = (delegation) => {
                         <button
                             type="button"
                             @click="closeModal"
-                            class="px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50"
+                            class="px-4 py-2 border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:border-gray-700"
                         >
                             取消
                         </button>

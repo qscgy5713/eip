@@ -199,10 +199,10 @@ const formatTime = (isoString) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800">
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">
                         會議室借用與公用日程
                     </h2>
-                    <p class="text-xs text-gray-500 mt-1">
+                    <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">
                         即時查看會議室佔用時段、邀請同仁與會並線上借用視聽設備
                     </p>
                 </div>
@@ -210,7 +210,7 @@ const formatTime = (isoString) => {
                     <button
                         v-if="isAdmin"
                         @click="openRoomModal"
-                        class="px-3.5 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-xs hover:bg-gray-50 transition"
+                        class="px-3.5 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-xs hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
                         + 新增會議室 (管理員)
                     </button>
@@ -228,11 +228,11 @@ const formatTime = (isoString) => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
                 <!-- 日期選擇控制列 -->
-                <div class="bg-white rounded-xl shadow-xs border border-gray-100 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="bg-white rounded-xl shadow-xs border border-gray-100 p-4 flex flex-col sm:flex-row items-center justify-between gap-4 dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex items-center space-x-2">
                         <button
                             @click="shiftDate(-1)"
-                            class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition text-xs font-medium"
+                            class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition text-xs font-medium dark:text-gray-400"
                             title="前一天"
                         >
                             &larr; 前一天
@@ -245,7 +245,7 @@ const formatTime = (isoString) => {
                         </button>
                         <button
                             @click="shiftDate(1)"
-                            class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition text-xs font-medium"
+                            class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition text-xs font-medium dark:text-gray-400"
                             title="後一天"
                         >
                             後一天 &rarr;
@@ -253,12 +253,12 @@ const formatTime = (isoString) => {
                     </div>
 
                     <div class="flex items-center space-x-3">
-                        <span class="text-sm font-medium text-gray-700">檢視日期：</span>
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">檢視日期：</span>
                         <input
                             type="date"
                             v-model="currentDate"
                             @change="changeDate(currentDate)"
-                            class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm text-gray-800 focus:ring-blue-500 focus:border-blue-500"
+                            class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm text-gray-800 focus:ring-blue-500 focus:border-blue-500 dark:text-gray-100 dark:border-gray-700"
                         />
                     </div>
                 </div>
@@ -276,7 +276,7 @@ const formatTime = (isoString) => {
                         <div
                             v-for="mb in myBookings"
                             :key="mb.id"
-                            class="bg-white/10 backdrop-blur-xs border border-white/15 rounded-lg p-3 flex flex-col justify-between"
+                            class="bg-white/10 backdrop-blur-xs border border-white/15 rounded-lg p-3 flex flex-col justify-between dark:bg-gray-800"
                         >
                             <div>
                                 <div class="flex items-center justify-between">
@@ -301,7 +301,7 @@ const formatTime = (isoString) => {
                                     主辦發起人：{{ mb.user?.name }}
                                 </p>
                             </div>
-                            <div class="mt-2 text-xs font-mono text-blue-100 bg-white/5 px-2 py-1 rounded flex items-center justify-between">
+                            <div class="mt-2 text-xs font-mono text-blue-100 bg-white/5 px-2 py-1 rounded flex items-center justify-between dark:bg-gray-800">
                                 <span class="flex items-center">
                                     <svg class="w-3.5 h-3.5 mr-1 text-blue-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     {{ new Date(mb.start_time).toLocaleDateString() }} {{ formatTime(mb.start_time) }} - {{ formatTime(mb.end_time) }}
@@ -319,17 +319,17 @@ const formatTime = (isoString) => {
                     <div
                         v-for="room in rooms"
                         :key="room.id"
-                        class="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden flex flex-col"
+                        class="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden flex flex-col dark:bg-gray-800 dark:border-gray-700"
                     >
                         <!-- 會議室頭部卡片 -->
-                        <div class="p-5 border-b border-gray-100 bg-slate-50/50">
+                        <div class="p-5 border-b border-gray-100 bg-slate-50/50 dark:border-gray-700 dark:bg-gray-800/60">
                             <div class="flex items-center justify-between">
-                                <h3 class="text-lg font-bold text-gray-900">{{ room.name }}</h3>
+                                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ room.name }}</h3>
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                                     容納 {{ room.capacity }} 人
                                 </span>
                             </div>
-                            <p class="text-xs text-gray-500 mt-1 flex items-center space-x-1">
+                            <p class="text-xs text-gray-500 mt-1 flex items-center space-x-1 dark:text-gray-400">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 <span>{{ room.location }}</span>
                             </p>
@@ -340,7 +340,7 @@ const formatTime = (isoString) => {
                                 <span
                                     v-for="(eq, i) in (room.equipment || [])"
                                     :key="i"
-                                    class="px-2 py-0.5 text-[11px] font-medium bg-gray-100 text-gray-600 rounded"
+                                    class="px-2 py-0.5 text-[11px] font-medium bg-gray-100 text-gray-600 rounded dark:bg-gray-700 dark:text-gray-400"
                                 >
                                     {{ eq }}
                                 </span>
@@ -368,11 +368,11 @@ const formatTime = (isoString) => {
                                     <div
                                         v-for="b in room.bookings"
                                         :key="b.id"
-                                        class="p-3 rounded-lg bg-gray-50 border border-gray-200 text-xs flex flex-col space-y-1.5"
+                                        class="p-3 rounded-lg bg-gray-50 border border-gray-200 text-xs flex flex-col space-y-1.5 dark:bg-gray-800/60 dark:border-gray-700"
                                     >
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center space-x-1.5 truncate">
-                                                <span class="font-bold text-gray-800 truncate">{{ b.title }}</span>
+                                                <span class="font-bold text-gray-800 truncate dark:text-gray-100">{{ b.title }}</span>
                                                 <span class="text-gray-400 text-[11px]">({{ b.attendees_count }}人)</span>
                                             </div>
                                             <div class="flex items-center space-x-1 shrink-0">
@@ -399,7 +399,7 @@ const formatTime = (isoString) => {
                                              {{ formatTime(b.start_time) }} ~ {{ formatTime(b.end_time) }}
                                         </p>
 
-                                        <div class="flex items-center justify-between text-[11px] text-gray-500">
+                                        <div class="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
                                             <span>發起人：{{ b.user?.name }}</span>
                                             <span v-if="b.attendees && b.attendees.length > 0" class="text-indigo-600 font-medium">
                                                 {{ b.attendees.length }} 位受邀同仁
@@ -407,7 +407,7 @@ const formatTime = (isoString) => {
                                         </div>
 
                                         <!-- 受邀同仁名字標籤 -->
-                                        <div v-if="b.attendees && b.attendees.length > 0" class="flex flex-wrap gap-1 pt-1 border-t border-gray-200/60">
+                                        <div v-if="b.attendees && b.attendees.length > 0" class="flex flex-wrap gap-1 pt-1 border-t border-gray-200/60 dark:border-gray-700">
                                             <span
                                                 v-for="att in b.attendees"
                                                 :key="att.id"
@@ -446,18 +446,18 @@ const formatTime = (isoString) => {
 
         <!-- 預約會議室 Modal -->
         <div v-if="isBookingModalOpen" class="fixed inset-0 z-50 overflow-y-auto bg-black/50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl space-y-4">
+            <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
-                    <h3 class="text-lg font-bold text-gray-900">預約內部會議室</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">預約內部會議室</h3>
                     <button @click="closeBookingModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitBooking" class="space-y-4 text-sm">
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">選擇會議室 *</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">選擇會議室 *</label>
                         <select
                             v-model="bookingForm.meeting_room_id"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                             required
                         >
                             <option v-for="r in rooms" :key="r.id" :value="r.id">
@@ -468,12 +468,12 @@ const formatTime = (isoString) => {
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">會議主題 *</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">會議主題 *</label>
                         <input
                             type="text"
                             v-model="bookingForm.title"
                             placeholder="例如：2026 Q4 專案進度與敏捷同步會"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                             required
                         />
                         <p v-if="bookingForm.errors.title" class="text-xs text-rose-500 mt-1">{{ bookingForm.errors.title }}</p>
@@ -481,20 +481,20 @@ const formatTime = (isoString) => {
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">開始時間 *</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">開始時間 *</label>
                             <input
                                 type="datetime-local"
                                 v-model="bookingForm.start_time"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                                 required
                             />
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">結束時間 *</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">結束時間 *</label>
                             <input
                                 type="datetime-local"
                                 v-model="bookingForm.end_time"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                                 required
                             />
                         </div>
@@ -505,7 +505,7 @@ const formatTime = (isoString) => {
                     <!-- 邀請與會同仁 -->
                     <div>
                         <div class="flex items-center justify-between mb-1">
-                            <label class="block font-medium text-gray-700">邀請與會同仁 (選填，將發送站內會議邀請)</label>
+                            <label class="block font-medium text-gray-700 dark:text-gray-300">邀請與會同仁 (選填，將發送站內會議邀請)</label>
                             <span class="text-xs text-gray-400">已邀請 {{ bookingForm.attendee_ids.length }} 人</span>
                         </div>
 
@@ -533,17 +533,17 @@ const formatTime = (isoString) => {
                                 type="text"
                                 v-model="attendeeSearch"
                                 placeholder="輸入同仁姓名、部門或帳號快速搜尋加入..."
-                                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-xs focus:ring-blue-500 focus:border-blue-500"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                             />
                             <div
                                 v-if="attendeeSearch.trim() && availableUsers.length > 0"
-                                class="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white py-1 text-xs shadow-lg ring-1 ring-black/5"
+                                class="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white py-1 text-xs shadow-lg ring-1 ring-black/5 dark:bg-gray-800"
                             >
                                 <div
                                     v-for="user in availableUsers.slice(0, 8)"
                                     :key="user.id"
                                     @click="addAttendee(user)"
-                                    class="cursor-pointer px-3 py-1.5 hover:bg-blue-50 flex items-center justify-between text-gray-700"
+                                    class="cursor-pointer px-3 py-1.5 hover:bg-blue-50 flex items-center justify-between text-gray-700 dark:text-gray-300"
                                 >
                                     <span class="font-medium">{{ user.name }}</span>
                                     <span class="text-gray-400 text-[11px]">{{ user.department?.name }} · {{ user.email }}</span>
@@ -554,12 +554,12 @@ const formatTime = (isoString) => {
 
                     <!-- 與會人數 -->
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">預估與會總人數 *</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">預估與會總人數 *</label>
                         <input
                             type="number"
                             :min="bookingForm.attendee_ids.length + 1"
                             v-model="bookingForm.attendees_count"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                             required
                         />
                         <p class="text-xs text-gray-400 mt-1">包含發起人本人，若選取受邀同仁會自動設定人數下限。</p>
@@ -568,12 +568,12 @@ const formatTime = (isoString) => {
 
                     <!-- 設備借用需求勾選 -->
                     <div v-if="selectedRoom && selectedRoom.equipment && selectedRoom.equipment.length > 0">
-                        <label class="block font-medium text-gray-700 mb-1">設備使用需求 (勾選行政支援備妥)</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">設備使用需求 (勾選行政支援備妥)</label>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1">
                             <label
                                 v-for="(eq, i) in selectedRoom.equipment"
                                 :key="i"
-                                class="flex items-center space-x-2 text-xs text-gray-700 cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200"
+                                class="flex items-center space-x-2 text-xs text-gray-700 cursor-pointer p-2 rounded hover:bg-gray-50 border border-gray-200 dark:border-gray-700 dark:text-gray-300"
                             >
                                 <input
                                     type="checkbox"
@@ -587,12 +587,12 @@ const formatTime = (isoString) => {
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">會議說明 / 備註需求 (選填)</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">會議說明 / 備註需求 (選填)</label>
                         <textarea
                             v-model="bookingForm.description"
                             rows="2"
                             placeholder="如：請與會同仁自備筆記型電腦，預計有跨國客戶連線..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 
@@ -600,7 +600,7 @@ const formatTime = (isoString) => {
                         <button
                             type="button"
                             @click="closeBookingModal"
-                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400"
                         >
                             取消
                         </button>
@@ -618,20 +618,20 @@ const formatTime = (isoString) => {
 
         <!-- 管理員新增會議室 Modal -->
         <div v-if="isRoomModalOpen" class="fixed inset-0 z-50 overflow-y-auto bg-black/50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
-                    <h3 class="text-lg font-bold text-gray-900">新增會議室 (管理員)</h3>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">新增會議室 (管理員)</h3>
                     <button @click="closeRoomModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitRoom" class="space-y-4 text-sm">
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">會議室名稱</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">會議室名稱</label>
                         <input
                             type="text"
                             v-model="roomForm.name"
                             placeholder="如：301 敏捷創新室"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                             required
                         />
                         <p v-if="roomForm.errors.name" class="text-xs text-rose-500 mt-1">{{ roomForm.errors.name }}</p>
@@ -639,34 +639,34 @@ const formatTime = (isoString) => {
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">所在位置</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">所在位置</label>
                             <input
                                 type="text"
                                 v-model="roomForm.location"
                                 placeholder="如：總部 B 棟 3F"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                                 required
                             />
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">容納人數</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">容納人數</label>
                             <input
                                 type="number"
                                 min="1"
                                 v-model="roomForm.capacity"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                                 required
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">配備設施</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">配備設施</label>
                         <div class="grid grid-cols-2 gap-2 mt-1">
                             <label
                                 v-for="eq in availableEquipments"
                                 :key="eq"
-                                class="flex items-center space-x-2 text-xs text-gray-700 cursor-pointer p-1.5 rounded hover:bg-gray-50 border border-gray-100"
+                                class="flex items-center space-x-2 text-xs text-gray-700 cursor-pointer p-1.5 rounded hover:bg-gray-50 border border-gray-100 dark:border-gray-700 dark:text-gray-300"
                             >
                                 <input
                                     type="checkbox"
@@ -680,12 +680,12 @@ const formatTime = (isoString) => {
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">備註說明 (選填)</label>
+                        <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">備註說明 (選填)</label>
                         <textarea
                             v-model="roomForm.description"
                             rows="2"
                             placeholder="如：近茶水間，適合部門團隊站會..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 
@@ -693,7 +693,7 @@ const formatTime = (isoString) => {
                         <button
                             type="button"
                             @click="closeRoomModal"
-                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400"
                         >
                             取消
                         </button>

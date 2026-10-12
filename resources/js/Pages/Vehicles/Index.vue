@@ -142,7 +142,7 @@ const handleExport = () => {
                         @click="handleExport"
                         class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-xs font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-xs transition"
                     >
-                        <svg class="w-4 h-4 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 mr-1.5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
                         匯出派車紀錄 CSV
@@ -181,7 +181,7 @@ const handleExport = () => {
 
             <!-- 車隊車輛名冊卡片橫向導覽 -->
             <div class="space-y-2">
-                <h3 class="text-xs font-bold text-gray-500">車隊現況與車位一覽</h3>
+                <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400">車隊現況與車位一覽</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div
                         v-for="v in vehicles"
@@ -319,7 +319,7 @@ const handleExport = () => {
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-left text-xs">
-                        <thead class="bg-gray-50 dark:bg-gray-900 text-gray-500 font-semibold">
+                        <thead class="bg-gray-50 dark:bg-gray-900 text-gray-500 font-semibold dark:text-gray-400">
                             <tr>
                                 <th class="px-5 py-3">派車單號</th>
                                 <th class="px-5 py-3">借用同仁</th>
@@ -558,7 +558,7 @@ const handleExport = () => {
                     ></textarea>
                 </div>
                 <div class="mt-6 flex justify-end gap-2">
-                    <button @click="showRejectModal = false" class="px-4 py-2 rounded-xl text-gray-500 font-bold hover:bg-gray-100">
+                    <button @click="showRejectModal = false" class="px-4 py-2 rounded-xl text-gray-500 font-bold hover:bg-gray-100 dark:text-gray-400">
                         取消
                     </button>
                     <button @click="submitReject" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold transition">

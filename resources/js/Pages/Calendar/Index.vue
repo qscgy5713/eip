@@ -186,13 +186,13 @@ const openDateEventsModal = (dateStr, evList) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center">
+                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center dark:text-gray-100">
                         <svg class="w-6 h-6 mr-2 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         全景綜合行事曆 (Calendar Hub)
                     </h2>
-                    <p class="text-sm text-gray-500 mt-1">
+                    <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">
                         統一整合會議室借用排程、同仁差勤休假與公司重大公告日程
                     </p>
                 </div>
@@ -209,7 +209,7 @@ const openDateEventsModal = (dateStr, evList) => {
                     </a>
                     <Link
                         :href="route('meeting-rooms.index')"
-                        class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition"
+                        class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
                         預約會議室
                     </Link>
@@ -226,29 +226,29 @@ const openDateEventsModal = (dateStr, evList) => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
                 <!-- 工具列與篩選列 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 dark:bg-gray-800 dark:border-gray-700">
                     <!-- 年月份導覽切換 -->
                     <div class="flex items-center space-x-2">
                         <button
                             @click="prevMonth"
-                            class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition"
+                            class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition dark:text-gray-400"
                             title="上個月"
                         >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
                         </button>
-                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 min-w-[140px] text-center font-mono">
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 min-w-[140px] text-center font-mono dark:text-gray-100">
                             {{ monthTitle }}
                         </h3>
                         <button
                             @click="nextMonth"
-                            class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition"
+                            class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition dark:text-gray-400"
                             title="下個月"
                         >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </button>
                         <button
                             @click="goToday"
-                            class="ml-2 px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                            class="ml-2 px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                         >
                             今天
                         </button>
@@ -257,17 +257,17 @@ const openDateEventsModal = (dateStr, evList) => {
                     <!-- 事件類型切換與部門篩選 -->
                     <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
                         <!-- 類型切換 Radio/Buttons -->
-                        <div class="inline-flex bg-gray-100 p-1 rounded-lg text-xs font-medium">
+                        <div class="inline-flex bg-gray-100 p-1 rounded-lg text-xs font-medium dark:bg-gray-700">
                             <button
                                 @click="selectedType = 'all'; updateView()"
-                                :class="selectedType === 'all' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'"
+                                :class="selectedType === 'all' ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-gray-100' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400'"
                                 class="px-3 py-1.5 rounded-md transition"
                             >
                                 全部
                             </button>
                             <button
                                 @click="selectedType = 'meeting'; updateView()"
-                                :class="selectedType === 'meeting' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-blue-700'"
+                                :class="selectedType === 'meeting' ? 'bg-white text-blue-700 shadow-sm dark:bg-gray-800' : 'text-gray-600 hover:text-blue-700 dark:text-gray-400'"
                                 class="px-3 py-1.5 rounded-md transition flex items-center space-x-1"
                             >
                                 <span class="w-2 h-2 rounded-full bg-blue-500"></span>
@@ -275,7 +275,7 @@ const openDateEventsModal = (dateStr, evList) => {
                             </button>
                             <button
                                 @click="selectedType = 'leave'; updateView()"
-                                :class="selectedType === 'leave' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-600 hover:text-purple-700'"
+                                :class="selectedType === 'leave' ? 'bg-white text-purple-700 shadow-sm dark:bg-gray-800' : 'text-gray-600 hover:text-purple-700 dark:text-gray-400'"
                                 class="px-3 py-1.5 rounded-md transition flex items-center space-x-1"
                             >
                                 <span class="w-2 h-2 rounded-full bg-purple-500"></span>
@@ -283,7 +283,7 @@ const openDateEventsModal = (dateStr, evList) => {
                             </button>
                             <button
                                 @click="selectedType = 'announcement'; updateView()"
-                                :class="selectedType === 'announcement' ? 'bg-white text-amber-700 shadow-sm' : 'text-gray-600 hover:text-amber-700'"
+                                :class="selectedType === 'announcement' ? 'bg-white text-amber-700 shadow-sm dark:bg-gray-800' : 'text-gray-600 hover:text-amber-700 dark:text-gray-400'"
                                 class="px-3 py-1.5 rounded-md transition flex items-center space-x-1"
                             >
                                 <span class="w-2 h-2 rounded-full bg-amber-500"></span>
@@ -295,7 +295,7 @@ const openDateEventsModal = (dateStr, evList) => {
                         <select
                             v-model="selectedDept"
                             @change="updateView()"
-                            class="text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 py-1.5"
+                            class="text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 py-1.5 dark:border-gray-700"
                         >
                             <option value="">全體部門</option>
                             <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
@@ -304,9 +304,9 @@ const openDateEventsModal = (dateStr, evList) => {
                 </div>
 
                 <!-- 核心日曆網格 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                     <!-- 星期表頭 -->
-                    <div class="grid grid-cols-7 border-b border-gray-200 bg-gray-50/80 text-center text-xs font-bold text-gray-600 py-3">
+                    <div class="grid grid-cols-7 border-b border-gray-200 bg-gray-50/80 text-center text-xs font-bold text-gray-600 py-3 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-400">
                         <span class="text-rose-600">週日</span>
                         <span>週一</span>
                         <span>週二</span>
@@ -317,14 +317,14 @@ const openDateEventsModal = (dateStr, evList) => {
                     </div>
 
                     <!-- 日期網格 -->
-                    <div class="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-gray-100 bg-gray-100/50">
+                    <div class="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-gray-100 bg-gray-100/50 dark:bg-gray-700 dark:divide-gray-700">
                         <div
                             v-for="day in calendarDays"
                             :key="day.dateStr"
                             :class="[
                                 'min-h-[120px] sm:min-h-[140px] p-2 flex flex-col justify-between transition group',
-                                day.isCurrentMonth ? 'bg-white' : 'bg-gray-50/50 text-gray-400',
-                                day.isWeekend && day.isCurrentMonth ? 'bg-slate-50/40' : '',
+                                day.isCurrentMonth ? 'bg-white dark:bg-gray-800' : 'bg-gray-50/50 text-gray-400 dark:bg-gray-800/60',
+                                day.isWeekend && day.isCurrentMonth ? 'bg-slate-50/40 dark:bg-gray-800/60' : '',
                             ]"
                         >
                             <!-- 日期數字列 -->
@@ -332,7 +332,7 @@ const openDateEventsModal = (dateStr, evList) => {
                                 <span
                                     :class="[
                                         'text-xs font-mono font-bold inline-flex items-center justify-center w-6 h-6 rounded-full',
-                                        day.isToday ? 'bg-indigo-600 text-white shadow-sm' : (day.isCurrentMonth ? 'text-gray-800' : 'text-gray-400'),
+                                        day.isToday ? 'bg-indigo-600 text-white shadow-sm' : (day.isCurrentMonth ? 'text-gray-800 dark:text-gray-100' : 'text-gray-400'),
                                     ]"
                                 >
                                     {{ day.dayNumber }}
@@ -383,7 +383,7 @@ const openDateEventsModal = (dateStr, evList) => {
             v-if="selectedEvent"
             class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
         >
-            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <div class="flex items-center space-x-2">
                         <span
@@ -395,7 +395,7 @@ const openDateEventsModal = (dateStr, evList) => {
                         >
                             {{ selectedEvent.type === 'meeting' ? '會議預約' : (selectedEvent.type === 'leave' ? '同仁請假/差勤' : '公司公告') }}
                         </span>
-                        <h3 class="text-base font-bold text-gray-900 truncate max-w-[220px]">
+                        <h3 class="text-base font-bold text-gray-900 truncate max-w-[220px] dark:text-gray-100">
                             {{ selectedEvent.title }}
                         </h3>
                     </div>
@@ -407,20 +407,20 @@ const openDateEventsModal = (dateStr, evList) => {
                     </button>
                 </div>
 
-                <div class="space-y-3 text-xs text-gray-600">
+                <div class="space-y-3 text-xs text-gray-600 dark:text-gray-400">
                     <!-- 會議詳情 -->
                     <template v-if="selectedEvent.type === 'meeting'">
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">會議室與地點</span>
-                            <span class="font-semibold text-gray-800">{{ selectedEvent.location }}</span>
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">{{ selectedEvent.location }}</span>
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">借用同仁</span>
-                            <span class="font-semibold text-gray-800">{{ selectedEvent.user_name }}</span>
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">{{ selectedEvent.user_name }}</span>
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">預計參與人數</span>
-                            <span class="font-semibold text-gray-800">{{ selectedEvent.attendees_count }} 人</span>
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">{{ selectedEvent.attendees_count }} 人</span>
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">會議時間</span>
@@ -430,7 +430,7 @@ const openDateEventsModal = (dateStr, evList) => {
                         </div>
                         <div v-if="selectedEvent.details" class="pt-2">
                             <span class="text-gray-400 block mb-1">會議說明 / 備註</span>
-                            <p class="p-2.5 bg-gray-50 rounded-lg text-gray-700">{{ selectedEvent.details }}</p>
+                            <p class="p-2.5 bg-gray-50 rounded-lg text-gray-700 dark:bg-gray-800/60 dark:text-gray-300">{{ selectedEvent.details }}</p>
                         </div>
                     </template>
 
@@ -438,11 +438,11 @@ const openDateEventsModal = (dateStr, evList) => {
                     <template v-if="selectedEvent.type === 'leave'">
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">同仁姓名</span>
-                            <span class="font-semibold text-gray-800">{{ selectedEvent.user_name }}</span>
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">{{ selectedEvent.user_name }}</span>
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">所屬部門</span>
-                            <span class="font-semibold text-gray-800">{{ selectedEvent.department_name }}</span>
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">{{ selectedEvent.department_name }}</span>
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">差勤類別</span>
@@ -450,13 +450,13 @@ const openDateEventsModal = (dateStr, evList) => {
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">期間與天數</span>
-                            <span class="font-mono font-semibold text-gray-800">
+                            <span class="font-mono font-semibold text-gray-800 dark:text-gray-100">
                                 {{ selectedEvent.date }} ~ {{ selectedEvent.end_date }} (共 {{ selectedEvent.days }} 天)
                             </span>
                         </div>
                         <div v-if="selectedEvent.reason" class="pt-2">
                             <span class="text-gray-400 block mb-1">事由備註</span>
-                            <p class="p-2.5 bg-gray-50 rounded-lg text-gray-700">{{ selectedEvent.reason }}</p>
+                            <p class="p-2.5 bg-gray-50 rounded-lg text-gray-700 dark:bg-gray-800/60 dark:text-gray-300">{{ selectedEvent.reason }}</p>
                         </div>
                     </template>
 
@@ -464,11 +464,11 @@ const openDateEventsModal = (dateStr, evList) => {
                     <template v-if="selectedEvent.type === 'announcement'">
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">公告類型</span>
-                            <span class="font-semibold text-gray-800">{{ selectedEvent.category || '一般公告' }}</span>
+                            <span class="font-semibold text-gray-800 dark:text-gray-100">{{ selectedEvent.category || '一般公告' }}</span>
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">發布日期</span>
-                            <span class="font-mono font-semibold text-gray-800">{{ selectedEvent.date }}</span>
+                            <span class="font-mono font-semibold text-gray-800 dark:text-gray-100">{{ selectedEvent.date }}</span>
                         </div>
                         <div class="pt-3 text-center">
                             <Link
@@ -496,7 +496,7 @@ const openDateEventsModal = (dateStr, evList) => {
                     </div>
                     <button
                         @click="selectedEvent = null"
-                        class="px-4 py-2 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-200 transition"
+                        class="px-4 py-2 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-200 transition dark:bg-gray-700 dark:text-gray-300"
                     >
                         關閉
                     </button>
@@ -509,13 +509,13 @@ const openDateEventsModal = (dateStr, evList) => {
             v-if="selectedDateEvents"
             class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
         >
-            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+            <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <div>
-                        <h3 class="text-base font-bold text-gray-900 font-mono">
+                        <h3 class="text-base font-bold text-gray-900 font-mono dark:text-gray-100">
                             {{ selectedDateStr }} 當日事件明細
                         </h3>
-                        <p class="text-xs text-gray-500 mt-0.5">累計 {{ selectedDateEvents.length }} 則行程排程</p>
+                        <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">累計 {{ selectedDateEvents.length }} 則行程排程</p>
                     </div>
                     <button
                         @click="selectedDateEvents = null"
@@ -525,7 +525,7 @@ const openDateEventsModal = (dateStr, evList) => {
                     </button>
                 </div>
 
-                <div class="divide-y divide-gray-100 max-h-96 overflow-y-auto space-y-2 pr-1">
+                <div class="divide-y divide-gray-100 max-h-96 overflow-y-auto space-y-2 pr-1 dark:divide-gray-700">
                     <div
                         v-for="ev in selectedDateEvents"
                         :key="ev.id"
@@ -553,7 +553,7 @@ const openDateEventsModal = (dateStr, evList) => {
                 <div class="pt-3 border-t flex justify-end">
                     <button
                         @click="selectedDateEvents = null"
-                        class="px-4 py-2 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-200 transition"
+                        class="px-4 py-2 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-200 transition dark:bg-gray-700 dark:text-gray-300"
                     >
                         關閉
                     </button>

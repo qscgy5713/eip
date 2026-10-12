@@ -191,7 +191,7 @@ const submitBatchPublish = () => {
                         <svg v-if="privacyShield" class="w-4 h-4 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                         </svg>
-                        <svg v-else class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg v-else class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
@@ -320,7 +320,7 @@ const submitBatchPublish = () => {
                         <button
                             @click="resetFilter"
                             type="button"
-                            class="px-2.5 py-2 text-xs text-gray-500 hover:text-gray-700 transition"
+                            class="px-2.5 py-2 text-xs text-gray-500 hover:text-gray-700 transition dark:text-gray-400"
                         >
                             重設
                         </button>
@@ -372,7 +372,7 @@ const submitBatchPublish = () => {
                                     <td class="py-3.5 px-4 font-mono text-emerald-700 dark:text-emerald-400 font-black text-sm">
                                         {{ formatCurrency(item.net_pay) }}
                                     </td>
-                                    <td class="py-3.5 px-4 text-gray-500">
+                                    <td class="py-3.5 px-4 text-gray-500 dark:text-gray-400">
                                         {{ item.payment_date ? item.payment_date.substring(0, 10) : '—' }}
                                     </td>
                                     <td class="py-3.5 px-4">
@@ -400,7 +400,7 @@ const submitBatchPublish = () => {
                                             <button
                                                 @click="openEditModal(item)"
                                                 type="button"
-                                                class="px-2 py-1 text-gray-500 hover:text-blue-600 transition"
+                                                class="px-2 py-1 text-gray-500 hover:text-blue-600 transition dark:text-gray-400"
                                                 title="編輯"
                                             >
                                                 編輯
@@ -408,7 +408,7 @@ const submitBatchPublish = () => {
                                             <button
                                                 @click="deletePayslip(item)"
                                                 type="button"
-                                                class="px-2 py-1 text-gray-500 hover:text-rose-600 transition"
+                                                class="px-2 py-1 text-gray-500 hover:text-rose-600 transition dark:text-gray-400"
                                                 title="刪除"
                                             >
                                                 刪除
@@ -428,7 +428,7 @@ const submitBatchPublish = () => {
 
                     <!-- 分頁 -->
                     <div v-if="payslips.links && payslips.links.length > 3" class="p-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center text-xs">
-                        <span class="text-gray-500">第 {{ payslips.current_page }} 頁 / 共 {{ payslips.last_page }} 頁</span>
+                        <span class="text-gray-500 dark:text-gray-400">第 {{ payslips.current_page }} 頁 / 共 {{ payslips.last_page }} 頁</span>
                         <div class="flex gap-1">
                             <template v-for="(link, idx) in payslips.links" :key="idx">
                                 <Link
@@ -514,23 +514,23 @@ const submitBatchPublish = () => {
                         </div>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <div>
-                                <label class="text-[11px] text-gray-500">底薪/本薪</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">底薪/本薪</label>
                                 <input v-model.number="form.base_salary" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
-                                <label class="text-[11px] text-gray-500">職務/專業加給</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">職務/專業加給</label>
                                 <input v-model.number="form.allowance" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
-                                <label class="text-[11px] text-gray-500">績效/業務獎金</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">績效/業務獎金</label>
                                 <input v-model.number="form.bonus" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
-                                <label class="text-[11px] text-gray-500">加班費</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">加班費</label>
                                 <input v-model.number="form.overtime_pay" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
-                                <label class="text-[11px] text-gray-500">其他應發 (津貼等)</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">其他應發 (津貼等)</label>
                                 <input v-model.number="form.other_additions" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                         </div>
@@ -544,23 +544,23 @@ const submitBatchPublish = () => {
                         </div>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <div>
-                                <label class="text-[11px] text-gray-500">勞保自付額</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">勞保自付額</label>
                                 <input v-model.number="form.labor_insurance" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
-                                <label class="text-[11px] text-gray-500">健保自付額</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">健保自付額</label>
                                 <input v-model.number="form.health_insurance" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
-                                <label class="text-[11px] text-gray-500">勞退自提額</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">勞退自提額</label>
                                 <input v-model.number="form.pension_self" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
-                                <label class="text-[11px] text-gray-500">代扣所得稅</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">代扣所得稅</label>
                                 <input v-model.number="form.tax_withholding" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                             <div>
-                                <label class="text-[11px] text-gray-500">其他扣款 (請假/福利)</label>
+                                <label class="text-[11px] text-gray-500 dark:text-gray-400">其他扣款 (請假/福利)</label>
                                 <input v-model.number="form.other_deductions" type="number" class="w-full text-xs rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono" />
                             </div>
                         </div>

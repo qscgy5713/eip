@@ -144,13 +144,13 @@ const handleDrop = (e) => {
             @dragleave="handleDragLeave"
             @drop.prevent="handleDrop"
             :class="[
-                'w-64 rounded-xl border transition-all duration-200 select-none relative z-10 group bg-white shadow-sm',
+                'w-64 rounded-xl border transition-all duration-200 select-none relative z-10 group bg-white shadow-sm dark:bg-gray-800',
                 isMatched ? 'ring-4 ring-amber-400 ring-offset-2 border-amber-400 bg-amber-50/20 shadow-xl' : '',
                 isBeingDragged ? 'opacity-40 border-dashed border-indigo-400 scale-95 shadow-none' : '',
                 isCurrentDropTarget
                     ? 'ring-4 ring-indigo-500 ring-offset-2 border-indigo-500 bg-indigo-50/70 scale-105 shadow-xl'
-                    : 'border-slate-200 hover:border-indigo-400 hover:shadow-md',
-                !node.is_active ? 'opacity-75 bg-slate-50' : '',
+                    : 'border-slate-200 hover:border-indigo-400 hover:shadow-md dark:border-gray-700',
+                !node.is_active ? 'opacity-75 bg-slate-50 dark:bg-gray-800/60' : '',
                 !readOnly && draggingDeptId && isDropDisabled && !isBeingDragged
                     ? 'opacity-50 cursor-not-allowed'
                     : !readOnly ? 'cursor-grab active:cursor-grabbing' : ''
@@ -165,7 +165,7 @@ const handleDrop = (e) => {
             </div>
 
             <!-- 卡片頂部條：代碼與人數 -->
-            <div class="px-3.5 py-2.5 bg-slate-50 border-b border-slate-100 rounded-t-xl flex items-center justify-between">
+            <div class="px-3.5 py-2.5 bg-slate-50 border-b border-slate-100 rounded-t-xl flex items-center justify-between dark:bg-gray-800/60 dark:border-gray-700">
                 <div class="flex items-center gap-1.5 min-w-0">
                     <span class="px-2 py-0.5 text-2xs font-bold font-mono rounded bg-indigo-100 text-indigo-700 shrink-0">
                         {{ node.code }}
@@ -176,7 +176,7 @@ const handleDrop = (e) => {
                 </div>
                 <button
                     @click.stop="emit('view-members', node)"
-                    class="inline-flex items-center gap-1 text-2xs font-semibold text-slate-500 hover:text-indigo-600 transition shrink-0"
+                    class="inline-flex items-center gap-1 text-2xs font-semibold text-slate-500 hover:text-indigo-600 transition shrink-0 dark:text-gray-400"
                     title="點擊查看在職成員名冊"
                 >
                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -190,7 +190,7 @@ const handleDrop = (e) => {
             <!-- 卡片主體：名稱與主管 -->
             <div class="p-3.5 space-y-2.5">
                 <div class="flex items-start justify-between gap-1">
-                    <h4 class="font-bold text-slate-900 text-sm truncate flex-1" :title="node.name">
+                    <h4 class="font-bold text-slate-900 text-sm truncate flex-1 dark:text-gray-100" :title="node.name">
                         {{ node.name }}
                     </h4>
                     <!-- 拖曳握把小圖示 (唯讀模式下隱藏) -->
@@ -200,12 +200,12 @@ const handleDrop = (e) => {
                 </div>
 
                 <!-- 負責主管資訊卡 -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50/80 border border-slate-100">
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50/80 border border-slate-100 dark:bg-gray-800/60 dark:border-gray-700">
                     <div class="w-7 h-7 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
                         {{ node.leader?.name ? node.leader.name.charAt(0) : '無' }}
                     </div>
                     <div class="min-w-0 flex-1">
-                        <p class="text-xs font-semibold text-slate-800 truncate">
+                        <p class="text-xs font-semibold text-slate-800 truncate dark:text-gray-100">
                             {{ node.leader?.name || '未指定主管' }}
                         </p>
                         <p class="text-3xs text-slate-400 truncate">
@@ -217,7 +217,7 @@ const handleDrop = (e) => {
 
             <!-- 卡片操作按鈕列 (快捷工具列) -->
             <!-- 模式 A：唯讀模式 (全員通訊錄瀏覽) -->
-            <div v-if="readOnly" class="px-2.5 py-2 bg-slate-50/50 border-t border-slate-100 rounded-b-xl flex items-center justify-center text-xs">
+            <div v-if="readOnly" class="px-2.5 py-2 bg-slate-50/50 border-t border-slate-100 rounded-b-xl flex items-center justify-center text-xs dark:bg-gray-800/60 dark:border-gray-700">
                 <button
                     @click.stop="emit('view-members', node)"
                     class="inline-flex items-center gap-1.5 px-3 py-1 text-2xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition w-full justify-center"
@@ -229,7 +229,7 @@ const handleDrop = (e) => {
             </div>
 
             <!-- 模式 B：管理後台模式 (支援建立子部門、成員指派、編輯、刪除) -->
-            <div v-else class="px-2.5 py-2 bg-slate-50/50 border-t border-slate-100 rounded-b-xl flex items-center justify-between text-xs">
+            <div v-else class="px-2.5 py-2 bg-slate-50/50 border-t border-slate-100 rounded-b-xl flex items-center justify-between text-xs dark:bg-gray-800/60 dark:border-gray-700">
                 <button
                     @click.stop="emit('create-child', node)"
                     class="inline-flex items-center gap-1 px-2 py-1 text-2xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded transition"
@@ -242,21 +242,21 @@ const handleDrop = (e) => {
                 <div class="flex items-center gap-0.5">
                     <button
                         @click.stop="emit('view-members', node)"
-                        class="p-1 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded transition"
+                        class="p-1 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded transition dark:text-gray-400"
                         title="查看部門成員"
                     >
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                     </button>
                     <button
                         @click.stop="emit('edit', node)"
-                        class="p-1 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded transition"
+                        class="p-1 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded transition dark:text-gray-400"
                         title="編輯部門資訊"
                     >
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     </button>
                     <button
                         @click.stop="emit('delete', node)"
-                        class="p-1 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded transition"
+                        class="p-1 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded transition dark:text-gray-400"
                         title="刪除部門"
                     >
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -272,7 +272,7 @@ const handleDrop = (e) => {
                     'absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border flex items-center justify-center text-3xs font-extrabold shadow-sm z-20 transition-transform',
                     isCollapsed
                         ? 'bg-indigo-600 text-white border-indigo-700 hover:bg-indigo-700 scale-105'
-                        : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400 hover:text-indigo-600'
+                        : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400 hover:text-indigo-600 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
                 ]"
                 :title="isCollapsed ? `展開 ${node.childrenNodes.length} 個子部門` : '收合子部門'"
             >

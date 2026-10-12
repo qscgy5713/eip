@@ -54,11 +54,11 @@ const deleteWebhook = (id, name) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center">
+                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center dark:text-gray-100">
                         <svg class="w-6 h-6 mr-2 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
                         外部生態 Webhook 整合
                     </h2>
-                    <p class="text-sm text-gray-500 mt-1">
+                    <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">
                         支援與 Slack、Discord、Microsoft Teams 或自訂內部服務串接，即時推播企業重要公告與審核事件
                     </p>
                 </div>
@@ -88,22 +88,22 @@ const deleteWebhook = (id, name) => {
                     <div class="text-sm text-indigo-950">
                         <h4 class="font-bold text-base mb-1">原生相容主流即時通訊軟體</h4>
                         <p class="text-indigo-800 leading-relaxed">
-                            EIP 的 Webhook Payload 具備自動格式配接器，原生支援 <strong>Slack Incoming Webhooks</strong> 與 <strong>Discord Webhooks</strong>（支援 <code class="bg-white/60 px-1 py-0.5 rounded font-mono text-xs">text</code> 與 <code class="bg-white/60 px-1 py-0.5 rounded font-mono text-xs">content</code> 訊息欄位），亦提供通用 JSON 與 HMAC-SHA256 數位簽章保護，可直接對接公司自建後端或自動化機器人。
+                            EIP 的 Webhook Payload 具備自動格式配接器，原生支援 <strong>Slack Incoming Webhooks</strong> 與 <strong>Discord Webhooks</strong>（支援 <code class="bg-white/60 px-1 py-0.5 rounded font-mono text-xs dark:bg-gray-800">text</code> 與 <code class="bg-white/60 px-1 py-0.5 rounded font-mono text-xs dark:bg-gray-800">content</code> 訊息欄位），亦提供通用 JSON 與 HMAC-SHA256 數位簽章保護，可直接對接公司自建後端或自動化機器人。
                         </p>
                     </div>
                 </div>
 
                 <!-- Webhook 清單 -->
-                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div v-if="webhooks.length === 0" class="py-16 text-center text-gray-500">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                    <div v-if="webhooks.length === 0" class="py-16 text-center text-gray-500 dark:text-gray-400">
                         <svg class="mx-auto h-12 w-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <div class="text-base font-semibold text-gray-700">尚未配置任何 Webhook</div>
+                        <div class="text-base font-semibold text-gray-700 dark:text-gray-300">尚未配置任何 Webhook</div>
                         <p class="text-sm text-gray-400 mt-1">點擊右上角「新增 Webhook 端點」開始整合外部通訊軟體</p>
                     </div>
 
-                    <div v-else class="divide-y divide-gray-100">
+                    <div v-else class="divide-y divide-gray-100 dark:divide-gray-700">
                         <div
                             v-for="webhook in webhooks"
                             :key="webhook.id"
@@ -111,7 +111,7 @@ const deleteWebhook = (id, name) => {
                         >
                             <div class="space-y-2 flex-1 min-w-0">
                                 <div class="flex items-center gap-3">
-                                    <h3 class="text-lg font-bold text-gray-900 truncate">
+                                    <h3 class="text-lg font-bold text-gray-900 truncate dark:text-gray-100">
                                         {{ webhook.name }}
                                     </h3>
                                     <span
@@ -119,7 +119,7 @@ const deleteWebhook = (id, name) => {
                                             'px-2 py-0.5 text-xs font-semibold rounded-full border',
                                             webhook.is_active
                                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                                : 'bg-gray-100 text-gray-500 border-gray-200'
+                                                : 'bg-gray-100 text-gray-500 border-gray-200 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400'
                                         ]"
                                     >
                                         {{ webhook.is_active ? '啟用中' : '已停用' }}
@@ -138,7 +138,7 @@ const deleteWebhook = (id, name) => {
                                     </span>
                                 </div>
 
-                                <div class="text-xs font-mono text-gray-500 truncate bg-gray-50 px-2 py-1 rounded border border-gray-100 max-w-2xl">
+                                <div class="text-xs font-mono text-gray-500 truncate bg-gray-50 px-2 py-1 rounded border border-gray-100 max-w-2xl dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-400">
                                     {{ webhook.url }}
                                 </div>
 
@@ -148,7 +148,7 @@ const deleteWebhook = (id, name) => {
                                     <span
                                         v-for="ev in webhook.events"
                                         :key="ev"
-                                        class="px-2 py-0.5 text-xs rounded bg-gray-100 text-gray-700 border border-gray-200"
+                                        class="px-2 py-0.5 text-xs rounded bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300"
                                     >
                                         {{ supportedEvents[ev] || ev }}
                                     </span>
@@ -173,7 +173,7 @@ const deleteWebhook = (id, name) => {
                                     :class="[
                                         'px-3 py-1.5 border rounded-lg text-xs font-semibold transition',
                                         webhook.is_active
-                                            ? 'border-gray-300 text-gray-700 hover:bg-gray-100'
+                                            ? 'border-gray-300 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:border-gray-700'
                                             : 'border-emerald-300 text-emerald-700 hover:bg-emerald-50'
                                     ]"
                                 >
@@ -198,9 +198,9 @@ const deleteWebhook = (id, name) => {
             v-if="showModal"
             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4"
         >
-            <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 text-left">
-                <div class="flex items-center justify-between pb-4 border-b border-gray-100">
-                    <h3 class="text-lg font-bold text-gray-900">
+            <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 text-left dark:bg-gray-800">
+                <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">
                         配置新外部 Webhook 端點
                     </h3>
                     <button @click="showModal = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">
@@ -210,40 +210,40 @@ const deleteWebhook = (id, name) => {
 
                 <form @submit.prevent="submitWebhook" class="mt-5 space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">Webhook 名稱 *</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1 dark:text-gray-300">Webhook 名稱 *</label>
                         <input
                             v-model="form.name"
                             type="text"
                             required
                             placeholder="例如：公司全體 Slack #general 頻道"
-                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">Webhook URL 端點 *</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1 dark:text-gray-300">Webhook URL 端點 *</label>
                         <input
                             v-model="form.url"
                             type="url"
                             required
                             placeholder="https://hooks.slack.com/services/... 或 Discord Webhook"
-                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-2">訂閱觸發事件 (至少勾選一項) *</label>
-                        <div class="space-y-2 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <label class="block text-xs font-bold text-gray-700 mb-2 dark:text-gray-300">訂閱觸發事件 (至少勾選一項) *</label>
+                        <div class="space-y-2 bg-gray-50 p-3 rounded-lg border border-gray-200 dark:bg-gray-800/60 dark:border-gray-700">
                             <label
                                 v-for="(label, key) in supportedEvents"
                                 :key="key"
-                                class="flex items-center gap-2.5 text-xs text-gray-700 cursor-pointer"
+                                class="flex items-center gap-2.5 text-xs text-gray-700 cursor-pointer dark:text-gray-300"
                             >
                                 <input
                                     type="checkbox"
                                     :value="key"
                                     v-model="form.events"
-                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-700"
                                 />
                                 <span class="font-medium">{{ label }}</span>
                                 <span class="text-gray-400 font-mono text-[11px]">({{ key }})</span>
@@ -252,12 +252,12 @@ const deleteWebhook = (id, name) => {
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">簽章密鑰 Secret (選填)</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1 dark:text-gray-300">簽章密鑰 Secret (選填)</label>
                         <input
                             v-model="form.secret"
                             type="text"
                             placeholder="用於生成 X-EIP-Signature 簽章（選填）"
-                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 font-mono text-xs"
+                            class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 font-mono text-xs dark:border-gray-700"
                         />
                     </div>
 
@@ -266,18 +266,18 @@ const deleteWebhook = (id, name) => {
                             id="is_active_check"
                             type="checkbox"
                             v-model="form.is_active"
-                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-700"
                         />
-                        <label for="is_active_check" class="text-xs font-semibold text-gray-700 cursor-pointer">
+                        <label for="is_active_check" class="text-xs font-semibold text-gray-700 cursor-pointer dark:text-gray-300">
                             建立後立即啟用
                         </label>
                     </div>
 
-                    <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-end gap-3 dark:border-gray-700">
                         <button
                             type="button"
                             @click="showModal = false"
-                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
+                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:border-gray-700"
                         >
                             取消
                         </button>

@@ -82,7 +82,7 @@ const printDispatchOrder = () => {
                 <div class="flex items-center gap-3">
                     <Link
                         :href="route('vehicles.index')"
-                        class="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                        class="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition dark:text-gray-400"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -108,7 +108,7 @@ const printDispatchOrder = () => {
                         @click="printDispatchOrder"
                         class="px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition inline-flex items-center gap-1.5"
                     >
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                         </svg>
                         列印派車憑單
@@ -207,7 +207,7 @@ const printDispatchOrder = () => {
                     <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6 border border-gray-100 dark:border-gray-700">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
                             <span>公務出差行程明細</span>
-                            <span class="text-xs font-normal text-gray-500">事由：{{ dispatch.purpose_label }}</span>
+                            <span class="text-xs font-normal text-gray-500 dark:text-gray-400">事由：{{ dispatch.purpose_label }}</span>
                         </h3>
 
                         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -324,7 +324,7 @@ const printDispatchOrder = () => {
                                 </div>
                                 <div>
                                     <p class="font-semibold text-gray-800 dark:text-gray-200">{{ dispatch.user?.name }}</p>
-                                    <p class="text-gray-500">{{ dispatch.user?.department?.name || '總部' }} · 申請同仁</p>
+                                    <p class="text-gray-500 dark:text-gray-400">{{ dispatch.user?.department?.name || '總部' }} · 申請同仁</p>
                                 </div>
                             </div>
 
@@ -334,7 +334,7 @@ const printDispatchOrder = () => {
                                 </div>
                                 <div>
                                     <p class="font-semibold text-gray-800 dark:text-gray-200">{{ dispatch.approver?.name }}</p>
-                                    <p class="text-gray-500">調派審核主管</p>
+                                    <p class="text-gray-500 dark:text-gray-400">調派審核主管</p>
                                 </div>
                             </div>
                         </div>
@@ -347,7 +347,7 @@ const printDispatchOrder = () => {
         <div v-if="showRejectModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 flex items-center justify-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">駁回公務派車申請</h3>
-                <p class="text-xs text-gray-500 mb-4">請填寫具體駁回理由，系統將發送通知退回給申請同仁。</p>
+                <p class="text-xs text-gray-500 mb-4 dark:text-gray-400">請填寫具體駁回理由，系統將發送通知退回給申請同仁。</p>
                 <form @submit.prevent="submitReject" class="space-y-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">駁回原因 *</label>
@@ -383,7 +383,7 @@ const printDispatchOrder = () => {
         <div v-if="showStartModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 flex items-center justify-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">交付鑰匙 · 領車出發登錄</h3>
-                <p class="text-xs text-gray-500 mb-4">請確認目前儀表板里程數，確認出發後車輛狀態將轉為「使用中」。</p>
+                <p class="text-xs text-gray-500 mb-4 dark:text-gray-400">請確認目前儀表板里程數，確認出發後車輛狀態將轉為「使用中」。</p>
                 <form @submit.prevent="submitStart" class="space-y-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">出發儀表里程 (km) *</label>
@@ -419,7 +419,7 @@ const printDispatchOrder = () => {
         <div v-if="showReturnModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 flex items-center justify-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">收回鑰匙 · 還車里程登錄</h3>
-                <p class="text-xs text-gray-500 mb-4">請抄錄歸還時儀表板最新里程數，系統將自動計算本次出差行駛總里程。</p>
+                <p class="text-xs text-gray-500 mb-4 dark:text-gray-400">請抄錄歸還時儀表板最新里程數，系統將自動計算本次出差行駛總里程。</p>
                 <form @submit.prevent="submitReturn" class="space-y-4">
                     <div>
                         <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">歸還儀表里程 (km) *</label>

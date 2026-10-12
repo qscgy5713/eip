@@ -94,7 +94,7 @@ const getStatusBadge = (s) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <Link :href="route('tickets.index')" class="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-500 transition">
+                    <Link :href="route('tickets.index')" class="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-500 transition dark:text-gray-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                     </Link>
                     <div>
@@ -262,7 +262,7 @@ const getStatusBadge = (s) => {
                                 <p class="font-bold text-gray-800 dark:text-gray-200">
                                     評價：{{ ticket.satisfaction_rating }} 顆星
                                 </p>
-                                <p v-if="ticket.satisfaction_feedback" class="mt-2 text-gray-500 italic bg-gray-50 dark:bg-gray-900/40 p-2.5 rounded-xl">
+                                <p v-if="ticket.satisfaction_feedback" class="mt-2 text-gray-500 italic bg-gray-50 dark:bg-gray-900/40 p-2.5 rounded-xl dark:text-gray-400">
                                     「{{ ticket.satisfaction_feedback }}」
                                 </p>
                                 <p class="text-[11px] text-gray-400 mt-2">
@@ -394,7 +394,7 @@ const getStatusBadge = (s) => {
                                                 class="hidden"
                                                 id="reply-file-input"
                                             />
-                                            <label for="reply-file-input" class="cursor-pointer text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 flex items-center gap-1">
+                                            <label for="reply-file-input" class="cursor-pointer text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 flex items-center gap-1 dark:text-gray-400">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
                                                 <span>夾帶附件 ({{ fileList.length }})</span>
                                             </label>

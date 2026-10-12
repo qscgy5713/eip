@@ -53,15 +53,15 @@ const formatActionBadge = (action) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center">
+                    <h2 class="text-2xl font-bold leading-tight text-gray-900 flex items-center dark:text-gray-100">
                         <svg class="w-6 h-6 mr-2 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         系統審計稽核日誌 (Audit Trail)
                     </h2>
-                    <p class="text-sm text-gray-500 mt-1">
+                    <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">
                         完整留存全體同仁之表單簽核、會議室調度、考勤打卡與機密文件調閱等關鍵操作軌跡
                     </p>
                 </div>
-                <div class="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm">
+                <div class="text-sm text-gray-600 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
                     累計日誌記錄：<span class="font-bold text-indigo-600">{{ totalLogs }}</span> 筆
                 </div>
             </div>
@@ -70,17 +70,17 @@ const formatActionBadge = (action) => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
                 <!-- 篩選器與搜尋工具列 -->
-                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
                         <div class="sm:col-span-5">
-                            <label class="block text-xs font-semibold text-gray-500 mb-1">關鍵字檢索 (同仁姓名、Email、IP、操作描述)</label>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1 dark:text-gray-400">關鍵字檢索 (同仁姓名、Email、IP、操作描述)</label>
                             <div class="relative">
                                 <input
                                     v-model="search"
                                     @keyup.enter="handleFilter"
                                     type="text"
                                     placeholder="搜尋同仁、IP 或操作備註..."
-                                    class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 pl-9"
+                                    class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 pl-9 dark:border-gray-700"
                                 />
                                 <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -89,11 +89,11 @@ const formatActionBadge = (action) => {
                         </div>
 
                         <div class="sm:col-span-4">
-                            <label class="block text-xs font-semibold text-gray-500 mb-1">動作類別篩選</label>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1 dark:text-gray-400">動作類別篩選</label>
                             <select
                                 v-model="selectedAction"
                                 @change="handleFilter"
-                                class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             >
                                 <option value="">全部動作類別</option>
                                 <option v-for="(count, action) in actionTypes" :key="action" :value="action">
@@ -112,7 +112,7 @@ const formatActionBadge = (action) => {
                             <button
                                 v-if="search || selectedAction"
                                 @click="resetFilter"
-                                class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-3 rounded-lg transition"
+                                class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 px-3 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                             >
                                 重設
                             </button>
@@ -121,10 +121,10 @@ const formatActionBadge = (action) => {
                 </div>
 
                 <!-- 審計日誌表格 -->
-                <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
+                <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
-                            <thead class="bg-gray-50 text-gray-500 font-semibold text-xs">
+                        <table class="min-w-full divide-y divide-gray-200 text-left text-sm dark:divide-gray-700">
+                            <thead class="bg-gray-50 text-gray-500 font-semibold text-xs dark:bg-gray-800/60 dark:text-gray-400">
                                 <tr>
                                     <th class="px-5 py-3">時間戳記</th>
                                     <th class="px-5 py-3">操作人員</th>
@@ -133,20 +133,20 @@ const formatActionBadge = (action) => {
                                     <th class="px-5 py-3">來源 IP / 裝置</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100 bg-white">
+                            <tbody class="divide-y divide-gray-100 bg-white dark:bg-gray-800 dark:divide-gray-700">
                                 <tr v-if="logs.data.length === 0">
                                     <td colspan="5" class="px-6 py-12 text-center text-gray-400">
                                         查無相符之審計稽核日誌
                                     </td>
                                 </tr>
                                 <tr v-for="log in logs.data" :key="log.id" class="hover:bg-gray-50 transition">
-                                    <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-500 font-mono">
+                                    <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-500 font-mono dark:text-gray-400">
                                         {{ log.created_at }}
                                     </td>
                                     <td class="px-5 py-4 whitespace-nowrap">
                                         <div v-if="log.user" class="flex flex-col">
-                                            <span class="font-medium text-gray-900">{{ log.user.name }}</span>
-                                            <span class="text-xs text-gray-500">{{ log.user.email }} ({{ log.user.role }})</span>
+                                            <span class="font-medium text-gray-900 dark:text-gray-100">{{ log.user.name }}</span>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ log.user.email }} ({{ log.user.role }})</span>
                                         </div>
                                         <div v-else class="text-gray-400 text-xs italic">
                                             系統自動排程
@@ -163,14 +163,14 @@ const formatActionBadge = (action) => {
                                         </span>
                                     </td>
                                     <td class="px-5 py-4">
-                                        <div class="text-gray-800 font-medium leading-relaxed">
+                                        <div class="text-gray-800 font-medium leading-relaxed dark:text-gray-100">
                                             {{ log.description }}
                                         </div>
-                                        <div v-if="log.details" class="mt-1 text-xs text-gray-400 font-mono bg-gray-50 p-1.5 rounded inline-block max-w-lg truncate">
+                                        <div v-if="log.details" class="mt-1 text-xs text-gray-400 font-mono bg-gray-50 p-1.5 rounded inline-block max-w-xs truncate dark:bg-gray-800/60">
                                             {{ JSON.stringify(log.details) }}
                                         </div>
                                     </td>
-                                    <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-500 font-mono">
+                                    <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-500 font-mono dark:text-gray-400">
                                         <div class="flex items-center gap-1.5">
                                             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                                             {{ log.ip_address || '127.0.0.1' }}
@@ -184,9 +184,9 @@ const formatActionBadge = (action) => {
                     <!-- 分頁導覽 -->
                     <div
                         v-if="logs.links && logs.links.length > 3"
-                        class="px-6 py-4 border-t border-gray-100 flex items-center justify-between"
+                        class="px-6 py-4 border-t border-gray-100 flex items-center justify-between dark:border-gray-700"
                     >
-                        <div class="text-sm text-gray-500">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">
                             顯示第 {{ logs.from || 0 }} 至 {{ logs.to || 0 }} 筆，共 {{ logs.total }} 筆日誌
                         </div>
                         <div class="flex gap-1">
@@ -199,13 +199,13 @@ const formatActionBadge = (action) => {
                                         'px-3 py-1.5 text-xs rounded-md border font-medium transition',
                                         link.active
                                             ? 'bg-indigo-600 text-white border-indigo-600'
-                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300'
                                     ]"
                                 />
                                 <span
                                     v-else
                                     v-html="link.label"
-                                    class="px-3 py-1.5 text-xs rounded-md border border-gray-100 text-gray-300"
+                                    class="px-3 py-1.5 text-xs rounded-md border border-gray-100 text-gray-300 dark:border-gray-700"
                                 />
                             </template>
                         </div>

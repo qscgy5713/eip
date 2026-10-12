@@ -118,15 +118,15 @@ const deleteForm = (formId, formName) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800">表單與線上簽核</h2>
-                    <p class="text-xs text-gray-500 mt-1">標準化行政工作流、靈活自訂表單與透明審批歷程</p>
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">表單與線上簽核</h2>
+                    <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">標準化行政工作流、靈活自訂表單與透明審批歷程</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <Link
                         :href="route('delegations.index')"
-                        class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition flex items-center space-x-1.5"
+                        class="px-4 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition flex items-center space-x-1.5 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
                         <span>設定職務代理人</span>
                     </Link>
                     <button
@@ -146,7 +146,7 @@ const deleteForm = (formId, formName) => {
                 <!-- 可發起表單區塊 -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-bold text-gray-900 flex items-center space-x-2">
+                        <h3 class="text-lg font-bold text-gray-900 flex items-center space-x-2 dark:text-gray-100">
                             <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             <span>發起新申請單 (共 {{ availableForms.length }} 種表單)</span>
                         </h3>
@@ -155,13 +155,13 @@ const deleteForm = (formId, formName) => {
                         <div
                             v-for="form in availableForms"
                             :key="form.id"
-                            class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md hover:border-blue-300 transition flex flex-col justify-between group"
+                            class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md hover:border-blue-300 transition flex flex-col justify-between group dark:bg-gray-800 dark:border-gray-700"
                         >
                             <div>
                                 <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-base font-bold text-gray-900 group-hover:text-blue-600 transition">{{ form.name }}</h4>
+                                    <h4 class="text-base font-bold text-gray-900 group-hover:text-blue-600 transition dark:text-gray-100">{{ form.name }}</h4>
                                     <div class="flex items-center space-x-2">
-                                        <span class="px-2 py-0.5 text-xs font-mono font-semibold bg-gray-100 text-gray-600 rounded">{{ form.code }}</span>
+                                        <span class="px-2 py-0.5 text-xs font-mono font-semibold bg-gray-100 text-gray-600 rounded dark:bg-gray-700 dark:text-gray-400">{{ form.code }}</span>
                                         <button
                                             v-if="canManageForms"
                                             @click.stop="deleteForm(form.id, form.name)"
@@ -172,10 +172,10 @@ const deleteForm = (formId, formName) => {
                                         </button>
                                     </div>
                                 </div>
-                                <p class="text-xs text-gray-500 mb-4 min-h-[32px] line-clamp-2">{{ form.description || '標準行政申請表單。' }}</p>
+                                <p class="text-xs text-gray-500 mb-4 min-h-[32px] line-clamp-2 dark:text-gray-400">{{ form.description || '標準行政申請表單。' }}</p>
 
                                 <div class="mb-4 text-[11px] text-gray-400 flex flex-wrap gap-1">
-                                    <span class="px-1.5 py-0.5 bg-gray-50 border border-gray-100 rounded" v-for="f in (form.fields_schema || []).slice(0, 3)" :key="f.key">
+                                    <span class="px-1.5 py-0.5 bg-gray-50 border border-gray-100 rounded dark:bg-gray-800/60 dark:border-gray-700" v-for="f in (form.fields_schema || []).slice(0, 3)" :key="f.key">
                                         {{ f.label }}
                                     </span>
                                     <span v-if="(form.fields_schema || []).length > 3" class="px-1.5 py-0.5 text-gray-400">
@@ -199,11 +199,11 @@ const deleteForm = (formId, formName) => {
                         <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <span>待您審批的單據 ({{ pendingApprovals.length }} 件)</span>
                     </h3>
-                    <div class="divide-y divide-amber-100 bg-white rounded-lg border border-amber-200 overflow-hidden">
+                    <div class="divide-y divide-amber-100 bg-white rounded-lg border border-amber-200 overflow-hidden dark:bg-gray-800">
                         <div v-for="item in pendingApprovals" :key="item.id" class="p-4 flex items-center justify-between">
                             <div>
                                 <div class="flex items-center space-x-2">
-                                    <p class="font-bold text-sm text-gray-900">{{ item.form_request?.title }}</p>
+                                    <p class="font-bold text-sm text-gray-900 dark:text-gray-100">{{ item.form_request?.title }}</p>
                                     <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-blue-100 text-blue-800">
                                         {{ item.step_title ? item.step_title : ('關卡 ' + item.step) }}
                                     </span>
@@ -214,8 +214,8 @@ const deleteForm = (formId, formName) => {
                                         代理代簽 (原主管：{{ item.approver?.name }})
                                     </span>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-0.5">
-                                    申請人：<span class="font-semibold text-gray-700">{{ item.form_request?.user?.name }}</span>
+                                <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">
+                                    申請人：<span class="font-semibold text-gray-700 dark:text-gray-300">{{ item.form_request?.user?.name }}</span>
                                     · 類別：{{ item.form_request?.form?.name }}
                                     · 單號：{{ item.form_request?.request_no }}
                                 </p>
@@ -228,9 +228,9 @@ const deleteForm = (formId, formName) => {
                 </div>
 
                 <!-- 我的申請歷史清單 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">我的申請紀錄</h3>
-                    <div class="divide-y divide-gray-100">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 dark:bg-gray-800 dark:border-gray-700">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 dark:text-gray-100">我的申請紀錄</h3>
+                    <div class="divide-y divide-gray-100 dark:divide-gray-700">
                         <div
                             v-for="req in myRequests.data"
                             :key="req.id"
@@ -239,7 +239,7 @@ const deleteForm = (formId, formName) => {
                             <div class="space-y-1">
                                 <div class="flex items-center space-x-2">
                                     <span class="text-xs font-mono font-medium text-gray-400">[{{ req.request_no }}]</span>
-                                    <Link :href="route('forms.show', req.id)" class="font-bold text-sm text-gray-900 hover:text-blue-600">
+                                    <Link :href="route('forms.show', req.id)" class="font-bold text-sm text-gray-900 hover:text-blue-600 dark:text-gray-100">
                                         {{ req.title }}
                                     </Link>
                                 </div>
@@ -264,11 +264,11 @@ const deleteForm = (formId, formName) => {
 
         <!-- 自訂表單設計器 Modal -->
         <div v-if="isCreateFormModalOpen" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 overflow-y-auto">
-            <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl space-y-5 my-8">
+            <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl space-y-5 my-8 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900">自訂新表單設計器</h3>
-                        <p class="text-xs text-gray-500 mt-0.5">定義表單代碼、簽核流程層級與動態欄位結構</p>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">自訂新表單設計器</h3>
+                        <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">定義表單代碼、簽核流程層級與動態欄位結構</p>
                     </div>
                     <button @click="isCreateFormModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                 </div>
@@ -276,22 +276,22 @@ const deleteForm = (formId, formName) => {
                 <form @submit.prevent="submitCustomForm" class="space-y-4 text-sm">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">表單名稱</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">表單名稱</label>
                             <input
                                 type="text"
                                 v-model="newForm.name"
                                 placeholder="如：遠端居家辦公申請單"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                                 required
                             />
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">表單代碼 (大寫英文加底線)</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">表單代碼 (大寫英文加底線)</label>
                             <input
                                 type="text"
                                 v-model="newForm.code"
                                 placeholder="如：REMOTE_WORK"
-                                class="w-full text-xs font-mono rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                class="w-full text-xs font-mono rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                                 required
                             />
                         </div>
@@ -299,10 +299,10 @@ const deleteForm = (formId, formName) => {
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">簽核流程層級架構</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">簽核流程層級架構</label>
                             <select
                                 v-model="newForm.workflow_type"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                             >
                                 <option value="single">標準單級流程：部門直屬主管初審 (1 關)</option>
                                 <option value="two_stage">二級流程：直屬主管初審 &rarr; 處長/管理員核定 (2 關)</option>
@@ -310,20 +310,20 @@ const deleteForm = (formId, formName) => {
                             </select>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">表單用途說明 (選填)</label>
+                            <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">表單用途說明 (選填)</label>
                             <input
                                 type="text"
                                 v-model="newForm.description"
                                 placeholder="如：提供同仁申請遠端辦公..."
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                             />
                         </div>
                     </div>
 
                     <!-- 動態欄位配置列表 -->
-                    <div class="border border-gray-200 rounded-xl p-4 bg-gray-50/50 space-y-3">
+                    <div class="border border-gray-200 rounded-xl p-4 bg-gray-50/50 space-y-3 dark:bg-gray-800/60 dark:border-gray-700">
                         <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-xs text-gray-700">自訂欄位清單 (JSON Schema)</h4>
+                            <h4 class="font-bold text-xs text-gray-700 dark:text-gray-300">自訂欄位清單 (JSON Schema)</h4>
                             <button
                                 type="button"
                                 @click="addField"
@@ -337,34 +337,34 @@ const deleteForm = (formId, formName) => {
                             <div
                                 v-for="(field, index) in newForm.fields"
                                 :key="index"
-                                class="p-3 bg-white rounded-lg border border-gray-200 shadow-sm space-y-2"
+                                class="p-3 bg-white rounded-lg border border-gray-200 shadow-sm space-y-2 dark:bg-gray-800 dark:border-gray-700"
                             >
                                 <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
                                     <div class="sm:col-span-5">
-                                        <label class="block text-[11px] text-gray-500 mb-0.5">欄位標題 (Label)</label>
+                                        <label class="block text-[11px] text-gray-500 mb-0.5 dark:text-gray-400">欄位標題 (Label)</label>
                                         <input
                                             type="text"
                                             v-model="field.label"
                                             placeholder="如：居家工作地址"
-                                            class="w-full text-xs rounded border-gray-300 py-1"
+                                            class="w-full text-xs rounded border-gray-300 py-1 dark:border-gray-700"
                                             required
                                         />
                                     </div>
                                     <div class="sm:col-span-3">
-                                        <label class="block text-[11px] text-gray-500 mb-0.5">英文識別碼 (Key)</label>
+                                        <label class="block text-[11px] text-gray-500 mb-0.5 dark:text-gray-400">英文識別碼 (Key)</label>
                                         <input
                                             type="text"
                                             v-model="field.key"
                                             placeholder="如：location"
-                                            class="w-full text-xs font-mono rounded border-gray-300 py-1"
+                                            class="w-full text-xs font-mono rounded border-gray-300 py-1 dark:border-gray-700"
                                             required
                                         />
                                     </div>
                                     <div class="sm:col-span-3">
-                                        <label class="block text-[11px] text-gray-500 mb-0.5">欄位類型</label>
+                                        <label class="block text-[11px] text-gray-500 mb-0.5 dark:text-gray-400">欄位類型</label>
                                         <select
                                             v-model="field.type"
-                                            class="w-full text-xs rounded border-gray-300 py-1"
+                                            class="w-full text-xs rounded border-gray-300 py-1 dark:border-gray-700"
                                         >
                                             <option value="text">單行文字</option>
                                             <option value="textarea">多行文字</option>
@@ -386,7 +386,7 @@ const deleteForm = (formId, formName) => {
                                 </div>
 
                                 <!-- 下拉選單選項輸入 -->
-                                <div v-if="field.type === 'select'" class="pt-2 border-t border-gray-100">
+                                <div v-if="field.type === 'select'" class="pt-2 border-t border-gray-100 dark:border-gray-700">
                                     <label class="block text-[11px] text-blue-600 mb-0.5">下拉選單選項 (請以逗點分隔，如：住家, 咖啡廳, 其他)</label>
                                     <input
                                         type="text"
@@ -404,7 +404,7 @@ const deleteForm = (formId, formName) => {
                         <button
                             type="button"
                             @click="isCreateFormModalOpen = false"
-                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
+                            class="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg dark:text-gray-400"
                         >
                             取消
                         </button>

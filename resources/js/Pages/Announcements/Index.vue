@@ -131,8 +131,8 @@ const submitAnnouncement = () => {
         <template #header>
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800">企業公告中心</h2>
-                    <p class="text-sm text-gray-500 mt-1">掌握公司重要決策、最新活動規章與下載官方附件</p>
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">企業公告中心</h2>
+                    <p class="text-sm text-gray-500 mt-1 dark:text-gray-400">掌握公司重要決策、最新活動規章與下載官方附件</p>
                 </div>
                 <div v-if="canManage" class="flex items-center space-x-3">
                     <button
@@ -152,7 +152,7 @@ const submitAnnouncement = () => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
                 <!-- 篩選列：分類與發布狀態 -->
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 pb-4">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 pb-4 dark:border-gray-700">
                     <!-- 分類切換標籤 -->
                     <div class="flex flex-wrap gap-2">
                         <button
@@ -161,7 +161,7 @@ const submitAnnouncement = () => {
                             @click="filterCategory(cat.key)"
                             :class="[
                                 'px-4 py-2 text-sm font-medium rounded-lg transition',
-                                category === cat.key ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                                category === cat.key ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
                             ]"
                         >
                             {{ cat.label }}
@@ -169,25 +169,25 @@ const submitAnnouncement = () => {
                     </div>
 
                     <!-- 管理者專屬狀態切換 (發布中 / 草稿 / 全部) -->
-                    <div v-if="canManage" class="flex items-center space-x-1.5 bg-gray-100 p-1 rounded-lg self-start sm:self-auto text-xs font-medium">
+                    <div v-if="canManage" class="flex items-center space-x-1.5 bg-gray-100 p-1 rounded-lg self-start sm:self-auto text-xs font-medium dark:bg-gray-700">
                         <button
                             type="button"
                             @click="filterStatus('published')"
-                            :class="['px-3 py-1.5 rounded-md transition', status === 'published' ? 'bg-white text-gray-900 shadow-xs font-semibold' : 'text-gray-600 hover:text-gray-900']"
+                            :class="['px-3 py-1.5 rounded-md transition', status === 'published' ? 'bg-white text-gray-900 shadow-xs font-semibold dark:bg-gray-800 dark:text-gray-100' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400']"
                         >
                             已發布
                         </button>
                         <button
                             type="button"
                             @click="filterStatus('draft')"
-                            :class="['px-3 py-1.5 rounded-md transition', status === 'draft' ? 'bg-white text-amber-700 shadow-xs font-semibold' : 'text-gray-600 hover:text-gray-900']"
+                            :class="['px-3 py-1.5 rounded-md transition', status === 'draft' ? 'bg-white text-amber-700 shadow-xs font-semibold dark:bg-gray-800' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400']"
                         >
                             草稿中
                         </button>
                         <button
                             type="button"
                             @click="filterStatus('all')"
-                            :class="['px-3 py-1.5 rounded-md transition', status === 'all' ? 'bg-white text-gray-900 shadow-xs font-semibold' : 'text-gray-600 hover:text-gray-900']"
+                            :class="['px-3 py-1.5 rounded-md transition', status === 'all' ? 'bg-white text-gray-900 shadow-xs font-semibold dark:bg-gray-800 dark:text-gray-100' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400']"
                         >
                             全狀態
                         </button>
@@ -195,7 +195,7 @@ const submitAnnouncement = () => {
                 </div>
 
                 <!-- 公告列表清單 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 divide-y divide-gray-100 overflow-hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 divide-y divide-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-700 dark:divide-gray-700">
                     <div
                         v-for="item in announcements.data"
                         :key="item.id"
@@ -209,18 +209,18 @@ const submitAnnouncement = () => {
                                 <span v-if="item.status === 'draft'" class="px-2 py-0.5 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-300 rounded">
                                     草稿
                                 </span>
-                                <span class="px-2 py-0.5 text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 rounded">
+                                <span class="px-2 py-0.5 text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 rounded dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300">
                                     {{ categoryName(item.category) }}
                                 </span>
                                 <span :class="['px-2 py-0.5 text-xs font-medium border rounded', priorityBadge(item.priority)]">
                                     {{ item.priority === 'urgent' ? '緊急' : (item.priority === 'high' ? '重要' : (item.priority === 'low' ? '低優先' : '一般')) }}
                                 </span>
-                                <Link :href="route('announcements.show', item.id)" class="text-lg font-bold text-gray-900 hover:text-blue-600">
+                                <Link :href="route('announcements.show', item.id)" class="text-lg font-bold text-gray-900 hover:text-blue-600 dark:text-gray-100">
                                     {{ item.title }}
                                 </Link>
                             </div>
 
-                            <p class="text-sm text-gray-500 line-clamp-2">{{ item.content }}</p>
+                            <p class="text-sm text-gray-500 line-clamp-2 dark:text-gray-400">{{ item.content }}</p>
 
                             <div class="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400 pt-1">
                                 <span>發布人：{{ item.author?.name || '系統' }}</span>
@@ -257,13 +257,13 @@ const submitAnnouncement = () => {
                             v-html="link.label"
                             :class="[
                                 'px-3 py-1.5 text-xs font-medium rounded-md transition',
-                                link.active ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                                link.active ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300'
                             ]"
                         />
                         <span
                             v-else
                             v-html="link.label"
-                            class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-400 border border-gray-100 bg-gray-50 cursor-not-allowed"
+                            class="px-3 py-1.5 text-xs font-medium rounded-md text-gray-400 border border-gray-100 bg-gray-50 cursor-not-allowed dark:bg-gray-800/60 dark:border-gray-700"
                         />
                     </template>
                 </div>
@@ -273,8 +273,8 @@ const submitAnnouncement = () => {
         <!-- 發布新公告 Modal -->
         <Modal :show="isCreateModalOpen" @close="closeCreateModal" maxWidth="2xl">
             <form @submit.prevent="submitAnnouncement" class="p-6 space-y-5">
-                <div class="flex items-center justify-between border-b border-gray-200 pb-3">
-                    <h3 class="text-lg font-bold text-gray-900">發布企業內部公告</h3>
+                <div class="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">發布企業內部公告</h3>
                     <button type="button" @click="closeCreateModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                 </div>
 
@@ -299,7 +299,7 @@ const submitAnnouncement = () => {
                         <select
                             id="category"
                             v-model="form.category"
-                            class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500"
+                            class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                         >
                             <option value="company">公司重大</option>
                             <option value="activity">全員活動</option>
@@ -313,7 +313,7 @@ const submitAnnouncement = () => {
                         <select
                             id="priority"
                             v-model="form.priority"
-                            class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500"
+                            class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                         >
                             <option value="low">低優先 (Low)</option>
                             <option value="normal">一般 (Normal)</option>
@@ -331,7 +331,7 @@ const submitAnnouncement = () => {
                         id="content"
                         v-model="form.content"
                         rows="6"
-                        class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                         placeholder="請詳述公告內容、時程規範與相關配合事項..."
                         required
                     ></textarea>
@@ -341,13 +341,13 @@ const submitAnnouncement = () => {
                 <!-- 官方附件上傳 -->
                 <div>
                     <InputLabel value="檢附官方文件/檔案 (選填，單檔上限 10MB)" />
-                    <div class="mt-1 flex items-center justify-center px-4 pt-4 pb-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 transition bg-gray-50/50">
+                    <div class="mt-1 flex items-center justify-center px-4 pt-4 pb-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 transition bg-gray-50/50 dark:bg-gray-800/60 dark:border-gray-700">
                         <div class="space-y-1 text-center">
                             <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <div class="flex text-xs text-gray-600 justify-center">
-                                <label class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
+                            <div class="flex text-xs text-gray-600 justify-center dark:text-gray-400">
+                                <label class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none dark:bg-gray-800">
                                     <span>選擇檔案上傳</span>
                                     <input
                                         ref="fileInputRef"
@@ -359,7 +359,7 @@ const submitAnnouncement = () => {
                                 </label>
                                 <span class="pl-1">或直接拖曳至此</span>
                             </div>
-                            <p class="text-xs text-gray-500">支援 PDF、DOCX、XLSX、圖片、ZIP</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">支援 PDF、DOCX、XLSX、圖片、ZIP</p>
                         </div>
                     </div>
 
@@ -368,10 +368,10 @@ const submitAnnouncement = () => {
                         <div
                             v-for="(f, i) in selectedFiles"
                             :key="i"
-                            class="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 text-xs text-gray-700"
+                            class="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200 text-xs text-gray-700 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-300"
                         >
                             <div class="flex items-center space-x-2 truncate">
-                                <span class="font-medium text-gray-900 truncate">{{ f.name }}</span>
+                                <span class="font-medium text-gray-900 truncate dark:text-gray-100">{{ f.name }}</span>
                                 <span class="text-gray-400 text-xs">({{ formatFileSize(f.size) }})</span>
                             </div>
                             <button
@@ -387,27 +387,27 @@ const submitAnnouncement = () => {
                 </div>
 
                 <!-- 置頂與發布狀態選項 -->
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2 border-t border-gray-100">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2 border-t border-gray-100 dark:border-gray-700">
                     <label class="flex items-center cursor-pointer">
                         <Checkbox v-model:checked="form.is_pinned" />
-                        <span class="ms-2 text-sm text-gray-700 font-medium">置頂於公告列表最上方</span>
+                        <span class="ms-2 text-sm text-gray-700 font-medium dark:text-gray-300">置頂於公告列表最上方</span>
                     </label>
 
                     <div class="flex items-center space-x-4 text-sm">
-                        <span class="text-gray-600 font-medium">發布狀態：</span>
+                        <span class="text-gray-600 font-medium dark:text-gray-400">發布狀態：</span>
                         <label class="inline-flex items-center cursor-pointer">
                             <input type="radio" value="published" v-model="form.status" class="text-blue-600 focus:ring-blue-500" />
-                            <span class="ms-1.5 text-gray-800">立即正式發布</span>
+                            <span class="ms-1.5 text-gray-800 dark:text-gray-100">立即正式發布</span>
                         </label>
                         <label class="inline-flex items-center cursor-pointer">
                             <input type="radio" value="draft" v-model="form.status" class="text-amber-600 focus:ring-amber-500" />
-                            <span class="ms-1.5 text-gray-800">存為草稿</span>
+                            <span class="ms-1.5 text-gray-800 dark:text-gray-100">存為草稿</span>
                         </label>
                     </div>
                 </div>
 
                 <!-- 動作按鈕 -->
-                <div class="flex justify-end space-x-3 pt-3 border-t border-gray-200">
+                <div class="flex justify-end space-x-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                     <SecondaryButton type="button" @click="closeCreateModal">
                         取消
                     </SecondaryButton>

@@ -115,7 +115,7 @@ const resetFilter = () => {
                     <div>
                         <p class="text-xs text-gray-500 dark:text-gray-400">我已獲認證學分</p>
                         <p class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5 font-mono">
-                            {{ metrics.my_credits }} <span class="text-xs font-normal text-gray-500">學分</span>
+                            {{ metrics.my_credits }} <span class="text-xs font-normal text-gray-500 dark:text-gray-400">學分</span>
                         </p>
                     </div>
                 </div>
@@ -127,7 +127,7 @@ const resetFilter = () => {
                     <div>
                         <p class="text-xs text-gray-500 dark:text-gray-400">我累計研習時數</p>
                         <p class="text-2xl font-black text-amber-600 dark:text-amber-400 mt-0.5 font-mono">
-                            {{ metrics.my_hours }} <span class="text-xs font-normal text-gray-500">小時</span>
+                            {{ metrics.my_hours }} <span class="text-xs font-normal text-gray-500 dark:text-gray-400">小時</span>
                         </p>
                     </div>
                 </div>
@@ -269,7 +269,7 @@ const resetFilter = () => {
 
                         <!-- 名額與額滿進度條 -->
                         <div class="pt-2">
-                            <div class="flex justify-between text-2xs text-gray-500 mb-1">
+                            <div class="flex justify-between text-2xs text-gray-500 mb-1 dark:text-gray-400">
                                 <span>名額進度</span>
                                 <span class="font-mono">
                                     {{ course.registered_count }} / {{ course.max_participants > 0 ? course.max_participants : '不限' }} 人

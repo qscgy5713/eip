@@ -190,7 +190,7 @@ const openDiffViewer = (rev = null) => {
             <div class="flex items-center space-x-3">
                 <Link :href="route('forms.index')" class="text-sm text-blue-600 hover:underline">&larr; 返回簽核中心</Link>
                 <span class="text-gray-300">/</span>
-                <h2 class="text-xl font-bold leading-tight text-gray-800 truncate">申請單明細</h2>
+                <h2 class="text-xl font-bold leading-tight text-gray-800 truncate dark:text-gray-100">申請單明細</h2>
             </div>
         </template>
 
@@ -203,9 +203,9 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- 單據已撤回提示橫幅 -->
-                <div v-if="formRequest.status === 'withdrawn'" class="p-4 bg-gray-50 border border-gray-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-gray-700 shadow-sm text-sm">
+                <div v-if="formRequest.status === 'withdrawn'" class="p-4 bg-gray-50 border border-gray-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-gray-700 shadow-sm text-sm dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-300">
                     <div class="flex items-center space-x-2">
-                        <svg class="w-5 h-5 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <svg class="w-5 h-5 text-gray-500 shrink-0 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <span>此申請單已由申請人撤回並作廢。相關凍結之休假額度已全數釋放恢復。</span>
                     </div>
                     <Link
@@ -241,13 +241,13 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- 單據主要內容 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-6">
-                    <div class="flex items-start justify-between border-b border-gray-100 pb-5">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-6 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex items-start justify-between border-b border-gray-100 pb-5 dark:border-gray-700">
                         <div>
                             <span class="text-xs font-mono font-semibold text-gray-400 block mb-1">{{ formRequest.request_no }}</span>
-                            <h1 class="text-2xl font-extrabold text-gray-900">{{ formRequest.title }}</h1>
-                            <div class="flex items-center space-x-4 text-xs text-gray-500 mt-2">
-                                <span>申請人：<strong class="text-gray-800">{{ formRequest.user?.name }}</strong></span>
+                            <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ formRequest.title }}</h1>
+                            <div class="flex items-center space-x-4 text-xs text-gray-500 mt-2 dark:text-gray-400">
+                                <span>申請人：<strong class="text-gray-800 dark:text-gray-100">{{ formRequest.user?.name }}</strong></span>
                                 <span>所屬部門：{{ formRequest.user?.department?.name || '無' }}</span>
                                 <span>送出時間：{{ new Date(formRequest.created_at).toLocaleString() }}</span>
                             </div>
@@ -256,10 +256,10 @@ const openDiffViewer = (rev = null) => {
                             <a
                                 :href="route('forms.print', formRequest.id)"
                                 target="_blank"
-                                class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition"
+                                class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                                 title="開新分頁列印或另存為 PDF"
                             >
-                                <svg class="w-3.5 h-3.5 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                <svg class="w-3.5 h-3.5 mr-1.5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                                 列印存證 / PDF
                             </a>
 
@@ -293,18 +293,18 @@ const openDiffViewer = (rev = null) => {
                     </div>
 
                     <!-- 動態欄位展示 -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50/70 p-5 rounded-lg border border-gray-100">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50/70 p-5 rounded-lg border border-gray-100 dark:bg-gray-800/60 dark:border-gray-700">
                         <div v-for="(val, key) in formRequest.data" :key="key" class="space-y-0.5">
                             <p class="text-xs font-semibold text-gray-400 capitalize">{{ key }}</p>
-                            <p class="text-sm font-medium text-gray-900 whitespace-pre-line">{{ val }}</p>
+                            <p class="text-sm font-medium text-gray-900 whitespace-pre-line dark:text-gray-100">{{ val }}</p>
                         </div>
                     </div>
 
                     <!-- 檢附證明文件與附件清單 -->
-                    <div v-if="formRequest.attachments && formRequest.attachments.length > 0" class="pt-4 border-t border-gray-100 space-y-3">
+                    <div v-if="formRequest.attachments && formRequest.attachments.length > 0" class="pt-4 border-t border-gray-100 space-y-3 dark:border-gray-700">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-sm font-bold text-gray-800 flex items-center space-x-1.5">
-                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                            <h3 class="text-sm font-bold text-gray-800 flex items-center space-x-1.5 dark:text-gray-100">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
                                 <span>檢附證明文件 / 附件 ({{ formRequest.attachments.length }})</span>
                             </h3>
                         </div>
@@ -312,14 +312,14 @@ const openDiffViewer = (rev = null) => {
                             <div
                                 v-for="(file, idx) in formRequest.attachments"
                                 :key="idx"
-                                class="flex items-center justify-between p-3 rounded-lg border border-gray-200 bg-gray-50/60 hover:bg-white hover:border-blue-300 transition"
+                                class="flex items-center justify-between p-3 rounded-lg border border-gray-200 bg-gray-50/60 hover:bg-white hover:border-blue-300 transition dark:bg-gray-800/60 dark:border-gray-700"
                             >
                                 <div class="flex items-center space-x-3 min-w-0 mr-3">
                                     <div class="p-2 bg-blue-50 text-blue-600 rounded-lg flex-shrink-0">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                     </div>
                                     <div class="truncate">
-                                        <p class="text-sm font-semibold text-gray-800 truncate" :title="file.name">{{ file.name }}</p>
+                                        <p class="text-sm font-semibold text-gray-800 truncate dark:text-gray-100" :title="file.name">{{ file.name }}</p>
                                         <p class="text-xs text-gray-400">{{ formatSize(file.size) }}</p>
                                     </div>
                                 </div>
@@ -338,7 +338,7 @@ const openDiffViewer = (rev = null) => {
                     <!-- 歷史版本修訂比對提示條 (Version Revision Diff Banner) -->
                     <div
                         v-if="formRequest.revision_history && formRequest.revision_history.length > 0"
-                        class="pt-4 border-t border-gray-100"
+                        class="pt-4 border-t border-gray-100 dark:border-gray-700"
                     >
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-amber-50/80 border border-amber-200 rounded-xl gap-3">
                             <div class="flex items-start sm:items-center space-x-3">
@@ -367,9 +367,9 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- 多層級簽核流程進度條 (Approval Pipeline Stepper) -->
-                <div v-if="formRequest.workflow_snapshot && formRequest.workflow_snapshot.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2">
+                <div v-if="formRequest.workflow_snapshot && formRequest.workflow_snapshot.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
+                        <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2 dark:text-gray-100">
                             <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                             <span>簽核流程進度鏈（共 {{ formRequest.total_steps || formRequest.workflow_snapshot.length }} 關）</span>
                         </h3>
@@ -389,7 +389,7 @@ const openDiffViewer = (rev = null) => {
                                         ? 'bg-blue-50/70 border-blue-300 ring-2 ring-blue-100'
                                         : (st.step === formRequest.current_step && formRequest.status === 'rejected'
                                             ? 'bg-rose-50/50 border-rose-200'
-                                            : 'bg-gray-50/60 border-gray-200 opacity-60'))
+                                            : 'bg-gray-50/60 border-gray-200 opacity-60 dark:bg-gray-800/60 dark:border-gray-700'))
                             ]"
                         >
                             <div class="flex items-start justify-between">
@@ -410,7 +410,7 @@ const openDiffViewer = (rev = null) => {
                                     >
                                         {{ st.step }}
                                     </span>
-                                    <span class="font-bold text-xs text-gray-900 truncate">{{ st.title }}</span>
+                                    <span class="font-bold text-xs text-gray-900 truncate dark:text-gray-100">{{ st.title }}</span>
                                 </div>
                                 <span
                                     :class="[
@@ -423,7 +423,7 @@ const openDiffViewer = (rev = null) => {
                                                     ? 'bg-amber-100 text-amber-800'
                                                     : (st.step === formRequest.current_step && formRequest.status === 'rejected'
                                                         ? 'bg-rose-100 text-rose-800'
-                                                        : 'bg-gray-200 text-gray-600')))
+                                                        : 'bg-gray-200 text-gray-600 dark:text-gray-400')))
                                     ]"
                                 >
                                     {{ st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved') ? '已核准' : (st.step === formRequest.current_step && formRequest.status === 'revision_required' ? '退回補件中' : (st.step === formRequest.current_step && formRequest.status === 'rejected' ? '已退件' : (st.step === formRequest.current_step ? '審核中' : '待流轉'))) }}
@@ -431,9 +431,9 @@ const openDiffViewer = (rev = null) => {
                             </div>
 
                             <div class="mt-3 text-xs space-y-1">
-                                <p class="text-gray-600 flex items-center space-x-1">
+                                <p class="text-gray-600 flex items-center space-x-1 dark:text-gray-400">
                                     <span class="text-gray-400">審批人：</span>
-                                    <strong class="text-gray-800">{{ st.approver_name }}</strong>
+                                    <strong class="text-gray-800 dark:text-gray-100">{{ st.approver_name }}</strong>
                                 </p>
                                 <p v-if="st.condition_desc" class="text-[11px] text-gray-400 leading-tight">
                                     {{ st.condition_desc }}
@@ -456,21 +456,21 @@ const openDiffViewer = (rev = null) => {
                     </div>
 
                     <div class="space-y-2">
-                        <label class="block text-xs font-medium text-gray-600">
+                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-400">
                             {{ currentPendingRecord?.is_add_sign ? '會辦附言意見' : '審核意見 / 備註' }}
                         </label>
                         <textarea
                             v-model="approvalForm.comment"
                             rows="2"
                             :placeholder="currentPendingRecord?.is_add_sign ? '請輸入會辦審查意見...' : '請輸入審核意見（可選）...'"
-                            class="w-full text-sm rounded-lg border-amber-200 focus:border-amber-500 focus:ring-amber-500 bg-white"
+                            class="w-full text-sm rounded-lg border-amber-200 focus:border-amber-500 focus:ring-amber-500 bg-white dark:bg-gray-800"
                         ></textarea>
                     </div>
 
                     <!-- 電子手寫簽章區塊 (主管線上親簽) -->
                     <div class="space-y-2 pt-2 border-t border-amber-200/60">
                         <div class="flex items-center justify-between">
-                            <label class="text-xs font-bold text-gray-700 flex items-center space-x-1.5 cursor-pointer" @click="showSignatureCanvas = !showSignatureCanvas">
+                            <label class="text-xs font-bold text-gray-700 flex items-center space-x-1.5 cursor-pointer dark:text-gray-300" @click="showSignatureCanvas = !showSignatureCanvas">
                                 <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                 <span>手寫數位簽章 (附署親簽筆跡，選填)</span>
                             </label>
@@ -548,13 +548,13 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- 簽核歷程軌跡 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
-                    <h3 class="font-bold text-gray-900 text-base">簽核進度與歷程軌跡</h3>
-                    <div class="space-y-4 border-l-2 border-gray-200 ml-3 pl-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4 dark:bg-gray-800 dark:border-gray-700">
+                    <h3 class="font-bold text-gray-900 text-base dark:text-gray-100">簽核進度與歷程軌跡</h3>
+                    <div class="space-y-4 border-l-2 border-gray-200 ml-3 pl-4 dark:border-gray-700">
                         <!-- 申請送出節點 -->
                         <div class="relative">
                             <span class="absolute -left-[23px] top-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></span>
-                            <p class="text-sm font-semibold text-gray-900">單據送出</p>
+                            <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">單據送出</p>
                             <p class="text-xs text-gray-400">{{ formRequest.user?.name }} · {{ new Date(formRequest.created_at).toLocaleString() }}</p>
                         </div>
 
@@ -567,7 +567,7 @@ const openDiffViewer = (rev = null) => {
                                 ]"
                             ></span>
                             <div class="flex items-center space-x-2 flex-wrap gap-y-1">
-                                <p class="text-sm font-semibold text-gray-900">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
                                     {{ rec.step_title ? rec.step_title : ('關卡 ' + rec.step) }}：
                                     <template v-if="rec.is_add_sign">
                                         會辦加簽（{{ rec.approver?.name }}，由主管 {{ rec.add_signed_by?.name || '主審' }} 發起）
@@ -595,7 +595,7 @@ const openDiffViewer = (rev = null) => {
                                     由 {{ rec.transferred_from?.name }} 轉簽
                                 </span>
                             </div>
-                            <p v-if="rec.comment" class="text-xs text-gray-600 mt-1 bg-gray-50 p-2 rounded border border-gray-100">意見：{{ rec.comment }}</p>
+                            <p v-if="rec.comment" class="text-xs text-gray-600 mt-1 bg-gray-50 p-2 rounded border border-gray-100 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-400">意見：{{ rec.comment }}</p>
                             <p v-if="rec.actioned_at" class="text-xs text-gray-400 mt-0.5">{{ new Date(rec.actioned_at).toLocaleString() }}</p>
 
                             <!-- 手寫簽名印記展示 -->
@@ -612,23 +612,23 @@ const openDiffViewer = (rev = null) => {
 
                 <!-- ================= 轉簽派審 Modal ================= -->
                 <div v-if="showTransferModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-                        <div class="flex items-center justify-between pb-3 border-b border-gray-100">
-                            <h3 class="text-base font-bold text-gray-900">協同轉簽派審</h3>
+                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">協同轉簽派審</h3>
                             <button @click="showTransferModal = false" class="text-gray-400 hover:text-gray-600">&times;</button>
                         </div>
 
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
                             將目前關卡的審核決行權限全權轉派給指定的主管接手審查。
                         </p>
 
                         <form @submit.prevent="submitTransfer" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1">受派審查主管 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">受派審查主管 <span class="text-rose-500">*</span></label>
                                 <select
                                     v-model="transferForm.target_user_id"
                                     required
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-700"
                                 >
                                     <option value="">— 請選擇受派主管 —</option>
                                     <option v-for="u in activeUsers" :key="u.id" :value="u.id">
@@ -639,22 +639,22 @@ const openDiffViewer = (rev = null) => {
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1">轉簽派審事由說明 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">轉簽派審事由說明 <span class="text-rose-500">*</span></label>
                                 <textarea
                                     v-model="transferForm.reason"
                                     required
                                     rows="3"
                                     placeholder="請說明轉簽的原因（例如：涉及該處管轄業務，轉請決行）..."
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-700"
                                 ></textarea>
                                 <p v-if="transferForm.errors.reason" class="text-2xs text-rose-600 mt-1">{{ transferForm.errors.reason }}</p>
                             </div>
 
-                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
                                 <button
                                     type="button"
                                     @click="showTransferModal = false"
-                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium dark:bg-gray-700 dark:text-gray-300"
                                 >
                                     取消
                                 </button>
@@ -672,23 +672,23 @@ const openDiffViewer = (rev = null) => {
 
                 <!-- ================= 會辦加簽 Modal ================= -->
                 <div v-if="showAddSignModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-                        <div class="flex items-center justify-between pb-3 border-b border-gray-100">
-                            <h3 class="text-base font-bold text-gray-900">發起會辦加簽</h3>
+                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                            <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">發起會辦加簽</h3>
                             <button @click="showAddSignModal = false" class="text-gray-400 hover:text-gray-600">&times;</button>
                         </div>
 
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
                             邀請特定專業同仁或跨部門主管會審並簽署意見，會辦完成後流程將回流至您手續審。
                         </p>
 
                         <form @submit.prevent="submitAddSign" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1">會辦加簽對象 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">會辦加簽對象 <span class="text-rose-500">*</span></label>
                                 <select
                                     v-model="addSignForm.target_user_id"
                                     required
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                                 >
                                     <option value="">— 請選擇會辦對象 —</option>
                                     <option v-for="u in activeUsers" :key="u.id" :value="u.id">
@@ -699,22 +699,22 @@ const openDiffViewer = (rev = null) => {
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1">加簽會審事由說明 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">加簽會審事由說明 <span class="text-rose-500">*</span></label>
                                 <textarea
                                     v-model="addSignForm.reason"
                                     required
                                     rows="3"
                                     placeholder="請說明需會辦說明的項目（例如：請 IT 評估伺服器規格、請會計覆核報銷單據）..."
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
                                 ></textarea>
                                 <p v-if="addSignForm.errors.reason" class="text-2xs text-rose-600 mt-1">{{ addSignForm.errors.reason }}</p>
                             </div>
 
-                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
                                 <button
                                     type="button"
                                     @click="showAddSignModal = false"
-                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium dark:bg-gray-700 dark:text-gray-300"
                                 >
                                     取消
                                 </button>
@@ -731,37 +731,37 @@ const openDiffViewer = (rev = null) => {
                 </div>
                 <!-- ================= 撤回申請 Modal ================= -->
                 <div v-if="showWithdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-                        <div class="flex items-center space-x-3 text-rose-600 border-b border-gray-100 pb-3">
+                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
+                        <div class="flex items-center space-x-3 text-rose-600 border-b border-gray-100 pb-3 dark:border-gray-700">
                             <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center shrink-0">
                                 <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-base font-bold text-gray-900">確認撤回申請單</h3>
-                                <p class="text-xs text-gray-500">撤回後單據立即作廢並終止簽核</p>
+                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">確認撤回申請單</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">撤回後單據立即作廢並終止簽核</p>
                             </div>
                         </div>
 
-                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50 p-3 rounded-lg border border-amber-200">
+                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50 p-3 rounded-lg border border-amber-200 dark:text-gray-400">
                             提醒：撤回後此公文將標記為已作廢，主管待審批清單將自動移除此單據；若此申請包含休假，已凍結之請假額度將立即釋放恢復。
                         </p>
 
                         <form @submit.prevent="submitWithdraw" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1">撤回原因說明（可選）</label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">撤回原因說明（可選）</label>
                                 <textarea
                                     v-model="withdrawForm.reason"
                                     rows="3"
                                     placeholder="例：行程變更取消、日期時間填寫有誤重新申請..."
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-rose-500 focus:ring-rose-500"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-rose-500 focus:ring-rose-500 dark:border-gray-700"
                                 ></textarea>
                             </div>
 
-                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
                                 <button
                                     type="button"
                                     @click="showWithdrawModal = false"
-                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium dark:bg-gray-700 dark:text-gray-300"
                                 >
                                     取消
                                 </button>
@@ -779,38 +779,38 @@ const openDiffViewer = (rev = null) => {
 
                 <!-- ================= 主管退回修改 Modal ================= -->
                 <div v-if="showRevisionModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-                        <div class="flex items-center space-x-3 text-amber-600 border-b border-gray-100 pb-3">
+                    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
+                        <div class="flex items-center space-x-3 text-amber-600 border-b border-gray-100 pb-3 dark:border-gray-700">
                             <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
                                 <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-base font-bold text-gray-900">退回申請人修改補件</h3>
-                                <p class="text-xs text-gray-500">申請人修改完成後可重新提交此關卡審查</p>
+                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">退回申請人修改補件</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">申請人修改完成後可重新提交此關卡審查</p>
                             </div>
                         </div>
 
-                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50/70 p-3 rounded-lg border border-amber-200">
+                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50/70 p-3 rounded-lg border border-amber-200 dark:text-gray-400">
                             退回修改不會直接終止或作廢單據。申請人將收到退回通知與指示，並可直接在此單據補齊資訊或重新上傳發票證明檔案後重新送審。
                         </p>
 
                         <form @submit.prevent="submitRevision" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1">退回修改原因與補件指示 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">退回修改原因與補件指示 <span class="text-rose-500">*</span></label>
                                 <textarea
                                     v-model="approvalForm.comment"
                                     required
                                     rows="3"
                                     placeholder="請具體告知申請同仁需修改之欄位或需補充之證明文件（例如：請補附具統編之統一發票電子檔並載明餐敘對象）..."
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 dark:border-gray-700"
                                 ></textarea>
                             </div>
 
-                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
                                 <button
                                     type="button"
                                     @click="showRevisionModal = false"
-                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium dark:bg-gray-700 dark:text-gray-300"
                                 >
                                     取消
                                 </button>
@@ -828,11 +828,11 @@ const openDiffViewer = (rev = null) => {
 
                 <!-- ================= 申請人修改表單並重新提交 Modal ================= -->
                 <div v-if="showResubmitModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto">
-                    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 my-8">
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 my-8 dark:bg-gray-800">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
                             <div class="flex items-center space-x-2 text-amber-700">
                                 <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                <h3 class="text-base font-bold text-gray-900">修改表單內容並重新送審</h3>
+                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">修改表單內容並重新送審</h3>
                             </div>
                             <button @click="showResubmitModal = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
                         </div>
@@ -847,23 +847,23 @@ const openDiffViewer = (rev = null) => {
                             <!-- 動態欄位編輯表單 -->
                             <div class="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
                                 <div v-for="(val, key) in resubmitForm.data" :key="key" class="space-y-1">
-                                    <label class="block text-xs font-semibold text-gray-700 capitalize">{{ key }}</label>
+                                    <label class="block text-xs font-semibold text-gray-700 capitalize dark:text-gray-300">{{ key }}</label>
                                     <input
                                         type="text"
                                         v-model="resubmitForm.data[key]"
-                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 dark:border-gray-700"
                                     />
                                 </div>
                             </div>
 
                             <!-- 補充上傳證明文件 -->
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1">補充檢附證明文件 / 附件檔案 (選填，單檔 10MB 內)</label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">補充檢附證明文件 / 附件檔案 (選填，單檔 10MB 內)</label>
                                 <input
                                     type="file"
                                     multiple
                                     @change="handleResubmitFileChange"
-                                    class="block w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100"
+                                    class="block w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 dark:text-gray-400"
                                 />
                                 <p v-if="resubmitForm.attachments.length > 0" class="text-2xs text-amber-700 mt-1">
                                     已選取 {{ resubmitForm.attachments.length }} 個新補充檔案
@@ -872,20 +872,20 @@ const openDiffViewer = (rev = null) => {
 
                             <!-- 申請人重新送審說明 -->
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1">修改與補件說明備註 (選填)</label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">修改與補件說明備註 (選填)</label>
                                 <textarea
                                     v-model="resubmitForm.resubmit_note"
                                     rows="2"
                                     placeholder="例：已更正金額、補充檢附蓋章報價單電子檔..."
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 dark:border-gray-700"
                                 ></textarea>
                             </div>
 
-                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+                            <div class="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
                                 <button
                                     type="button"
                                     @click="showResubmitModal = false"
-                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium"
+                                    class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium dark:bg-gray-700 dark:text-gray-300"
                                 >
                                     取消
                                 </button>
@@ -907,14 +907,14 @@ const openDiffViewer = (rev = null) => {
                 v-if="showDiffViewer && activeDiffVersion"
                 class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-xs flex items-center justify-center p-4"
             >
-                <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-100 overflow-hidden transform transition-all">
+                <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-gray-100 overflow-hidden transform transition-all dark:bg-gray-800 dark:border-gray-700">
                     <!-- Modal 標題 -->
                     <div class="px-6 py-4 bg-amber-500/10 border-b border-amber-200/50 flex items-center justify-between">
                         <div class="flex items-center space-x-2">
                             <span class="p-1.5 bg-amber-100 text-amber-700 rounded-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
                             </span>
-                            <h3 class="text-base font-bold text-gray-900">
+                            <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">
                                 歷史版本修訂對照 (Diff Viewer)
                             </h3>
                         </div>
@@ -929,8 +929,8 @@ const openDiffViewer = (rev = null) => {
 
                     <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
                         <!-- 版本切換 Tabs (若有多個版本) -->
-                        <div v-if="formRequest.revision_history && formRequest.revision_history.length > 1" class="flex items-center gap-2 border-b border-gray-100 pb-3">
-                            <span class="text-xs font-semibold text-gray-500">切換版次：</span>
+                        <div v-if="formRequest.revision_history && formRequest.revision_history.length > 1" class="flex items-center gap-2 border-b border-gray-100 pb-3 dark:border-gray-700">
+                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">切換版次：</span>
                             <button
                                 v-for="(rev, idx) in formRequest.revision_history"
                                 :key="idx"
@@ -940,7 +940,7 @@ const openDiffViewer = (rev = null) => {
                                     'px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer',
                                     activeDiffVersion.version === rev.version
                                         ? 'bg-amber-600 text-white shadow-xs'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400'
                                 ]"
                             >
                                 第 {{ rev.version }} 次修訂
@@ -948,12 +948,12 @@ const openDiffViewer = (rev = null) => {
                         </div>
 
                         <!-- 當前版本修訂資訊卡片 -->
-                        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 space-y-2">
-                            <div class="flex items-center justify-between text-xs text-gray-500">
-                                <span>修訂人：<strong class="text-gray-900">{{ activeDiffVersion.resubmitted_by?.name || '申請人' }}</strong></span>
-                                <span>提交時間：<strong class="text-gray-900">{{ new Date(activeDiffVersion.resubmitted_at).toLocaleString() }}</strong></span>
+                        <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 space-y-2 dark:bg-gray-800/60 dark:border-gray-700">
+                            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                                <span>修訂人：<strong class="text-gray-900 dark:text-gray-100">{{ activeDiffVersion.resubmitted_by?.name || '申請人' }}</strong></span>
+                                <span>提交時間：<strong class="text-gray-900 dark:text-gray-100">{{ new Date(activeDiffVersion.resubmitted_at).toLocaleString() }}</strong></span>
                             </div>
-                            <div v-if="activeDiffVersion.resubmit_note" class="text-xs text-gray-700 bg-white p-2.5 rounded-lg border border-gray-200">
+                            <div v-if="activeDiffVersion.resubmit_note" class="text-xs text-gray-700 bg-white p-2.5 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
                                 <span class="font-bold text-amber-800">修訂附言：</span>
                                 <span>{{ activeDiffVersion.resubmit_note }}</span>
                             </div>
@@ -965,16 +965,16 @@ const openDiffViewer = (rev = null) => {
                                 欄位變更對比 (Changes)
                             </h4>
 
-                            <div v-if="getChangedFields(activeDiffVersion).length === 0" class="p-4 text-center text-xs text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                            <div v-if="getChangedFields(activeDiffVersion).length === 0" class="p-4 text-center text-xs text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-400">
                                 表單欄位文字未變動（本次修訂僅補充上傳附件或說明備註）
                             </div>
 
                             <div
                                 v-for="(chg, cIdx) in getChangedFields(activeDiffVersion)"
                                 :key="cIdx"
-                                class="border border-gray-200 rounded-xl overflow-hidden text-xs"
+                                class="border border-gray-200 rounded-xl overflow-hidden text-xs dark:border-gray-700"
                             >
-                                <div class="px-3.5 py-2 bg-gray-100 font-bold text-gray-700 capitalize border-b border-gray-200">
+                                <div class="px-3.5 py-2 bg-gray-100 font-bold text-gray-700 capitalize border-b border-gray-200 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300">
                                     {{ chg.key }}
                                 </div>
                                 <div class="p-3 space-y-2 font-mono">
@@ -991,7 +991,7 @@ const openDiffViewer = (rev = null) => {
                         </div>
 
                         <!-- 本次補充上傳之附件檔案 (若有) -->
-                        <div v-if="activeDiffVersion.new_attachments && activeDiffVersion.new_attachments.length > 0" class="space-y-2 pt-2 border-t border-gray-100">
+                        <div v-if="activeDiffVersion.new_attachments && activeDiffVersion.new_attachments.length > 0" class="space-y-2 pt-2 border-t border-gray-100 dark:border-gray-700">
                             <h4 class="text-xs font-bold text-gray-400">
                                 本次修訂新補充之附件檔案 ({{ activeDiffVersion.new_attachments.length }})
                             </h4>
@@ -1001,14 +1001,14 @@ const openDiffViewer = (rev = null) => {
                                     :key="aIdx"
                                     class="flex items-center justify-between p-2.5 bg-blue-50/50 border border-blue-100 rounded-lg text-xs"
                                 >
-                                    <span class="font-medium text-gray-800 truncate mr-2">{{ att.name }}</span>
+                                    <span class="font-medium text-gray-800 truncate mr-2 dark:text-gray-100">{{ att.name }}</span>
                                     <span class="text-gray-400 shrink-0">{{ formatSize(att.size) }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="px-6 py-3 bg-gray-50 border-t border-gray-100 flex justify-end">
+                    <div class="px-6 py-3 bg-gray-50 border-t border-gray-100 flex justify-end dark:bg-gray-800/60 dark:border-gray-700">
                         <button
                             type="button"
                             @click="showDiffViewer = false"

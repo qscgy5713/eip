@@ -39,7 +39,7 @@ const priorityBadge = (priority) => {
                 <div class="flex items-center space-x-3">
                     <Link :href="route('announcements.index')" class="text-sm text-blue-600 hover:underline">&larr; 返回公告列表</Link>
                     <span class="text-gray-300">/</span>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800 truncate">公告詳情</h2>
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 truncate dark:text-gray-100">公告詳情</h2>
                 </div>
                 <div v-if="canManage" class="flex items-center space-x-2">
                     <button
@@ -63,32 +63,32 @@ const priorityBadge = (priority) => {
                 </div>
 
                 <!-- 公告正文卡片 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-6">
-                    <div class="border-b border-gray-100 pb-5 space-y-3">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-6 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="border-b border-gray-100 pb-5 space-y-3 dark:border-gray-700">
                         <div class="flex items-center space-x-2 flex-wrap gap-y-1">
                             <span v-if="announcement.is_pinned" class="px-2.5 py-0.5 text-xs font-bold bg-rose-100 text-rose-700 border border-rose-200 rounded-md">置頂</span>
                             <span :class="['px-2.5 py-0.5 text-xs font-semibold border rounded-md', priorityBadge(announcement.priority)]">
                                 {{ announcement.priority === 'urgent' ? '緊急公告' : (announcement.priority === 'high' ? '重要公告' : '一般通知') }}
                             </span>
-                            <span v-if="announcement.status === 'draft'" class="px-2.5 py-0.5 text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200 rounded-md">
+                            <span v-if="announcement.status === 'draft'" class="px-2.5 py-0.5 text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200 rounded-md dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300">
                                 暫存草稿
                             </span>
                         </div>
-                        <h1 class="text-2xl font-extrabold text-gray-900 leading-snug">{{ announcement.title }}</h1>
-                        <div class="flex items-center space-x-6 text-sm text-gray-500 pt-1">
-                            <span>發布同仁：<strong class="text-gray-800">{{ announcement.author?.name }}</strong></span>
+                        <h1 class="text-2xl font-extrabold text-gray-900 leading-snug dark:text-gray-100">{{ announcement.title }}</h1>
+                        <div class="flex items-center space-x-6 text-sm text-gray-500 pt-1 dark:text-gray-400">
+                            <span>發布同仁：<strong class="text-gray-800 dark:text-gray-100">{{ announcement.author?.name }}</strong></span>
                             <span>發布日期：{{ announcement.published_at ? new Date(announcement.published_at).toLocaleString() : '尚未公開' }}</span>
                             <span>總已讀人數：<strong class="text-blue-600">{{ announcement.reads_count }} 人</strong></span>
                         </div>
                     </div>
 
-                    <div class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line text-base">
+                    <div class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line text-base dark:text-gray-300">
                         {{ announcement.content }}
                     </div>
 
                     <!-- 官方檢附檔案與附件下載清單 -->
-                    <div v-if="announcement.attachments && announcement.attachments.length > 0" class="pt-6 border-t border-gray-100 space-y-3">
-                        <h3 class="text-sm font-bold text-gray-900 flex items-center space-x-2">
+                    <div v-if="announcement.attachments && announcement.attachments.length > 0" class="pt-6 border-t border-gray-100 space-y-3 dark:border-gray-700">
+                        <h3 class="text-sm font-bold text-gray-900 flex items-center space-x-2 dark:text-gray-100">
                             <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
                             <span>官方檢附文件 / 附件檔案 ({{ announcement.attachments.length }})</span>
                         </h3>
@@ -96,14 +96,14 @@ const priorityBadge = (priority) => {
                             <div
                                 v-for="(file, idx) in announcement.attachments"
                                 :key="idx"
-                                class="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 bg-gray-50/70 hover:bg-white hover:border-blue-300 transition group"
+                                class="flex items-center justify-between p-3.5 rounded-xl border border-gray-200 bg-gray-50/70 hover:bg-white hover:border-blue-300 transition group dark:bg-gray-800/60 dark:border-gray-700"
                             >
                                 <div class="flex items-center space-x-3 min-w-0 mr-3">
                                     <div class="p-2.5 bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white rounded-lg transition shrink-0">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                     </div>
                                     <div class="truncate">
-                                        <p class="text-sm font-bold text-gray-800 truncate group-hover:text-blue-600 transition" :title="file.name">{{ file.name }}</p>
+                                        <p class="text-sm font-bold text-gray-800 truncate group-hover:text-blue-600 transition dark:text-gray-100" :title="file.name">{{ file.name }}</p>
                                         <p class="text-xs text-gray-400 mt-0.5">{{ formatSize(file.size) }}</p>
                                     </div>
                                 </div>
@@ -121,8 +121,8 @@ const priorityBadge = (priority) => {
                 </div>
 
                 <!-- 主管/行政 查閱追蹤名單 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center space-x-2">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 dark:bg-gray-800 dark:border-gray-700">
+                    <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center space-x-2 dark:text-gray-100">
                         <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         <span>已讀同仁追蹤 (共 {{ readers.length }} 人)</span>
                     </h3>
@@ -130,9 +130,9 @@ const priorityBadge = (priority) => {
                         <span
                             v-for="(r, idx) in readers"
                             :key="idx"
-                            class="inline-flex items-center space-x-1.5 px-3 py-1 bg-gray-50 border border-gray-200 rounded-full text-xs text-gray-600"
+                            class="inline-flex items-center space-x-1.5 px-3 py-1 bg-gray-50 border border-gray-200 rounded-full text-xs text-gray-600 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-400"
                         >
-                            <span class="font-medium text-gray-800">{{ r.name }}</span>
+                            <span class="font-medium text-gray-800 dark:text-gray-100">{{ r.name }}</span>
                             <span class="text-gray-400">({{ r.read_at }})</span>
                         </span>
                         <span v-if="readers.length === 0" class="text-xs text-gray-400">尚無同仁已讀</span>

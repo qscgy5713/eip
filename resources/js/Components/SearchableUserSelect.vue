@@ -147,8 +147,8 @@ onUnmounted(() => {
                 'w-full min-h-[38px] px-3 py-1.5 bg-white border rounded-lg text-xs flex items-center justify-between gap-2 cursor-pointer transition select-none',
                 isOpen
                     ? 'border-indigo-500 ring-2 ring-indigo-100 shadow-xs'
-                    : 'border-gray-300 hover:border-gray-400',
-                disabled ? 'opacity-60 cursor-not-allowed bg-gray-50' : ''
+                    : 'border-gray-300 hover:border-gray-400 dark:border-gray-700',
+                disabled ? 'opacity-60 cursor-not-allowed bg-gray-50 dark:bg-gray-800/60' : ''
             ]"
         >
             <!-- 已選取狀態 -->
@@ -157,11 +157,11 @@ onUnmounted(() => {
                     {{ selectedUser.name.charAt(0) }}
                 </div>
                 <div class="flex items-center gap-1.5 truncate">
-                    <span class="font-bold text-gray-900 truncate">{{ selectedUser.name }}</span>
-                    <span v-if="selectedUser.employee_no" class="text-3xs font-mono text-gray-500">
+                    <span class="font-bold text-gray-900 truncate dark:text-gray-100">{{ selectedUser.name }}</span>
+                    <span v-if="selectedUser.employee_no" class="text-3xs font-mono text-gray-500 dark:text-gray-400">
                         ({{ selectedUser.employee_no }})
                     </span>
-                    <span class="text-3xs text-gray-500 truncate">
+                    <span class="text-3xs text-gray-500 truncate dark:text-gray-400">
                         · {{ selectedUser.job_title || '未設職稱' }}
                     </span>
                 </div>
@@ -202,10 +202,10 @@ onUnmounted(() => {
         <!-- 下拉彈出選單 (Combobox Dropdown Panel) -->
         <div
             v-if="isOpen"
-            class="absolute z-50 left-0 right-0 mt-1.5 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden flex flex-col text-xs max-h-72"
+            class="absolute z-50 left-0 right-0 mt-1.5 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden flex flex-col text-xs max-h-72 dark:bg-gray-800 dark:border-gray-700"
         >
             <!-- 搜尋輸入框 -->
-            <div class="p-2.5 bg-slate-50 border-b border-gray-100 flex items-center gap-2">
+            <div class="p-2.5 bg-slate-50 border-b border-gray-100 flex items-center gap-2 dark:bg-gray-800/60 dark:border-gray-700">
                 <svg class="w-4 h-4 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -214,7 +214,7 @@ onUnmounted(() => {
                     v-model="searchQuery"
                     type="text"
                     placeholder="輸入姓名、帳號 (Email) 或工號搜尋..."
-                    class="w-full text-xs bg-white border border-gray-200 rounded-md py-1.5 px-2.5 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
+                    class="w-full text-xs bg-white border border-gray-200 rounded-md py-1.5 px-2.5 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none dark:bg-gray-800 dark:border-gray-700"
                     @click.stop
                 />
                 <button
@@ -240,7 +240,7 @@ onUnmounted(() => {
                         user.id === Number(modelValue)
                             ? 'bg-indigo-50/80 font-bold'
                             : highlightedIndex === idx
-                                ? 'bg-slate-50'
+                                ? 'bg-slate-50 dark:bg-gray-800/60'
                                 : 'hover:bg-slate-50/70'
                     ]"
                 >
@@ -251,11 +251,11 @@ onUnmounted(() => {
                         </div>
                         <div class="min-w-0">
                             <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="font-bold text-gray-900 text-xs">{{ user.name }}</span>
-                                <span v-if="user.employee_no" class="px-1.5 py-0.2 bg-gray-100 text-gray-600 rounded text-3xs font-mono">
+                                <span class="font-bold text-gray-900 text-xs dark:text-gray-100">{{ user.name }}</span>
+                                <span v-if="user.employee_no" class="px-1.5 py-0.2 bg-gray-100 text-gray-600 rounded text-3xs font-mono dark:bg-gray-700 dark:text-gray-400">
                                     {{ user.employee_no }}
                                 </span>
-                                <span v-if="user.job_title" class="text-3xs text-gray-500">
+                                <span v-if="user.job_title" class="text-3xs text-gray-500 dark:text-gray-400">
                                     {{ user.job_title }}
                                 </span>
                             </div>
@@ -305,7 +305,7 @@ onUnmounted(() => {
             </div>
 
             <!-- 底部資訊提示列 -->
-            <div class="px-3 py-1.5 bg-slate-100/70 border-t border-gray-100 flex items-center justify-between text-3xs text-gray-400">
+            <div class="px-3 py-1.5 bg-slate-100/70 border-t border-gray-100 flex items-center justify-between text-3xs text-gray-400 dark:bg-gray-700 dark:border-gray-700">
                 <span>共 {{ filteredUsers.length }} 位候選同仁</span>
                 <span class="hidden sm:inline">支援 ↑ ↓ 鍵導航、Enter 選取、Esc 關閉</span>
             </div>

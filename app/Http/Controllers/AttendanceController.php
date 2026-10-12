@@ -69,7 +69,7 @@ class AttendanceController extends Controller
             'todayAttendance' => $todayAttendance,
             'month' => $month,
             'stats' => [
-                'totalWorkHours' => $attendances->sum('work_hours'),
+                'totalWorkHours' => round((float) $attendances->sum('work_hours'), 1),
                 'daysWorked' => $attendances->whereNotNull('clock_in_at')->count(),
                 'lateCount' => $attendances->where('status', 'late')->count(),
                 'earlyLeaveCount' => $attendances->where('status', 'early_leave')->count(),

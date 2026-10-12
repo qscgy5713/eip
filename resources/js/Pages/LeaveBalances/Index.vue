@@ -187,17 +187,17 @@ const overtimeStatusLabel = (status, isComp) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-900">
+                    <h2 class="text-xl font-bold leading-tight text-gray-900 dark:text-gray-100">
                         特休與假別額度管理
                     </h2>
-                    <p class="mt-1 text-sm text-gray-500">
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         掌握個人各類假別年度剩餘天數與配額，人事部門專屬配額維護與自動扣減。
                     </p>
                 </div>
 
                 <!-- 年度切換與管理功能列 -->
                 <div class="flex items-center gap-3">
-                    <div class="inline-flex rounded-lg bg-gray-100 p-1 border border-gray-200">
+                    <div class="inline-flex rounded-lg bg-gray-100 p-1 border border-gray-200 dark:bg-gray-700 dark:border-gray-700">
                         <button
                             v-for="yr in yearOptions"
                             :key="yr"
@@ -206,8 +206,8 @@ const overtimeStatusLabel = (status, isComp) => {
                             :class="[
                                 'px-3 py-1.5 text-xs font-semibold rounded-md transition duration-150',
                                 filterForm.year === yr
-                                    ? 'bg-white text-gray-900 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-900'
+                                    ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-gray-100'
+                                    : 'text-gray-600 hover:text-gray-900 dark:text-gray-400'
                             ]"
                         >
                             {{ yr }} 年度
@@ -236,9 +236,9 @@ const overtimeStatusLabel = (status, isComp) => {
                         v-if="canManage"
                         type="button"
                         @click="showBatchModal = true"
-                        class="inline-flex items-center px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg shadow-sm transition"
+                        class="inline-flex items-center px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg shadow-sm transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
-                        <svg class="w-4 h-4 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 mr-1.5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                         批次初始化配額
@@ -252,13 +252,13 @@ const overtimeStatusLabel = (status, isComp) => {
                 <!-- 個人年度休假額度卡片 -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                        <h3 class="text-base font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100">
                             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7 7z" />
                             </svg>
                             我的休假額度 ({{ filterForm.year }} 年度)
                         </h3>
-                        <span class="text-xs text-gray-500">
+                        <span class="text-xs text-gray-500 dark:text-gray-400">
                             ※ 申請請假單經簽核通過後，系統將自動扣減並即時更新
                         </span>
                     </div>
@@ -267,10 +267,10 @@ const overtimeStatusLabel = (status, isComp) => {
                         <div
                             v-for="b in (myBalances || [])"
                             :key="b.id"
-                            class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-gray-300 transition"
+                            class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-gray-300 transition dark:bg-gray-800 dark:border-gray-700"
                         >
                             <div class="flex items-center justify-between">
-                                <span class="text-sm font-bold text-gray-900">{{ b.type_label }}</span>
+                                <span class="text-sm font-bold text-gray-900 dark:text-gray-100">{{ b.type_label }}</span>
                                 <span
                                     v-if="b.is_hard_quota"
                                     class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"
@@ -279,7 +279,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                 </span>
                                 <span
                                     v-else
-                                    class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gray-100 text-gray-600"
+                                    class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
                                 >
                                     常規假別
                                 </span>
@@ -287,19 +287,19 @@ const overtimeStatusLabel = (status, isComp) => {
 
                             <div class="mt-4 flex items-baseline justify-between">
                                 <div>
-                                    <span class="text-3xl font-extrabold tracking-tight text-gray-900">
+                                    <span class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
                                         {{ b.available_days ?? 0 }}
                                     </span>
-                                    <span class="ml-1 text-sm text-gray-500">天可用</span>
+                                    <span class="ml-1 text-sm text-gray-500 dark:text-gray-400">天可用</span>
                                 </div>
-                                <div class="text-right text-xs text-gray-500">
-                                    核給上限：<span class="font-semibold text-gray-700">{{ b.allocated_days ?? 0 }}</span> 天
+                                <div class="text-right text-xs text-gray-500 dark:text-gray-400">
+                                    核給上限：<span class="font-semibold text-gray-700 dark:text-gray-300">{{ b.allocated_days ?? 0 }}</span> 天
                                 </div>
                             </div>
 
                             <!-- 進度條 -->
                             <div class="mt-4">
-                                <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                                <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden dark:bg-gray-700">
                                     <div
                                         class="h-2 rounded-full transition-all duration-300"
                                         :class="b.is_hard_quota ? 'bg-indigo-600' : 'bg-blue-500'"
@@ -311,9 +311,9 @@ const overtimeStatusLabel = (status, isComp) => {
                             </div>
 
                             <!-- 明細欄位 -->
-                            <div class="mt-4 pt-3 border-t border-gray-100 grid grid-cols-2 text-xs text-gray-500">
+                            <div class="mt-4 pt-3 border-t border-gray-100 grid grid-cols-2 text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">
                                 <div>
-                                    已核准使用：<span class="font-semibold text-gray-800">{{ b.used_days ?? 0 }}</span> 天
+                                    已核准使用：<span class="font-semibold text-gray-800 dark:text-gray-100">{{ b.used_days ?? 0 }}</span> 天
                                 </div>
                                 <div class="text-right">
                                     審核中凍結：<span class="font-semibold text-amber-600">{{ b.pending_days ?? 0 }}</span> 天
@@ -328,31 +328,31 @@ const overtimeStatusLabel = (status, isComp) => {
                 </div>
 
                 <!-- 個人請假與加班補休對帳單 (Leave & Overtime Compensatory Ledger) -->
-                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="p-5 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                    <div class="p-5 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 dark:border-gray-700">
                         <div>
                             <div class="flex items-center gap-2">
-                                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100">
                                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                                     個人假額存摺與申請對帳表
                                 </h3>
                             </div>
-                            <p class="mt-1 text-xs text-gray-500">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                 完整追蹤您的請假扣額支出與加班換補休入帳歷程，即時掌握額度變動軌跡。
                             </p>
                         </div>
 
                         <!-- 雙頁籤切換按鈕與快捷申請 -->
                         <div class="flex items-center gap-3 self-start sm:self-auto">
-                            <div class="inline-flex rounded-lg bg-gray-100 p-1 border border-gray-200 text-xs font-semibold">
+                            <div class="inline-flex rounded-lg bg-gray-100 p-1 border border-gray-200 text-xs font-semibold dark:bg-gray-700 dark:border-gray-700">
                                 <button
                                     type="button"
                                     @click="activeLedgerTab = 'leave'"
                                     :class="[
                                         'px-3 py-1.5 rounded-md transition flex items-center gap-1.5',
                                         activeLedgerTab === 'leave'
-                                            ? 'bg-white text-gray-900 shadow-sm'
-                                            : 'text-gray-600 hover:text-gray-900'
+                                            ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-gray-100'
+                                            : 'text-gray-600 hover:text-gray-900 dark:text-gray-400'
                                     ]"
                                 >
                                     <span>請假支出扣額</span>
@@ -366,8 +366,8 @@ const overtimeStatusLabel = (status, isComp) => {
                                     :class="[
                                         'px-3 py-1.5 rounded-md transition flex items-center gap-1.5',
                                         activeLedgerTab === 'overtime'
-                                            ? 'bg-white text-gray-900 shadow-sm'
-                                            : 'text-gray-600 hover:text-gray-900'
+                                            ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-gray-100'
+                                            : 'text-gray-600 hover:text-gray-900 dark:text-gray-400'
                                     ]"
                                 >
                                     <span>加班換補休入帳</span>
@@ -399,8 +399,8 @@ const overtimeStatusLabel = (status, isComp) => {
 
                     <!-- 頁籤 1: 請假扣額明細表格 -->
                     <div v-show="activeLedgerTab === 'leave'" class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
+                        <table class="w-full text-left text-xs text-gray-600 dark:text-gray-400">
+                            <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-300">
                                 <tr>
                                     <th class="px-5 py-3">申請公文單號 / 主旨</th>
                                     <th class="px-5 py-3">假別類型</th>
@@ -412,9 +412,9 @@ const overtimeStatusLabel = (status, isComp) => {
                                     <th class="px-5 py-3 text-right">單據詳情</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                 <tr v-for="req in myLeaveRequests" :key="req.id" class="hover:bg-gray-50/80 transition">
-                                    <td class="px-5 py-3 font-semibold text-gray-900">
+                                    <td class="px-5 py-3 font-semibold text-gray-900 dark:text-gray-100">
                                         <div class="flex items-center gap-2">
                                             <span class="font-mono text-2xs text-indigo-600 font-bold bg-indigo-50 px-1.5 py-0.5 rounded">
                                                 #{{ req.id }}
@@ -422,16 +422,16 @@ const overtimeStatusLabel = (status, isComp) => {
                                             <span class="truncate max-w-xs">{{ req.title }}</span>
                                         </div>
                                     </td>
-                                    <td class="px-5 py-3 font-bold text-gray-800">
+                                    <td class="px-5 py-3 font-bold text-gray-800 dark:text-gray-100">
                                         {{ req.leave_type }}
                                     </td>
-                                    <td class="px-5 py-3 font-mono text-gray-600">
+                                    <td class="px-5 py-3 font-mono text-gray-600 dark:text-gray-400">
                                         {{ req.start_date }} ~ {{ req.end_date }}
                                     </td>
                                     <td class="px-5 py-3 font-bold text-indigo-600">
                                         -{{ req.days }} 天
                                     </td>
-                                    <td class="px-5 py-3 text-gray-500 max-w-xs truncate" :title="req.reason">
+                                    <td class="px-5 py-3 text-gray-500 max-w-xs truncate dark:text-gray-400" :title="req.reason">
                                         {{ req.reason || '—' }}
                                     </td>
                                     <td class="px-5 py-3">
@@ -462,8 +462,8 @@ const overtimeStatusLabel = (status, isComp) => {
 
                     <!-- 頁籤 2: 加班補休折算入帳明細表格 -->
                     <div v-show="activeLedgerTab === 'overtime'" class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
+                        <table class="w-full text-left text-xs text-gray-600 dark:text-gray-400">
+                            <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-300">
                                 <tr>
                                     <th class="px-5 py-3">加班單號 / 主旨</th>
                                     <th class="px-5 py-3">加班日期</th>
@@ -476,9 +476,9 @@ const overtimeStatusLabel = (status, isComp) => {
                                     <th class="px-5 py-3 text-right">單據詳情</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                 <tr v-for="req in myOvertimeRequests" :key="req.id" class="hover:bg-gray-50/80 transition">
-                                    <td class="px-5 py-3 font-semibold text-gray-900">
+                                    <td class="px-5 py-3 font-semibold text-gray-900 dark:text-gray-100">
                                         <div class="flex items-center gap-2">
                                             <span class="font-mono text-2xs text-amber-600 font-bold bg-amber-50 px-1.5 py-0.5 rounded">
                                                 #{{ req.id }}
@@ -486,17 +486,17 @@ const overtimeStatusLabel = (status, isComp) => {
                                             <span class="truncate max-w-xs">{{ req.title }}</span>
                                         </div>
                                     </td>
-                                    <td class="px-5 py-3 font-mono text-gray-700 font-semibold">
+                                    <td class="px-5 py-3 font-mono text-gray-700 font-semibold dark:text-gray-300">
                                         {{ req.overtime_date }}
                                     </td>
-                                    <td class="px-5 py-3 text-gray-800">
+                                    <td class="px-5 py-3 text-gray-800 dark:text-gray-100">
                                         {{ req.overtime_type }}
                                     </td>
-                                    <td class="px-5 py-3 font-bold text-gray-900">
+                                    <td class="px-5 py-3 font-bold text-gray-900 dark:text-gray-100">
                                         {{ req.hours }} 小時
                                     </td>
                                     <td class="px-5 py-3">
-                                        <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-2xs font-medium">
+                                        <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-2xs font-medium dark:bg-gray-700 dark:text-gray-300">
                                             {{ req.compensation }}
                                         </span>
                                     </td>
@@ -540,17 +540,17 @@ const overtimeStatusLabel = (status, isComp) => {
                 </div>
 
                 <!-- HR / 管理員專屬：同仁配額管轄清單 -->
-                <div v-if="canManage && managedUsers && managedUsers.data" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="p-5 sm:p-6 border-b border-gray-200">
+                <div v-if="canManage && managedUsers && managedUsers.data" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                    <div class="p-5 sm:p-6 border-b border-gray-200 dark:border-gray-700">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div>
-                                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100">
                                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                     </svg>
                                     全體同仁休假配額管轄 (HR / 管理員)
                                 </h3>
-                                <p class="mt-1 text-xs text-gray-500">
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                     查詢同仁法定特休與各類假別天數，支援個別快速調整與備註維護。
                                 </p>
                             </div>
@@ -561,7 +561,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                     <select
                                         v-model="filterForm.department_id"
                                         @change="applyFilters"
-                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                     >
                                         <option value="">全部部門</option>
                                         <option v-for="dept in departments" :key="dept.id" :value="dept.id">
@@ -576,7 +576,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                         @keyup.enter="applyFilters"
                                         type="text"
                                         placeholder="搜尋姓名 / 工號..."
-                                        class="w-full text-xs rounded-lg border-gray-300 pl-8 focus:border-indigo-500 focus:ring-indigo-500"
+                                        class="w-full text-xs rounded-lg border-gray-300 pl-8 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                     />
                                     <svg class="w-4 h-4 text-gray-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -586,7 +586,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                 <button
                                     type="button"
                                     @click="applyFilters"
-                                    class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                                    class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                                 >
                                     查詢
                                 </button>
@@ -596,8 +596,8 @@ const overtimeStatusLabel = (status, isComp) => {
 
                     <!-- 同仁配額表格 -->
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 text-left text-xs">
-                            <thead class="bg-gray-50 text-gray-600 font-semibold">
+                        <table class="min-w-full divide-y divide-gray-200 text-left text-xs dark:divide-gray-700">
+                            <thead class="bg-gray-50 text-gray-600 font-semibold dark:bg-gray-800/60 dark:text-gray-400">
                                 <tr>
                                     <th class="py-3 px-4">同仁資訊</th>
                                     <th class="py-3 px-4">部門</th>
@@ -608,7 +608,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                     <th class="py-3 px-4 text-right">操作</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100 bg-white">
+                            <tbody class="divide-y divide-gray-100 bg-white dark:bg-gray-800 dark:divide-gray-700">
                                 <tr
                                     v-for="user in managedUsers.data"
                                     :key="user.id"
@@ -620,14 +620,14 @@ const overtimeStatusLabel = (status, isComp) => {
                                                 {{ (user.name || '').slice(0, 1) }}
                                             </div>
                                             <div>
-                                                <div class="font-bold text-gray-900">{{ user.name }}</div>
+                                                <div class="font-bold text-gray-900 dark:text-gray-100">{{ user.name }}</div>
                                                 <div class="text-[11px] text-gray-400">
                                                     {{ user.employee_no ? `工號：${user.employee_no}` : user.email }}
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="py-3.5 px-4 text-gray-600">
+                                    <td class="py-3.5 px-4 text-gray-600 dark:text-gray-400">
                                         {{ user.department?.name || '無部門' }}
                                     </td>
 
@@ -637,7 +637,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                             {{ getUserBalanceByType(user, 'annual')?.available_days ?? 0 }}
                                         </span>
                                         <span class="text-gray-400"> / </span>
-                                        <span class="text-gray-700">
+                                        <span class="text-gray-700 dark:text-gray-300">
                                             {{ getUserBalanceByType(user, 'annual')?.allocated_days ?? 0 }} 天
                                         </span>
                                     </td>
@@ -648,20 +648,20 @@ const overtimeStatusLabel = (status, isComp) => {
                                             {{ getUserBalanceByType(user, 'compensatory')?.available_days ?? 0 }}
                                         </span>
                                         <span class="text-gray-400"> / </span>
-                                        <span class="text-gray-700">
+                                        <span class="text-gray-700 dark:text-gray-300">
                                             {{ getUserBalanceByType(user, 'compensatory')?.allocated_days ?? 0 }} 天
                                         </span>
                                     </td>
 
                                     <!-- 病假 -->
-                                    <td class="py-3.5 px-4 text-gray-600">
+                                    <td class="py-3.5 px-4 text-gray-600 dark:text-gray-400">
                                         <span>{{ getUserBalanceByType(user, 'sick')?.used_days ?? 0 }}</span>
                                         <span class="text-gray-400"> / </span>
                                         <span>{{ getUserBalanceByType(user, 'sick')?.allocated_days ?? 30 }} 天</span>
                                     </td>
 
                                     <!-- 事假 -->
-                                    <td class="py-3.5 px-4 text-gray-600">
+                                    <td class="py-3.5 px-4 text-gray-600 dark:text-gray-400">
                                         <span>{{ getUserBalanceByType(user, 'personal')?.used_days ?? 0 }}</span>
                                         <span class="text-gray-400"> / </span>
                                         <span>{{ getUserBalanceByType(user, 'personal')?.allocated_days ?? 14 }} 天</span>
@@ -692,8 +692,8 @@ const overtimeStatusLabel = (status, isComp) => {
                     </div>
 
                     <!-- 分頁列 -->
-                    <div v-if="managedUsers.last_page > 1" class="p-4 border-t border-gray-200 flex items-center justify-between">
-                        <div class="text-xs text-gray-500">
+                    <div v-if="managedUsers.last_page > 1" class="p-4 border-t border-gray-200 flex items-center justify-between dark:border-gray-700">
+                        <div class="text-xs text-gray-500 dark:text-gray-400">
                             共 {{ managedUsers.total }} 位同仁
                         </div>
                         <div class="flex items-center gap-1">
@@ -704,7 +704,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                     @click="router.get(link.url, {}, { preserveState: true, preserveScroll: true })"
                                     :class="[
                                         'px-2.5 py-1 text-xs rounded transition',
-                                        link.active ? 'bg-indigo-600 text-white font-bold' : 'text-gray-700 hover:bg-gray-100'
+                                        link.active ? 'bg-indigo-600 text-white font-bold' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300'
                                     ]"
                                     v-html="link.label"
                                 ></button>
@@ -719,9 +719,9 @@ const overtimeStatusLabel = (status, isComp) => {
         <div v-if="showEditModal && editingUser" class="fixed inset-0 z-50 overflow-y-auto">
             <div class="fixed inset-0 bg-gray-500/75 transition-opacity" @click="showEditModal = false"></div>
             <div class="flex min-h-full items-center justify-center p-4">
-                <div class="relative w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden p-6">
-                    <div class="flex items-center justify-between pb-4 border-b border-gray-100">
-                        <h4 class="text-base font-bold text-gray-900">
+                <div class="relative w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden p-6 dark:bg-gray-800">
+                    <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
+                        <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">
                             調整同仁休假配額
                         </h4>
                         <button type="button" @click="showEditModal = false" class="text-gray-400 hover:text-gray-600">
@@ -732,17 +732,17 @@ const overtimeStatusLabel = (status, isComp) => {
                     </div>
 
                     <div class="mt-4 space-y-4">
-                        <div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 flex justify-between">
-                            <span>同仁：<strong class="text-gray-900">{{ editingUser.name }}</strong></span>
-                            <span>年度：<strong class="text-gray-900">{{ editForm.year }}</strong></span>
+                        <div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 flex justify-between dark:bg-gray-800/60 dark:text-gray-400">
+                            <span>同仁：<strong class="text-gray-900 dark:text-gray-100">{{ editingUser.name }}</strong></span>
+                            <span>年度：<strong class="text-gray-900 dark:text-gray-100">{{ editForm.year }}</strong></span>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">假別選擇</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">假別選擇</label>
                             <select
                                 v-model="editForm.leave_type"
                                 @change="handleTypeChangeInModal"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             >
                                 <option v-for="(meta, key) in leaveTypesMeta" :key="key" :value="key">
                                     {{ meta.name }} ({{ meta.is_hard_quota ? '硬性額度' : '常規上限' }})
@@ -751,7 +751,7 @@ const overtimeStatusLabel = (status, isComp) => {
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">
                                 核給天數 (天)
                             </label>
                             <input
@@ -760,7 +760,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                 step="0.5"
                                 min="0"
                                 max="365"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             />
                             <p class="mt-1 text-[11px] text-gray-400">
                                 支援 0.5 天（半天）精度，可隨同仁年資累計動態增減
@@ -768,21 +768,21 @@ const overtimeStatusLabel = (status, isComp) => {
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">異動備註 / 說明</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">異動備註 / 說明</label>
                             <input
                                 v-model="editForm.note"
                                 type="text"
                                 placeholder="例如：到職滿兩年法定特休、加班時數轉補休"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             />
                         </div>
                     </div>
 
-                    <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                    <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <button
                             type="button"
                             @click="showEditModal = false"
-                            class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                            class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                         >
                             取消
                         </button>
@@ -803,9 +803,9 @@ const overtimeStatusLabel = (status, isComp) => {
         <div v-if="showBatchModal" class="fixed inset-0 z-50 overflow-y-auto">
             <div class="fixed inset-0 bg-gray-500/75 transition-opacity" @click="showBatchModal = false"></div>
             <div class="flex min-h-full items-center justify-center p-4">
-                <div class="relative w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden p-6">
-                    <div class="flex items-center justify-between pb-4 border-b border-gray-100">
-                        <h4 class="text-base font-bold text-gray-900">
+                <div class="relative w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden p-6 dark:bg-gray-800">
+                    <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
+                        <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">
                             批次初始化年度休假配額
                         </h4>
                         <button type="button" @click="showBatchModal = false" class="text-gray-400 hover:text-gray-600">
@@ -821,10 +821,10 @@ const overtimeStatusLabel = (status, isComp) => {
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">目標年度</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">目標年度</label>
                             <select
                                 v-model.number="batchForm.year"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             >
                                 <option v-for="yr in yearOptions" :key="yr" :value="yr">
                                     {{ yr }} 年度
@@ -833,10 +833,10 @@ const overtimeStatusLabel = (status, isComp) => {
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">目標部門 (選填)</label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">目標部門 (選填)</label>
                             <select
                                 v-model="batchForm.department_id"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             >
                                 <option value="">全公司同仁</option>
                                 <option v-for="dept in departments" :key="dept.id" :value="dept.id">
@@ -846,11 +846,11 @@ const overtimeStatusLabel = (status, isComp) => {
                         </div>
                     </div>
 
-                    <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                    <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <button
                             type="button"
                             @click="showBatchModal = false"
-                            class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                            class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                         >
                             取消
                         </button>

@@ -125,7 +125,7 @@ const removePost = (post) => {
                     <p class="text-xs text-gray-500 dark:text-gray-400">本月可贈送感謝幣額度</p>
                     <p class="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-0.5 font-mono">
                         {{ wallet.recognition_quota }}
-                        <span class="text-xs font-normal text-gray-500">/ {{ wallet.monthly_quota }} 枚，每月 1 日重置</span>
+                        <span class="text-xs font-normal text-gray-500 dark:text-gray-400">/ {{ wallet.monthly_quota }} 枚，每月 1 日重置</span>
                     </p>
                     <div class="mt-2 h-1.5 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
                         <div
@@ -137,7 +137,7 @@ const removePost = (post) => {
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
                     <p class="text-xs text-gray-500 dark:text-gray-400">我的福利點數</p>
                     <p class="text-2xl font-black text-amber-600 dark:text-amber-400 mt-0.5 font-mono">
-                        {{ wallet.reward_points }} <span class="text-xs font-normal text-gray-500">點</span>
+                        {{ wallet.reward_points }} <span class="text-xs font-normal text-gray-500 dark:text-gray-400">點</span>
                     </p>
                 </div>
             </div>
@@ -280,9 +280,9 @@ const removePost = (post) => {
                         <div v-if="selectedRecipient" class="flex items-center justify-between px-3 py-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-sm">
                             <span class="font-bold text-indigo-700 dark:text-indigo-300">
                                 {{ selectedRecipient.name }}
-                                <span class="text-xs font-normal text-gray-500">{{ selectedRecipient.department }}</span>
+                                <span class="text-xs font-normal text-gray-500 dark:text-gray-400">{{ selectedRecipient.department }}</span>
                             </span>
-                            <button type="button" class="text-xs text-gray-500 hover:text-gray-800" @click="form.recipient_id = null">更換</button>
+                            <button type="button" class="text-xs text-gray-500 hover:text-gray-800 dark:text-gray-400" @click="form.recipient_id = null">更換</button>
                         </div>
                         <template v-else>
                             <input
@@ -341,7 +341,7 @@ const removePost = (post) => {
                     </div>
 
                     <label class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
-                        <input v-model="form.is_anonymous" type="checkbox" class="rounded border-gray-300 text-indigo-600" />
+                        <input v-model="form.is_anonymous" type="checkbox" class="rounded border-gray-300 text-indigo-600 dark:border-gray-700" />
                         匿名送出（文化牆不顯示我的名字，對象的通知也不會揭露）
                     </label>
 

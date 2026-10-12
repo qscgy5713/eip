@@ -221,13 +221,13 @@ const typeLabel = (type) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800">考勤打卡管理</h2>
-                    <span class="text-sm text-gray-500">智慧 GPS 圍欄打卡、工時記錄與出勤異常統計</span>
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">考勤打卡管理</h2>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">智慧 GPS 圍欄打卡、工時記錄與出勤異常統計</span>
                 </div>
                 <div class="flex items-center space-x-2">
                     <Link
                         :href="route('leave-balances.index')"
-                        class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                        class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition flex items-center space-x-1.5 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
                         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         <span>休假額度查詢</span>
@@ -235,9 +235,9 @@ const typeLabel = (type) => {
                     <Link
                         v-if="['hr', 'admin'].includes($page.props.auth.user.role)"
                         :href="route('attendance.settings')"
-                        class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                        class="px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition flex items-center space-x-1.5 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         <span>圍欄與半徑設定</span>
                     </Link>
                     <Link
@@ -264,7 +264,7 @@ const typeLabel = (type) => {
                         </div>
 
                         <!-- 打卡動作按鈕區 -->
-                        <div class="flex flex-col sm:flex-row items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+                        <div class="flex flex-col sm:flex-row items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20 dark:bg-gray-800">
                             <div class="text-center sm:text-right px-2">
                                 <p class="text-xs text-blue-200">今日狀態</p>
                                 <p class="text-sm font-bold text-white mt-0.5">
@@ -330,7 +330,7 @@ const typeLabel = (type) => {
                             <button
                                 @click="requestGeolocation"
                                 type="button"
-                                class="px-2.5 py-1 rounded bg-white/20 hover:bg-white/30 text-white transition text-[11px] flex items-center space-x-1"
+                                class="px-2.5 py-1 rounded bg-white/20 hover:bg-white/30 text-white transition text-[11px] flex items-center space-x-1 dark:bg-gray-800"
                             >
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                 <span>重新定位</span>
@@ -354,7 +354,7 @@ const typeLabel = (type) => {
                             v-model="fieldWorkNote"
                             @input="noteError = ''"
                             placeholder="如：拜訪客戶展示產品、外部會議、居家遠端辦公..."
-                            class="w-full text-xs rounded-lg bg-white/10 text-white placeholder-purple-200/60 border-purple-300/40 focus:border-rose-400 focus:ring-rose-400"
+                            class="w-full text-xs rounded-lg bg-white/10 text-white placeholder-purple-200/60 border-purple-300/40 focus:border-rose-400 focus:ring-rose-400 dark:bg-gray-800"
                         />
                         <p v-if="noteError" class="text-xs text-rose-300 font-semibold flex items-center pt-0.5">
                             <svg class="w-3.5 h-3.5 mr-1 text-rose-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -365,43 +365,43 @@ const typeLabel = (type) => {
 
                 <!-- 本月出勤統計 -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center dark:bg-gray-800 dark:border-gray-700">
                         <p class="text-xs font-semibold text-gray-400">本月累計工時</p>
-                        <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.totalWorkHours }} <span class="text-xs text-gray-400 font-normal">小時</span></p>
+                        <p class="text-2xl font-bold text-gray-900 mt-1 dark:text-gray-100">{{ stats.totalWorkHours }} <span class="text-xs text-gray-400 font-normal">小時</span></p>
                     </div>
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center dark:bg-gray-800 dark:border-gray-700">
                         <p class="text-xs font-semibold text-gray-400">出勤天數</p>
                         <p class="text-2xl font-bold text-blue-600 mt-1">{{ stats.daysWorked }} <span class="text-xs text-gray-400 font-normal">天</span></p>
                     </div>
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center dark:bg-gray-800 dark:border-gray-700">
                         <p class="text-xs font-semibold text-gray-400">遲到次數</p>
                         <p class="text-2xl font-bold text-rose-600 mt-1">{{ stats.lateCount }} <span class="text-xs text-gray-400 font-normal">次</span></p>
                     </div>
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center dark:bg-gray-800 dark:border-gray-700">
                         <p class="text-xs font-semibold text-gray-400">早退次數</p>
                         <p class="text-2xl font-bold text-amber-600 mt-1">{{ stats.earlyLeaveCount }} <span class="text-xs text-gray-400 font-normal">次</span></p>
                     </div>
                 </div>
 
                 <!-- 團隊/部門出勤監控 (主管與管理員專屬) -->
-                <div v-if="teamAttendances && teamAttendances.length > 0" class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <h3 class="font-bold text-gray-900 text-base flex items-center space-x-2">
+                <div v-if="teamAttendances && teamAttendances.length > 0" class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
+                        <h3 class="font-bold text-gray-900 text-base flex items-center space-x-2 dark:text-gray-100">
                             <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full"></span>
                             <span>團隊今日出勤即時概況</span>
                         </h3>
                         <span class="text-xs text-gray-400">共 {{ teamAttendances.length }} 位同仁</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                        <div v-for="member in teamAttendances" :key="member.id" class="p-3 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-between">
+                        <div v-for="member in teamAttendances" :key="member.id" class="p-3 bg-gray-50 rounded-lg border border-gray-100 flex items-center justify-between dark:bg-gray-800/60 dark:border-gray-700">
                             <div>
                                 <div class="flex items-center space-x-1.5">
-                                    <p class="text-sm font-bold text-gray-900">{{ member.name }}</p>
+                                    <p class="text-sm font-bold text-gray-900 dark:text-gray-100">{{ member.name }}</p>
                                     <span v-if="member.clock_in_at" :class="['px-1.5 py-0.2 text-[9px] font-bold rounded border', typeBadge(member.clock_in_type)]">
                                         {{ typeLabel(member.clock_in_type) }}
                                     </span>
                                 </div>
-                                <p class="text-[11px] text-gray-500">{{ member.department }}</p>
+                                <p class="text-[11px] text-gray-500 dark:text-gray-400">{{ member.department }}</p>
                                 <p class="text-[10px] text-gray-400 mt-0.5">{{ member.clock_in_at ? `${member.clock_in_at} 上班` : '尚未打卡' }}</p>
                             </div>
                             <span :class="['px-2 py-0.5 text-xs font-semibold rounded', statusBadge(member.status)]">
@@ -412,15 +412,15 @@ const typeLabel = (type) => {
                 </div>
 
                 <!-- 個人出勤歷史明細 -->
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <h3 class="font-bold text-gray-900 text-base">個人出勤明細紀錄</h3>
-                        <input type="month" :value="month" @change="changeMonth" class="text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-1.5" />
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
+                        <h3 class="font-bold text-gray-900 text-base dark:text-gray-100">個人出勤明細紀錄</h3>
+                        <input type="month" :value="month" @change="changeMonth" class="text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-1.5 dark:border-gray-700" />
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
+                        <table class="w-full text-left text-xs text-gray-600 dark:text-gray-400">
+                            <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-300">
                                 <tr>
                                     <th class="py-3 px-4">日期</th>
                                     <th class="py-3 px-4">打卡地點 / 型態</th>
@@ -433,9 +433,9 @@ const typeLabel = (type) => {
                                     <th class="py-3 px-4 text-right">操作</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                 <tr v-for="att in attendances" :key="att.id" class="hover:bg-gray-50/60">
-                                    <td class="py-3 px-4 font-mono font-medium text-gray-900">{{ att.date ? String(att.date).split('T')[0] : '-' }}</td>
+                                    <td class="py-3 px-4 font-mono font-medium text-gray-900 dark:text-gray-100">{{ att.date ? String(att.date).split('T')[0] : '-' }}</td>
                                     <td class="py-3 px-4">
                                         <div class="flex flex-col space-y-1">
                                             <div class="flex items-center space-x-1.5">
@@ -462,13 +462,13 @@ const typeLabel = (type) => {
                                     <td class="py-3 px-4 text-gray-400 font-mono">{{ att.clock_in_ip || '-' }}</td>
                                     <td class="py-3 px-4">{{ att.clock_out_at ? new Date(att.clock_out_at).toLocaleTimeString() : '-' }}</td>
                                     <td class="py-3 px-4 text-gray-400 font-mono">{{ att.clock_out_ip || '-' }}</td>
-                                    <td class="py-3 px-4 font-semibold text-gray-900">{{ att.work_hours }}h</td>
+                                    <td class="py-3 px-4 font-semibold text-gray-900 dark:text-gray-100">{{ att.work_hours }}h</td>
                                     <td class="py-3 px-4">
                                         <div class="space-y-1">
                                             <span :class="['px-2 py-0.5 rounded text-[11px] font-semibold inline-block', statusBadge(att.status)]">
                                                 {{ statusLabel(att.status) }}
                                             </span>
-                                            <p v-if="att.note" class="text-3xs text-gray-500 max-w-xs truncate" :title="att.note">
+                                            <p v-if="att.note" class="text-3xs text-gray-500 max-w-xs truncate dark:text-gray-400" :title="att.note">
                                                 {{ att.note }}
                                             </p>
                                         </div>
@@ -498,7 +498,7 @@ const typeLabel = (type) => {
 
         <!-- 超出範圍強制填寫事由 Modal -->
         <div v-if="showReasonModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-gray-100 overflow-hidden transform transition-all p-6 space-y-5">
+            <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-gray-100 overflow-hidden transform transition-all p-6 space-y-5 dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -506,13 +506,13 @@ const typeLabel = (type) => {
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-gray-900">超出打卡範圍提示</h3>
-                        <p class="text-xs text-gray-500">距總部 {{ formatDistance(detectedDistance) }}（超過限制 {{ geofenceConfig?.radius }}m）</p>
+                        <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">超出打卡範圍提示</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">距總部 {{ formatDistance(detectedDistance) }}（超過限制 {{ geofenceConfig?.radius }}m）</p>
                     </div>
                 </div>
 
                 <div class="space-y-2">
-                    <label class="block text-xs font-semibold text-gray-700">
+                    <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300">
                         請說明外勤 / 遠端事由 <span class="text-rose-500">*</span>
                     </label>
                     <textarea
@@ -521,7 +521,7 @@ const typeLabel = (type) => {
                         required
                         autofocus
                         placeholder="請填寫外勤客戶拜訪、公出差旅或居家辦公事由（未填寫將無法完成打卡）..."
-                        class="w-full text-xs rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm placeholder-gray-400 p-3"
+                        class="w-full text-xs rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm placeholder-gray-400 p-3 dark:border-gray-700"
                     ></textarea>
                     <p v-if="noteError" class="text-xs text-rose-600 font-semibold">{{ noteError }}</p>
                 </div>
@@ -530,7 +530,7 @@ const typeLabel = (type) => {
                     <button
                         type="button"
                         @click="showReasonModal = false"
-                        class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                        class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                     >
                         取消打卡
                     </button>

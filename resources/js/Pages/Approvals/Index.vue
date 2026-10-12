@@ -184,10 +184,10 @@ const extractDataSummary = (data, formCode) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-900">
+                    <h2 class="text-xl font-bold leading-tight text-gray-900 dark:text-gray-100">
                         主管審批中心
                     </h2>
-                    <p class="mt-1 text-sm text-gray-500">
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         集中檢閱全體待審核單據，支援多選一鍵批次核准與批次退件。
                     </p>
                 </div>
@@ -201,7 +201,7 @@ const extractDataSummary = (data, formCode) => {
                             'inline-flex items-center px-3.5 py-2 text-xs font-semibold rounded-lg border shadow-sm transition',
                             viewAllCompany
                                 ? 'bg-indigo-50 border-indigo-300 text-indigo-700 font-bold'
-                                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700'
                         ]"
                     >
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +212,7 @@ const extractDataSummary = (data, formCode) => {
 
                     <Link
                         :href="route('forms.index')"
-                        class="inline-flex items-center px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition"
+                        class="inline-flex items-center px-3.5 py-2 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                     >
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -227,19 +227,19 @@ const extractDataSummary = (data, formCode) => {
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
                 <!-- 待審指標卡片 -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold">
+                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold dark:text-gray-400">
                             <span>待審核單據總數</span>
                             <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                         </div>
-                        <div class="mt-2 text-3xl font-extrabold text-gray-900">
+                        <div class="mt-2 text-3xl font-extrabold text-gray-900 dark:text-gray-100">
                             {{ stats.total_pending }}
                         </div>
                         <div class="mt-1 text-[11px] text-gray-400">目前待簽核流程</div>
                     </div>
 
-                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold">
+                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold dark:text-gray-400">
                             <span>今日新送審</span>
                             <span class="w-2 h-2 rounded-full bg-blue-500"></span>
                         </div>
@@ -249,8 +249,8 @@ const extractDataSummary = (data, formCode) => {
                         <div class="mt-1 text-[11px] text-gray-400">本日新增待審件</div>
                     </div>
 
-                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold">
+                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold dark:text-gray-400">
                             <span>職務代理待審</span>
                             <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                         </div>
@@ -260,8 +260,8 @@ const extractDataSummary = (data, formCode) => {
                         <div class="mt-1 text-[11px] text-gray-400">受託主管出差/請假代簽</div>
                     </div>
 
-                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold">
+                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                        <div class="flex items-center justify-between text-xs text-gray-500 font-semibold dark:text-gray-400">
                             <span>差假請假單據</span>
                             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                         </div>
@@ -320,8 +320,8 @@ const extractDataSummary = (data, formCode) => {
                 </div>
 
                 <!-- 待審列表主卡片 -->
-                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="p-5 border-b border-gray-200">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                    <div class="p-5 border-b border-gray-200 dark:border-gray-700">
                         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                             <!-- 篩選列 -->
                             <div class="flex flex-wrap items-center gap-3">
@@ -329,7 +329,7 @@ const extractDataSummary = (data, formCode) => {
                                     <select
                                         v-model="filterForm.form_id"
                                         @change="applyFilters"
-                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                     >
                                         <option value="">全部表單種類</option>
                                         <option v-for="f in forms" :key="f.id" :value="f.id">
@@ -342,7 +342,7 @@ const extractDataSummary = (data, formCode) => {
                                     <select
                                         v-model="filterForm.filter_type"
                                         @change="applyFilters"
-                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                     >
                                         <option value="">全部審核類型</option>
                                         <option value="direct">親自審查</option>
@@ -356,7 +356,7 @@ const extractDataSummary = (data, formCode) => {
                                         @keyup.enter="applyFilters"
                                         type="text"
                                         placeholder="搜尋申請人 / 單號 / 主旨..."
-                                        class="w-full text-xs rounded-lg border-gray-300 pl-8 focus:border-indigo-500 focus:ring-indigo-500"
+                                        class="w-full text-xs rounded-lg border-gray-300 pl-8 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                     />
                                     <svg class="w-4 h-4 text-gray-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -366,13 +366,13 @@ const extractDataSummary = (data, formCode) => {
                                 <button
                                     type="button"
                                     @click="applyFilters"
-                                    class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                                    class="px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                                 >
                                     查詢
                                 </button>
                             </div>
 
-                            <div class="text-xs text-gray-500">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">
                                 共 <strong>{{ pendingRecords.total || 0 }}</strong> 筆待簽核單據
                             </div>
                         </div>
@@ -380,15 +380,15 @@ const extractDataSummary = (data, formCode) => {
 
                     <!-- 待審核清單表格 -->
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 text-left text-xs">
-                            <thead class="bg-gray-50 text-gray-600 font-semibold">
+                        <table class="min-w-full divide-y divide-gray-200 text-left text-xs dark:divide-gray-700">
+                            <thead class="bg-gray-50 text-gray-600 font-semibold dark:bg-gray-800/60 dark:text-gray-400">
                                 <tr>
                                     <th class="py-3.5 px-4 w-10 text-center">
                                         <input
                                             type="checkbox"
                                             :checked="isAllSelected"
                                             @change="toggleSelectAll"
-                                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-700"
                                         />
                                     </th>
                                     <th class="py-3.5 px-4">申請人與部門</th>
@@ -399,7 +399,7 @@ const extractDataSummary = (data, formCode) => {
                                     <th class="py-3.5 px-4 text-right">快速操作</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100 bg-white">
+                            <tbody class="divide-y divide-gray-100 bg-white dark:bg-gray-800 dark:divide-gray-700">
                                 <tr
                                     v-for="record in (pendingRecords.data || [])"
                                     :key="record.id"
@@ -414,7 +414,7 @@ const extractDataSummary = (data, formCode) => {
                                             type="checkbox"
                                             :checked="selectedIds.includes(record.id)"
                                             @change="toggleSelectRecord(record.id)"
-                                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-700"
                                         />
                                     </td>
 
@@ -425,7 +425,7 @@ const extractDataSummary = (data, formCode) => {
                                                 {{ (record.form_request?.user?.name || '').slice(0, 1) }}
                                             </div>
                                             <div>
-                                                <div class="font-bold text-gray-900">
+                                                <div class="font-bold text-gray-900 dark:text-gray-100">
                                                     {{ record.form_request?.user?.name }}
                                                 </div>
                                                 <div class="text-[11px] text-gray-400">
@@ -457,19 +457,19 @@ const extractDataSummary = (data, formCode) => {
                                     <td class="py-3.5 px-4 max-w-xs">
                                         <Link
                                             :href="route('forms.show', record.form_request_id)"
-                                            class="font-semibold text-gray-900 hover:text-indigo-600 block truncate"
+                                            class="font-semibold text-gray-900 hover:text-indigo-600 block truncate dark:text-gray-100"
                                             :title="record.form_request?.title"
                                         >
                                             {{ record.form_request?.title }}
                                         </Link>
-                                        <div class="text-[11px] text-gray-500 mt-0.5">
+                                        <div class="text-[11px] text-gray-500 mt-0.5 dark:text-gray-400">
                                             {{ extractDataSummary(record.form_request?.data, record.form_request?.form?.code) }}
                                         </div>
                                     </td>
 
                                     <!-- 關卡進度 -->
                                     <td class="py-3.5 px-4">
-                                        <div class="font-medium text-gray-800">
+                                        <div class="font-medium text-gray-800 dark:text-gray-100">
                                             {{ record.step_title || `第 ${record.step} 關` }}
                                         </div>
                                         <div class="text-[11px] text-gray-400">
@@ -478,7 +478,7 @@ const extractDataSummary = (data, formCode) => {
                                     </td>
 
                                     <!-- 送審時間 -->
-                                    <td class="py-3.5 px-4 text-gray-500 text-[11px]">
+                                    <td class="py-3.5 px-4 text-gray-500 text-[11px] dark:text-gray-400">
                                         {{ formatDate(record.created_at) }}
                                     </td>
 
@@ -487,7 +487,7 @@ const extractDataSummary = (data, formCode) => {
                                         <div class="inline-flex items-center gap-1.5">
                                             <Link
                                                 :href="route('forms.show', record.form_request_id)"
-                                                class="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition"
+                                                class="px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded transition dark:bg-gray-700 dark:text-gray-400"
                                             >
                                                 詳情
                                             </Link>
@@ -513,12 +513,12 @@ const extractDataSummary = (data, formCode) => {
 
                                 <tr v-if="(pendingRecords.data || []).length === 0">
                                     <td colspan="7" class="py-12 text-center text-gray-400">
-                                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-400 mb-2">
+                                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-400 mb-2 dark:bg-gray-700">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </div>
-                                        <p class="text-sm font-medium text-gray-600">太棒了！目前沒有任何待審核單據</p>
+                                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">太棒了！目前沒有任何待審核單據</p>
                                         <p class="text-xs text-gray-400 mt-1">您負責的所有簽核公文均已處理完畢。</p>
                                     </td>
                                 </tr>
@@ -527,8 +527,8 @@ const extractDataSummary = (data, formCode) => {
                     </div>
 
                     <!-- 分頁列 -->
-                    <div v-if="pendingRecords.last_page > 1" class="p-4 border-t border-gray-200 flex items-center justify-between">
-                        <div class="text-xs text-gray-500">
+                    <div v-if="pendingRecords.last_page > 1" class="p-4 border-t border-gray-200 flex items-center justify-between dark:border-gray-700">
+                        <div class="text-xs text-gray-500 dark:text-gray-400">
                             共 {{ pendingRecords.total }} 筆單據
                         </div>
                         <div class="flex items-center gap-1">
@@ -539,7 +539,7 @@ const extractDataSummary = (data, formCode) => {
                                     @click="router.get(link.url, {}, { preserveState: true, preserveScroll: true })"
                                     :class="[
                                         'px-2.5 py-1 text-xs rounded transition',
-                                        link.active ? 'bg-indigo-600 text-white font-bold' : 'text-gray-700 hover:bg-gray-100'
+                                        link.active ? 'bg-indigo-600 text-white font-bold' : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300'
                                     ]"
                                     v-html="link.label"
                                 ></button>
@@ -554,9 +554,9 @@ const extractDataSummary = (data, formCode) => {
         <div v-if="showBatchModal" class="fixed inset-0 z-50 overflow-y-auto">
             <div class="fixed inset-0 bg-gray-500/75 transition-opacity" @click="showBatchModal = false"></div>
             <div class="flex min-h-full items-center justify-center p-4">
-                <div class="relative w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden p-6">
-                    <div class="flex items-center justify-between pb-4 border-b border-gray-100">
-                        <h4 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                <div class="relative w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden p-6 dark:bg-gray-800">
+                    <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
+                        <h4 class="text-base font-bold text-gray-900 flex items-center gap-2 dark:text-gray-100">
                             <span
                                 :class="[
                                     'w-2.5 h-2.5 rounded-full',
@@ -590,23 +590,23 @@ const extractDataSummary = (data, formCode) => {
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">
                                 批次審批意見 / 批註 (選填)
                             </label>
                             <textarea
                                 v-model="batchComment"
                                 rows="3"
                                 placeholder="例如：批次核准通過，准予備查..."
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             ></textarea>
                         </div>
                     </div>
 
-                    <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                    <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <button
                             type="button"
                             @click="showBatchModal = false"
-                            class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                            class="px-4 py-2 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition dark:bg-gray-700 dark:text-gray-300"
                         >
                             取消
                         </button>

@@ -60,14 +60,14 @@ const submit = () => {
         <template #header>
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-bold leading-tight text-gray-800">考勤打卡與地理圍欄設定</h2>
-                    <p class="text-xs text-gray-500 mt-1">設定公司地址、總部 GPS 座標與有效打卡半徑，超出範圍打卡將強制填寫事由說明</p>
+                    <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">考勤打卡與地理圍欄設定</h2>
+                    <p class="text-xs text-gray-500 mt-1 dark:text-gray-400">設定公司地址、總部 GPS 座標與有效打卡半徑，超出範圍打卡將強制填寫事由說明</p>
                 </div>
                 <Link
                     :href="route('attendance.index')"
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-sm transition"
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-sm transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                 >
-                    <svg class="w-4 h-4 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 mr-1.5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                     返回打卡頁面
@@ -92,8 +92,8 @@ const submit = () => {
                     <span class="text-sm font-medium">{{ $page.props.flash.error }}</span>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="px-6 py-5 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 border-b border-gray-100 flex items-center justify-between">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                    <div class="px-6 py-5 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 border-b border-gray-100 flex items-center justify-between dark:border-gray-700">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,8 +102,8 @@ const submit = () => {
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-base font-bold text-gray-900">公司基地與圍欄範圍設定</h3>
-                                <p class="text-xs text-gray-500">更新後同仁考勤打卡立即套用新規則</p>
+                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">公司基地與圍欄範圍設定</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">更新後同仁考勤打卡立即套用新規則</p>
                             </div>
                         </div>
                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
@@ -115,7 +115,7 @@ const submit = () => {
                         <!-- 辦公室名稱與地址 -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                <label class="block text-sm font-semibold text-gray-700 mb-1 dark:text-gray-300">
                                     辦公室 / 總部名稱 <span class="text-rose-500">*</span>
                                 </label>
                                 <input
@@ -123,31 +123,31 @@ const submit = () => {
                                     type="text"
                                     required
                                     placeholder="例如：台北企業總部大樓"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition dark:border-gray-700"
                                 />
                                 <p v-if="form.errors.office_name" class="mt-1 text-xs text-rose-600">{{ form.errors.office_name }}</p>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                <label class="block text-sm font-semibold text-gray-700 mb-1 dark:text-gray-300">
                                     公司詳細地址
                                 </label>
                                 <input
                                     v-model="form.office_address"
                                     type="text"
                                     placeholder="例如：台北市信義區信義路五段7號"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition dark:border-gray-700"
                                 />
                                 <p v-if="form.errors.office_address" class="mt-1 text-xs text-rose-600">{{ form.errors.office_address }}</p>
                             </div>
                         </div>
 
                         <!-- 經緯度座標與即時抓取 -->
-                        <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-200/80 space-y-4">
+                        <div class="p-5 bg-gray-50/80 rounded-xl border border-gray-200/80 space-y-4 dark:bg-gray-800/60 dark:border-gray-700">
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-800">總部中心 GPS 經緯度座標</h4>
-                                    <p class="text-xs text-gray-500">若不設定座標，全體同仁將自動判定為「遠端打卡」，不限制距離且無需填寫事由</p>
+                                    <h4 class="text-sm font-bold text-gray-800 dark:text-gray-100">總部中心 GPS 經緯度座標</h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">若不設定座標，全體同仁將自動判定為「遠端打卡」，不限制距離且無需填寫事由</p>
                                 </div>
                                 <div class="flex items-center flex-wrap gap-2">
                                     <button
@@ -169,7 +169,7 @@ const submit = () => {
                                     <button
                                         type="button"
                                         @click="form.office_lat = null; form.office_lng = null; form.allowed_radius = null"
-                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg transition"
+                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg transition dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
                                     >
                                         清空座標 (全遠端模式)
                                     </button>
@@ -179,9 +179,9 @@ const submit = () => {
                                         :href="`https://www.google.com/maps?q=${form.office_lat},${form.office_lng}`"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg transition"
+                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                                     >
-                                        <svg class="w-3.5 h-3.5 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                         </svg>
                                         地圖確認
@@ -201,7 +201,7 @@ const submit = () => {
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-600 mb-1">
+                                    <label class="block text-xs font-medium text-gray-600 mb-1 dark:text-gray-400">
                                         緯度 (Latitude) <span class="text-gray-400 font-normal">(選填)</span>
                                     </label>
                                     <input
@@ -209,12 +209,12 @@ const submit = () => {
                                         type="number"
                                         step="any"
                                         placeholder="未設定（例如 25.033964）"
-                                        class="w-full px-3.5 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono"
+                                        class="w-full px-3.5 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono dark:border-gray-700"
                                     />
                                     <p v-if="form.errors.office_lat" class="mt-1 text-xs text-rose-600">{{ form.errors.office_lat }}</p>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-600 mb-1">
+                                    <label class="block text-xs font-medium text-gray-600 mb-1 dark:text-gray-400">
                                         經度 (Longitude) <span class="text-gray-400 font-normal">(選填)</span>
                                     </label>
                                     <input
@@ -222,7 +222,7 @@ const submit = () => {
                                         type="number"
                                         step="any"
                                         placeholder="未設定（例如 121.564468）"
-                                        class="w-full px-3.5 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono"
+                                        class="w-full px-3.5 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono dark:border-gray-700"
                                     />
                                     <p v-if="form.errors.office_lng" class="mt-1 text-xs text-rose-600">{{ form.errors.office_lng }}</p>
                                 </div>
@@ -232,10 +232,10 @@ const submit = () => {
                         <!-- 限制打卡半徑 -->
                         <div class="space-y-3" :class="{ 'opacity-60': !form.office_lat || !form.office_lng }">
                             <div class="flex items-center justify-between">
-                                <label class="block text-sm font-semibold text-gray-700">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                                     限制打卡半徑（公尺）
                                 </label>
-                                <span class="text-xs text-gray-500">
+                                <span class="text-xs text-gray-500 dark:text-gray-400">
                                     <template v-if="form.office_lat && form.office_lng">
                                         目前設定：<strong class="text-blue-600 font-bold">{{ form.allowed_radius || 500 }} 公尺</strong>
                                     </template>
@@ -253,9 +253,9 @@ const submit = () => {
                                     max="50000"
                                     :disabled="!form.office_lat || !form.office_lng"
                                     placeholder="500"
-                                    class="w-48 px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-semibold text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
+                                    class="w-48 px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-semibold text-gray-900 disabled:bg-gray-100 disabled:text-gray-400 dark:text-gray-100 dark:border-gray-700"
                                 />
-                                <span class="text-sm text-gray-500">公尺 (m)</span>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">公尺 (m)</span>
                             </div>
                             <p v-if="form.errors.allowed_radius" class="text-xs text-rose-600">{{ form.errors.allowed_radius }}</p>
 
@@ -271,7 +271,7 @@ const submit = () => {
                                         'px-3 py-1 rounded-lg text-xs font-medium transition border',
                                         form.allowed_radius === preset
                                             ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                                            : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                                            : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-400'
                                     ]"
                                 >
                                     {{ preset }}m
@@ -295,10 +295,10 @@ const submit = () => {
                         </div>
 
                         <!-- 儲存按鈕 -->
-                        <div class="pt-4 border-t border-gray-100 flex items-center justify-end space-x-3">
+                        <div class="pt-4 border-t border-gray-100 flex items-center justify-end space-x-3 dark:border-gray-700">
                             <Link
                                 :href="route('attendance.index')"
-                                class="px-5 py-2.5 rounded-xl border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition"
+                                class="px-5 py-2.5 rounded-xl border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                             >
                                 取消
                             </Link>

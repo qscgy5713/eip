@@ -101,7 +101,7 @@ const getStatusBadge = (order) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <Link :href="route('meal-orders.index')" class="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-500 transition">
+                    <Link :href="route('meal-orders.index')" class="p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-500 transition dark:text-gray-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                     </Link>
                     <div>
@@ -232,7 +232,7 @@ const getStatusBadge = (order) => {
                                 type="text"
                                 required
                                 placeholder="例：四季春茶、招牌雞排飯"
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white"
+                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
                             />
                         </div>
 
@@ -244,7 +244,7 @@ const getStatusBadge = (order) => {
                                 min="0"
                                 required
                                 placeholder="例：55"
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white"
+                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
                             />
                         </div>
 
@@ -256,7 +256,7 @@ const getStatusBadge = (order) => {
                                 min="1"
                                 max="99"
                                 required
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white"
+                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
                             />
                         </div>
 
@@ -266,7 +266,7 @@ const getStatusBadge = (order) => {
                                 v-model="addItemForm.options"
                                 type="text"
                                 placeholder="例：微糖微冰、大杯、加珍珠"
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white"
+                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
                             />
                         </div>
 
@@ -276,7 +276,7 @@ const getStatusBadge = (order) => {
                                 v-model="addItemForm.notes"
                                 type="text"
                                 placeholder="例：請幫忙分開裝袋"
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white"
+                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
                             />
                         </div>
 
@@ -304,7 +304,7 @@ const getStatusBadge = (order) => {
                             @click="activeTab = 'summary'"
                             :class="[
                                 'pb-3 border-b-2 transition flex items-center gap-1.5',
-                                activeTab === 'summary' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700'
+                                activeTab === 'summary' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
                             ]"
                         >
                             <span>廚房出餐/電話下單彙總 ({{ summaryItems.length }})</span>
@@ -313,7 +313,7 @@ const getStatusBadge = (order) => {
                             @click="activeTab = 'settlement'"
                             :class="[
                                 'pb-3 border-b-2 transition flex items-center gap-1.5',
-                                activeTab === 'settlement' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700'
+                                activeTab === 'settlement' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
                             ]"
                         >
                             <span>同仁自費結算清冊 ({{ userSettlements.length }})</span>
@@ -322,7 +322,7 @@ const getStatusBadge = (order) => {
                             @click="activeTab = 'all'"
                             :class="[
                                 'pb-3 border-b-2 transition flex items-center gap-1.5',
-                                activeTab === 'all' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700'
+                                activeTab === 'all' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
                             ]"
                         >
                             <span>全部品項明細 ({{ order.items?.length || 0 }})</span>
