@@ -234,7 +234,7 @@ class PayslipController extends Controller
         }
 
         $validated = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
             'year' => ['required', 'integer', 'min:2020', 'max:2050'],
             'month' => ['required', 'integer', 'min:1', 'max:12'],
             'base_salary' => ['required', 'numeric', 'min:0'],

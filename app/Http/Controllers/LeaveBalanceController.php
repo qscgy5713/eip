@@ -182,7 +182,7 @@ class LeaveBalanceController extends Controller
 
         $validated = $request->validate([
             'year' => 'required|integer|min:2020|max:2099',
-            'department_id' => 'nullable|exists:departments,id',
+            'department_id' => 'nullable|integer|exists:departments,id',
         ]);
 
         $count = $this->leaveBalanceService->batchInitYear(

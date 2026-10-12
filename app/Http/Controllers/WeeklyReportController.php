@@ -452,7 +452,7 @@ class WeeklyReportController extends Controller
         }
 
         $validated = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
             'year' => ['required', 'integer'],
             'week_number' => ['required', 'integer'],
         ]);

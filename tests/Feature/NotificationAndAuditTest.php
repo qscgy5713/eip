@@ -37,6 +37,30 @@ class NotificationAndAuditTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_mark_as_read_redirects_only_within_the_site(): void
+    {
+        $user = User::where('email', 'employee@eip.local')->first();
+        $user->notifications()->delete();
+        $user->notify(new EipSystemNotification(title: '通知', message: '內文'));
+        $id = $user->notifications()->first()->id;
+
+        foreach (['/forms/requests/1', 'http://localhost/forms/requests/1'] as $ok) {
+            $this->actingAs($user)->post(route('notifications.read', $id), ['redirect_to' => $ok])->assertRedirect($ok);
+        }
+        foreach (['https://evil.example/phish', '//evil.example', '/\\evil.example', 'javascript:alert(1)'] as $bad) {
+            $res = $this->actingAs($user)->post(route('notifications.read', $id), ['redirect_to' => $bad]);
+            $this->assertStringNotContainsString('evil', (string) $res->headers->get('Location'));
+            $this->assertStringNotContainsString('javascript', (string) $res->headers->get('Location'));
+        }
+    }
+
+    public function test_non_uuid_notification_id_returns_404(): void
+    {
+        $user = User::where('email', 'employee@eip.local')->first();
+        $this->actingAs($user)->post('/notifications/1/read')->assertNotFound();
+        $this->actingAs($user)->delete('/notifications/1')->assertNotFound();
+    }
+
     public function test_user_can_mark_notification_as_read_and_read_all(): void
     {
         $user = User::where('email', 'employee@eip.local')->first();

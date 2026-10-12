@@ -113,10 +113,10 @@ class VisitorReservationController extends Controller
             'visit_date' => ['required', 'date'],
             'expected_arrival_time' => ['nullable', 'string', 'max:20'],
             'purpose' => ['required', 'string', 'in:business,interview,audit,vendor,other'],
-            'meeting_room_id' => ['nullable', 'exists:meeting_rooms,id'],
+            'meeting_room_id' => ['nullable', 'integer', 'exists:meeting_rooms,id'],
             'visitor_count' => ['required', 'integer', 'min:1', 'max:50'],
             'notes' => ['nullable', 'string', 'max:1000'],
-            'host_id' => ['nullable', 'exists:users,id'],
+            'host_id' => ['nullable', 'integer', 'exists:users,id'],
         ]);
 
         $hostId = ($request->user()->isAdmin() && ! empty($validated['host_id']))

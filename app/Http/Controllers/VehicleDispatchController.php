@@ -102,7 +102,7 @@ class VehicleDispatchController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'vehicle_id' => ['required', 'exists:vehicles,id'],
+            'vehicle_id' => ['required', 'integer', 'exists:vehicles,id'],
             'start_time' => ['required', 'date', 'after_or_equal:now - 30 minutes'],
             'end_time' => ['required', 'date', 'after:start_time'],
             'destination' => ['required', 'string', 'max:150'],

@@ -42,8 +42,25 @@ class NotificationController extends Controller
     /**
      * 標記單則通知為已讀
      */
+    private function isSameSiteUrl(Request $request, string $url): bool
+    {
+        if (preg_match('#^/(?![/\\\\])#', $url)) {
+            return true;
+        }
+
+        $parts = parse_url($url);
+
+        return $parts !== false
+            && in_array($parts['scheme'] ?? '', ['http', 'https'], true)
+            && isset($parts['host'])
+            && strcasecmp($parts['host'], $request->getHost()) === 0
+            && ! isset($parts['user']);
+    }
+
     public function markAsRead(Request $request, string $id): RedirectResponse
     {
+        abort_unless(\Illuminate\Support\Str::isUuid($id), 404);
+
         $notification = $request->user()->notifications()->where('id', $id)->first();
 
         if ($notification && is_null($notification->read_at)) {
@@ -51,8 +68,10 @@ class NotificationController extends Controller
         }
 
         // 若有 action_url 且為直接點擊跳轉
-        if ($request->filled('redirect_to')) {
-            return redirect($request->input('redirect_to'));
+        // 僅允許站內跳轉(相對路徑,或與本站相同網域的完整網址),避免開放式重新導向
+        $target = (string) $request->input('redirect_to');
+        if ($target !== '' && $this->isSameSiteUrl($request, $target)) {
+            return redirect($target);
         }
 
         return back()->with('success', '通知已標記為已讀。');
@@ -73,6 +92,8 @@ class NotificationController extends Controller
      */
     public function destroy(Request $request, string $id): RedirectResponse
     {
+        abort_unless(\Illuminate\Support\Str::isUuid($id), 404);
+
         $notification = $request->user()->notifications()->where('id', $id)->first();
 
         if ($notification) {

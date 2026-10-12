@@ -108,7 +108,7 @@ class AssetController extends Controller
             'specification' => ['nullable', 'string'],
             'location' => ['nullable', 'string', 'max:100'],
             'status' => ['nullable', 'in:available,in_use,maintenance,retired'],
-            'department_id' => ['nullable', 'exists:departments,id'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'purchase_date' => ['nullable', 'date'],
             'purchase_cost' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
@@ -173,7 +173,7 @@ class AssetController extends Controller
             'specification' => ['nullable', 'string'],
             'location' => ['nullable', 'string', 'max:100'],
             'status' => ['required', 'in:available,in_use,maintenance,retired'],
-            'department_id' => ['nullable', 'exists:departments,id'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'purchase_date' => ['nullable', 'date'],
             'purchase_cost' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
@@ -233,7 +233,7 @@ class AssetController extends Controller
         }
 
         $validated = $request->validate([
-            'borrower_id' => ['nullable', 'exists:users,id'],
+            'borrower_id' => ['nullable', 'integer', 'exists:users,id'],
             'expected_return_date' => ['nullable', 'date', 'after_or_equal:today'],
             'purpose' => ['required', 'string', 'max:500'],
         ]);

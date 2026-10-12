@@ -213,7 +213,7 @@ class TicketController extends Controller
         }
 
         $validated = $request->validate([
-            'assigned_to' => ['required', 'exists:users,id'],
+            'assigned_to' => ['required', 'integer', 'exists:users,id'],
         ]);
 
         $assignee = User::findOrFail($validated['assigned_to']);

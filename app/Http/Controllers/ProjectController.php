@@ -106,13 +106,13 @@ class ProjectController extends Controller
             'code' => ['required', 'string', 'max:50', 'unique:projects,code'],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string'],
-            'department_id' => ['nullable', 'exists:departments,id'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'priority' => ['required', 'in:urgent,high,medium,low'],
             'status' => ['required', 'in:active,on_hold,completed,archived'],
             'start_date' => ['nullable', 'date'],
             'due_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'member_ids' => ['nullable', 'array'],
-            'member_ids.*' => ['exists:users,id'],
+            'member_ids.*' => ['integer', 'exists:users,id'],
         ]);
 
         $project = DB::transaction(function () use ($validated, $user) {
@@ -215,13 +215,13 @@ class ProjectController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string'],
-            'department_id' => ['nullable', 'exists:departments,id'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'priority' => ['required', 'in:urgent,high,medium,low'],
             'status' => ['required', 'in:active,on_hold,completed,archived'],
             'start_date' => ['nullable', 'date'],
             'due_date' => ['nullable', 'date'],
             'member_ids' => ['nullable', 'array'],
-            'member_ids.*' => ['exists:users,id'],
+            'member_ids.*' => ['integer', 'exists:users,id'],
         ]);
 
         DB::transaction(function () use ($project, $validated) {

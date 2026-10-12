@@ -81,7 +81,7 @@ class DocumentController extends Controller
             'title' => ['required', 'string', 'max:150'],
             'category' => ['required', 'string', 'in:policy,template,tech,training'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'department_id' => ['nullable', 'exists:departments,id'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'restricted_roles' => ['nullable', 'array'],
             'restricted_roles.*' => ['string', 'in:admin,manager,employee,hr'],
             'version_label' => ['nullable', 'string', 'max:20'],
@@ -138,7 +138,7 @@ class DocumentController extends Controller
             'title' => ['required', 'string', 'max:150'],
             'category' => ['required', 'string', 'in:policy,template,tech,training'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'department_id' => ['nullable', 'exists:departments,id'],
+            'department_id' => ['nullable', 'integer', 'exists:departments,id'],
             'restricted_roles' => ['nullable', 'array'],
             'restricted_roles.*' => ['string', 'in:admin,manager,employee,hr'],
         ]);

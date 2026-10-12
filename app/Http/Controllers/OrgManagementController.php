@@ -173,7 +173,7 @@ class OrgManagementController extends Controller
             'parent_id' => [
                 'nullable',
                 'integer',
-                'exists:departments,id',
+                'integer', 'exists:departments,id',
                 Rule::notIn([$department->id]), // 防範將自己設為父部門
             ],
             'leader_id' => 'nullable|integer|exists:users,id',
@@ -219,7 +219,7 @@ class OrgManagementController extends Controller
                 'present',
                 'nullable',
                 'integer',
-                'exists:departments,id',
+                'integer', 'exists:departments,id',
                 Rule::notIn([$department->id]),
             ],
             'sort_order' => 'nullable|integer|min:0',

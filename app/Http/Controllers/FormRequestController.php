@@ -451,7 +451,7 @@ class FormRequestController extends Controller
             'target_user_id' => [
                 'required',
                 'integer',
-                'exists:users,id',
+                'integer', 'exists:users,id',
                 Rule::notIn([$user->id]),
             ],
             'reason' => 'required|string|max:500',
@@ -497,7 +497,7 @@ class FormRequestController extends Controller
             'target_user_id' => [
                 'required',
                 'integer',
-                'exists:users,id',
+                'integer', 'exists:users,id',
                 Rule::notIn([$user->id]),
             ],
             'reason' => 'required|string|max:500',

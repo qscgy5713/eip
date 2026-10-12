@@ -55,7 +55,7 @@ class DelegationController extends Controller
         $validated = $request->validate([
             'delegate_id' => [
                 'required',
-                'exists:users,id',
+                'integer', 'exists:users,id',
                 function ($attribute, $value, $fail) use ($user) {
                     if ((int)$value === (int)$user->id) {
                         $fail('代理人不能設定為自己。');

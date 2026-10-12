@@ -90,7 +90,7 @@ class MeetingRoomController extends Controller
     public function storeBooking(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'meeting_room_id' => ['required', 'exists:meeting_rooms,id'],
+            'meeting_room_id' => ['required', 'integer', 'exists:meeting_rooms,id'],
             'title' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:1000'],
             'start_time' => ['required', 'date'],
