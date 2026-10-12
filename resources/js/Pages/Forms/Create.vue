@@ -25,20 +25,20 @@ if (props.form.fields_schema) {
 
 const formState = useForm({
     title: `${props.form.name}申請`,
-    data: initialData,
+    fields: initialData, // 不可命名為 data:useForm 的 data 為內建方法
     attachments: [],
 });
 
 const selectedLeaveTypeBalance = computed(() => {
     if (!props.leaveBalances || props.form.code !== 'LEAVE') return null;
-    const currentSelectedType = formState.data.leave_type;
+    const currentSelectedType = formState.fields.leave_type;
     return props.leaveBalances.find(b => b.type_label === currentSelectedType || b.leave_type === currentSelectedType);
 });
 
 const isQuotaExceeded = computed(() => {
     if (!selectedLeaveTypeBalance.value) return false;
     if (!selectedLeaveTypeBalance.value.is_hard_quota) return false;
-    const requested = parseFloat(formState.data.days || 0);
+    const requested = parseFloat(formState.fields.days || 0);
     return requested > selectedLeaveTypeBalance.value.available_days;
 });
 
@@ -60,7 +60,7 @@ const formatSize = (bytes) => {
 };
 
 const submit = () => {
-    formState.post(route('forms.store', props.form.id), {
+    formState.transform(({ fields, ...rest }) => ({ ...rest, data: fields })).post(route('forms.store', props.form.id), {
         forceFormData: true,
         preserveScroll: true,
     });
@@ -135,7 +135,7 @@ const submit = () => {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                             <span>
-                                <strong>額度不足警示：</strong>您所選的「{{ selectedLeaveTypeBalance?.type_label }}」剩餘可用為 <strong>{{ selectedLeaveTypeBalance?.available_days }}</strong> 天，本次欲申請 <strong>{{ formState.data.days }}</strong> 天已超出可用天數，請調整申請天數！
+                                <strong>額度不足警示：</strong>您所選的「{{ selectedLeaveTypeBalance?.type_label }}」剩餘可用為 <strong>{{ selectedLeaveTypeBalance?.available_days }}</strong> 天，本次欲申請 <strong>{{ formState.fields.days }}</strong> 天已超出可用天數，請調整申請天數！
                             </span>
                         </div>
 
@@ -156,7 +156,7 @@ const submit = () => {
 
                             <select
                                 v-if="field.type === 'select'"
-                                v-model="formState.data[field.key]"
+                                v-model="formState.fields[field.key]"
                                 class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
                             >
                                 <option v-for="opt in field.options" :key="opt" :value="opt">{{ opt }}</option>
@@ -164,7 +164,7 @@ const submit = () => {
 
                             <textarea
                                 v-else-if="field.type === 'textarea'"
-                                v-model="formState.data[field.key]"
+                                v-model="formState.fields[field.key]"
                                 rows="3"
                                 class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
                             ></textarea>
@@ -172,7 +172,7 @@ const submit = () => {
                             <input
                                 v-else
                                 :type="field.type || 'text'"
-                                v-model="formState.data[field.key]"
+                                v-model="formState.fields[field.key]"
                                 class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
                             />
 

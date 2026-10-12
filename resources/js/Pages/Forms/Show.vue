@@ -110,14 +110,15 @@ const submitRevision = () => {
 
 // 申請人修改表單並重新提交 Modal
 const showResubmitModal = ref(false);
+// 注意:useForm 的 `data` 是內建方法名稱,表單欄位改用 `fields`,送出時再轉回後端需要的 `data`
 const resubmitForm = useForm({
-    data: { ...(props.formRequest.data || {}) },
+    fields: { ...(props.formRequest.data || {}) },
     resubmit_note: '',
     attachments: [],
 });
 
 const openResubmitModal = () => {
-    resubmitForm.data = { ...(props.formRequest.data || {}) };
+    resubmitForm.fields = { ...(props.formRequest.data || {}) };
     resubmitForm.resubmit_note = '';
     resubmitForm.attachments = [];
     resubmitForm.clearErrors();
@@ -129,7 +130,7 @@ const handleResubmitFileChange = (e) => {
 };
 
 const submitResubmit = () => {
-    resubmitForm.post(route('forms.requests.resubmit', props.formRequest.id), {
+    resubmitForm.transform(({ fields, ...rest }) => ({ ...rest, data: fields })).post(route('forms.requests.resubmit', props.formRequest.id), {
         onSuccess: () => {
             showResubmitModal.value = false;
         },
@@ -852,11 +853,11 @@ const openDiffViewer = (rev = null) => {
                         <form @submit.prevent="submitResubmit" class="space-y-4">
                             <!-- 動態欄位編輯表單 -->
                             <div class="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
-                                <div v-for="(val, key) in resubmitForm.data" :key="key" class="space-y-1">
+                                <div v-for="(val, key) in resubmitForm.fields" :key="key" class="space-y-1">
                                     <label class="block text-xs font-semibold text-gray-700 capitalize dark:text-gray-300">{{ fieldLabel(key) }}</label>
                                     <input
                                         type="text"
-                                        v-model="resubmitForm.data[key]"
+                                        v-model="resubmitForm.fields[key]"
                                         class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 dark:border-gray-700"
                                     />
                                 </div>
