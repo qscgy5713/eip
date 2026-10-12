@@ -1,11 +1,32 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-12(續)全選單 × 多角色功能走查
+- **範圍**:以 admin / manager / hr / employee 與新建帳號逐一操作各選單的寫入流程(資產借還、專案任務、投票、組織部門與帳號、停權/復職、訪客簽到退、訂餐全流程、內訓報名到結訓、文件庫上傳/歷程/刪除、Webhook、考勤設定與報表、稽核日誌)。
+- **修正**:
+  - 派車:核准按鈕只給審核者(`isApprover`)、歸還欄位 `return_notes` 對齊、錯誤顯示。
+  - 全域錯誤 toast(`AuthenticatedLayout`),驗證失敗不再靜默。
+  - 新增 `lang/zh_TW/*`(原本缺,錯誤訊息顯示 `validation.min.numeric`)。
+  - `AppServiceProvider` 模型綁定參數限數字,`/assets/create` 這類網址由 500 改 404。
+  - 福利頁 HR 開啟 500(`reward.category` 未選取)。
+  - 訂餐詳情頁橘色點餐框與分頁改為全站 indigo 風格。
+- **確認正常**:停權帳號無法登入且有明確訊息;無直屬主管者送單自動交管理員;Webhook 擋 localhost(SSRF 防護)。
+- **待決/已知問題**:
+  - 系統時區為 UTC,畫面時間比台北少/多 8 小時,建議 `APP_TIMEZONE=Asia/Taipei`(待確認)。
+  - 公告有 update 路由但前端無編輯入口。
+  - 組織資料品質:多位主管未指派、殘留 test/test2/test3 部門。
+- 測試資料(`[測試]`)已清除;vehicle 1 里程與員工特休額度已還原。測試 337 通過。
+
 ## 2026-10-12
 ### 示範資料與詳情頁驗證
 - 新增 `database/seeders/DemoModulesSeeder.php`（可重複執行）：為訂餐、工單、派車、訪客、內訓、專案、資產、週報、投票、薪資單補示範資料；執行 `php artisan db:seed --class=DemoModulesSeeder`。
 - **修正 bug**：`MealOrders/Show` 前端讀取 `userSettlements`、`summaryItems[].total_quantity/options`、`userSettlements[].user_name/total_amount/is_fully_paid`，但後端欄位名稱與結構不一致，造成整頁空白（先前測試只斷言 HTTP 200 而漏掉）。已調整 `MealOrderController@show` 並新增 `test_show_page_exposes_props_the_frontend_reads` 迴歸測試。
 - **修正顯示**：週報 Show/Edit/Index 的週期原本顯示 `2026-10-12T00:00:00.000000Z`，改為 `YYYY-MM-DD`。
 - 已用瀏覽器檢視 tickets、vehicles、trainings、visitor-reservations、meal-orders、projects、assets、weekly-reports、polls、payslips 詳情頁，皆可正常渲染；全系統 331 項測試通過。
+
+### 組織樹狀圖畫面
+- **問題**：`OrgManagement/Index` 樹狀圖畫布同時使用 `flex justify-center` 與 `overflow-x-auto`，內容比畫布寬時左側被切掉且無法捲到（總經理室被擠出畫面）；且以 `transform: scale` 縮放不會縮小版面寬度，縮小後仍需橫向捲動。
+- **修法**：改用 CSS `zoom`（真的縮小版面）與 `w-max mx-auto`；新增「自動適配」：載入、切換回樹狀圖、視窗縮放（200ms debounce）時量測樹寬並縮放至剛好放進畫布（上限 100%、下限 40%），點中間的百分比也會重新適配；縮放範圍 60–140% 放寬為 40–140%。
+- 桌機（1440px）自動縮放 66%，7 個部門全部可見；手機寬度縮到 40% 仍放不下，但可橫向捲動且不再被切。
 
 ### 後續修正
 - **表單詳情**：`Forms/Show` 依範本 `fields_schema` 顯示中文欄位標籤（詳情、重送編輯、修改比對三處），找不到時退回原鍵值。

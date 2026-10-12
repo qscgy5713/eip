@@ -32,4 +32,13 @@ class ErrorPageTest extends TestCase
             ->assertStatus(404)
             ->assertJsonStructure(['message']);
     }
+
+    public function test_non_numeric_ids_return_404_instead_of_500(): void
+    {
+        $user = User::factory()->create();
+
+        foreach (['/assets/create', '/polls/create', '/tickets/abc', '/meal-orders/new'] as $url) {
+            $this->actingAs($user)->get($url)->assertStatus(404);
+        }
+    }
 }

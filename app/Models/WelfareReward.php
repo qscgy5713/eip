@@ -44,7 +44,7 @@ class WelfareReward extends Model
 
     public function getCategoryLabelAttribute(): string
     {
-        return self::CATEGORIES[$this->category] ?? $this->category;
+        return self::CATEGORIES[$this->category] ?? (string) $this->category;
     }
 
     /**

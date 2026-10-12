@@ -163,6 +163,20 @@ class RecognitionAndWelfareTest extends TestCase
         $this->assertCount(1, $this->user->notifications);
     }
 
+    public function test_hr_can_open_welfare_page_while_redemptions_are_pending(): void
+    {
+        $reward = WelfareReward::create(['name' => '咖啡券', 'points_cost' => 10, 'stock' => 3, 'category' => 'beverage']);
+        PointWallet::getOrCreateForUser($this->user)->update(['reward_points' => 50]);
+        $this->actingAs($this->user)->post(route('welfare.redeem', $reward))->assertRedirect();
+
+        $this->actingAs($this->hrUser)->get(route('welfare.index'))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->component('Welfare/Index')
+                ->has('manageQueue', 1)
+                ->where('manageQueue.0.reward.category', 'beverage'));
+    }
+
     public function test_redeem_rejects_insufficient_points_and_inactive_reward(): void
     {
         $reward = WelfareReward::create(['name' => '禮品卡', 'points_cost' => 100, 'stock' => -1, 'category' => 'gift_card']);

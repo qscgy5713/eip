@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import OrgTreeNode from '@/Components/OrgTreeNode.vue';
@@ -144,16 +144,51 @@ const openCreateChildDeptModal = (parentDept) => {
 // ================= 視覺組織圖視圖控制與拖曳調整 =================
 const orgViewMode = ref('chart'); // 'chart' (視覺樹狀圖) | 'list' (階層卡片總覽)
 const zoomLevel = ref(100);
+const ZOOM_MIN = 40;
+const ZOOM_MAX = 140;
+const chartCanvas = ref(null);
+const chartTree = ref(null);
 
 const zoomIn = () => {
-    if (zoomLevel.value < 140) zoomLevel.value += 10;
+    if (zoomLevel.value < ZOOM_MAX) zoomLevel.value += 10;
 };
 const zoomOut = () => {
-    if (zoomLevel.value > 60) zoomLevel.value -= 10;
+    if (zoomLevel.value > ZOOM_MIN) zoomLevel.value -= 10;
 };
-const resetZoom = () => {
+
+// 自動適配:量出樹在 100% 時的自然寬度,縮放到剛好放進畫布 (不放大超過 100%)
+const fitToCanvas = async () => {
     zoomLevel.value = 100;
+    await nextTick();
+    const canvas = chartCanvas.value;
+    const tree = chartTree.value;
+    if (!canvas || !tree) return;
+    const style = getComputedStyle(canvas);
+    const available = canvas.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+    const natural = tree.offsetWidth;
+    if (natural <= 0 || available <= 0) return;
+    const fit = Math.floor((available / natural) * 100);
+    zoomLevel.value = Math.max(ZOOM_MIN, Math.min(100, fit));
 };
+
+let resizeTimer = null;
+const onResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        if (orgViewMode.value === 'chart') fitToCanvas();
+    }, 200);
+};
+onMounted(() => {
+    fitToCanvas();
+    window.addEventListener('resize', onResize);
+});
+onBeforeUnmount(() => {
+    clearTimeout(resizeTimer);
+    window.removeEventListener('resize', onResize);
+});
+watch(orgViewMode, (mode) => {
+    if (mode === 'chart') nextTick(fitToCanvas);
+});
 
 // 節點折疊收合管理
 const collapsedDeptIds = ref(new Set());
@@ -735,14 +770,14 @@ const statusLabel = (status) => {
                                     @click="zoomOut"
                                     class="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white rounded transition dark:text-gray-400"
                                     title="縮小畫布"
-                                    :disabled="zoomLevel <= 60"
+                                    :disabled="zoomLevel <= ZOOM_MIN"
                                 >
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
                                 </button>
                                 <button
-                                    @click="resetZoom"
+                                    @click="fitToCanvas"
                                     class="px-2 py-1 font-mono font-bold text-3xs text-gray-700 hover:text-indigo-600 transition dark:text-gray-300"
-                                    title="重設為 100%"
+                                    title="自動適配畫布"
                                 >
                                     {{ zoomLevel }}%
                                 </button>
@@ -750,7 +785,7 @@ const statusLabel = (status) => {
                                     @click="zoomIn"
                                     class="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white rounded transition dark:text-gray-400"
                                     title="放大畫布"
-                                    :disabled="zoomLevel >= 140"
+                                    :disabled="zoomLevel >= ZOOM_MAX"
                                 >
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                                 </button>
@@ -823,10 +858,11 @@ const statusLabel = (status) => {
                         </div>
 
                         <!-- 樹狀圖可拖曳縮放大畫布 -->
-                        <div class="p-8 sm:p-12 overflow-x-auto min-h-[550px] bg-radial from-slate-50/50 to-white flex justify-center">
+                        <div ref="chartCanvas" class="p-8 sm:p-12 overflow-auto min-h-[550px] bg-radial from-slate-50/50 to-white">
                             <div
-                                :style="{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }"
-                                class="transition-transform duration-150 inline-flex flex-col items-center select-none"
+                                ref="chartTree"
+                                :style="{ zoom: zoomLevel / 100 }"
+                                class="w-max mx-auto flex flex-col items-center select-none"
                             >
                                 <!-- 頂層企業總部全景根節點 -->
                                 <div class="flex flex-col items-center">

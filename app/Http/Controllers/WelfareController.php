@@ -45,7 +45,7 @@ class WelfareController extends Controller
             ->get();
 
         $manageQueue = $canManage
-            ? WelfareRedemption::with(['user:id,name', 'user.department:id,name', 'reward:id,name'])
+            ? WelfareRedemption::with(['user:id,name', 'user.department:id,name', 'reward:id,name,category'])
                 ->orderByRaw("CASE status WHEN 'pending' THEN 0 ELSE 1 END")
                 ->latest('id')
                 ->limit(50)
@@ -183,7 +183,7 @@ class WelfareController extends Controller
             'fulfilled_at' => now(),
         ]);
 
-        $welfareRedemption->load('reward:id,name');
+        $welfareRedemption->load('reward:id,name,category');
         $welfareRedemption->user->notify(new EipSystemNotification(
             title: '【福利發放】兌換品已核發',
             message: "您兌換的《{$welfareRedemption->reward->name}》({$welfareRedemption->redemption_code}) 已由人資核發，請查收。",

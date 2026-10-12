@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, computed, onBeforeUnmount } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -7,9 +7,34 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import CommandPalette from '@/Components/CommandPalette.vue';
 import ThemeToggle from '@/Components/ThemeToggle.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+// 全站錯誤提示:許多頁面的表單沒有逐欄顯示驗證錯誤,這裡統一以提示條呈現,避免操作失敗卻毫無回饋
+const page = usePage();
+const errorToast = ref([]);
+let errorToastTimer = null;
+const collectErrors = () => {
+    const messages = Object.values(page.props.errors || {}).filter(Boolean).map(String);
+    const flashError = page.props.flash?.error;
+    if (flashError) messages.push(String(flashError));
+    return [...new Set(messages)];
+};
+watch(
+    () => [page.props.errors, page.props.flash?.error],
+    () => {
+        const messages = collectErrors();
+        clearTimeout(errorToastTimer);
+        errorToast.value = messages;
+        if (messages.length) {
+            errorToastTimer = setTimeout(() => (errorToast.value = []), 8000);
+        }
+    },
+    { immediate: true, deep: true },
+);
+onBeforeUnmount(() => clearTimeout(errorToastTimer));
+const hasErrorToast = computed(() => errorToast.value.length > 0);
 const commandPaletteRef = ref(null);
 
 // 桌機導覽：高頻項目固定於主列，其餘收納進「更多應用」下拉選單
@@ -619,6 +644,23 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
             <main>
                 <slot />
             </main>
+        </div>
+
+        <!-- 全站錯誤提示條 -->
+        <div
+            v-if="hasErrorToast"
+            role="alert"
+            class="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-96 z-[60] rounded-xl border border-rose-200 bg-white p-4 shadow-lg dark:border-rose-900/60 dark:bg-gray-800"
+        >
+            <div class="flex items-start gap-3">
+                <div class="min-w-0 flex-1">
+                    <p class="text-sm font-semibold text-rose-700 dark:text-rose-400">操作未完成,請修正以下問題</p>
+                    <ul class="mt-1 list-disc space-y-0.5 pl-4 text-xs text-gray-700 dark:text-gray-300">
+                        <li v-for="m in errorToast" :key="m">{{ m }}</li>
+                    </ul>
+                </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" aria-label="關閉" @click="errorToast = []">✕</button>
+            </div>
         </div>
 
         <!-- 全站快捷搜尋指揮中心 (Global Command Palette) -->

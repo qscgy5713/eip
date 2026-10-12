@@ -114,7 +114,7 @@ const getStatusBadge = (order) => {
                             </span>
                         </div>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-3">
-                            <span>店家：<strong class="text-orange-600 dark:text-orange-400">{{ order.restaurant_name }}</strong></span>
+                            <span>店家：<strong class="text-indigo-600 dark:text-indigo-400">{{ order.restaurant_name }}</strong></span>
                             <span v-if="order.restaurant_phone">電話：{{ order.restaurant_phone }}</span>
                             <span>發起人：{{ order.creator?.name }}</span>
                         </p>
@@ -139,7 +139,7 @@ const getStatusBadge = (order) => {
                     </button>
                     <button
                         @click="notifyParticipants"
-                        class="px-3.5 py-2 text-xs font-bold text-orange-700 bg-orange-100 hover:bg-orange-200 dark:bg-orange-950/60 dark:text-orange-300 rounded-xl transition"
+                        class="px-3.5 py-2 text-xs font-bold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 rounded-xl transition"
                     >
                          一鍵催繳自費
                     </button>
@@ -174,7 +174,7 @@ const getStatusBadge = (order) => {
                                 說明：{{ order.description }}
                             </p>
                             <div v-if="order.menu_url" class="mt-2">
-                                <a :href="order.menu_url" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-semibold text-orange-600 dark:text-orange-400 hover:underline">
+                                <a :href="order.menu_url" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
                                     <span>開啟官方線上菜單</span>
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                                 </a>
@@ -193,7 +193,7 @@ const getStatusBadge = (order) => {
                             </div>
                             <div v-if="order.minimum_order_amount" class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 mt-2 overflow-hidden">
                                 <div
-                                    class="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                                    class="bg-indigo-500 h-2 rounded-full transition-all duration-300"
                                     :style="{ width: progressPercentage + '%' }"
                                 ></div>
                             </div>
@@ -208,75 +208,75 @@ const getStatusBadge = (order) => {
                                 {{ order.subsidy_per_person > 0 ? `每位參與同仁補助 $${order.subsidy_per_person}` : '本活動無補助 (全額自費)' }}
                             </p>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                目前已有 <strong class="text-orange-600 font-bold">{{ order.participants_count }}</strong> 位同仁點餐
+                                目前已有 <strong class="text-indigo-600 font-bold">{{ order.participants_count }}</strong> 位同仁點餐
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <!-- 點餐輸入卡片 (當活動 open 且未截止時可用) -->
-                <div v-if="isOrderingAllowed" class="bg-gradient-to-r from-orange-500 to-amber-600 rounded-2xl p-6 text-white shadow-md">
+                <div v-if="isOrderingAllowed" class="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
                     <div class="flex items-center gap-2 mb-4">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         <div>
-                            <h3 class="text-base font-bold">我要點餐 / 新增品項</h3>
-                            <p class="text-xs text-orange-100">填寫品項名稱、單價與規格（如甜度、冰塊、口味），系統自動計費！</p>
+                            <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">我要點餐 / 新增品項</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">填寫品項名稱、單價與規格（如甜度、冰塊、口味），系統自動計費！</p>
                         </div>
                     </div>
 
                     <form @submit.prevent="submitAddItem" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
                         <div class="lg:col-span-2">
-                            <label class="block font-semibold text-orange-100 mb-1">餐點/飲料名稱 *</label>
+                            <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">餐點/飲料名稱 *</label>
                             <input
                                 v-model="addItemForm.item_name"
                                 type="text"
                                 required
                                 placeholder="例：四季春茶、招牌雞排飯"
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
+                                class="w-full rounded-xl bg-gray-50 text-gray-900 border-gray-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
                             />
                         </div>
 
                         <div>
-                            <label class="block font-semibold text-orange-100 mb-1">單價 ($) *</label>
+                            <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">單價 ($) *</label>
                             <input
                                 v-model="addItemForm.unit_price"
                                 type="number"
                                 min="0"
                                 required
                                 placeholder="例：55"
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
+                                class="w-full rounded-xl bg-gray-50 text-gray-900 border-gray-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
                             />
                         </div>
 
                         <div>
-                            <label class="block font-semibold text-orange-100 mb-1">數量 *</label>
+                            <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">數量 *</label>
                             <input
                                 v-model="addItemForm.quantity"
                                 type="number"
                                 min="1"
                                 max="99"
                                 required
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
+                                class="w-full rounded-xl bg-gray-50 text-gray-900 border-gray-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
                             />
                         </div>
 
                         <div>
-                            <label class="block font-semibold text-orange-100 mb-1">規格/客製化</label>
+                            <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">規格/客製化</label>
                             <input
                                 v-model="addItemForm.options"
                                 type="text"
                                 placeholder="例：微糖微冰、大杯、加珍珠"
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
+                                class="w-full rounded-xl bg-gray-50 text-gray-900 border-gray-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
                             />
                         </div>
 
                         <div class="sm:col-span-2 lg:col-span-4">
-                            <label class="block font-semibold text-orange-100 mb-1">備註</label>
+                            <label class="block font-semibold text-gray-600 dark:text-gray-300 mb-1">備註</label>
                             <input
                                 v-model="addItemForm.notes"
                                 type="text"
                                 placeholder="例：請幫忙分開裝袋"
-                                class="w-full rounded-xl bg-white text-gray-900 border-none text-xs focus:ring-2 focus:ring-white dark:bg-gray-800 dark:text-gray-100"
+                                class="w-full rounded-xl bg-gray-50 text-gray-900 border-gray-200 text-xs focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
                             />
                         </div>
 
@@ -284,7 +284,7 @@ const getStatusBadge = (order) => {
                             <button
                                 type="submit"
                                 :disabled="addItemForm.processing"
-                                class="w-full py-2.5 px-4 bg-gray-900 hover:bg-black text-white font-bold rounded-xl transition shadow-md flex items-center justify-center gap-1.5 active:scale-95"
+                                class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-1.5 active:scale-95"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                                 <span>送出點餐</span>
@@ -304,7 +304,7 @@ const getStatusBadge = (order) => {
                             @click="activeTab = 'summary'"
                             :class="[
                                 'pb-3 border-b-2 transition flex items-center gap-1.5',
-                                activeTab === 'summary' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
+                                activeTab === 'summary' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
                             ]"
                         >
                             <span>廚房出餐/電話下單彙總 ({{ summaryItems.length }})</span>
@@ -313,7 +313,7 @@ const getStatusBadge = (order) => {
                             @click="activeTab = 'settlement'"
                             :class="[
                                 'pb-3 border-b-2 transition flex items-center gap-1.5',
-                                activeTab === 'settlement' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
+                                activeTab === 'settlement' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
                             ]"
                         >
                             <span>同仁自費結算清冊 ({{ userSettlements.length }})</span>
@@ -322,7 +322,7 @@ const getStatusBadge = (order) => {
                             @click="activeTab = 'all'"
                             :class="[
                                 'pb-3 border-b-2 transition flex items-center gap-1.5',
-                                activeTab === 'all' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
+                                activeTab === 'all' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400'
                             ]"
                         >
                             <span>全部品項明細 ({{ order.items?.length || 0 }})</span>
@@ -331,7 +331,7 @@ const getStatusBadge = (order) => {
                             @click="activeTab = 'my'"
                             :class="[
                                 'pb-3 border-b-2 transition flex items-center gap-1.5',
-                                activeTab === 'my' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700'
+                                activeTab === 'my' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 hover:text-gray-700'
                             ]"
                         >
                             <span>我的點餐 ({{ myItems.length }})</span>
@@ -370,7 +370,7 @@ const getStatusBadge = (order) => {
                                         </td>
                                         <td class="py-3 text-center font-mono text-gray-600 dark:text-gray-300">${{ item.unit_price }}</td>
                                         <td class="py-3 text-center">
-                                            <span class="px-2.5 py-1 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-700 dark:text-orange-300 font-extrabold text-xs">
+                                            <span class="px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-extrabold text-xs">
                                                 x {{ item.total_quantity }}
                                             </span>
                                         </td>
@@ -418,7 +418,7 @@ const getStatusBadge = (order) => {
                                         <td class="py-3 text-right font-mono text-emerald-600 dark:text-emerald-400">
                                             - ${{ Number(user.subsidy).toLocaleString() }}
                                         </td>
-                                        <td class="py-3 text-right font-mono font-bold text-base text-orange-600 dark:text-orange-400">
+                                        <td class="py-3 text-right font-mono font-bold text-base text-indigo-600 dark:text-indigo-400">
                                             ${{ Number(user.net_payable).toLocaleString() }}
                                         </td>
                                         <td class="py-3 text-center">
@@ -523,7 +523,7 @@ const getStatusBadge = (order) => {
                                         <td class="py-3 text-gray-500 dark:text-gray-400">{{ item.options || '-' }}</td>
                                         <td class="py-3 text-center font-mono">${{ item.unit_price }}</td>
                                         <td class="py-3 text-center font-mono font-bold">{{ item.quantity }}</td>
-                                        <td class="py-3 text-right font-mono font-bold text-orange-600 dark:text-orange-400">${{ Number(item.subtotal).toLocaleString() }}</td>
+                                        <td class="py-3 text-right font-mono font-bold text-indigo-600 dark:text-indigo-400">${{ Number(item.subtotal).toLocaleString() }}</td>
                                         <td class="py-3 text-center">
                                             <span
                                                 :class="[
