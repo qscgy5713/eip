@@ -205,8 +205,8 @@ const printDispatchOrder = () => {
                 <div class="lg:col-span-2 space-y-6">
                     <!-- 行程資訊卡 -->
                     <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6 border border-gray-100 dark:border-gray-700">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-                            <span>公務出差行程明細</span>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-100 dark:border-gray-700 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                            <span class="whitespace-nowrap">公務出差行程明細</span>
                             <span class="text-xs font-normal text-gray-500 dark:text-gray-400">事由：{{ dispatch.purpose_label }}</span>
                         </h3>
 

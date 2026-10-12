@@ -13,6 +13,7 @@
 - **錯誤頁**：新增 `Pages/Error.vue`，於 `bootstrap/app.php` 對 403/404/419（及非 debug 的 500/503）以 Inertia 呈現中文錯誤頁，JSON/API 請求維持原樣；新增 `tests/Feature/ErrorPageTest.php`。全系統 333 項測試通過。
 - **訂餐列表統計**：`MealOrders/Index` 讀取 `openOrders/todayOrders/myJoinedCount/myPendingPayable`，後端原本回傳不同鍵名，造成卡片數字空白與「$非數值」。後端對齊（待繳金額為各未結清訂單小計扣補助、最低 0），並強化 index 測試斷言。
 - **深色模式**：Trainings/Vehicles 共 4 檔使用了不存在的 `dark:bg-gray-750`，卡片在深色下仍是淺色；於 `tailwind.config.js` 的 gray 補上 `750` (#262e40)。
+- **手機版**：以 340px iframe 檢查訂餐、工單、派車、資產、訪客、內訓、專案詳情；僅派車詳情卡片標題被右側「事由」擠成兩行，改為可換行並讓標題不折斷。
 - 已瀏覽檢視 tickets/vehicles/visitor-reservations/assets/projects/polls/weekly-reports 列表與 tickets/vehicles/visitor 詳情，無其他異常。
 
 ### 全站視覺改版：現代 SaaS 簡潔風
