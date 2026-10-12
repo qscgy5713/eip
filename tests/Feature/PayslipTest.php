@@ -270,4 +270,27 @@ class PayslipTest extends TestCase
                 ->has('users')
                 ->has('payslips.data', 1));
     }
+
+    public function test_manage_stats_only_count_published_payslips(): void
+    {
+        $hr = User::factory()->create(['role' => 'hr']);
+        $employee = User::factory()->create(['role' => 'employee']);
+
+        foreach ([['published', 1], ['draft', 2]] as [$status, $month]) {
+            Payslip::create([
+                'user_id' => $employee->id,
+                'year' => now()->year,
+                'month' => $month,
+                'period' => sprintf('%d-%02d', now()->year, $month),
+                'base_salary' => 50000,
+                'status' => $status,
+            ]);
+        }
+
+        $this->actingAs($hr)->get(route('payslips.index'))
+            ->assertInertia(fn ($page) => $page
+                ->has('payslips.data', 2)
+                ->where('stats.count', 1)
+                ->where('stats.total_net', 50000));
+    }
 }

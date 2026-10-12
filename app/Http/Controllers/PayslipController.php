@@ -76,11 +76,13 @@ class PayslipController extends Controller
             ];
 
             // 前端統計卡片使用的鍵名
+            // 統計卡只計已發布薪資單,草稿尚未生效不列入累計
+            $publishedPayslips = $statsPayslips->where('status', 'published');
             $stats = [
-                'total_net' => $manageStats['total_net_pay'],
-                'total_gross' => $manageStats['total_gross_pay'],
-                'total_deductions' => (float) $statsPayslips->sum('total_deductions'),
-                'count' => $manageStats['total_count'],
+                'total_net' => (float) $publishedPayslips->sum('net_pay'),
+                'total_gross' => (float) $publishedPayslips->sum('total_earnings'),
+                'total_deductions' => (float) $publishedPayslips->sum('total_deductions'),
+                'count' => $publishedPayslips->count(),
             ];
 
             $departments = Department::orderBy('name')->get(['id', 'name']);
