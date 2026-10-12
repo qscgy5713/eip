@@ -160,6 +160,7 @@ class MultilevelWorkflowTest extends TestCase
         $this->actingAs($this->employee)->post(route('forms.store', $this->leaveForm->id), [
             'title' => '專案上線期間請長假',
             'data' => [
+                'start_date' => '2026-11-02', 'end_date' => '2026-11-02',
                 'leave_type' => '事假',
                 'days' => 5,
                 'reason' => '想出遊',
@@ -270,6 +271,7 @@ class MultilevelWorkflowTest extends TestCase
         $this->actingAs($otherEmployee)->post(route('forms.store', $this->leaveForm->id), [
             'title' => '同仁婚假 2 天',
             'data' => [
+                'start_date' => '2026-11-02', 'end_date' => '2026-11-02',
                 'leave_type' => '婚喪假',
                 'days' => 2,
                 'reason' => '結婚登記',

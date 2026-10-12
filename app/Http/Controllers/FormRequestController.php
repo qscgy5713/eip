@@ -92,15 +92,61 @@ class FormRequestController extends Controller
         ]);
     }
 
+    /**
+     * 依表單欄位定義產生 data.* 驗證規則(選單限選項、數字須為正、日期須合法),避免負數或任意值寫入。
+     */
+    private function dataRules(Form $form): array
+    {
+        $rules = [];
+        foreach ($form->fields_schema ?? [] as $field) {
+            $key = $field['key'] ?? null;
+            if (! $key) {
+                continue;
+            }
+            $rules["data.$key"] = match ($field['type'] ?? 'text') {
+                'select' => ['required', 'string', ...(! empty($field['options']) ? [\Illuminate\Validation\Rule::in($field['options'])] : [])],
+                'number' => ['required', 'numeric', 'min:0.01', 'max:99999999'],
+                'date' => ['required', 'date'],
+                'textarea' => ['nullable', 'string', 'max:5000'],
+                default => ['nullable', 'string', 'max:255'],
+            };
+        }
+
+        if ($form->code === 'LEAVE') {
+            // 假別由 LeaveBalance::normalizeType 正規化(接受中文標籤與別名),此處僅要求必填
+            $rules['data.leave_type'] = ['required', 'string', 'max:50'];
+            $rules['data.end_date'] = ['required', 'date', 'after_or_equal:data.start_date'];
+        }
+
+        return $rules;
+    }
+
+    /** 驗證訊息中以欄位的中文標籤取代 data.xxx */
+    private function dataAttributes(Form $form): array
+    {
+        $attributes = [];
+        foreach ($form->fields_schema ?? [] as $field) {
+            if (! empty($field['key'])) {
+                $attributes['data.'.$field['key']] = $field['label'] ?? $field['key'];
+            }
+        }
+
+        return $attributes;
+    }
+
     public function store(Request $request, Form $form): RedirectResponse
     {
         $user = $request->user();
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'data' => 'required|array',
+            ...$this->dataRules($form),
             'attachments' => 'nullable|array',
             'attachments.*' => 'nullable|file|max:10240|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx,csv,zip',
-        ]);
+        ], [], $this->dataAttributes($form));
+
+        // data.* 規則只會回傳有定義的欄位,這裡併回原送出內容以維持既有行為
+        $validated['data'] = array_merge($request->input('data', []), $validated['data']);
 
         // 若為休假申請單，校驗假別可用額度是否充足
         if ($form->code === 'LEAVE') {
@@ -594,10 +640,13 @@ class FormRequestController extends Controller
 
         $validated = $request->validate([
             'data' => 'required|array',
+            ...$this->dataRules($formRequest->form),
             'resubmit_note' => 'nullable|string|max:500',
             'attachments' => 'nullable|array',
             'attachments.*' => 'file|max:10240|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx,zip',
-        ]);
+        ], [], $this->dataAttributes($formRequest->form));
+
+        $validated['data'] = array_merge($request->input('data', []), $validated['data']);
 
         // 處理補充上傳之附件檔案 (改用 local 私有儲存磁碟 SEC-01)
         $newAttachments = [];

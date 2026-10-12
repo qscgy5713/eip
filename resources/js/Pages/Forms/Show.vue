@@ -15,6 +15,8 @@ const props = defineProps({
 });
 
 // 以表單範本的欄位定義取得中文標籤;找不到時退回原始鍵值
+const fieldDef = (key) => (props.formRequest?.form?.fields_schema || []).find((f) => f.key === key) || null;
+
 const fieldLabel = (key) => {
     const field = (props.formRequest?.form?.fields_schema || []).find((f) => f.key === key);
     return field?.label || key;
@@ -225,14 +227,14 @@ const openDiffViewer = (rev = null) => {
                 </div>
 
                 <!-- 單據已被退回修改提示橫幅 -->
-                <div v-if="formRequest.status === 'revision_required'" class="p-4 sm:p-5 bg-amber-50 border border-amber-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-amber-900 shadow-sm text-sm">
+                <div v-if="formRequest.status === 'revision_required'" class="p-4 sm:p-5 bg-amber-50 border border-amber-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-amber-900 shadow-sm text-sm dark:bg-amber-900/20 dark:border-amber-700/50 dark:text-amber-100">
                     <div class="flex items-start space-x-3">
-                        <div class="p-2 bg-amber-100 rounded-lg text-amber-700 shrink-0 mt-0.5">
+                        <div class="p-2 bg-amber-100 rounded-lg text-amber-700 shrink-0 mt-0.5 dark:bg-amber-900/40 dark:text-amber-300">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                         </div>
                         <div>
-                            <h4 class="font-bold text-amber-900">審核主管退回修改通知</h4>
-                            <p class="text-xs text-amber-800 mt-0.5">
+                            <h4 class="font-bold text-amber-900 dark:text-amber-100">審核主管退回修改通知</h4>
+                            <p class="text-xs text-amber-800 mt-0.5 dark:text-amber-200">
                                 此申請單已被主管退回修改。請檢視簽核歷程中的退回審核意見，修正表單內容或補充證明檔案後重新提交審查。
                             </p>
                         </div>
@@ -294,7 +296,7 @@ const openDiffViewer = (rev = null) => {
                             </button>
 
                             <span :class="['px-3 py-1.5 text-xs font-bold rounded-lg border', statusBadge(formRequest.status)]">
-                                {{ formRequest.status === 'approved' ? '已核准' : (formRequest.status === 'rejected' ? '已駁回' : (formRequest.status === 'withdrawn' ? '已撤回' : '審批中')) }}
+                                {{ formRequest.status === 'approved' ? '已核准' : (formRequest.status === 'rejected' ? '已駁回' : (formRequest.status === 'withdrawn' ? '已撤回' : (formRequest.status === 'revision_required' ? '退回修改中' : '審批中'))) }}
                             </span>
                         </div>
                     </div>
@@ -749,7 +751,7 @@ const openDiffViewer = (rev = null) => {
                             </div>
                         </div>
 
-                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50 p-3 rounded-lg border border-amber-200 dark:text-gray-400">
+                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50 p-3 rounded-lg border border-amber-200 dark:bg-amber-900/20 dark:border-amber-700/50 dark:text-amber-100">
                             提醒：撤回後此公文將標記為已作廢，主管待審批清單將自動移除此單據；若此申請包含休假，已凍結之請假額度將立即釋放恢復。
                         </p>
 
@@ -797,7 +799,7 @@ const openDiffViewer = (rev = null) => {
                             </div>
                         </div>
 
-                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50/70 p-3 rounded-lg border border-amber-200 dark:text-gray-400">
+                        <p class="text-xs text-gray-600 leading-relaxed bg-amber-50/70 p-3 rounded-lg border border-amber-200 dark:bg-amber-900/20 dark:border-amber-700/50 dark:text-amber-100">
                             退回修改不會直接終止或作廢單據。申請人將收到退回通知與指示，並可直接在此單據補齊資訊或重新上傳發票證明檔案後重新送審。
                         </p>
 
@@ -845,7 +847,7 @@ const openDiffViewer = (rev = null) => {
                         </div>
 
                         <!-- 主管退回意見提醒 -->
-                        <div v-if="formRequest.approval_records?.find(r => r.status === 'returned')" class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900">
+                        <div v-if="formRequest.approval_records?.find(r => r.status === 'returned')" class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 dark:bg-amber-900/20 dark:border-amber-700/50 dark:text-amber-100">
                             <span class="font-bold">主管退回意見：</span>
                             {{ formRequest.approval_records.find(r => r.status === 'returned')?.comment }}
                         </div>
@@ -855,11 +857,26 @@ const openDiffViewer = (rev = null) => {
                             <div class="space-y-3 max-h-[45vh] overflow-y-auto pr-1">
                                 <div v-for="(val, key) in resubmitForm.fields" :key="key" class="space-y-1">
                                     <label class="block text-xs font-semibold text-gray-700 capitalize dark:text-gray-300">{{ fieldLabel(key) }}</label>
+                                    <select
+                                        v-if="fieldDef(key)?.type === 'select'"
+                                        v-model="resubmitForm.fields[key]"
+                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 dark:border-gray-700"
+                                    >
+                                        <option v-for="opt in fieldDef(key).options" :key="opt" :value="opt">{{ opt }}</option>
+                                    </select>
+                                    <textarea
+                                        v-else-if="fieldDef(key)?.type === 'textarea'"
+                                        v-model="resubmitForm.fields[key]"
+                                        rows="3"
+                                        class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 dark:border-gray-700"
+                                    ></textarea>
                                     <input
-                                        type="text"
+                                        v-else
+                                        :type="['number', 'date'].includes(fieldDef(key)?.type) ? fieldDef(key).type : 'text'"
                                         v-model="resubmitForm.fields[key]"
                                         class="w-full text-xs rounded-lg border-gray-300 focus:border-amber-500 focus:ring-amber-500 dark:border-gray-700"
                                     />
+                                    <p v-if="resubmitForm.errors['data.' + key]" class="text-xs text-red-600">{{ resubmitForm.errors['data.' + key] }}</p>
                                 </div>
                             </div>
 

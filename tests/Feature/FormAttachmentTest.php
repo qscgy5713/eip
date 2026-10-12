@@ -60,6 +60,7 @@ class FormAttachmentTest extends TestCase
         $response = $this->actingAs($this->owner)->post(route('forms.store', $this->form->id), [
             'title' => '病假申請（檢附就醫證明）',
             'data' => [
+                'leave_type' => '事假', 'start_date' => '2026-11-02', 'end_date' => '2026-11-02',
                 'reason' => '突發重感冒前往診所就醫',
                 'days' => 2,
             ],
@@ -86,6 +87,7 @@ class FormAttachmentTest extends TestCase
         $response = $this->actingAs($this->owner)->post(route('forms.store', $this->form->id), [
             'title' => '一般請假申請（無附件）',
             'data' => [
+                'leave_type' => '事假', 'start_date' => '2026-11-02', 'end_date' => '2026-11-02',
                 'reason' => '事假外出處理私事',
                 'days' => 1,
             ],

@@ -1031,7 +1031,7 @@ const statusBadge = (status) => {
                                         <span class="text-xs text-gray-400 dark:text-gray-500">{{ req.request_no }}</span>
                                     </div>
                                     <span :class="['px-2.5 py-1 text-xs font-semibold rounded-full', statusBadge(req.status)]">
-                                        {{ req.status === 'approved' ? '已核准' : (req.status === 'rejected' ? '已駁回' : '審批中') }}
+                                        {{ req.status === 'approved' ? '已核准' : (req.status === 'rejected' ? '已駁回' : (req.status === 'withdrawn' ? '已撤回' : (req.status === 'revision_required' ? '退回修改中' : '審批中'))) }}
                                     </span>
                                 </div>
                                 <div v-if="myRequests.length === 0" class="py-4 text-center text-xs text-gray-400 dark:text-gray-500">尚未發起任何表單申請</div>

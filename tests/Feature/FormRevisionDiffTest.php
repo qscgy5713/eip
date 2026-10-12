@@ -78,6 +78,7 @@ class FormRevisionDiffTest extends TestCase
             'request_no' => 'REQ-DIFF-001',
             'title' => '工程師小陳特休申請單',
             'data' => [
+                'start_date' => '2026-11-02', 'end_date' => '2026-11-02',
                 'leave_type' => 'annual',
                 'days' => 3,
                 'reason' => '家庭旅遊',
@@ -112,6 +113,7 @@ class FormRevisionDiffTest extends TestCase
         $response = $this->actingAs($this->employee)
             ->post(route('forms.requests.resubmit', $formRequest->id), [
                 'data' => [
+                'start_date' => '2026-11-02', 'end_date' => '2026-11-02',
                     'leave_type' => 'annual',
                     'days' => 2,
                     'reason' => '家庭旅遊（已協調同事小張代理線上值班）',
@@ -145,6 +147,7 @@ class FormRevisionDiffTest extends TestCase
         $this->actingAs($this->employee)
             ->post(route('forms.requests.resubmit', $formRequest->id), [
                 'data' => [
+                'start_date' => '2026-11-02', 'end_date' => '2026-11-02',
                     'leave_type' => 'annual',
                     'days' => 2,
                     'reason' => '家庭旅遊（10/20~10/21）',
