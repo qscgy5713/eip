@@ -536,6 +536,33 @@ class GlobalSearchController extends Controller
             ];
         }
 
+        // 17. 檢索福利商城商品 (僅上架中)
+        $rewards = \App\Models\WelfareReward::where('is_active', true)
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                  ->orWhere('description', 'like', "%{$query}%");
+            })
+            ->orderBy('points_cost')
+            ->limit(5)
+            ->get()
+            ->map(function ($reward) {
+                return [
+                    'id' => $reward->id,
+                    'title' => "【福利】{$reward->name}",
+                    'subtitle' => "{$reward->category_label} · {$reward->points_cost} 點",
+                    'url' => route('welfare.index'),
+                    'badge' => '福利',
+                    'type' => 'welfare_reward',
+                ];
+            });
+
+        if ($rewards->isNotEmpty()) {
+            $results['welfare_rewards'] = [
+                'title' => '福利點數商城',
+                'items' => $rewards,
+            ];
+        }
+
         return response()->json([
             'query' => $query,
             'results' => $results,

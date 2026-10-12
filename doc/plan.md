@@ -60,7 +60,7 @@
 5. **企業內訓課程與員工學習學分系統 (Corporate Training & Learning Credits Hub)** `[✅ 已完工上線]`
    - 訓練課程發布（主題/講師/教材下載/教室/學分）、線上報名與防爆額候補遞補機制
    - 個人學分存摺（累計學分與研習總時數）、完訓評量滿意度、符合 ESG 人力資本培訓總表 CSV 匯出
-6. **企業福利點數、同仁互贈感謝幣與文化牆系統 (Peer Recognition & Welfare Points Hub)** `[🟡 架構與資料表已備妥，待後續階段實作]`
+6. **企業福利點數、同仁互贈感謝幣與文化牆系統 (Peer Recognition & Welfare Points Hub)** `[✅ 已完工上線]`
    - 每月固定額度感謝幣互贈 (Kudos) 與感謝留言、公開企業文化感謝牆輪播
    - 福利點數存摺 (Welfare Points)、福利商城兌換券、月度感謝之星榮譽榜
 

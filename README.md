@@ -161,6 +161,11 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **講師/HR 一鍵點名核發學分與滿意度評量**：開課人/HR 於後台名冊點名簽到完訓，即時將學分與研習總時數正式入帳同仁存摺；完訓學員線上填寫 1~5 星滿意度與心得回饋。
   - **符合 ESG 人力資本培訓總表 CSV 匯出**：一鍵匯出符合企業 ESG / 永續報告書人力資本培訓揭露要求之培訓清冊，具備 UTF-8 BOM 與 Formula Injection 防護。
   - **生態深度整合**：工作台 Dashboard 內訓卡片、全站指揮中心 (`Cmd+K`) 模糊檢索。
+- 🎁 **企業感謝幣文化牆與福利點數商城 (Peer Recognition & Welfare Points Hub)**：
+  - **感謝幣互贈**：每月 100 枚額度（跨月自動重置），單次 1~50 枚，可標註核心價值、匿名送出；收到的感謝幣即轉為福利點數。
+  - **文化牆與榮譽榜**：貼文點讚、本月感謝之星 Top 5；匿名貼文對所有人（含管理員）隱藏寄件者。
+  - **福利商城**：點數兌換禮券/飲品/休閒/榮譽休假，悲觀鎖防超賣與重複扣點；HR/Admin 上下架、核銷發放、取消退點。
+  - **生態深度整合**：Dashboard 錢包卡片、`Cmd+K` 檢索福利商品、AuditLog 留痕。
 - 🔒 **企業級資安防禦縱深與 CI/CD Pipeline (Security Hardened Architecture)**：
   - **私有磁碟嚴格隔離 (Private Storage Isolation)**：機密證明文件與未公開公告附件全數由 `public` 遷移至 `local` 私有儲存，徹底阻絕 Nginx 靜態檔案繞過 Controller 授權之資料外洩風險。
   - **跨物件歷史版本 IDOR 防護 (Scoped Route Model Binding)**：嚴格校驗歷史版本與當前文件之一致性隸屬，杜絕跨機密文件版本越權下載與預覽。
@@ -169,7 +174,7 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
   - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
   - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
-  - **全面測試覆蓋**：累積 **316 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1,784 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **全面測試覆蓋**：累積 **330 項自動化 Feature / Unit 測試 100% 覆蓋通過 (1,907 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)
@@ -253,7 +258,7 @@ npm run dev
 ```bash
 docker compose exec app php artisan test
 ```
-*目前全系統 316 項 Feature / Unit 測試 100% 全數通過 (1,784 assertions)*。
+*目前全系統 330 項 Feature / Unit 測試 100% 全數通過 (1,907 assertions)*。
 
 ## 文檔索引
 - [系統架構與實施規劃 (Plan)](file:///Users/yujuchen/www/eip/doc/plan.md)

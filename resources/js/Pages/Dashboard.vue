@@ -23,6 +23,7 @@ defineProps({
     todayVisitors: Array,
     myActiveDispatches: Array,
     upcomingTrainings: Array,
+    latestKudos: Array,
 });
 
 const showSalary = ref(false);
@@ -329,6 +330,15 @@ const statusBadge = (status) => {
                         <div>
                             <p class="text-xs font-bold text-gray-800 dark:text-gray-200">企業內訓</p>
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">課程研習與學分</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('recognition.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">感謝牆與福利</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">感謝幣與點數商城</p>
                         </div>
                     </Link>
                 </div>
@@ -934,6 +944,41 @@ const statusBadge = (status) => {
                                 class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition"
                             >
                                 探索內訓學習中心 &rarr;
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- 感謝幣與福利點數 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
+                                    <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">感謝幣與福利點數</h3>
+                                </div>
+                                <span class="px-2 py-0.5 text-2xs font-bold rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                    {{ stats.myRewardPoints || 0 }} 點
+                                </span>
+                            </div>
+                            <p class="mt-3 text-[11px] text-gray-400">本月還可贈送 {{ stats.myRecognitionQuota ?? 0 }} 枚感謝幣</p>
+                            <div class="mt-2 divide-y divide-gray-100 dark:divide-gray-700">
+                                <div v-for="kudos in latestKudos" :key="kudos.id" class="py-2.5 text-xs">
+                                    <p class="font-semibold text-gray-900 dark:text-gray-100">
+                                        {{ kudos.sender_name }} 送你 {{ kudos.points }} 枚 · {{ kudos.core_value_label }}
+                                    </p>
+                                    <p class="text-[11px] text-gray-500 dark:text-gray-400 truncate">{{ kudos.message }}</p>
+                                </div>
+                                <div v-if="!latestKudos || latestKudos.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                                    還沒有收到感謝，去文化牆感謝一位同仁吧
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-2">
+                            <Link :href="route('welfare.index')" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 transition">
+                                福利商城
+                            </Link>
+                            <Link :href="route('recognition.index')" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-500 hover:bg-amber-600 text-white shadow-xs transition">
+                                前往文化牆 &rarr;
                             </Link>
                         </div>
                     </div>

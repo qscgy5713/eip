@@ -238,6 +238,21 @@ class DashboardController extends Controller
                 return $tc;
             });
 
+        // 18. 感謝幣與福利點數錢包、最新收到的感謝
+        $myWallet = \App\Models\PointWallet::getOrCreateForUser($user);
+        $latestKudos = \App\Models\RecognitionPost::with('sender:id,name')
+            ->where('recipient_id', $user->id)
+            ->latest('id')
+            ->take(3)
+            ->get()
+            ->map(fn ($post) => [
+                'id' => $post->id,
+                'sender_name' => $post->is_anonymous ? '匿名同仁' : $post->sender?->name,
+                'points' => $post->points,
+                'core_value_label' => $post->core_value_label,
+                'message' => $post->message,
+            ]);
+
         return Inertia::render('Dashboard', [
             'announcements' => $announcements,
             'pendingApprovals' => $pendingApprovals,
@@ -257,6 +272,7 @@ class DashboardController extends Controller
             'todayVisitors' => $todayVisitors,
             'myActiveDispatches' => $myActiveDispatches,
             'upcomingTrainings' => $upcomingTrainings,
+            'latestKudos' => $latestKudos,
             'stats' => [
                 'unreadAnnouncementsCount' => Announcement::where('status', 'published')->whereDoesntHave('reads', fn($q) => $q->where('user_id', $user->id))->count(),
                 'pendingApprovalsCount' => $totalPendingApprovalsCount,
@@ -269,6 +285,8 @@ class DashboardController extends Controller
                 'myActiveDispatchesCount' => $myActiveDispatches->count(),
                 'upcomingTrainingsCount' => $upcomingTrainings->count(),
                 'myEarnedCredits' => $user->earned_credits,
+                'myRewardPoints' => $myWallet->reward_points,
+                'myRecognitionQuota' => $myWallet->recognition_quota,
             ],
         ]);
     }

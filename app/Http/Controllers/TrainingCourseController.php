@@ -410,7 +410,7 @@ class TrainingCourseController extends Controller
                     $sanitize($reg->course->category_label),
                     $sanitize($reg->course->instructor),
                     $sanitize($reg->user->name),
-                    $sanitize($reg->user->employee_id ?? 'N/A'),
+                    $sanitize($reg->user->employee_no ?? 'N/A'),
                     $sanitize($reg->user->department->name ?? '總部'),
                     $sanitize($reg->course->hours),
                     $sanitize($reg->course->credits),

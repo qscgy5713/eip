@@ -1,6 +1,16 @@
 # 工作日誌 (Worklog)
 
 ## 2026-10-12
+### 補完：企業福利點數、感謝幣文化牆與福利商城 (Peer Recognition & Welfare Points Hub)
+- 前一次提交僅完成資料表與 `PointWallet` 模型，本次補齊後端、前端、全站整合與測試：
+  - **資料層**：新增 migration `000011` 於 `point_wallets` 加入 `quota_month`，跨月時惰性重置感謝幣額度為每月 100 枚；補齊 `RecognitionPost`、`RecognitionLike`、`WelfareReward`、`WelfareRedemption` 模型，`User` 增加 `pointWallet()`、`welfareRedemptions()` 關聯。
+  - **`RecognitionController`**：文化牆列表（全體/我收到/我送出、核心價值篩選）、贈送感謝幣（1~50 枚、不可送自己、對象須在職）、點讚 Toggle、刪除（本人或管理員）、本月感謝之星 Top 5。贈送採 DB Transaction，並依 `user_id` 排序對雙方錢包 `lockForUpdate`，避免互贈死鎖與額度超扣。
+  - **匿名保護**：匿名貼文的 `sender` 與 `sender_id` 對非本人（含 HR/管理員）一律不回傳；通知文字亦以「匿名同仁」呈現。取捨：AuditLog 仍會記錄實際贈送者，屬稽核用途。
+  - **`WelfareController`**：福利商城列表（一般同仁只看上架商品）、HR/Admin 上架與上下架切換、兌換（悲觀鎖檢查上架/庫存/點數）、HR 核銷發放（通知同仁）、取消退點（僅 pending；本人或 HR/Admin，點數與庫存一併退回）。
+  - **前端**：`Recognition/Index.vue`（錢包、文化牆、贈送 Modal、感謝之星）、`Welfare/Index.vue`（商城/我的兌換/核銷管理三頁籤、上架 Modal）；導覽列加入「感謝牆與福利」、Dashboard 新增快捷鍵與「感謝幣與福利點數」卡片、`Cmd+K` 可檢索上架中的福利商品。
+  - **測試**：新增 `tests/Feature/RecognitionAndWelfareTest.php` 14 項；全系統 330 項 100% 通過（1907 assertions）。
+- 順手修正：`TrainingCourseController::exportLog` 的同仁編號欄位誤用不存在的 `employee_id`，改為 `employee_no`。
+
 ### 做了什麼
 - 實作**企業內訓課程與員工學習學分系統 (Corporate Training & Learning Credits Hub)**：
   - **資料架構與資料表設計 (`TrainingCourse`, `CourseRegistration` 模型與 migration)**：

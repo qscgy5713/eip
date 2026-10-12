@@ -212,6 +212,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/trainings/{trainingCourse}/feedback', [\App\Http\Controllers\TrainingCourseController::class, 'submitFeedback'])->name('trainings.feedback');
     Route::patch('/trainings/{trainingCourse}/status', [\App\Http\Controllers\TrainingCourseController::class, 'updateStatus'])->name('trainings.status');
 
+    // 企業感謝幣文化牆與福利點數商城
+    Route::get('/recognition', [\App\Http\Controllers\RecognitionController::class, 'index'])->name('recognition.index');
+    Route::post('/recognition', [\App\Http\Controllers\RecognitionController::class, 'store'])->name('recognition.store');
+    Route::post('/recognition/{recognitionPost}/like', [\App\Http\Controllers\RecognitionController::class, 'like'])->name('recognition.like');
+    Route::delete('/recognition/{recognitionPost}', [\App\Http\Controllers\RecognitionController::class, 'destroy'])->name('recognition.destroy');
+    Route::get('/welfare', [\App\Http\Controllers\WelfareController::class, 'index'])->name('welfare.index');
+    Route::post('/welfare/rewards', [\App\Http\Controllers\WelfareController::class, 'storeReward'])->name('welfare.rewards.store');
+    Route::patch('/welfare/rewards/{welfareReward}/toggle', [\App\Http\Controllers\WelfareController::class, 'toggleReward'])->name('welfare.rewards.toggle');
+    Route::post('/welfare/rewards/{welfareReward}/redeem', [\App\Http\Controllers\WelfareController::class, 'redeem'])->name('welfare.redeem');
+    Route::post('/welfare/redemptions/{welfareRedemption}/fulfill', [\App\Http\Controllers\WelfareController::class, 'fulfill'])->name('welfare.fulfill');
+    Route::post('/welfare/redemptions/{welfareRedemption}/cancel', [\App\Http\Controllers\WelfareController::class, 'cancel'])->name('welfare.cancel');
+
     // 站內通知中心
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');

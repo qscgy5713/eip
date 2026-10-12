@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -218,6 +219,16 @@ class User extends Authenticatable
     public function courseRegistrations(): HasMany
     {
         return $this->hasMany(CourseRegistration::class);
+    }
+
+    public function pointWallet(): HasOne
+    {
+        return $this->hasOne(PointWallet::class);
+    }
+
+    public function welfareRedemptions(): HasMany
+    {
+        return $this->hasMany(WelfareRedemption::class);
     }
 
     /**

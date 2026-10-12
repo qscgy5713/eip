@@ -176,6 +176,13 @@ const commandPaletteRef = ref(null);
                                 >
                                     企業內訓
                                 </NavLink>
+                                <NavLink
+                                    :href="route('recognition.index')"
+                                    :active="route().current('recognition.*') || route().current('welfare.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    感謝牆與福利
+                                </NavLink>
 
                                 <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
@@ -556,6 +563,12 @@ const commandPaletteRef = ref(null);
                             :active="route().current('trainings.*')"
                         >
                             企業內訓
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('recognition.index')"
+                            :active="route().current('recognition.*') || route().current('welfare.*')"
+                        >
+                            感謝牆與福利
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"
