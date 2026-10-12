@@ -216,6 +216,7 @@ class OrgManagementController extends Controller
 
         $validated = $request->validate([
             'parent_id' => [
+                'present',
                 'nullable',
                 'integer',
                 'exists:departments,id',
@@ -223,10 +224,11 @@ class OrgManagementController extends Controller
             ],
             'sort_order' => 'nullable|integer|min:0',
         ], [
+            'parent_id.present' => '請指定要移動到的上層部門(移至最上層請明確選擇「頂層公司」)。',
             'parent_id.not_in' => '不可將部門拖曳設置隸屬於自己。',
         ]);
 
-        $newParentId = $validated['parent_id'] ? (int) $validated['parent_id'] : null;
+        $newParentId = ! empty($validated['parent_id']) ? (int) $validated['parent_id'] : null;
 
         // 循環依賴檢測
         if ($newParentId !== null) {
