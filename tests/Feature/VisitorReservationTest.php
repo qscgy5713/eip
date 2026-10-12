@@ -185,7 +185,9 @@ class VisitorReservationTest extends TestCase
             'status' => 'checked_in',
         ]);
 
-        $response = $this->actingAs($this->user)->get(route('visitor-reservations.export'));
+        $this->actingAs($this->user)->get(route('visitor-reservations.export'))->assertForbidden();
+
+        $response = $this->actingAs($this->admin)->get(route('visitor-reservations.export'));
         $response->assertStatus(200);
         $this->assertEquals('text/csv; charset=UTF-8', $response->headers->get('Content-Type'));
     }

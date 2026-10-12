@@ -355,6 +355,11 @@ class TrainingCourseController extends Controller
      */
     public function exportLog(Request $request): StreamedResponse
     {
+        $user = $request->user();
+        if (! $user->isAdmin() && ! $user->hasRole('hr')) {
+            abort(403, '僅限系統管理員或人資可匯出學分報表。');
+        }
+
         $fileName = 'training_credits_report_' . date('Ymd_His') . '.csv';
 
         $query = CourseRegistration::with(['course', 'user.department'])

@@ -314,6 +314,11 @@ class VehicleDispatchController extends Controller
      */
     public function exportLog(Request $request): StreamedResponse
     {
+        $user = $request->user();
+        if (! $user->isAdmin() && ! $user->isManager()) {
+            abort(403, '僅限系統管理員或主管可匯出派車紀錄。');
+        }
+
         $fileName = 'vehicle_dispatches_' . date('Ymd_His') . '.csv';
 
         $query = VehicleDispatch::with(['user.department', 'vehicle', 'approver:id,name']);

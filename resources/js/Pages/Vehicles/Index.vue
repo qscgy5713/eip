@@ -140,6 +140,7 @@ const handleExport = () => {
 
                 <div class="flex items-center gap-3">
                     <button
+                        v-if="canManageAll"
                         @click="handleExport"
                         class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-xs font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-xs transition"
                     >

@@ -58,6 +58,7 @@ const resetFilter = () => {
 
                 <div class="flex flex-wrap items-center gap-2">
                     <a
+                        v-if="canManageAll"
                         :href="route('trainings.export', { category })"
                         class="px-3.5 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-xs font-semibold rounded-lg transition inline-flex items-center gap-1.5 shadow-sm"
                     >

@@ -221,6 +221,11 @@ class VisitorReservationController extends Controller
      */
     public function exportLog(Request $request): StreamedResponse
     {
+        $user = $request->user();
+        if (! $user->isAdmin() && ! $user->isManager()) {
+            abort(403, '僅限系統管理員或主管可匯出訪客紀錄。');
+        }
+
         $fileName = 'visitor_logs_' . date('Ymd_His') . '.csv';
 
         $query = VisitorReservation::with(['host.department', 'meetingRoom:id,name']);

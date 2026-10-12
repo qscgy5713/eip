@@ -75,6 +75,11 @@ class EipDatabaseSeeder extends Seeder
             'phone' => '0912-000-004',
         ]);
 
+        // 指派各部門主管
+        $hq->update(['leader_id' => $admin->id]);
+        $rd->update(['leader_id' => $manager->id]);
+        $hr->update(['leader_id' => $hrUser->id]);
+
         // 3. 企業公告
         Announcement::create([
             'title' => '【重大公告】EIP 企業資訊入口網全新改版上線！',
