@@ -346,6 +346,12 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                                             考勤月報統計
                                         </DropdownLink>
                                         <DropdownLink
+                                            v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)"
+                                            :href="route('reports.index')"
+                                        >
+                                            表單統計報表
+                                        </DropdownLink>
+                                        <DropdownLink
                                             :href="route('profile.edit')"
                                         >
                                             個人帳號設定
@@ -626,6 +632,12 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                                 :href="route('attendance.reports.index')"
                             >
                                 考勤月報統計
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                v-if="['hr', 'admin', 'manager'].includes($page.props.auth.user.role)"
+                                :href="route('reports.index')"
+                            >
+                                表單統計報表
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 個人帳號設定

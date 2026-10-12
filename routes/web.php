@@ -78,6 +78,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
     Route::get('/attendance/reports', [AttendanceReportController::class, 'index'])->name('attendance.reports.index');
+    Route::get('/reports', [\App\Http\Controllers\FormReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export', [\App\Http\Controllers\FormReportController::class, 'export'])->name('reports.export');
     Route::get('/attendance/reports/export-summary', [AttendanceReportController::class, 'exportSummary'])->name('attendance.reports.exportSummary');
     Route::get('/attendance/reports/export-details', [AttendanceReportController::class, 'exportDetails'])->name('attendance.reports.exportDetails');
     Route::get('/attendance/settings', [AttendanceController::class, 'settings'])->name('attendance.settings');
@@ -263,13 +265,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/org-management/departments/{department}/members', [OrgManagementController::class, 'addMember'])->name('org-management.departments.members.add');
     Route::delete('/org-management/departments/{department}/members/{user}', [OrgManagementController::class, 'removeMember'])->name('org-management.departments.members.remove');
     Route::delete('/org-management/departments/{department}', [OrgManagementController::class, 'destroyDepartment'])->name('org-management.departments.destroy');
+    Route::get('/org-management/import', [\App\Http\Controllers\UserImportController::class, 'show'])->name('org-management.import');
+    Route::get('/org-management/import/template', [\App\Http\Controllers\UserImportController::class, 'template'])->name('org-management.import.template');
+    Route::post('/org-management/import', [\App\Http\Controllers\UserImportController::class, 'store'])->name('org-management.import.store');
     Route::post('/org-management/users', [OrgManagementController::class, 'storeUser'])->name('org-management.users.store');
     Route::put('/org-management/users/{user}', [OrgManagementController::class, 'updateUser'])->name('org-management.users.update');
     Route::post('/org-management/users/{user}/reset-password', [OrgManagementController::class, 'resetPassword'])->name('org-management.users.reset-password');
+    Route::post('/org-management/users/{user}/reset-two-factor', [OrgManagementController::class, 'resetTwoFactor'])->name('org-management.users.reset-two-factor');
     Route::post('/org-management/users/{user}/status', [OrgManagementController::class, 'updateUserStatus'])->name('org-management.users.status');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/notification-preferences', [\App\Http\Controllers\ProfileController::class, 'updateNotificationPreferences'])->name('profile.notification-preferences');
 });
 
 require __DIR__.'/auth.php';

@@ -175,7 +175,15 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **休假額度並發扣減排他性悲觀鎖 (Pessimistic Concurrency Lock)**：休假額度凍結採 `DB::transaction` 配合 `lockForUpdate()` 悲觀鎖，杜絕並發送單突破可用天數透支之 TOCTOU 漏洞。
   - **外部端點 SSRF 防護與金鑰遮罩 (SSRF Protection & Secret Masking)**：驗證 Webhook URL 嚴禁指向本機 (`localhost`)、內部私有網段與雲端中繼資料位址，並於模型層全域隱藏簽章密鑰。
   - **試算表公式注入防護 (CSV Formula / DDE Injection Sanitization)**：針對所有匯出名冊與考勤報表進行字元跳脫過濾，凡特殊字元開頭自動前綴單引號防範執行惡意公式。
-  - **全面測試覆蓋**：累積 **366 項自動化 Feature / Unit 測試 100% 覆蓋通過 (2,163 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **雙因素驗證 (TOTP 2FA)**：相容 Google / Microsoft Authenticator,登入多一道驗證碼;一次性復原碼、防重放、嘗試次數鎖定;可用 `EIP_REQUIRE_2FA_ROLES=admin,hr` 強制指定角色啟用;手機遺失時管理員/人資可協助重設。
+  - **強制首次改密碼**：管理員建立帳號、代為重設密碼或 CSV 批次匯入的帳號,首次登入必須先自行更換密碼。
+  - **應用層安全標頭**：Referrer-Policy、Permissions-Policy、nosniff,HTTPS 時加 HSTS。
+  - **全面測試覆蓋**：累積 **418 項自動化 Feature / Unit 測試 100% 覆蓋通過 (2,565 assertions)**，並配置 GitHub Actions 持續整合流程。
+
+### 近期新增(營運與帳號管理)
+- **Email 通知**：所有站內通知同步以 Email 寄出(進佇列,寄送失敗不影響主流程);同仁可在「個人帳號設定」自行關閉,管理員可用 `EIP_MAIL_NOTIFICATIONS=false` 全站關閉。需要 `queue` 容器(`docker compose up -d` 已包含)與正式的 SMTP 設定(`MAIL_*`)。
+- **員工名冊 CSV 批次匯入**：組織管理 →「批次匯入同仁」,下載範本、預覽逐列檢查、全部通過才整批匯入,支援 UTF-8 與 Big5。
+- **表單統計報表** (`/reports`)：請假天數(依假別)、加班時數、費用報銷(依項目)、請購預算與申請處理狀態的月統計,可依部門篩選並匯出 CSV;人資/管理員看全公司,部門主管僅限本部門。
 
 ## 技術棧 (Tech Stack)
 - **後端 (Backend)**: Laravel 12 (PHP 8.4-FPM)
@@ -249,6 +257,14 @@ npm run dev
 ```
 若無須熱重載，Nginx 已直接提供編譯完成之靜態資源。
 
+### 4. 佇列與寄信設定
+`docker compose up -d` 會一併啟動 `queue` 容器(`php artisan queue:work`),負責寄出 Email 通知。開發環境預設 `MAIL_MAILER=log`(信件寫入 `storage/logs`,不真的寄出);正式環境請改為 SMTP 並設定 `MAIL_*`。相關環境變數:
+
+| 變數 | 說明 | 預設 |
+| :--- | :--- | :--- |
+| `EIP_MAIL_NOTIFICATIONS` | 是否把站內通知同步寄 Email | `true` |
+| `EIP_REQUIRE_2FA_ROLES` | 強制啟用雙因素驗證的角色(逗號分隔,如 `admin,hr`) | 空(不強制) |
+
 ---
 
 ## 預設測試帳號 (密碼皆為 `password`)
@@ -265,7 +281,7 @@ npm run dev
 ```bash
 docker compose exec app php artisan test
 ```
-*目前全系統 366 項 Feature / Unit 測試 100% 全數通過 (2,163 assertions)*。
+*目前全系統 418 項 Feature / Unit 測試 100% 全數通過 (2,565 assertions)*。
 
 ## 文檔索引
 - [系統架構與實施規劃 (Plan)](file:///Users/yujuchen/www/eip/doc/plan.md)

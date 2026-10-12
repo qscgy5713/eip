@@ -31,6 +31,17 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        // 已啟用雙因素驗證:先登出,導向第二步驗證(通過後才真正登入)
+        $user = Auth::user();
+        if ($user && $user->hasTwoFactorEnabled()) {
+            Auth::guard('web')->logout();
+            $request->session()->regenerate();
+            $request->session()->put('two_factor.user_id', $user->id);
+            $request->session()->put('two_factor.remember', $request->boolean('remember'));
+
+            return redirect()->route('two-factor.challenge');
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));

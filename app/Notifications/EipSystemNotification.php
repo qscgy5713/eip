@@ -20,7 +20,14 @@ class EipSystemNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['database'];
+        $channels = ['database'];
+
+        // Email:全域開關開啟、同仁未自行關閉、且有 Email 時才寄
+        if (config('eip.mail_notifications') && ($notifiable->mail_notifications ?? true) && ! empty($notifiable->email)) {
+            $channels[] = Channels\QueuedMailChannel::class;
+        }
+
+        return $channels;
     }
 
     public function toDatabase(object $notifiable): array

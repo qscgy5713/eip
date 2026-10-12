@@ -515,6 +515,13 @@ const submitResetPwd = () => {
     });
 };
 
+// ================= 重設雙因素驗證 =================
+const resetTwoFactor = async (user) => {
+    if (await confirmDialog(`確定要重設同仁「${user.name}」的雙因素驗證嗎?對方下次登入將只需密碼,並應盡快重新設定。`)) {
+        router.post(route('org-management.users.reset-two-factor', user.id), {}, { preserveScroll: true });
+    }
+};
+
 // ================= 變更在職狀態 =================
 const changeUserStatus = async (user, newStatus) => {
     const statusText = newStatus === 'active' ? '在職正常' : (newStatus === 'suspended' ? '暫時停權' : '已離職');
@@ -588,6 +595,14 @@ const statusLabel = (status) => {
                         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         匯出編制名冊 (CSV)
                     </a>
+                    <Link
+                        :href="route('org-management.import')"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-gray-50 text-gray-700 hover:text-indigo-600 text-xs font-semibold rounded-lg border border-gray-300 shadow-2xs transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
+                        title="以 CSV 檔案批次建立多位同仁帳號"
+                    >
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14v-6m0 0l-3 3m3-3l3 3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        批次匯入同仁
+                    </Link>
                     <button
                         v-if="currentTab === 'departments'"
                         @click="openCreateDeptModal"
@@ -1238,6 +1253,16 @@ const statusLabel = (status) => {
                                                     改密碼
                                                 </button>
                                                 <span class="text-gray-300">|</span>
+                                                <template v-if="user.has_two_factor">
+                                                    <button
+                                                        @click="resetTwoFactor(user)"
+                                                        class="text-amber-600 hover:text-amber-800 font-medium"
+                                                        title="同仁手機遺失且沒有復原碼時,解除其雙因素驗證"
+                                                    >
+                                                        重設2FA
+                                                    </button>
+                                                    <span class="text-gray-300">|</span>
+                                                </template>
                                                 <button
                                                     v-if="user.status === 'active'"
                                                     @click="changeUserStatus(user, 'suspended')"
@@ -1496,7 +1521,7 @@ const statusLabel = (status) => {
                             v-model="userForm.password"
                             type="password"
                             required
-                            placeholder="至少 8 位,需含英文字母與數字"
+                            placeholder="初始密碼:至少 8 位,需含英文字母與數字(同仁首次登入須自行更換)"
                             class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
                         <p class="text-2xs text-gray-400 mt-1">建立帳號後系統將自動為同仁初始化法定年度休假額度。</p>
@@ -1542,7 +1567,7 @@ const statusLabel = (status) => {
                             v-model="pwdForm.password"
                             type="password"
                             required
-                            placeholder="至少 8 位,需含英文字母與數字"
+                            placeholder="初始密碼:至少 8 位,需含英文字母與數字(同仁首次登入須自行更換)"
                             class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
                         <p v-if="pwdForm.errors.password" class="text-2xs text-red-600 mt-1">{{ pwdForm.errors.password }}</p>

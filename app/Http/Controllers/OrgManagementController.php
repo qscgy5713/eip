@@ -66,6 +66,7 @@ class OrgManagementController extends Controller
                 'role',
                 'phone',
                 'status',
+                'two_factor_confirmed_at',
                 'created_at',
             ]);
 
@@ -92,6 +93,8 @@ class OrgManagementController extends Controller
         }
 
         $users = $userQuery->orderBy('id', 'desc')->paginate(15)->withQueryString();
+        // 只回傳「是否已啟用 2FA」,不外洩啟用時間
+        $users->getCollection()->each(fn (User $u) => $u->setAttribute('has_two_factor', $u->two_factor_confirmed_at !== null)->makeHidden('two_factor_confirmed_at'));
 
         // 3. 所有在職候選主管/人員名單 (供下拉選單快速指派)
         $activeUsers = User::with('department:id,name,code')
@@ -587,6 +590,7 @@ class OrgManagementController extends Controller
             'role' => $validated['role'],
             'phone' => $validated['phone'] ?? null,
             'password' => Hash::make($validated['password']),
+            'must_change_password' => true,
             'status' => 'active',
         ]);
 
@@ -676,6 +680,7 @@ class OrgManagementController extends Controller
 
         $user->update([
             'password' => Hash::make($validated['password']),
+            'must_change_password' => true,
         ]);
 
         AuditLog::log(
@@ -685,6 +690,35 @@ class OrgManagementController extends Controller
         );
 
         return redirect()->back()->with('success', "同仁「{$user->name}」的密碼已成功重設！");
+    }
+
+    /**
+     * 重設同仁的雙因素驗證(手機遺失且沒有復原碼時,由管理員協助解除,同仁再重新設定)
+     */
+    public function resetTwoFactor(Request $request, User $user): RedirectResponse
+    {
+        $operator = $request->user();
+        abort_unless($operator->isAdmin() || $operator->isHr(), 403);
+        abort_if(! $operator->isAdmin() && $user->isAdmin(), 403, '僅系統管理員有權重設其他管理員的雙因素驗證。');
+
+        if (! $user->hasTwoFactorEnabled() && ! $user->two_factor_secret) {
+            return redirect()->back()->withErrors(['two_factor' => "同仁「{$user->name}」尚未啟用雙因素驗證。"]);
+        }
+
+        $user->forceFill([
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_confirmed_at' => null,
+            'two_factor_last_step' => null,
+        ])->save();
+
+        AuditLog::log(
+            action: 'reset_user_two_factor',
+            description: "管理者 {$operator->name} 重設了同仁「{$user->name}」的雙因素驗證",
+            auditable: $user
+        );
+
+        return redirect()->back()->with('success', "已重設同仁「{$user->name}」的雙因素驗證,對方下次登入後可重新設定。");
     }
 
     /**

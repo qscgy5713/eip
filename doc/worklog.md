@@ -1,5 +1,14 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-13 帳號安全與營運功能擴充
+- **強制首次改密碼**:`users.must_change_password`/`password_changed_at`;管理員建立帳號、代為重設密碼後自動標記;`EnsurePasswordIsChanged` 中介層把該同仁導向 `/password/change`(只放行改密碼與登出;JSON 請求回 403);新密碼須符合強度且不得與初始密碼相同;自行改密碼/忘記密碼重設都會解除標記;寫入 AuditLog。測試 `ForcePasswordChangeTest`。
+- **雙因素驗證 (TOTP 2FA)**:自行實作 RFC 6238(`TwoFactorService`,以官方測試向量驗證),QR Code 由前端 `qrcode` 套件在瀏覽器產生,密鑰不經第三方;密鑰與復原碼加密儲存(復原碼只存 sha256),驗證碼同一時間窗不可重放、第二步每人每 IP 5 次/分鐘鎖定;登入流程 `密碼 → /two-factor-challenge → 登入`;個人設定頁可啟用/確認/停用/重新產生復原碼(皆需再輸入密碼);`EIP_REQUIRE_2FA_ROLES=admin,hr` 可強制特定角色啟用(未啟用只能進個人設定、且不可停用)。測試 `TwoFactorTest`(14 項)。
+- **員工名冊 CSV 批次匯入**(`/org-management/import`,管理員/人資):範本下載;無狀態兩步——「預覽檢查」逐列驗證(必填、Email/員編唯一含檔內重複、部門代碼存在、角色辨識中英文、非管理員不可匯入 admin、密碼強度),全部通過才可「確認匯入」;整批單一交易、任一列有錯就一筆都不寫;自動辨識 UTF-8(含 BOM)與 Big5;上限 500 筆/1 MB;初始密碼留空自動產生(含英數)並只顯示一次;匯入帳號一律須首次改密碼、初始化當年度休假額度、寫入 AuditLog。`UserImportService`、`UserImportController`、`OrgManagement/Import.vue`;測試 `UserImportTest`(11 項)。
+- **真實 Email 通知**:所有 `EipSystemNotification`(38 處呼叫)自動多一個 `QueuedMailChannel`:站內通知照常即時寫入,Email 另外進佇列(`EipNotificationMail`,中文 markdown 信件模板含按鈕連結、寄件單位、關閉說明,內容經跳脫防注入);排入佇列失敗只記日誌,不影響簽核等主要流程。控制:全站 `EIP_MAIL_NOTIFICATIONS`、個人設定頁「Email 通知」開關(`users.mail_notifications`)。`docker-compose.yml` 新增 `queue` 服務(`queue:work`),否則 redis 佇列沒人消化信件寄不出去;已實測 worker 取走並寄出。正式環境需設定 `MAIL_MAILER`/SMTP。測試 `MailNotificationTest`(8 項)。
+- **表單統計報表** `/reports`(人資/管理員全公司、部門主管鎖定本部門、員工 403):只計已核准單據;歸月依請假開始日、加班日期、報銷/請購申請日;摘要卡、假別與報銷項目長條、本月申請處理狀態、個人明細、CSV 匯出(Formula Injection 跳脫、AuditLog)。回溯 12 個月申請以涵蓋提早請假;歸月在 PHP 端判斷以相容 PostgreSQL 與 SQLite。測試 `FormReportTest`(10 項)。
+- **管理員重設 2FA**(自我 code review 發現缺口):同仁手機遺失又沒復原碼會被永久鎖住 → 組織管理列表新增「重設2FA」(管理員/人資;人資不可動管理員),AuditLog。review 同時抓到列表查詢只選部分欄位導致拿不到 2FA 欄位,已補。
+- 全系統 418 項測試通過(2,565 assertions)。已知限制不變:PHPUnit 的 SQLite 無法執行 PostgreSQL `ilike` 搜尋。
+
 ## 2026-10-12(續)全選單 × 多角色功能走查
 ### 時區、色系、品牌設定與觀察項修正
 - **時區改台北**:`config/app.php` 改讀 `APP_TIMEZONE`(預設 `Asia/Taipei`,`.env`/`.env.example` 已加)。`Carbon::serializeUsing` 輸出帶 `+08:00` 的日期,前端 `substring(0,10)` / `new Date()` 不會差一天。**注意**:資料庫內既有的時間戳是以 UTC 存的,切換後舊資料會顯示早 8 小時,新資料正確。
