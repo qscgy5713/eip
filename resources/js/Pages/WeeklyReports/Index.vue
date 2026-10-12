@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     reports: Object,
@@ -40,8 +41,8 @@ const switchView = (view) => {
     applyFilter();
 };
 
-const sendRemind = (userId, userName) => {
-    if (confirm(`確定要向「${userName}」發送第 ${props.currentWeekInfo.week_number} 週週報催繳提醒嗎？`)) {
+const sendRemind = async (userId, userName) => {
+    if (await confirmDialog(`確定要向「${userName}」發送第 ${props.currentWeekInfo.week_number} 週週報催繳提醒嗎？`)) {
         router.post(route('weekly-reports.remind'), {
             user_id: userId,
             year: props.currentWeekInfo.year,

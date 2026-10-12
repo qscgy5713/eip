@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     reservations: Object,
@@ -65,8 +66,8 @@ const submitCheckIn = () => {
     });
 };
 
-const handleCheckOut = (reservation) => {
-    if (confirm(`確定要為貴賓「${reservation.visitor_name}」辦理離廠簽退手續嗎？`)) {
+const handleCheckOut = async (reservation) => {
+    if (await confirmDialog(`確定要為貴賓「${reservation.visitor_name}」辦理離廠簽退手續嗎？`)) {
         router.post(route('visitor-reservations.check-out', reservation.id), {}, {
             preserveScroll: true,
         });

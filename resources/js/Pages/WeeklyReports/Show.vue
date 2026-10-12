@@ -4,6 +4,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
 import { Head, Link, useForm, router, usePage } from '@inertiajs/vue3';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     report: Object,
@@ -27,8 +28,8 @@ const submitComment = () => {
     });
 };
 
-const deleteReport = () => {
-    if (confirm(`確定要刪除第 ${props.report.year} 年第 ${props.report.week_number} 週的這份週報嗎？`)) {
+const deleteReport = async () => {
+    if (await confirmDialog(`確定要刪除第 ${props.report.year} 年第 ${props.report.week_number} 週的這份週報嗎？`)) {
         router.delete(route('weekly-reports.destroy', props.report.id));
     }
 };

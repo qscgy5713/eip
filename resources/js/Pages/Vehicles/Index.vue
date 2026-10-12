@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { alertDialog, confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     vehicles: Array,
@@ -48,8 +49,8 @@ const resetFilters = () => {
     applyFilters();
 };
 
-const handleApprove = (dispatch) => {
-    if (confirm(`確定核准同仁「${dispatch.user?.name}」的公務派車單（${dispatch.dispatch_number}）嗎？`)) {
+const handleApprove = async (dispatch) => {
+    if (await confirmDialog(`確定核准同仁「${dispatch.user?.name}」的公務派車單（${dispatch.dispatch_number}）嗎？`)) {
         router.patch(route('vehicles.approve', dispatch.id), {}, { preserveScroll: true });
     }
 };
@@ -62,7 +63,7 @@ const openRejectModal = (dispatch) => {
 
 const submitReject = () => {
     if (!rejectingDispatch.value || !rejectionReason.value.trim()) {
-        alert('請填寫駁回原因');
+        alertDialog('請填寫駁回原因');
         return;
     }
     router.patch(route('vehicles.reject', rejectingDispatch.value.id), {
@@ -76,8 +77,8 @@ const submitReject = () => {
     });
 };
 
-const handleStartTrip = (dispatch) => {
-    if (confirm(`確定領車出發嗎？出車時表定里程為 ${dispatch.vehicle?.current_mileage || 0} km。`)) {
+const handleStartTrip = async (dispatch) => {
+    if (await confirmDialog(`確定領車出發嗎？出車時表定里程為 ${dispatch.vehicle?.current_mileage || 0} km。`)) {
         router.post(route('vehicles.start', dispatch.id), {}, { preserveScroll: true });
     }
 };
@@ -92,7 +93,7 @@ const openReturnModal = (dispatch) => {
 const submitReturn = () => {
     if (!activeDispatch.value) return;
     if (endMileage.value < (activeDispatch.value.start_mileage || 0)) {
-        alert(`歸還里程數不可低於出車時里程 (${activeDispatch.value.start_mileage} km)！`);
+        alertDialog(`歸還里程數不可低於出車時里程 (${activeDispatch.value.start_mileage} km)！`);
         return;
     }
     isSubmittingReturn.value = true;

@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { alertDialog, confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     availableForms: Array,
@@ -56,7 +57,7 @@ const addField = () => {
 
 const removeField = (index) => {
     if (newForm.fields.length <= 1) {
-        alert('表單至少需保留一個自訂欄位');
+        alertDialog('表單至少需保留一個自訂欄位');
         return;
     }
     newForm.fields.splice(index, 1);
@@ -104,8 +105,8 @@ const submitCustomForm = () => {
 };
 
 // 下架/刪除表單
-const deleteForm = (formId, formName) => {
-    if (confirm(`確定要下架/移除表單「${formName}」嗎？若該表單有過往申請紀錄將自動轉為停用保留。`)) {
+const deleteForm = async (formId, formName) => {
+    if (await confirmDialog(`確定要下架/移除表單「${formName}」嗎？若該表單有過往申請紀錄將自動轉為停用保留。`)) {
         router.delete(route('forms.templates.destroy', formId));
     }
 };

@@ -6,6 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import CommandPalette from '@/Components/CommandPalette.vue';
+import DialogHost from '@/Components/DialogHost.vue';
 import ThemeToggle from '@/Components/ThemeToggle.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 
@@ -665,5 +666,6 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
 
         <!-- 全站快捷搜尋指揮中心 (Global Command Palette) -->
         <CommandPalette ref="commandPaletteRef" />
+        <DialogHost />
     </div>
 </template>

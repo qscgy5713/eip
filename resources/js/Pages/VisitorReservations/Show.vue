@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { alertDialog, confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     reservation: Object,
@@ -14,7 +15,7 @@ const isSubmitting = ref(false);
 
 const copyCode = () => {
     navigator.clipboard.writeText(props.reservation.reservation_code);
-    alert(`通行代碼「${props.reservation.reservation_code}」已複製至剪貼簿！`);
+    alertDialog(`通行代碼「${props.reservation.reservation_code}」已複製至剪貼簿！`);
 };
 
 const handleCheckIn = () => {
@@ -32,16 +33,16 @@ const handleCheckIn = () => {
     });
 };
 
-const handleCheckOut = () => {
-    if (confirm('確定辦理貴賓離廠簽退手續嗎？')) {
+const handleCheckOut = async () => {
+    if (await confirmDialog('確定辦理貴賓離廠簽退手續嗎？')) {
         router.post(route('visitor-reservations.check-out', props.reservation.id), {}, {
             preserveScroll: true,
         });
     }
 };
 
-const handleCancel = () => {
-    if (confirm('確定要取消此筆訪客預約嗎？')) {
+const handleCancel = async () => {
+    if (await confirmDialog('確定要取消此筆訪客預約嗎？')) {
         router.post(route('visitor-reservations.cancel', props.reservation.id), {}, {
             preserveScroll: true,
         });

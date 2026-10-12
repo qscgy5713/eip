@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     dispatch: Object,
@@ -32,8 +33,8 @@ const returnForm = useForm({
     return_notes: '',
 });
 
-const approveDispatch = () => {
-    if (confirm('確定要核准此筆公務派車申請單嗎？')) {
+const approveDispatch = async () => {
+    if (await confirmDialog('確定要核准此筆公務派車申請單嗎？')) {
         useForm({}).post(route('vehicles.approve', props.dispatch.id));
     }
 };
@@ -63,8 +64,8 @@ const submitReturn = () => {
     });
 };
 
-const cancelDispatch = () => {
-    if (confirm('確定要取消此筆公務派車申請嗎？')) {
+const cancelDispatch = async () => {
+    if (await confirmDialog('確定要取消此筆公務派車申請嗎？')) {
         useForm({}).post(route('vehicles.cancel', props.dispatch.id));
     }
 };

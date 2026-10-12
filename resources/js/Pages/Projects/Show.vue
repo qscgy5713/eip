@@ -8,6 +8,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     project: Object,
@@ -87,8 +88,8 @@ const updateStatus = (task, newStatus) => {
     }, { preserveScroll: true });
 };
 
-const deleteTask = (task) => {
-    if (confirm(`確定要刪除任務「${task.title}」嗎？`)) {
+const deleteTask = async (task) => {
+    if (await confirmDialog(`確定要刪除任務「${task.title}」嗎？`)) {
         router.delete(route('tasks.destroy', task.id), { preserveScroll: true });
     }
 };

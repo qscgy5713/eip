@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     order: Object,
@@ -30,8 +31,8 @@ const submitAddItem = () => {
     });
 };
 
-const removeItem = (itemId) => {
-    if (confirm('確定要取消此點餐品項嗎？')) {
+const removeItem = async (itemId) => {
+    if (await confirmDialog('確定要取消此點餐品項嗎？')) {
         router.delete(route('meal-orders.items.destroy', [props.order.id, itemId]), {
             preserveScroll: true,
         });
@@ -44,20 +45,20 @@ const togglePayment = (itemId) => {
     });
 };
 
-const closeOrder = () => {
-    if (confirm('確定要結單嗎？結單後同仁將無法再新增或修改點餐。')) {
+const closeOrder = async () => {
+    if (await confirmDialog('確定要結單嗎？結單後同仁將無法再新增或修改點餐。')) {
         router.post(route('meal-orders.close', props.order.id), {}, { preserveScroll: true });
     }
 };
 
-const completeOrder = () => {
-    if (confirm('確定餐點已送達並完成訂單發送嗎？')) {
+const completeOrder = async () => {
+    if (await confirmDialog('確定餐點已送達並完成訂單發送嗎？')) {
         router.post(route('meal-orders.complete', props.order.id), {}, { preserveScroll: true });
     }
 };
 
-const cancelOrder = () => {
-    if (confirm('確定要取消此揪團活動嗎？')) {
+const cancelOrder = async () => {
+    if (await confirmDialog('確定要取消此揪團活動嗎？')) {
         router.post(route('meal-orders.cancel', props.order.id), {}, { preserveScroll: true });
     }
 };

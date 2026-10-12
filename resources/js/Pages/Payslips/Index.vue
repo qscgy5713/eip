@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     payslips: Object,
@@ -127,8 +128,8 @@ const submitForm = () => {
     }
 };
 
-const deletePayslip = (payslip) => {
-    if (confirm(`確定要刪除 ${payslip.period} (${payslip.user?.name}) 的薪資單嗎？`)) {
+const deletePayslip = async (payslip) => {
+    if (await confirmDialog(`確定要刪除 ${payslip.period} (${payslip.user?.name}) 的薪資單嗎？`)) {
         router.delete(route('payslips.destroy', payslip.id), {
             preserveScroll: true,
         });
@@ -146,8 +147,8 @@ const openBatchModal = () => {
     showBatchModal.value = true;
 };
 
-const submitBatchPublish = () => {
-    if (confirm(`確定要一鍵發布 [${batchForm.period}] 全體同仁的薪資單並發送站內通知嗎？`)) {
+const submitBatchPublish = async () => {
+    if (await confirmDialog(`確定要一鍵發布 [${batchForm.period}] 全體同仁的薪資單並發送站內通知嗎？`)) {
         batchForm.post(route('payslips.publishBatch'), {
             onSuccess: () => {
                 showBatchModal.value = false;

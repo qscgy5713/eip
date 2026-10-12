@@ -4,6 +4,7 @@ import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import OrgTreeNode from '@/Components/OrgTreeNode.vue';
 import SearchableUserSelect from '@/Components/SearchableUserSelect.vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     departments: {
@@ -124,8 +125,8 @@ const submitDeptForm = () => {
     }
 };
 
-const deleteDept = (dept) => {
-    if (confirm(`確定要刪除部門「${dept.name}」(${dept.code}) 嗎？此操作將永久移除該部門資料。`)) {
+const deleteDept = async (dept) => {
+    if (await confirmDialog(`確定要刪除部門「${dept.name}」(${dept.code}) 嗎？此操作將永久移除該部門資料。`)) {
         router.delete(route('org-management.departments.destroy', dept.id));
     }
 };
@@ -238,13 +239,13 @@ const matchingDepts = computed(() => {
 });
 
 // 快速設定或解除部門主管
-const setDepartmentLeader = (dept, userOrNull) => {
+const setDepartmentLeader = async (dept, userOrNull) => {
     const leaderId = userOrNull ? userOrNull.id : null;
     const actionText = userOrNull
         ? `確定要指派同仁「${userOrNull.name}」為「${dept.name}」的部門主管嗎？`
         : `確定要解除「${dept.name}」的主管職務嗎？`;
 
-    if (confirm(actionText)) {
+    if (await confirmDialog(actionText)) {
         router.post(route('org-management.departments.leader', dept.id), {
             leader_id: leaderId,
         }, {
@@ -297,7 +298,7 @@ const handleNodeDragLeave = (targetDept) => {
     }
 };
 
-const handleNodeDrop = (targetDept, event) => {
+const handleNodeDrop = async (targetDept, event) => {
     event.preventDefault();
     if (!draggingDept.value) return;
     if (disabledDropIds.value.includes(targetDept.id)) return;
@@ -310,7 +311,7 @@ const handleNodeDrop = (targetDept, event) => {
         return; // 原本就隸屬於該部門，無需更動
     }
 
-    if (confirm(`確定要將部門「${movingDept.name}」拖曳調整隸屬於「${targetDept.name}」嗎？`)) {
+    if (await confirmDialog(`確定要將部門「${movingDept.name}」拖曳調整隸屬於「${targetDept.name}」嗎？`)) {
         router.patch(route('org-management.departments.move', movingDept.id), {
             parent_id: targetDept.id,
         }, {
@@ -329,7 +330,7 @@ const handleRootDragLeave = () => {
     isOverRootDropZone.value = false;
 };
 
-const handleRootDrop = (event) => {
+const handleRootDrop = async (event) => {
     event.preventDefault();
     isOverRootDropZone.value = false;
     if (!draggingDept.value) return;
@@ -342,7 +343,7 @@ const handleRootDrop = (event) => {
         return; // 本身就是頂層部門
     }
 
-    if (confirm(`確定要將部門「${movingDept.name}」提升為【頂層公司直屬部門】嗎？`)) {
+    if (await confirmDialog(`確定要將部門「${movingDept.name}」提升為【頂層公司直屬部門】嗎？`)) {
         router.patch(route('org-management.departments.move', movingDept.id), {
             parent_id: null,
         }, {
@@ -398,10 +399,10 @@ const submitAddMember = () => {
     });
 };
 
-const removeMemberFromDept = (dept, member) => {
+const removeMemberFromDept = async (dept, member) => {
     const isLeader = dept.leader_id === member.id;
     const warningExtra = isLeader ? '\n 注意：此同仁為該部門主管，移出後主管職務將一併清除為未指定！' : '';
-    if (confirm(`確定要將同仁「${member.name}」從「${dept.name}」移出嗎？\n移出後同仁帳號仍完整保留，其部門將變更為「未分配部門」。${warningExtra}`)) {
+    if (await confirmDialog(`確定要將同仁「${member.name}」從「${dept.name}」移出嗎？\n移出後同仁帳號仍完整保留，其部門將變更為「未分配部門」。${warningExtra}`)) {
         router.delete(route('org-management.departments.members.remove', [dept.id, member.id]), {
             preserveScroll: true,
         });
@@ -515,9 +516,9 @@ const submitResetPwd = () => {
 };
 
 // ================= 變更在職狀態 =================
-const changeUserStatus = (user, newStatus) => {
+const changeUserStatus = async (user, newStatus) => {
     const statusText = newStatus === 'active' ? '在職正常' : (newStatus === 'suspended' ? '暫時停權' : '已離職');
-    if (confirm(`確定要將同仁「${user.name}」的在職狀態變更為【${statusText}】嗎？`)) {
+    if (await confirmDialog(`確定要將同仁「${user.name}」的在職狀態變更為【${statusText}】嗎？`)) {
         router.post(route('org-management.users.status', user.id), {
             status: newStatus,
         }, {

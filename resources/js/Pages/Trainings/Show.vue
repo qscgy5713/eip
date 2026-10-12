@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     course: Object,
@@ -21,20 +22,20 @@ const statusForm = useForm({
     status: props.course.status,
 });
 
-const registerCourse = () => {
-    if (confirm(props.course.is_full ? '此課程正取名額已額滿，確認要加入【候補名單】嗎？若有名額釋出將自動遞補。' : '確定要報名此門企業內訓課程嗎？')) {
+const registerCourse = async () => {
+    if (await confirmDialog(props.course.is_full ? '此課程正取名額已額滿，確認要加入【候補名單】嗎？若有名額釋出將自動遞補。' : '確定要報名此門企業內訓課程嗎？')) {
         useForm({}).post(route('trainings.register', props.course.id));
     }
 };
 
-const cancelRegistration = () => {
-    if (confirm('確定要取消此課程的報名嗎？您的名額將釋出供候補同仁遞補。')) {
+const cancelRegistration = async () => {
+    if (await confirmDialog('確定要取消此課程的報名嗎？您的名額將釋出供候補同仁遞補。')) {
         useForm({}).post(route('trainings.cancel', props.course.id));
     }
 };
 
-const checkInParticipant = (registrationId) => {
-    if (confirm('確定要為此位同仁簽到出席並正式核發研習學分與時數嗎？')) {
+const checkInParticipant = async (registrationId) => {
+    if (await confirmDialog('確定要為此位同仁簽到出席並正式核發研習學分與時數嗎？')) {
         useForm({}).post(route('trainings.check-in', [props.course.id, registrationId]));
     }
 };
@@ -47,8 +48,8 @@ const submitFeedback = () => {
     });
 };
 
-const updateCourseStatus = (newStatus) => {
-    if (confirm(`確定要將課程狀態更新為【${newStatus}】嗎？`)) {
+const updateCourseStatus = async (newStatus) => {
+    if (await confirmDialog(`確定要將課程狀態更新為【${newStatus}】嗎？`)) {
         statusForm.status = newStatus;
         statusForm.patch(route('trainings.status', props.course.id));
     }

@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { ref, computed, watch } from 'vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const page = usePage();
 const currentUser = computed(() => page.props.auth.user);
@@ -138,8 +139,8 @@ const submitBooking = () => {
 };
 
 // 取消預約操作
-const cancelBooking = (bookingId) => {
-    if (confirm('確定要取消這筆會議預約嗎？系統將同步發送通知給所有受邀同仁。')) {
+const cancelBooking = async (bookingId) => {
+    if (await confirmDialog('確定要取消這筆會議預約嗎？系統將同步發送通知給所有受邀同仁。')) {
         router.post(route('meeting-rooms.bookings.cancel', bookingId));
     }
 };

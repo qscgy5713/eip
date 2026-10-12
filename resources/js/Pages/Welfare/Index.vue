@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     wallet: Object,
@@ -21,14 +22,14 @@ const statusStyle = {
     cancelled: 'bg-gray-100 text-gray-500 border-gray-200',
 };
 
-const redeem = (reward) => {
-    if (confirm(`確定以 ${reward.points_cost} 點兌換《${reward.name}》嗎？`)) {
+const redeem = async (reward) => {
+    if (await confirmDialog(`確定以 ${reward.points_cost} 點兌換《${reward.name}》嗎？`)) {
         router.post(route('welfare.redeem', reward.id), {}, { preserveScroll: true });
     }
 };
 
-const cancelRedemption = (r) => {
-    if (confirm(`確定取消兌換單 ${r.redemption_code} 並退還 ${r.points_spent} 點嗎？`)) {
+const cancelRedemption = async (r) => {
+    if (await confirmDialog(`確定取消兌換單 ${r.redemption_code} 並退還 ${r.points_spent} 點嗎？`)) {
         router.post(route('welfare.cancel', r.id), {}, { preserveScroll: true });
     }
 };

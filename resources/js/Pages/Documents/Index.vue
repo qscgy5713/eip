@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { alertDialog, confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     documents: Object,
@@ -133,7 +134,7 @@ const openHistoryModal = async (doc) => {
         const data = await res.json();
         historyVersions.value = data.versions;
     } catch (e) {
-        alert('載入歷史版本歷程失敗');
+        alertDialog('載入歷史版本歷程失敗');
     } finally {
         loadingHistory.value = false;
     }
@@ -177,8 +178,8 @@ const submitEdit = () => {
 };
 
 // 刪除文件
-const deleteDoc = (docId) => {
-    if (confirm('確定要刪除這份文件及其所有歷史版本嗎？此操作不可逆。')) {
+const deleteDoc = async (docId) => {
+    if (await confirmDialog('確定要刪除這份文件及其所有歷史版本嗎？此操作不可逆。')) {
         router.delete(route('documents.destroy', docId));
     }
 };

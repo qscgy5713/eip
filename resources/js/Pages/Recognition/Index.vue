@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     posts: Object,
@@ -72,8 +73,8 @@ const toggleLike = (post) => {
     router.post(route('recognition.like', post.id), {}, { preserveScroll: true });
 };
 
-const removePost = (post) => {
-    if (confirm('確定要刪除這則感謝貼文嗎？已贈送的感謝幣不會追回。')) {
+const removePost = async (post) => {
+    if (await confirmDialog('確定要刪除這則感謝貼文嗎？已贈送的感謝幣不會追回。')) {
         router.delete(route('recognition.destroy', post.id), { preserveScroll: true });
     }
 };

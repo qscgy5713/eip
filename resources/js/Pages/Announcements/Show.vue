@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     announcement: Object,
@@ -15,8 +16,8 @@ const formatSize = (bytes) => {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 };
 
-const handleDelete = () => {
-    if (confirm(`確定要刪除公告「${props.announcement.title}」嗎？此動作將連同清理所有附件。`)) {
+const handleDelete = async () => {
+    if (await confirmDialog(`確定要刪除公告「${props.announcement.title}」嗎？此動作將連同清理所有附件。`)) {
         router.delete(route('announcements.destroy', props.announcement.id));
     }
 };

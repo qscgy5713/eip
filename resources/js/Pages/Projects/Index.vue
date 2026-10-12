@@ -8,6 +8,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     projects: Object,
@@ -110,9 +111,9 @@ const submitEdit = () => {
     });
 };
 
-const deleteProject = () => {
+const deleteProject = async () => {
     if (!editingProject.value) return;
-    if (confirm(`確定要刪除專案「[${editingProject.value.code}] ${editingProject.value.name}」嗎？這將一併刪除轄下所有任務且無法復原！`)) {
+    if (await confirmDialog(`確定要刪除專案「[${editingProject.value.code}] ${editingProject.value.name}」嗎？這將一併刪除轄下所有任務且無法復原！`)) {
         router.delete(route('projects.destroy', editingProject.value.id), {
             onSuccess: () => {
                 showEditModal.value = false;

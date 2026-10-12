@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     webhooks: Array,
@@ -40,8 +41,8 @@ const toggleWebhook = (id) => {
     router.patch(route('webhooks.toggle', id));
 };
 
-const deleteWebhook = (id, name) => {
-    if (confirm(`確定要刪除外部整合 Webhook「${name}」嗎？`)) {
+const deleteWebhook = async (id, name) => {
+    if (await confirmDialog(`確定要刪除外部整合 Webhook「${name}」嗎？`)) {
         router.delete(route('webhooks.destroy', id));
     }
 };

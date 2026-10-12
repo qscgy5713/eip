@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     myDelegations: Array,
@@ -52,8 +53,8 @@ const toggleDelegation = (id) => {
     });
 };
 
-const deleteDelegation = (id, name) => {
-    if (confirm(`確定要刪除對「${name}」的職務代理設定嗎？`)) {
+const deleteDelegation = async (id, name) => {
+    if (await confirmDialog(`確定要刪除對「${name}」的職務代理設定嗎？`)) {
         form.delete(route('delegations.destroy', id), {
             preserveScroll: true,
         });

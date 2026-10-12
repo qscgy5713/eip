@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { promptDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     pendingRecords: {
@@ -134,8 +135,8 @@ const quickApprove = (record) => {
     });
 };
 
-const quickReject = (record) => {
-    const reason = prompt('請輸入退件駁回原因（選填）：', '退件駁回');
+const quickReject = async (record) => {
+    const reason = await promptDialog('請輸入退件駁回原因（選填）：', '退件駁回');
     if (reason === null) return;
     singleActionForm.status = 'rejected';
     singleActionForm.comment = reason;

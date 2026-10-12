@@ -8,6 +8,7 @@ import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { Head, Link, useForm, router, usePage } from '@inertiajs/vue3';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     asset: Object,
@@ -68,8 +69,8 @@ const submitEdit = () => {
     });
 };
 
-const deleteAsset = () => {
-    if (confirm(`確定要刪除資產「[${props.asset.asset_tag}] ${props.asset.name}」嗎？這將刪除所有相關紀錄且無法復原！`)) {
+const deleteAsset = async () => {
+    if (await confirmDialog(`確定要刪除資產「[${props.asset.asset_tag}] ${props.asset.name}」嗎？這將刪除所有相關紀錄且無法復原！`)) {
         router.delete(route('assets.destroy', props.asset.id));
     }
 };

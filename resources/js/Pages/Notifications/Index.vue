@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { confirmDialog } from '@/Components/useDialog';
 
 const props = defineProps({
     notifications: Object,
@@ -17,8 +18,8 @@ const markAsRead = (id, redirectTo = null) => {
     });
 };
 
-const deleteNotification = (id) => {
-    if (confirm('確定要刪除此則通知嗎？')) {
+const deleteNotification = async (id) => {
+    if (await confirmDialog('確定要刪除此則通知嗎？')) {
         router.delete(route('notifications.destroy', id));
     }
 };
