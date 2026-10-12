@@ -239,7 +239,7 @@ const submit = () => {
                             <button
                                 type="submit"
                                 :disabled="formState.processing"
-                                class="inline-flex items-center px-6 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-bold shadow-sm hover:bg-blue-700 disabled:opacity-50 transition"
+                                class="inline-flex items-center px-6 py-2.5 rounded-lg bg-indigo-600 text-white text-sm font-bold shadow-sm hover:bg-indigo-700 disabled:opacity-50 transition"
                             >
                                 <svg v-if="formState.processing" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

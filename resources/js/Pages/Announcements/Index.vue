@@ -138,7 +138,7 @@ const submitAnnouncement = () => {
                     <button
                         type="button"
                         @click="openCreateModal"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition"
+                        class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm transition"
                     >
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -161,7 +161,7 @@ const submitAnnouncement = () => {
                             @click="filterCategory(cat.key)"
                             :class="[
                                 'px-4 py-2 text-sm font-medium rounded-lg transition',
-                                category === cat.key ? 'bg-blue-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                                category === cat.key ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
                             ]"
                         >
                             {{ cat.label }}
@@ -257,7 +257,7 @@ const submitAnnouncement = () => {
                             v-html="link.label"
                             :class="[
                                 'px-3 py-1.5 text-xs font-medium rounded-md transition',
-                                link.active ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                                link.active ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
                             ]"
                         />
                         <span

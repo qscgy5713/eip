@@ -106,7 +106,7 @@ const printPass = () => {
                 <div class="bg-gradient-to-r from-sky-600 via-indigo-600 to-blue-700 p-6 sm:p-8 text-white relative">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full text-2xs font-extrabold bg-white/20 backdrop-blur-xs tracking-wider uppercase">
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-2xs font-extrabold bg-white/20 backdrop-blur-xs">
                                 VIP VISITOR PASS · 數位貴賓通行證
                             </span>
                             <h2 class="text-2xl sm:text-3xl font-black mt-2 tracking-tight">
@@ -122,8 +122,8 @@ const printPass = () => {
 
                         <!-- 唯一通行代碼卡塊 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center shrink-0">
-                            <p class="text-2xs text-sky-200 uppercase font-mono tracking-widest">Reservation Code</p>
-                            <p class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5 tracking-wider">
+                            <p class="text-2xs text-sky-200 font-mono">Reservation Code</p>
+                            <p class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5">
                                 {{ reservation.reservation_code }}
                             </p>
                             <button
@@ -207,7 +207,7 @@ const printPass = () => {
 
                     <!-- 門禁打卡與稽核時間軸 -->
                     <div class="space-y-3">
-                        <h4 class="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                        <h4 class="text-xs font-bold text-gray-700 dark:text-gray-300">
                             門禁進出與實體安全稽核時間軸
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">

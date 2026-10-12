@@ -214,7 +214,7 @@ defineExpose({
                         <!-- 當分組改變時，顯示分組標題 -->
                         <div
                             v-if="idx === 0 || item.group !== flatItems[idx - 1].group"
-                            class="px-3 pt-3 pb-1 text-2xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 flex items-center justify-between"
+                            class="px-3 pt-3 pb-1 text-2xs font-bold text-gray-400 dark:text-gray-500 flex items-center justify-between"
                         >
                             <span>{{ item.group }}</span>
                         </div>

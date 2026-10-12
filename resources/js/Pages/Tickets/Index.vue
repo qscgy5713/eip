@@ -68,7 +68,6 @@ const getStatusBadge = (s) => {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
-                        <span>🛠️</span>
                         <span>內部 IT / 總務叫修與服務工單中心</span>
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -77,7 +76,7 @@ const getStatusBadge = (s) => {
                 </div>
                 <Link
                     :href="route('tickets.create')"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm transition active:scale-95 shrink-0"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition active:scale-95 shrink-0"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     <span>我要提單報修</span>
@@ -137,38 +136,38 @@ const getStatusBadge = (s) => {
                             @click="applyFilters('my')"
                             :class="[
                                 'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                                tab === 'my' ? 'bg-rose-600 text-white shadow-xs' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
+                                tab === 'my' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
                             ]"
                         >
-                            🙋 我提報的工單
+                             我提報的工單
                         </button>
                         <button
                             @click="applyFilters('assigned')"
                             :class="[
                                 'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                                tab === 'assigned' ? 'bg-rose-600 text-white shadow-xs' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
+                                tab === 'assigned' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
                             ]"
                         >
-                            🧑‍💻 指派給我處理
+                             指派給我處理
                         </button>
                         <button
                             @click="applyFilters('pending')"
                             :class="[
                                 'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                                tab === 'pending' ? 'bg-rose-600 text-white shadow-xs' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
+                                tab === 'pending' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
                             ]"
                         >
-                            ⚡ 處理中工單
+                             處理中工單
                         </button>
                         <button
                             v-if="isStaff"
                             @click="applyFilters('all')"
                             :class="[
                                 'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                                tab === 'all' ? 'bg-rose-600 text-white shadow-xs' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
+                                tab === 'all' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100'
                             ]"
                         >
-                            🏢 全體工單總覽 (管理視圖)
+                             全體工單總覽 (管理視圖)
                         </button>
                     </div>
 
@@ -190,12 +189,12 @@ const getStatusBadge = (s) => {
                                 class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
                             >
                                 <option value="">全部分類</option>
-                                <option value="it_hardware">💻 電腦硬體</option>
-                                <option value="it_software">🔐 軟體與帳號</option>
-                                <option value="it_network">🌐 網路與通訊</option>
-                                <option value="facility">💡 水電與環境設施</option>
-                                <option value="stationery">📎 行政與耗材</option>
-                                <option value="other">📦 其他叫修</option>
+                                <option value="it_hardware">電腦硬體</option>
+                                <option value="it_software">軟體與帳號</option>
+                                <option value="it_network">網路與通訊</option>
+                                <option value="facility">水電與環境設施</option>
+                                <option value="stationery">行政與耗材</option>
+                                <option value="other">其他叫修</option>
                             </select>
                         </div>
 
@@ -206,10 +205,10 @@ const getStatusBadge = (s) => {
                                 class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
                             >
                                 <option value="">全部優先級</option>
-                                <option value="urgent">🚨 特急件</option>
-                                <option value="high">🔥 高優先</option>
-                                <option value="normal">⚡ 一般</option>
-                                <option value="low">🌱 低優先</option>
+                                <option value="urgent">特急件</option>
+                                <option value="high">高優先</option>
+                                <option value="normal">一般</option>
+                                <option value="low">低優先</option>
                             </select>
                         </div>
 
@@ -263,7 +262,6 @@ const getStatusBadge = (s) => {
                                             {{ ticket.title }}
                                         </Link>
                                         <p v-if="ticket.location" class="text-[11px] text-gray-400 mt-0.5 truncate flex items-center gap-1">
-                                            <span>📍</span>
                                             <span>{{ ticket.location }}</span>
                                         </p>
                                     </td>
@@ -315,7 +313,7 @@ const getStatusBadge = (s) => {
                     <!-- 空狀態 -->
                     <div v-else class="py-16 text-center">
                         <div class="w-16 h-16 mx-auto rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-3xl">
-                            🛠️
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
                         <h3 class="text-base font-bold text-gray-800 dark:text-gray-200 mt-4">查無符合條件的叫修工單</h3>
                         <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-sm mx-auto">
@@ -323,7 +321,7 @@ const getStatusBadge = (s) => {
                         </p>
                         <Link
                             :href="route('tickets.create')"
-                            class="mt-5 inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition"
+                            class="mt-5 inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                             <span>立即提單報修</span>
@@ -339,7 +337,7 @@ const getStatusBadge = (s) => {
                         :href="link.url || '#'"
                         :class="[
                             'px-3 py-1.5 text-xs rounded-lg transition font-medium',
-                            link.active ? 'bg-rose-600 text-white font-bold' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700',
+                            link.active ? 'bg-indigo-600 text-white font-bold' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700',
                             !link.url ? 'opacity-40 cursor-not-allowed' : ''
                         ]"
                         v-html="link.label"

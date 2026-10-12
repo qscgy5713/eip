@@ -241,7 +241,7 @@ const isText = (mimeType, fileName = '') => {
                 <div>
                     <button
                         @click="openUploadModal"
-                        class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700 transition flex items-center space-x-1.5"
+                        class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 transition flex items-center space-x-1.5"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                         <span>上傳新文件</span>
@@ -262,7 +262,7 @@ const isText = (mimeType, fileName = '') => {
                             :class="[
                                 'px-4 py-2 text-xs font-medium rounded-lg transition flex items-center space-x-1.5',
                                 selectedCategory === cat.key
-                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    ? 'bg-indigo-600 text-white shadow-sm'
                                     : 'text-gray-600 hover:bg-gray-100'
                             ]"
                         >
@@ -520,7 +520,7 @@ const isText = (mimeType, fileName = '') => {
                         <button
                             type="submit"
                             :disabled="uploadForm.processing"
-                            class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm disabled:opacity-50"
+                            class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm disabled:opacity-50"
                         >
                             確認上傳
                         </button>
@@ -582,7 +582,7 @@ const isText = (mimeType, fileName = '') => {
                         <button
                             type="submit"
                             :disabled="newVersionForm.processing"
-                            class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm disabled:opacity-50"
+                            class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm disabled:opacity-50"
                         >
                             發布此版本
                         </button>
@@ -683,7 +683,7 @@ const isText = (mimeType, fileName = '') => {
                         </a>
                         <a
                             :href="route('documents.download', { document: previewDoc?.id, version: previewVersion?.id })"
-                            class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition"
                             title="下載此檔案"
                         >
                             <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -744,7 +744,7 @@ const isText = (mimeType, fileName = '') => {
                         <div class="pt-2 flex justify-center space-x-3">
                             <a
                                 :href="route('documents.download', { document: previewDoc?.id, version: previewVersion?.id })"
-                                class="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                                class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition flex items-center space-x-1.5"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 <span>下載檔案以開啟</span>
@@ -848,7 +848,7 @@ const isText = (mimeType, fileName = '') => {
                         <button
                             type="submit"
                             :disabled="editForm.processing"
-                            class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm disabled:opacity-50"
+                            class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm disabled:opacity-50"
                         >
                             {{ editForm.processing ? '儲存中...' : '儲存變更' }}
                         </button>

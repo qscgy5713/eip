@@ -95,7 +95,7 @@ const submit = () => {
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-6 py-5 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 border-b border-gray-100 flex items-center justify-between">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -270,7 +270,7 @@ const submit = () => {
                                     :class="[
                                         'px-3 py-1 rounded-lg text-xs font-medium transition border',
                                         form.allowed_radius === preset
-                                            ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
                                             : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
                                     ]"
                                 >
@@ -305,7 +305,7 @@ const submit = () => {
                             <button
                                 type="submit"
                                 :disabled="form.processing"
-                                class="inline-flex items-center px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow transition disabled:opacity-50"
+                                class="inline-flex items-center px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm hover:shadow transition disabled:opacity-50"
                             >
                                 <svg v-if="form.processing" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

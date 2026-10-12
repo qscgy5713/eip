@@ -365,7 +365,7 @@ const submitAddMember = () => {
 
 const removeMemberFromDept = (dept, member) => {
     const isLeader = dept.leader_id === member.id;
-    const warningExtra = isLeader ? '\n⚠️ 注意：此同仁為該部門主管，移出後主管職務將一併清除為未指定！' : '';
+    const warningExtra = isLeader ? '\n 注意：此同仁為該部門主管，移出後主管職務將一併清除為未指定！' : '';
     if (confirm(`確定要將同仁「${member.name}」從「${dept.name}」移出嗎？\n移出後同仁帳號仍完整保留，其部門將變更為「未分配部門」。${warningExtra}`)) {
         router.delete(route('org-management.departments.members.remove', [dept.id, member.id]), {
             preserveScroll: true,
@@ -1032,7 +1032,7 @@ const statusLabel = (status) => {
                             </div>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left text-xs text-gray-600">
-                                    <thead class="bg-gray-50 text-gray-700 uppercase font-bold border-b border-gray-200">
+                                    <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
                                         <tr>
                                             <th class="px-4 py-3">部門名稱</th>
                                             <th class="px-4 py-3">代碼</th>
@@ -1145,7 +1145,7 @@ const statusLabel = (status) => {
                     <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs text-gray-600">
-                                <thead class="bg-gray-50 text-gray-700 uppercase font-bold border-b border-gray-200">
+                                <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
                                     <tr>
                                         <th class="px-4 py-3">同仁姓名 / 工號</th>
                                         <th class="px-4 py-3">電子郵件</th>
@@ -1284,7 +1284,7 @@ const statusLabel = (status) => {
                                 type="text"
                                 required
                                 placeholder="例如：RD, MKT, SALES"
-                                class="w-full text-xs font-mono uppercase rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                class="w-full text-xs font-mono rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                             />
                             <p v-if="deptForm.errors.code" class="text-2xs text-rose-600 mt-1">{{ deptForm.errors.code }}</p>
                         </div>

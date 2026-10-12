@@ -73,7 +73,7 @@ const formatSize = (bytes) => {
                     <div>
                         <div class="flex items-center space-x-2 mb-1">
                             <span class="px-2 py-0.5 text-xs font-bold bg-gray-900 text-white rounded">EIP SYSTEM</span>
-                            <span class="text-xs text-gray-500 font-mono tracking-wider">OFFICIAL APPROVAL ARCHIVE</span>
+                            <span class="text-xs text-gray-500 font-mono">OFFICIAL APPROVAL ARCHIVE</span>
                         </div>
                         <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
                             企業電子簽核公文存證聯
@@ -85,7 +85,7 @@ const formatSize = (bytes) => {
 
                     <!-- 單號資訊卡 -->
                     <div class="text-right font-mono">
-                        <div class="text-xs text-gray-500 uppercase">公文編號 / REQUEST NO.</div>
+                        <div class="text-xs text-gray-500">公文編號 / REQUEST NO.</div>
                         <div class="text-lg sm:text-xl font-extrabold text-gray-900 tracking-wide mt-0.5">
                             {{ formRequest.request_no }}
                         </div>
@@ -133,14 +133,14 @@ const formatSize = (bytes) => {
             <!-- 單據主旨與動態欄位內容 -->
             <div class="space-y-4 mb-8">
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">公文申請主旨</label>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">公文申請主旨</label>
                     <div class="p-3 bg-gray-50 border border-gray-200 rounded font-bold text-sm text-gray-900">
                         {{ formRequest.title }}
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">表單明細內容清單</label>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">表單明細內容清單</label>
                     <table class="w-full text-xs border border-gray-300 border-collapse">
                         <thead>
                             <tr class="bg-gray-100 border-b border-gray-300 text-left font-bold text-gray-700">
@@ -167,7 +167,7 @@ const formatSize = (bytes) => {
 
             <!-- 檢附證明文件與附件清單 (列印存證留痕) -->
             <div v-if="formRequest.attachments && formRequest.attachments.length > 0" class="mb-8">
-                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+                <label class="block text-xs font-bold text-gray-500 mb-1">
                     檢附證明文件清單 (Attachments Archive)
                 </label>
                 <table class="w-full text-xs border border-gray-300 border-collapse">
@@ -200,7 +200,7 @@ const formatSize = (bytes) => {
 
             <!-- 簽核審查軌跡紀錄表 -->
             <div class="mb-12">
-                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+                <label class="block text-xs font-bold text-gray-500 mb-1">
                     主管審核簽署歷程與審查意見 (Approval Trail)
                 </label>
                 <table class="w-full text-xs border border-gray-300 border-collapse">
@@ -253,8 +253,8 @@ const formatSize = (bytes) => {
                 v-if="formRequest.status === 'approved'"
                 class="absolute right-12 bottom-20 w-32 h-32 rounded-full border-4 border-rose-600 border-dashed text-rose-600 flex flex-col items-center justify-center -rotate-12 select-none opacity-85 pointer-events-none"
             >
-                <div class="text-[10px] font-bold tracking-widest uppercase">EIP PORTAL</div>
-                <div class="text-base font-extrabold tracking-wider my-0.5 border-y border-rose-500 py-0.5 px-2">
+                <div class="text-[10px] font-bold">EIP PORTAL</div>
+                <div class="text-base font-extrabold my-0.5 border-y border-rose-500 py-0.5 px-2">
                     電子核准章
                 </div>
                 <div class="text-[9px] font-mono font-bold tracking-tight">

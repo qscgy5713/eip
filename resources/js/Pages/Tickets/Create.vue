@@ -47,7 +47,6 @@ const submit = () => {
                 </Link>
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
-                        <span>📝</span>
                         <span>提報服務叫修工單</span>
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -85,12 +84,12 @@ const submit = () => {
                                     required
                                     class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
                                 >
-                                    <option value="it_hardware">💻 電腦與硬體周邊 (螢幕、鍵盤、筆電)</option>
-                                    <option value="it_software">🔐 軟體安裝與帳號權限 (VPN、Email、系統)</option>
-                                    <option value="it_network">🌐 網路連線與電話通訊 (Wi-Fi、分機、網路孔)</option>
-                                    <option value="facility">💡 水電空調與環境設施 (電燈、冷氣、桌椅鎖)</option>
-                                    <option value="stationery">📎 行政庶務與印表機耗材 (碳粉匣、文具)</option>
-                                    <option value="other">📦 其他服務需求</option>
+                                    <option value="it_hardware">電腦與硬體周邊 (螢幕、鍵盤、筆電)</option>
+                                    <option value="it_software">軟體安裝與帳號權限 (VPN、Email、系統)</option>
+                                    <option value="it_network">網路連線與電話通訊 (Wi-Fi、分機、網路孔)</option>
+                                    <option value="facility">水電空調與環境設施 (電燈、冷氣、桌椅鎖)</option>
+                                    <option value="stationery">行政庶務與印表機耗材 (碳粉匣、文具)</option>
+                                    <option value="other">其他服務需求</option>
                                 </select>
                             </div>
 
@@ -103,10 +102,10 @@ const submit = () => {
                                     required
                                     class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
                                 >
-                                    <option value="low">🌱 低優先 (不影響正常工作進度)</option>
-                                    <option value="normal">⚡ 一般 (日常叫修，正常工作日排程)</option>
-                                    <option value="high">🔥 高優先 (嚴重影響個人工作進行)</option>
-                                    <option value="urgent">🚨 特急件 (全體或部門重大系統中斷、緊急安全事件)</option>
+                                    <option value="low">低優先 (不影響正常工作進度)</option>
+                                    <option value="normal">一般 (日常叫修，正常工作日排程)</option>
+                                    <option value="high">高優先 (嚴重影響個人工作進行)</option>
+                                    <option value="urgent">特急件 (全體或部門重大系統中斷、緊急安全事件)</option>
                                 </select>
                             </div>
                         </div>
@@ -165,7 +164,7 @@ const submit = () => {
                                     :key="idx"
                                     class="flex items-center justify-between p-2 rounded-lg bg-gray-50 dark:bg-gray-700/60 text-xs"
                                 >
-                                    <span class="truncate text-gray-700 dark:text-gray-300 font-medium">📎 {{ f.name }} ({{ f.size }})</span>
+                                    <span class="truncate text-gray-700 dark:text-gray-300 font-medium">{{ f.name }} ({{ f.size }})</span>
                                     <button
                                         type="button"
                                         @click="removeFile(idx)"
@@ -187,7 +186,7 @@ const submit = () => {
                             <button
                                 type="submit"
                                 :disabled="form.processing"
-                                class="px-6 py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition active:scale-95 disabled:opacity-50"
+                                class="px-6 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition active:scale-95 disabled:opacity-50"
                             >
                                 確認送出工單
                             </button>

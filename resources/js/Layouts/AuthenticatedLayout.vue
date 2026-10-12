@@ -11,13 +11,66 @@ import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 const commandPaletteRef = ref(null);
+
+// 桌機導覽：高頻項目固定於主列，其餘收納進「更多應用」下拉選單
+const primaryNav = [
+    { route: 'dashboard', label: '總覽儀表板', patterns: ['dashboard'] },
+    { route: 'announcements.index', label: '企業公告', patterns: ['announcements.*'] },
+    { route: 'forms.index', label: '表單簽核', patterns: ['forms.*'] },
+    { route: 'approvals.index', label: '審批中心', patterns: ['approvals.*'] },
+    { route: 'directory.index', label: '通訊錄', patterns: ['directory.*'] },
+    { route: 'attendance.index', label: '考勤打卡', patterns: ['attendance.*'] },
+    { route: 'leave-balances.index', label: '休假額度', patterns: ['leave-balances.*'] },
+    { route: 'calendar.index', label: '行事曆', patterns: ['calendar.*'] },
+];
+
+const moreNav = [
+    {
+        group: '協作與知識',
+        items: [
+            { route: 'meeting-rooms.index', label: '會議室', patterns: ['meeting-rooms.*'] },
+            { route: 'documents.index', label: '知識文件', patterns: ['documents.*'] },
+            { route: 'polls.index', label: '同仁投票', patterns: ['polls.*'] },
+            { route: 'projects.index', label: '專案看板', patterns: ['projects.*'] },
+            { route: 'weekly-reports.index', label: '工作週報', patterns: ['weekly-reports.*'] },
+        ],
+    },
+    {
+        group: '行政總務',
+        items: [
+            { route: 'assets.index', label: '資產設備', patterns: ['assets.*'] },
+            { route: 'meal-orders.index', label: '訂餐揪團', patterns: ['meal-orders.*'] },
+            { route: 'tickets.index', label: '服務叫修', patterns: ['tickets.*'] },
+            { route: 'visitor-reservations.index', label: '訪客接待', patterns: ['visitor-reservations.*'] },
+            { route: 'vehicles.index', label: '公務派車', patterns: ['vehicles.*'] },
+        ],
+    },
+    {
+        group: '人資與福利',
+        items: [
+            { route: 'payslips.index', label: '薪資明細', patterns: ['payslips.*'] },
+            { route: 'trainings.index', label: '企業內訓', patterns: ['trainings.*'] },
+            { route: 'recognition.index', label: '感謝牆與福利', patterns: ['recognition.*', 'welfare.*'] },
+        ],
+    },
+];
+
+const triggerClass = (active) => [
+    'inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors focus:outline-none',
+    active
+        ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-50'
+        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100',
+];
+
+const isActive = (patterns) => patterns.some((p) => route().current(p));
+const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.patterns)));
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-150">
+        <div class="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-150">
             <nav
-                class="border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-800 transition-colors duration-150"
+                class="sticky top-0 z-40 border-b border-gray-200/80 dark:border-gray-800 bg-white/85 dark:bg-gray-900/85 backdrop-blur-md transition-colors duration-150"
             >
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
@@ -25,164 +78,59 @@ const commandPaletteRef = ref(null);
                         <div class="flex items-center min-w-0">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center mr-2 lg:mr-4">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-100"
-                                    />
+                                <Link :href="route('dashboard')" class="flex items-center gap-2" aria-label="EIP 企業入口網">
+                                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 shadow-sm">
+                                        <ApplicationLogo class="block h-5 w-5 fill-current text-white" />
+                                    </span>
+                                    <span class="hidden 2xl:block text-base font-semibold tracking-tight text-gray-900 dark:text-gray-50">EIP</span>
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div
-                                class="hidden space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6 sm:-my-px sm:flex items-center flex-nowrap"
+                                class="hidden gap-0.5 xl:gap-1 sm:flex items-center flex-nowrap"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    v-for="item in primaryNav"
+                                    :key="item.route"
+                                    :href="route(item.route)"
+                                    :active="isActive(item.patterns)"
                                     class="whitespace-nowrap"
                                 >
-                                    總覽儀表板
+                                    {{ item.label }}
                                 </NavLink>
-                                <NavLink
-                                    :href="route('announcements.index')"
-                                    :active="route().current('announcements.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    企業公告
-                                </NavLink>
-                                <NavLink
-                                    :href="route('forms.index')"
-                                    :active="route().current('forms.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    表單簽核
-                                </NavLink>
-                                <NavLink
-                                    :href="route('approvals.index')"
-                                    :active="route().current('approvals.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    審批中心
-                                </NavLink>
-                                <NavLink
-                                    :href="route('directory.index')"
-                                    :active="route().current('directory.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    通訊錄
-                                </NavLink>
-                                <NavLink
-                                    :href="route('attendance.index')"
-                                    :active="route().current('attendance.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    考勤打卡
-                                </NavLink>
-                                <NavLink
-                                    :href="route('leave-balances.index')"
-                                    :active="route().current('leave-balances.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    休假額度
-                                </NavLink>
-                                <NavLink
-                                    :href="route('meeting-rooms.index')"
-                                    :active="route().current('meeting-rooms.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    會議室
-                                </NavLink>
-                                <NavLink
-                                    :href="route('documents.index')"
-                                    :active="route().current('documents.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    知識文件
-                                </NavLink>
-                                <NavLink
-                                    :href="route('calendar.index')"
-                                    :active="route().current('calendar.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    行事曆
-                                </NavLink>
-                                <NavLink
-                                    :href="route('polls.index')"
-                                    :active="route().current('polls.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    同仁投票
-                                </NavLink>
-                                <NavLink
-                                    :href="route('projects.index')"
-                                    :active="route().current('projects.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    專案看板
-                                </NavLink>
-                                <NavLink
-                                    :href="route('assets.index')"
-                                    :active="route().current('assets.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    資產設備
-                                </NavLink>
-                                <NavLink
-                                    :href="route('weekly-reports.index')"
-                                    :active="route().current('weekly-reports.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    工作週報
-                                </NavLink>
-                                <NavLink
-                                    :href="route('payslips.index')"
-                                    :active="route().current('payslips.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    薪資明細
-                                </NavLink>
-                                <NavLink
-                                    :href="route('meal-orders.index')"
-                                    :active="route().current('meal-orders.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    訂餐揪團
-                                </NavLink>
-                                <NavLink
-                                    :href="route('tickets.index')"
-                                    :active="route().current('tickets.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    服務叫修
-                                </NavLink>
-                                <NavLink
-                                    :href="route('visitor-reservations.index')"
-                                    :active="route().current('visitor-reservations.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    訪客接待
-                                </NavLink>
-                                <NavLink
-                                    :href="route('vehicles.index')"
-                                    :active="route().current('vehicles.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    公務派車
-                                </NavLink>
-                                <NavLink
-                                    :href="route('trainings.index')"
-                                    :active="route().current('trainings.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    企業內訓
-                                </NavLink>
-                                <NavLink
-                                    :href="route('recognition.index')"
-                                    :active="route().current('recognition.*') || route().current('welfare.*')"
-                                    class="whitespace-nowrap"
-                                >
-                                    感謝牆與福利
-                                </NavLink>
+
+                                <!-- 更多應用 Dropdown -->
+                                <div class="relative inline-flex items-center">
+                                    <Dropdown align="left" width="48">
+                                        <template #trigger>
+                                            <button
+                                                type="button"
+                                                :class="triggerClass(isMoreActive())"
+                                            >
+                                                <span>更多應用</span>
+                                                <svg class="ms-1 h-3.5 w-3.5 fill-current text-gray-400" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </template>
+                                        <template #content>
+                                            <template v-for="group in moreNav" :key="group.group">
+                                                <div class="px-4 pt-2 pb-1 text-[11px] font-bold text-gray-400 dark:text-gray-500">
+                                                    {{ group.group }}
+                                                </div>
+                                                <DropdownLink
+                                                    v-for="item in group.items"
+                                                    :key="item.route"
+                                                    :href="route(item.route)"
+                                                    :class="isActive(item.patterns) ? 'font-bold text-indigo-600 dark:text-indigo-400' : ''"
+                                                >
+                                                    {{ item.label }}
+                                                </DropdownLink>
+                                            </template>
+                                        </template>
+                                    </Dropdown>
+                                </div>
 
                                 <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
@@ -193,12 +141,7 @@ const commandPaletteRef = ref(null);
                                         <template #trigger>
                                             <button
                                                 type="button"
-                                                :class="[
-                                                    'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none whitespace-nowrap',
-                                                    route().current('audit-logs.*') || route().current('webhooks.*') || route().current('attendance.settings') || route().current('org-management.*')
-                                                        ? 'border-indigo-400 text-gray-900 font-bold'
-                                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                                ]"
+                                                :class="triggerClass(route().current('audit-logs.*') || route().current('webhooks.*') || route().current('attendance.settings') || route().current('org-management.*'))"
                                             >
                                                 <span>系統管理</span>
                                                 <svg class="ms-1 h-3.5 w-3.5 fill-current text-gray-400" viewBox="0 0 20 20">
@@ -266,7 +209,7 @@ const commandPaletteRef = ref(null);
 
                                     <template #content>
                                         <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-                                            <span class="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">站內通知</span>
+                                            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">站內通知</span>
                                             <Link
                                                 :href="route('notifications.index')"
                                                 class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium"
@@ -328,7 +271,7 @@ const commandPaletteRef = ref(null);
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium leading-4 text-gray-500 dark:text-gray-300 transition duration-150 ease-in-out hover:text-gray-700 dark:hover:text-gray-100 focus:outline-none"
+                                                class="inline-flex items-center whitespace-nowrap rounded-md border border-transparent dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm font-medium leading-4 text-gray-500 dark:text-gray-300 transition duration-150 ease-in-out hover:text-gray-700 dark:hover:text-gray-100 focus:outline-none"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -666,11 +609,8 @@ const commandPaletteRef = ref(null);
             </nav>
 
             <!-- Page Heading -->
-            <header
-                class="bg-white dark:bg-gray-800 shadow dark:shadow-gray-900/40 border-b border-gray-100 dark:border-gray-700/60 transition-colors duration-150"
-                v-if="$slots.header"
-            >
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <header class="page-header" v-if="$slots.header">
+                <div class="mx-auto max-w-7xl px-4 pt-8 pb-2 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>
             </header>

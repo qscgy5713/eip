@@ -159,7 +159,7 @@ const handleDrop = (e) => {
             <!-- 拖曳高亮懸浮提示 -->
             <div
                 v-if="isCurrentDropTarget"
-                class="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-indigo-600 text-white text-3xs font-black rounded-full shadow-md uppercase tracking-wider whitespace-nowrap z-20"
+                class="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-indigo-600 text-white text-3xs font-black rounded-full shadow-md whitespace-nowrap z-20"
             >
                 移至此部門下
             </div>

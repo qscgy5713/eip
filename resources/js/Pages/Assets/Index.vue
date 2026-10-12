@@ -191,7 +191,7 @@ const statusLabel = (status) => {
                         :class="[
                             'px-3.5 py-2 rounded-lg text-xs font-semibold border transition shadow-xs',
                             showMyAssets
-                                ? 'bg-teal-600 text-white border-teal-600'
+                                ? 'bg-indigo-600 text-white border-indigo-600'
                                 : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
                         ]"
                     >
@@ -200,7 +200,7 @@ const statusLabel = (status) => {
                     <button
                         v-if="canManage"
                         @click="openCreateModal"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-sm transition"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-sm transition"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         <span>登錄新資產</span>
@@ -253,7 +253,7 @@ const statusLabel = (status) => {
                                 :class="[
                                     'px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors',
                                     currentStatus === tab.key
-                                        ? 'bg-teal-600 text-white shadow-xs'
+                                        ? 'bg-indigo-600 text-white shadow-xs'
                                         : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                 ]"
                             >

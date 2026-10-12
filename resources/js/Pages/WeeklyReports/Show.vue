@@ -76,7 +76,7 @@ const getStatusBadge = (status) => {
                         :href="route('weekly-reports.edit', report.id)"
                         class="px-3.5 py-2 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition"
                     >
-                        ✏️ 編輯週報
+                         編輯週報
                     </Link>
                     <button
                         v-if="canEdit || currentUser.role === 'admin'"
@@ -84,7 +84,7 @@ const getStatusBadge = (status) => {
                         @click="deleteReport"
                         class="px-3.5 py-2 text-xs font-bold rounded-lg bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/50 dark:hover:bg-rose-900 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 transition"
                     >
-                        🗑️ 刪除
+                         刪除
                     </button>
                     <Link
                         :href="route('weekly-reports.index')"
@@ -121,7 +121,7 @@ const getStatusBadge = (status) => {
                         <!-- 1. 本週工作重點概述 -->
                         <div class="pb-5 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-2">
-                                <span class="p-1 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600">📌</span>
+                                <span class="inline-flex p-1 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></span>
                                 <span>本週工作重點概述 (Summary)</span>
                             </h3>
                             <div class="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl text-xs sm:text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">
@@ -132,7 +132,7 @@ const getStatusBadge = (status) => {
                         <!-- 2. 具體完成事項 -->
                         <div class="pb-5 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-2">
-                                <span class="p-1 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600">🎯</span>
+                                <span class="inline-flex p-1 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
                                 <span>具體完成事項 (Achievements)</span>
                             </h3>
                             <div class="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl text-xs sm:text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-mono whitespace-pre-line">
@@ -143,7 +143,7 @@ const getStatusBadge = (status) => {
                         <!-- 3. 下週工作計畫 -->
                         <div class="pb-5 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-2">
-                                <span class="p-1 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-600">🚀</span>
+                                <span class="inline-flex p-1 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
                                 <span>下週工作計畫 (Next Week Plans)</span>
                             </h3>
                             <div class="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl text-xs sm:text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-mono whitespace-pre-line">
@@ -154,7 +154,7 @@ const getStatusBadge = (status) => {
                         <!-- 4. 困難與需跨部門支援 -->
                         <div v-if="report.challenges_or_support">
                             <h3 class="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-2">
-                                <span class="p-1 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-600">💡</span>
+                                <span class="inline-flex p-1 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 21h6m-3-18a6 6 0 00-3.6 10.8c.6.5 1.1 1.3 1.1 2.2h5c0-.9.5-1.7 1.1-2.2A6 6 0 0012 3z"/></svg></span>
                                 <span>遭遇困難、阻礙或需跨部門支援 (Challenges & Support)</span>
                             </h3>
                             <div class="p-4 bg-amber-50/50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/40 rounded-xl text-xs sm:text-sm text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">
@@ -177,7 +177,7 @@ const getStatusBadge = (status) => {
                         <div class="flex items-center space-x-2">
                             <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
                             <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">
-                                💬 主管指導點評與交流反饋 ({{ report.comments?.length || 0 }})
+                                 主管指導點評與交流反饋 ({{ report.comments?.length || 0 }})
                             </h3>
                         </div>
                     </div>
@@ -218,7 +218,7 @@ const getStatusBadge = (status) => {
                     <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
                         <form @submit.prevent="submitComment" class="space-y-3">
                             <label class="block text-xs font-bold text-gray-700 dark:text-gray-300">
-                                {{ canManage && report.user_id !== currentUser.id ? '🎯 撰寫主管指導點評 (送出後標記為已點評)' : '💬 回覆留言' }}
+                                {{ canManage && report.user_id !== currentUser.id ? ' 撰寫主管指導點評 (送出後標記為已點評)' : ' 回覆留言' }}
                             </label>
                             <textarea
                                 v-model="commentForm.comment"

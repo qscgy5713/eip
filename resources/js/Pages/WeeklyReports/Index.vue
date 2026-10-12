@@ -74,7 +74,7 @@ const getStatusBadge = (status) => {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
-                        <span>📝 工作週報與團隊協同簡報</span>
+                        <span>工作週報與團隊協同簡報</span>
                         <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300">
                             {{ currentWeekInfo.year }} 年 第 {{ currentWeekInfo.week_number }} 週
                         </span>
@@ -184,7 +184,7 @@ const getStatusBadge = (status) => {
                                 @click="sendRemind(unUser.id, unUser.name)"
                                 class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 hover:underline"
                             >
-                                🔔 提醒催繳
+                                 提醒催繳
                             </button>
                         </div>
                     </div>
@@ -335,15 +335,15 @@ const getStatusBadge = (status) => {
                         <!-- 週報內容簡報 -->
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                             <div class="md:col-span-1 bg-gray-50 dark:bg-gray-700/40 p-3 rounded-lg">
-                                <p class="font-bold text-gray-600 dark:text-gray-300 mb-1">📌 本週重點概述：</p>
+                                <p class="font-bold text-gray-600 dark:text-gray-300 mb-1">本週重點概述：</p>
                                 <p class="text-gray-800 dark:text-gray-200 line-clamp-3 leading-relaxed whitespace-pre-line">{{ rep.summary }}</p>
                             </div>
                             <div class="md:col-span-1 bg-gray-50 dark:bg-gray-700/40 p-3 rounded-lg">
-                                <p class="font-bold text-emerald-700 dark:text-emerald-400 mb-1">🎯 具體完成事項：</p>
+                                <p class="font-bold text-emerald-700 dark:text-emerald-400 mb-1">具體完成事項：</p>
                                 <p class="text-gray-800 dark:text-gray-200 line-clamp-3 leading-relaxed whitespace-pre-line">{{ rep.achievements }}</p>
                             </div>
                             <div class="md:col-span-1 bg-gray-50 dark:bg-gray-700/40 p-3 rounded-lg">
-                                <p class="font-bold text-blue-700 dark:text-blue-400 mb-1">🚀 下週工作計畫：</p>
+                                <p class="font-bold text-blue-700 dark:text-blue-400 mb-1">下週工作計畫：</p>
                                 <p class="text-gray-800 dark:text-gray-200 line-clamp-3 leading-relaxed whitespace-pre-line">{{ rep.plans_next_week }}</p>
                             </div>
                         </div>

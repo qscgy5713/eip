@@ -96,7 +96,7 @@ const updateCourseStatus = (newStatus) => {
                             @click="registerCourse"
                             class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-sm transition inline-flex items-center gap-1.5"
                         >
-                            <span>{{ course.is_full ? '⏳ 額滿登記候補' : '✍️ 線上報名研習' }}</span>
+                            <span>{{ course.is_full ? ' 額滿登記候補' : ' 線上報名研習' }}</span>
                         </button>
                     </template>
 
@@ -114,7 +114,7 @@ const updateCourseStatus = (newStatus) => {
                             @click="showFeedbackModal = true"
                             class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/50 text-xs font-bold rounded-lg transition inline-flex items-center gap-1"
                         >
-                            ⭐ {{ myRegistration.rating ? '修改課後回饋' : '填寫課後回饋與評分' }}
+                             {{ myRegistration.rating ? '修改課後回饋' : '填寫課後回饋與評分' }}
                         </button>
                     </template>
                 </div>
@@ -135,9 +135,7 @@ const updateCourseStatus = (newStatus) => {
                 ]"
             >
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl">
-                        {{ myRegistration.status === 'attended' ? '🏅' : myRegistration.status === 'waitlist' ? '⏳' : '✅' }}
-                    </span>
+                    <span class="text-indigo-600 dark:text-indigo-400"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg></span>
                     <div>
                         <h4 class="font-bold text-sm">
                             {{ myRegistration.status_label }}
@@ -166,7 +164,7 @@ const updateCourseStatus = (newStatus) => {
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
                         <h3 class="text-base font-bold text-indigo-950 dark:text-indigo-200 flex items-center gap-2">
-                            <span>🛠️ 講師與人資訓練控制台</span>
+                            <span>講師與人資訓練控制台</span>
                         </h3>
                         <p class="text-xs text-indigo-700 dark:text-indigo-400 mt-1">
                             您擁有管理本課程、審核出勤、點名核發研習學分與調整開課狀態之完整權限。
@@ -184,7 +182,7 @@ const updateCourseStatus = (newStatus) => {
                         <button
                             v-if="course.status === 'in_progress' || course.status === 'upcoming'"
                             @click="updateCourseStatus('completed')"
-                            class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-lg transition"
+                            class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs rounded-lg transition"
                         >
                             完訓結案
                         </button>
@@ -206,7 +204,7 @@ const updateCourseStatus = (newStatus) => {
                     <!-- 課程大綱卡片 -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-4">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 pb-2 border-b border-gray-100 dark:border-gray-700">
-                            📖 課程綱要與預期學習成效
+                             課程綱要與預期學習成效
                         </h3>
                         <div class="prose dark:prose-invert max-w-none text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
                             {{ course.description || '講師與學習發展小組精心設計之專業課程。' }}
@@ -218,7 +216,7 @@ const updateCourseStatus = (newStatus) => {
                         <div class="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-700">
                             <div class="flex items-center gap-2">
                                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">
-                                    📋 參訓學員名冊與簽到狀況
+                                     參訓學員名冊與簽到狀況
                                 </h3>
                                 <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300">
                                     正取 {{ course.registered_count }} / 候補 {{ course.waitlist_count }} 人
@@ -287,7 +285,7 @@ const updateCourseStatus = (newStatus) => {
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-4">
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-2xl font-bold">
-                                👨‍🏫
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-900 dark:text-gray-100 text-base">
@@ -318,7 +316,7 @@ const updateCourseStatus = (newStatus) => {
                     <!-- 研習時間與地點 -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-3">
                         <h4 class="font-bold text-sm text-gray-900 dark:text-gray-100">
-                            📍 研習時程與上課地點
+                             研習時程與上課地點
                         </h4>
 
                         <div class="space-y-2 text-xs text-gray-600 dark:text-gray-400">
@@ -344,7 +342,7 @@ const updateCourseStatus = (newStatus) => {
         <!-- 完訓滿意度與課後回饋 Modal -->
         <div v-if="showFeedbackModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 flex items-center justify-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">⭐ 課後滿意度與心得回饋</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">課後滿意度與心得回饋</h3>
                 <p class="text-xs text-gray-500 mb-4">您的寶貴意見將協助講師與人資精進未來的課程設計與教學品質。</p>
 
                 <form @submit.prevent="submitFeedback" class="space-y-4">

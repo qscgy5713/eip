@@ -132,7 +132,7 @@ const deleteForm = (formId, formName) => {
                     <button
                         v-if="canManageForms"
                         @click="openCreateFormModal"
-                        class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 rounded-lg shadow-sm hover:bg-blue-700 transition flex items-center space-x-1.5"
+                        class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 transition flex items-center space-x-1.5"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         <span>自訂新表單範本 (管理員/主管)</span>
@@ -323,7 +323,7 @@ const deleteForm = (formId, formName) => {
                     <!-- 動態欄位配置列表 -->
                     <div class="border border-gray-200 rounded-xl p-4 bg-gray-50/50 space-y-3">
                         <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-xs text-gray-700 uppercase tracking-wider">自訂欄位清單 (JSON Schema)</h4>
+                            <h4 class="font-bold text-xs text-gray-700">自訂欄位清單 (JSON Schema)</h4>
                             <button
                                 type="button"
                                 @click="addField"
@@ -410,7 +410,7 @@ const deleteForm = (formId, formName) => {
                         </button>
                         <button
                             type="submit"
-                            class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm"
+                            class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm"
                         >
                             確認建立表單
                         </button>

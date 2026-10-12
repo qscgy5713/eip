@@ -124,7 +124,7 @@ const formatActionBadge = (action) => {
                 <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
-                            <thead class="bg-gray-50 text-gray-500 font-semibold text-xs uppercase tracking-wider">
+                            <thead class="bg-gray-50 text-gray-500 font-semibold text-xs">
                                 <tr>
                                     <th class="px-5 py-3">時間戳記</th>
                                     <th class="px-5 py-3">操作人員</th>

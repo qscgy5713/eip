@@ -55,7 +55,7 @@ const submitReport = (asDraft = false) => {
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
-                        <span>📝 撰寫工作週報</span>
+                        <span>撰寫工作週報</span>
                         <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300">
                             {{ weekInfo.year }} 年 第 {{ weekInfo.week_number }} 週
                         </span>
@@ -92,7 +92,7 @@ const submitReport = (asDraft = false) => {
                         @click="importCompletedTasks"
                         class="px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs transition shrink-0"
                     >
-                        ✨ 一鍵帶入完成事項
+                         一鍵帶入完成事項
                     </button>
                 </div>
 
@@ -102,7 +102,7 @@ const submitReport = (asDraft = false) => {
                         
                         <!-- 1. 本週工作重點概述 -->
                         <div>
-                            <InputLabel for="summary" value="📌 本週工作重點概述 (Summary) *" class="text-sm font-bold" />
+                            <InputLabel for="summary" value="本週工作重點概述 (Summary) *" class="text-sm font-bold" />
                             <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1.5">簡要用 1~2 句話總結本週最關鍵的工作進展與成果目標。</p>
                             <textarea
                                 id="summary"
@@ -118,7 +118,7 @@ const submitReport = (asDraft = false) => {
                         <!-- 2. 具體完成事項 -->
                         <div>
                             <div class="flex items-center justify-between mb-1.5">
-                                <InputLabel for="achievements" value="🎯 具體完成事項 (Achievements) *" class="text-sm font-bold" />
+                                <InputLabel for="achievements" value="具體完成事項 (Achievements) *" class="text-sm font-bold" />
                                 <button
                                     v-if="completedTasks && completedTasks.length > 0"
                                     type="button"
@@ -142,7 +142,7 @@ const submitReport = (asDraft = false) => {
 
                         <!-- 3. 下週工作計畫 -->
                         <div>
-                            <InputLabel for="plans_next_week" value="🚀 下週工作計畫 (Next Week Plans) *" class="text-sm font-bold" />
+                            <InputLabel for="plans_next_week" value="下週工作計畫 (Next Week Plans) *" class="text-sm font-bold" />
                             <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1.5">預計在下週推進的核心排程、里程碑或優先級任務。</p>
                             <textarea
                                 id="plans_next_week"
@@ -157,7 +157,7 @@ const submitReport = (asDraft = false) => {
 
                         <!-- 4. 遭遇困難或需跨部門支援 -->
                         <div>
-                            <InputLabel for="challenges_or_support" value="💡 困難、阻礙或需跨部門協助事項 (Challenges & Support)" class="text-sm font-bold" />
+                            <InputLabel for="challenges_or_support" value="困難、阻礙或需跨部門協助事項 (Challenges & Support)" class="text-sm font-bold" />
                             <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1.5">若有卡點、外部依賴或需要主管與其他單位資源協調，請在此提出（選填）。</p>
                             <textarea
                                 id="challenges_or_support"
@@ -177,7 +177,7 @@ const submitReport = (asDraft = false) => {
                                 :disabled="form.processing"
                                 class="text-xs"
                             >
-                                💾 暫存為草稿
+                                 暫存為草稿
                             </SecondaryButton>
                             <PrimaryButton
                                 type="button"
@@ -185,7 +185,7 @@ const submitReport = (asDraft = false) => {
                                 :disabled="form.processing"
                                 class="text-xs"
                             >
-                                🚀 正式提交送出週報
+                                 正式提交送出週報
                             </PrimaryButton>
                         </div>
                     </form>

@@ -300,7 +300,7 @@ const toggleVotersList = (optionId) => {
                                             v-if="maxVotesCount > 0 && option.votes_count === maxVotesCount"
                                             class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300"
                                         >
-                                            👑 最高票
+                                             最高票
                                         </span>
                                         <!-- 我的選票標籤 -->
                                         <span

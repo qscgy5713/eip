@@ -113,7 +113,7 @@ const handleExport = () => {
                     </button>
                     <Link
                         :href="route('visitor-reservations.create')"
-                        class="inline-flex items-center px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold shadow-md transition"
+                        class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md transition"
                     >
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -226,7 +226,7 @@ const handleExport = () => {
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-left text-xs">
-                        <thead class="bg-gray-50 dark:bg-gray-900 text-gray-500 uppercase font-semibold">
+                        <thead class="bg-gray-50 dark:bg-gray-900 text-gray-500 font-semibold">
                             <tr>
                                 <th class="px-5 py-3">通行碼</th>
                                 <th class="px-5 py-3">貴賓資訊</th>
@@ -353,7 +353,7 @@ const handleExport = () => {
                             v-html="link.label"
                             :class="[
                                 'px-3 py-1.5 rounded-lg text-xs font-semibold transition',
-                                link.active ? 'bg-sky-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200'
+                                link.active ? 'bg-indigo-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200'
                             ]"
                         />
                         <span

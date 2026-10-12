@@ -114,9 +114,9 @@ const getStatusBadge = (order) => {
                             </span>
                         </div>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-3">
-                            <span>🏪 店家：<strong class="text-orange-600 dark:text-orange-400">{{ order.restaurant_name }}</strong></span>
-                            <span v-if="order.restaurant_phone">📞 電話：{{ order.restaurant_phone }}</span>
-                            <span>👑 發起人：{{ order.creator?.name }}</span>
+                            <span>店家：<strong class="text-orange-600 dark:text-orange-400">{{ order.restaurant_name }}</strong></span>
+                            <span v-if="order.restaurant_phone">電話：{{ order.restaurant_phone }}</span>
+                            <span>發起人：{{ order.creator?.name }}</span>
                         </p>
                     </div>
                 </div>
@@ -126,7 +126,7 @@ const getStatusBadge = (order) => {
                     <button
                         v-if="order.status === 'open'"
                         @click="closeOrder"
-                        class="px-3.5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-xs transition"
+                        class="px-3.5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition"
                     >
                         結單 (停止點餐)
                     </button>
@@ -141,7 +141,7 @@ const getStatusBadge = (order) => {
                         @click="notifyParticipants"
                         class="px-3.5 py-2 text-xs font-bold text-orange-700 bg-orange-100 hover:bg-orange-200 dark:bg-orange-950/60 dark:text-orange-300 rounded-xl transition"
                     >
-                        📢 一鍵催繳自費
+                         一鍵催繳自費
                     </button>
                     <button
                         v-if="order.status !== 'cancelled'"
@@ -198,7 +198,7 @@ const getStatusBadge = (order) => {
                                 ></div>
                             </div>
                             <p v-if="order.minimum_order_amount" class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
-                                {{ order.total_amount >= order.minimum_order_amount ? '🎉 已達成起送門檻！' : `還差 $${order.minimum_order_amount - order.total_amount} 達標` }}
+                                {{ order.total_amount >= order.minimum_order_amount ? ' 已達成起送門檻！' : `還差 $${order.minimum_order_amount - order.total_amount} 達標` }}
                             </p>
                         </div>
 
@@ -217,7 +217,7 @@ const getStatusBadge = (order) => {
                 <!-- 點餐輸入卡片 (當活動 open 且未截止時可用) -->
                 <div v-if="isOrderingAllowed" class="bg-gradient-to-r from-orange-500 to-amber-600 rounded-2xl p-6 text-white shadow-md">
                     <div class="flex items-center gap-2 mb-4">
-                        <span class="text-2xl">🍜</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         <div>
                             <h3 class="text-base font-bold">我要點餐 / 新增品項</h3>
                             <p class="text-xs text-orange-100">填寫品項名稱、單價與規格（如甜度、冰塊、口味），系統自動計費！</p>
@@ -294,7 +294,7 @@ const getStatusBadge = (order) => {
                 </div>
 
                 <div v-else class="p-4 bg-gray-100 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 text-center text-xs text-gray-500 dark:text-gray-400">
-                    🔒 本活動已截止或結單，目前無法新增點餐。
+                     本活動已截止或結單，目前無法新增點餐。
                 </div>
 
                 <!-- 點餐明細 Tabs 切換 -->
@@ -307,7 +307,7 @@ const getStatusBadge = (order) => {
                                 activeTab === 'summary' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700'
                             ]"
                         >
-                            <span>📋 廚房出餐/電話下單彙總 ({{ summaryItems.length }})</span>
+                            <span>廚房出餐/電話下單彙總 ({{ summaryItems.length }})</span>
                         </button>
                         <button
                             @click="activeTab = 'settlement'"
@@ -316,7 +316,7 @@ const getStatusBadge = (order) => {
                                 activeTab === 'settlement' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700'
                             ]"
                         >
-                            <span>💰 同仁自費結算清冊 ({{ userSettlements.length }})</span>
+                            <span>同仁自費結算清冊 ({{ userSettlements.length }})</span>
                         </button>
                         <button
                             @click="activeTab = 'all'"
@@ -325,7 +325,7 @@ const getStatusBadge = (order) => {
                                 activeTab === 'all' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700'
                             ]"
                         >
-                            <span>👥 全部品項明細 ({{ order.items?.length || 0 }})</span>
+                            <span>全部品項明細 ({{ order.items?.length || 0 }})</span>
                         </button>
                         <button
                             @click="activeTab = 'my'"
@@ -334,7 +334,7 @@ const getStatusBadge = (order) => {
                                 activeTab === 'my' ? 'border-orange-600 text-orange-600 dark:text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-700'
                             ]"
                         >
-                            <span>🙋 我的點餐 ({{ myItems.length }})</span>
+                            <span>我的點餐 ({{ myItems.length }})</span>
                         </button>
                     </div>
 

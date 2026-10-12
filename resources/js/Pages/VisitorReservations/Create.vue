@@ -220,7 +220,7 @@ const submit = () => {
                         <button
                             type="submit"
                             :disabled="form.processing"
-                            class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold shadow-md transition"
+                            class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md transition"
                         >
                             確認發行訪客預約
                         </button>

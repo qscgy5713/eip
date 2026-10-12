@@ -216,7 +216,7 @@ const formatTime = (isoString) => {
                     </button>
                     <button
                         @click="openBookingModal()"
-                        class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 rounded-lg shadow-xs hover:bg-blue-700 transition flex items-center space-x-1"
+                        class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-lg shadow-xs hover:bg-indigo-700 transition flex items-center space-x-1"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         <span>預約會議室</span>
@@ -350,7 +350,7 @@ const formatTime = (isoString) => {
                         <!-- 該日預約時間軸 / 清單 -->
                         <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
                             <div>
-                                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                                <h4 class="text-xs font-bold text-gray-400 mb-2">
                                     {{ currentDate }} 時段預約狀況
                                 </h4>
 
@@ -396,7 +396,7 @@ const formatTime = (isoString) => {
                                         </div>
 
                                         <p class="text-blue-600 font-mono text-[11px]">
-                                            ⏰ {{ formatTime(b.start_time) }} ~ {{ formatTime(b.end_time) }}
+                                             {{ formatTime(b.start_time) }} ~ {{ formatTime(b.end_time) }}
                                         </p>
 
                                         <div class="flex items-center justify-between text-[11px] text-gray-500">
@@ -607,7 +607,7 @@ const formatTime = (isoString) => {
                         <button
                             type="submit"
                             :disabled="bookingForm.processing"
-                            class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs disabled:opacity-50"
+                            class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs disabled:opacity-50"
                         >
                             {{ bookingForm.processing ? '預約處理中...' : '確認送出預約' }}
                         </button>
@@ -700,7 +700,7 @@ const formatTime = (isoString) => {
                         <button
                             type="submit"
                             :disabled="roomForm.processing"
-                            class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs disabled:opacity-50"
+                            class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs disabled:opacity-50"
                         >
                             新增建立
                         </button>

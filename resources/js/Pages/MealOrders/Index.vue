@@ -76,7 +76,6 @@ const getStatusBadge = (order) => {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
-                        <span>🍱</span>
                         <span>企業訂餐與下午茶揪團中心</span>
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -85,7 +84,7 @@ const getStatusBadge = (order) => {
                 </div>
                 <button
                     @click="openCreateModal"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-xl shadow-sm transition active:scale-95 shrink-0"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm transition active:scale-95 shrink-0"
                 >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     <span>發起新揪團</span>
@@ -144,7 +143,7 @@ const getStatusBadge = (order) => {
                         @click="filterTab('all')"
                         :class="[
                             'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                            !filters.status ? 'bg-orange-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            !filters.status ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                         ]"
                     >
                         全部揪團
@@ -153,37 +152,37 @@ const getStatusBadge = (order) => {
                         @click="filterTab('open')"
                         :class="[
                             'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                            filters.status === 'open' ? 'bg-orange-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            filters.status === 'open' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                         ]"
                     >
-                        🔥 進行中開團
+                         進行中開團
                     </button>
                     <button
                         @click="filterTab('closed')"
                         :class="[
                             'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                            filters.status === 'closed' ? 'bg-orange-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            filters.status === 'closed' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                         ]"
                     >
-                        📦 已結單 (店家出餐中)
+                         已結單 (店家出餐中)
                     </button>
                     <button
                         @click="filterTab('completed')"
                         :class="[
                             'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                            filters.status === 'completed' ? 'bg-orange-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            filters.status === 'completed' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                         ]"
                     >
-                        ✅ 已送達結案
+                         已送達結案
                     </button>
                     <button
                         @click="filterTab('my_created')"
                         :class="[
                             'px-4 py-2 rounded-xl transition whitespace-nowrap',
-                            filters.status === 'my_created' ? 'bg-orange-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            filters.status === 'my_created' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                         ]"
                     >
-                        👑 我發起的揪團
+                         我發起的揪團
                     </button>
                 </div>
 
@@ -210,7 +209,7 @@ const getStatusBadge = (order) => {
                                     {{ order.title }}
                                 </h3>
                                 <div class="flex items-center gap-2 mt-1 text-xs text-orange-600 dark:text-orange-400 font-semibold">
-                                    <span>🏪 店家：{{ order.restaurant_name }}</span>
+                                    <span>店家：{{ order.restaurant_name }}</span>
                                     <span v-if="order.restaurant_phone" class="text-gray-400 dark:text-gray-500 font-normal">({{ order.restaurant_phone }})</span>
                                 </div>
                             </Link>
@@ -240,7 +239,7 @@ const getStatusBadge = (order) => {
                                     </span>
                                 </div>
                                 <div v-if="order.subsidy_per_person > 0" class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">
-                                    <span>🎁 公司補助每人 ${{ order.subsidy_per_person }}</span>
+                                    <span>公司補助每人 ${{ order.subsidy_per_person }}</span>
                                 </div>
                             </div>
                         </div>
@@ -255,7 +254,7 @@ const getStatusBadge = (order) => {
 
                             <Link
                                 :href="route('meal-orders.show', order.id)"
-                                class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-lg shadow-xs transition"
+                                class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs transition"
                             >
                                 <span>{{ order.status === 'open' && !order.is_expired ? '立即點餐' : '檢視明細' }}</span>
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -267,7 +266,7 @@ const getStatusBadge = (order) => {
                 <!-- 空狀態 -->
                 <div v-else class="py-16 text-center bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs">
                     <div class="w-16 h-16 mx-auto rounded-full bg-orange-50 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400 flex items-center justify-center text-3xl">
-                        🍱
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
                     <h3 class="text-base font-bold text-gray-800 dark:text-gray-200 mt-4">目前沒有符合條件的訂餐揪團</h3>
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-sm mx-auto">
@@ -275,7 +274,7 @@ const getStatusBadge = (order) => {
                     </p>
                     <button
                         @click="openCreateModal"
-                        class="mt-5 inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-xl shadow-xs transition"
+                        class="mt-5 inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         <span>發起新揪團</span>
@@ -290,7 +289,7 @@ const getStatusBadge = (order) => {
                         :href="link.url || '#'"
                         :class="[
                             'px-3 py-1.5 text-xs rounded-lg transition font-medium',
-                            link.active ? 'bg-orange-600 text-white font-bold' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700',
+                            link.active ? 'bg-indigo-600 text-white font-bold' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700',
                             !link.url ? 'opacity-40 cursor-not-allowed' : ''
                         ]"
                         v-html="link.label"
@@ -304,7 +303,7 @@ const getStatusBadge = (order) => {
             <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-gray-100 dark:border-gray-700">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                     <div class="flex items-center gap-2">
-                        <span class="text-xl">🧋</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">發起同仁訂餐 / 下午茶揪團</h3>
                     </div>
                     <button @click="showCreateModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
@@ -409,7 +408,7 @@ const getStatusBadge = (order) => {
                         <button
                             type="submit"
                             :disabled="form.processing"
-                            class="px-5 py-2 text-xs font-bold text-white bg-orange-600 hover:bg-orange-700 rounded-xl shadow-xs transition"
+                            class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition"
                         >
                             立即發起開團
                         </button>

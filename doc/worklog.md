@@ -1,6 +1,15 @@
 # 工作日誌 (Worklog)
 
 ## 2026-10-12
+### 全站視覺改版：現代 SaaS 簡潔風
+- **修正既有 bug**：Dashboard 連到不存在的路由 `organization.index`、`knowledge.index` 造成整頁空白，改為 `org-management.index`、`documents.index`。
+- **導覽列**：高頻項目留主列，其餘收進「更多應用」分組下拉；啟用狀態改為淡底膠囊、黏頂半透明；使用者名稱不再折行；左上改為品牌標誌。
+- **設計 token（`tailwind.config.js`）**：以重映射 `indigo`（品牌群青）與 `gray`（偏冷石墨）讓既有 752 處 indigo 用法自動換色；調整圓角與陰影層級；補上原先未定義的 `text-2xs`/`text-3xs`；字體改 Inter + Noto Sans TC。
+- **全域樣式（`resources/css/app.css`）**：表單欄位統一圓角與焦點環、`font-mono` 改為等寬數字、頁首標題樣式、細捲軸、尊重 reduced-motion。
+- **共用元件**：PrimaryButton/SecondaryButton/DangerButton、Dropdown、NavLink、GuestLayout 重做；移除全大寫與寬字距標籤。
+- **頁面**：移除 26 檔共 100+ 處裝飾 emoji（圖示格改為線性 SVG，功能性符號 ✓ ✕ ★ 保留）；61 個非語意色的實心主按鈕統一為品牌色（紅/綠/琥珀保留作語意色）；Dashboard 快捷鍵格由 9 欄改 5 欄。
+- 已用瀏覽器抽查 Dashboard（深/淺色）、內訓、工單、表單、審批中心；尚未逐頁人工驗證全部 60 個頁面。
+
 ### 補完：企業福利點數、感謝幣文化牆與福利商城 (Peer Recognition & Welfare Points Hub)
 - 前一次提交僅完成資料表與 `PointWallet` 模型，本次補齊後端、前端、全站整合與測試：
   - **資料層**：新增 migration `000011` 於 `point_wallets` 加入 `quota_month`，跨月時惰性重置感謝幣額度為每月 100 枚；補齊 `RecognitionPost`、`RecognitionLike`、`WelfareReward`、`WelfareRedemption` 模型，`User` 增加 `pointWallet()`、`welfareRedemptions()` 關聯。

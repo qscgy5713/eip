@@ -1,3 +1,116 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        color-scheme: light;
+    }
+
+    .dark {
+        color-scheme: dark;
+    }
+
+    html {
+        font-feature-settings: 'cv11', 'ss01';
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        @apply bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-200;
+        letter-spacing: 0.005em;
+    }
+
+    ::selection {
+        @apply bg-indigo-200 text-indigo-950;
+    }
+
+    /* 鍵盤焦點可見 */
+    :focus-visible {
+        @apply outline-none ring-2 ring-indigo-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-950;
+    }
+
+    /* 表單欄位：統一圓角、邊框與焦點樣式 */
+    [type='text'],
+    [type='email'],
+    [type='url'],
+    [type='password'],
+    [type='number'],
+    [type='date'],
+    [type='datetime-local'],
+    [type='month'],
+    [type='search'],
+    [type='tel'],
+    [type='time'],
+    [type='week'],
+    [multiple],
+    textarea,
+    select {
+        @apply rounded-lg border-gray-300 bg-white text-gray-900 shadow-none placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    [type='text']:focus,
+    [type='email']:focus,
+    [type='url']:focus,
+    [type='password']:focus,
+    [type='number']:focus,
+    [type='date']:focus,
+    [type='datetime-local']:focus,
+    [type='month']:focus,
+    [type='search']:focus,
+    [type='tel']:focus,
+    [type='time']:focus,
+    [type='week']:focus,
+    [multiple]:focus,
+    textarea:focus,
+    select:focus {
+        @apply border-indigo-500 ring-2 ring-indigo-500/20 ring-offset-0;
+    }
+
+    [type='checkbox'],
+    [type='radio'] {
+        @apply rounded border-gray-300 text-indigo-600 dark:border-gray-600 dark:bg-gray-900;
+    }
+
+    /* 數字等寬、代碼不使用程式碼字型，讓代號與金額更好讀 */
+    .font-mono {
+        font-family: theme('fontFamily.sans');
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0;
+    }
+
+    table {
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+@layer components {
+    /* 頁面標題區 (AuthenticatedLayout header)：直接落在畫布上 */
+    .page-header h2 {
+        @apply text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-50 leading-tight;
+    }
+
+    .page-header h2 + p {
+        @apply mt-1.5 text-sm text-gray-500 dark:text-gray-400;
+    }
+}
+
+/* 細緻捲軸 */
+@media (hover: hover) {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: theme('colors.gray.300') transparent;
+    }
+
+    .dark * {
+        scrollbar-color: theme('colors.gray.700') transparent;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

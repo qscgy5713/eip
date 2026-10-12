@@ -529,7 +529,7 @@ const openDiffViewer = (rev = null) => {
                             <button
                                 type="button"
                                 @click="openAddSignModal"
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-1.5"
+                                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-1.5"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                                 <span>會辦加簽</span>
@@ -538,7 +538,7 @@ const openDiffViewer = (rev = null) => {
                             <button
                                 type="button"
                                 @click="openTransferModal"
-                                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-1.5"
+                                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-lg shadow-sm transition flex items-center gap-1.5"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
                                 <span>轉簽派審</span>
@@ -600,7 +600,7 @@ const openDiffViewer = (rev = null) => {
 
                             <!-- 手寫簽名印記展示 -->
                             <div v-if="rec.signature" class="mt-2 inline-flex items-center gap-2 p-1.5 px-3 bg-indigo-50/70 border border-indigo-100 rounded-lg">
-                                <span class="text-2xs font-bold text-indigo-700 uppercase tracking-wider flex items-center gap-1">
+                                <span class="text-2xs font-bold text-indigo-700 flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                     手寫簽章：
                                 </span>
@@ -661,7 +661,7 @@ const openDiffViewer = (rev = null) => {
                                 <button
                                     type="submit"
                                     :disabled="transferForm.processing"
-                                    class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold shadow-sm"
+                                    class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm"
                                 >
                                     確認轉簽派送
                                 </button>
@@ -721,7 +721,7 @@ const openDiffViewer = (rev = null) => {
                                 <button
                                     type="submit"
                                     :disabled="addSignForm.processing"
-                                    class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm"
+                                    class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm"
                                 >
                                     發送加簽邀請
                                 </button>
@@ -961,7 +961,7 @@ const openDiffViewer = (rev = null) => {
 
                         <!-- 欄位差異對比清單 (Field Diff List) -->
                         <div class="space-y-3">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400">
+                            <h4 class="text-xs font-bold text-gray-400">
                                 欄位變更對比 (Changes)
                             </h4>
 
@@ -992,7 +992,7 @@ const openDiffViewer = (rev = null) => {
 
                         <!-- 本次補充上傳之附件檔案 (若有) -->
                         <div v-if="activeDiffVersion.new_attachments && activeDiffVersion.new_attachments.length > 0" class="space-y-2 pt-2 border-t border-gray-100">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400">
+                            <h4 class="text-xs font-bold text-gray-400">
                                 本次修訂新補充之附件檔案 ({{ activeDiffVersion.new_attachments.length }})
                             </h4>
                             <div class="space-y-1.5">

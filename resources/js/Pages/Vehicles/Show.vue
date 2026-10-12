@@ -146,7 +146,7 @@ const printDispatchOrder = () => {
                 <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
                         <h3 class="text-base font-bold text-amber-900 dark:text-amber-200 flex items-center gap-2">
-                            <span>🛠️ 車輛調度與派車管理控制台</span>
+                            <span>車輛調度與派車管理控制台</span>
                         </h3>
                         <p class="text-xs text-amber-700 dark:text-amber-400 mt-1">
                             您擁有公務車輛調派審核與車匙交付、還車登錄權限。
@@ -182,7 +182,7 @@ const printDispatchOrder = () => {
                                 @click="showStartModal = true"
                                 class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium text-sm rounded-lg shadow-sm transition inline-flex items-center gap-1.5"
                             >
-                                🚗 交付鑰匙 · 領車出發
+                                 交付鑰匙 · 領車出發
                             </button>
                         </template>
 
@@ -190,9 +190,9 @@ const printDispatchOrder = () => {
                         <template v-if="dispatch.status === 'active'">
                             <button
                                 @click="showReturnModal = true"
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-sm transition inline-flex items-center gap-1.5"
+                                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-lg shadow-sm transition inline-flex items-center gap-1.5"
                             >
-                                🏁 收回鑰匙 · 還車里程登錄
+                                 收回鑰匙 · 還車里程登錄
                             </button>
                         </template>
                     </div>
@@ -206,7 +206,7 @@ const printDispatchOrder = () => {
                     <!-- 行程資訊卡 -->
                     <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6 border border-gray-100 dark:border-gray-700">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
-                            <span>📍 公務出差行程明細</span>
+                            <span>公務出差行程明細</span>
                             <span class="text-xs font-normal text-gray-500">事由：{{ dispatch.purpose_label }}</span>
                         </h3>
 
@@ -227,9 +227,9 @@ const printDispatchOrder = () => {
                             <div class="sm:col-span-2 bg-gray-50 dark:bg-gray-750 p-3.5 rounded-lg border border-gray-100 dark:border-gray-700">
                                 <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">預約用車時段</dt>
                                 <dd class="text-sm font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-2">
-                                    <span>📅 {{ new Date(dispatch.start_time).toLocaleString() }}</span>
+                                    <span>{{ new Date(dispatch.start_time).toLocaleString() }}</span>
                                     <span>➔</span>
-                                    <span>📅 {{ new Date(dispatch.end_time).toLocaleString() }}</span>
+                                    <span>{{ new Date(dispatch.end_time).toLocaleString() }}</span>
                                 </dd>
                             </div>
 
@@ -245,7 +245,7 @@ const printDispatchOrder = () => {
                     <!-- 里程與燃料稽核卡片 -->
                     <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6 border border-gray-100 dark:border-gray-700">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
-                            <span>🛣️ 里程行駛與車況查核</span>
+                            <span>里程行駛與車況查核</span>
                         </h3>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -277,7 +277,7 @@ const printDispatchOrder = () => {
                     <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6 border border-gray-100 dark:border-gray-700">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/40 rounded-xl flex items-center justify-center text-amber-600 dark:text-amber-400 text-2xl font-bold">
-                                🚘
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-900 dark:text-gray-100 text-lg">
@@ -313,7 +313,7 @@ const printDispatchOrder = () => {
 
                     <!-- 審核與申請人資訊 -->
                     <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-6 border border-gray-100 dark:border-gray-700 space-y-4">
-                        <h4 class="font-bold text-sm text-gray-900 dark:text-gray-100 uppercase tracking-wider">
+                        <h4 class="font-bold text-sm text-gray-900 dark:text-gray-100">
                             行政簽核流程資訊
                         </h4>
 
@@ -382,7 +382,7 @@ const printDispatchOrder = () => {
         <!-- 領車出發 Modal -->
         <div v-if="showStartModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 flex items-center justify-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">🚗 交付鑰匙 · 領車出發登錄</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">交付鑰匙 · 領車出發登錄</h3>
                 <p class="text-xs text-gray-500 mb-4">請確認目前儀表板里程數，確認出發後車輛狀態將轉為「使用中」。</p>
                 <form @submit.prevent="submitStart" class="space-y-4">
                     <div>
@@ -418,7 +418,7 @@ const printDispatchOrder = () => {
         <!-- 還車里程登錄 Modal -->
         <div v-if="showReturnModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 flex items-center justify-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">🏁 收回鑰匙 · 還車里程登錄</h3>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">收回鑰匙 · 還車里程登錄</h3>
                 <p class="text-xs text-gray-500 mb-4">請抄錄歸還時儀表板最新里程數，系統將自動計算本次出差行駛總里程。</p>
                 <form @submit.prevent="submitReturn" class="space-y-4">
                     <div>
@@ -452,7 +452,7 @@ const printDispatchOrder = () => {
                         <button
                             type="submit"
                             :disabled="returnForm.processing"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
+                            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium"
                         >
                             完成還車結案
                         </button>

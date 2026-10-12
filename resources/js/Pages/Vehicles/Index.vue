@@ -181,7 +181,7 @@ const handleExport = () => {
 
             <!-- 車隊車輛名冊卡片橫向導覽 -->
             <div class="space-y-2">
-                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">車隊現況與車位一覽</h3>
+                <h3 class="text-xs font-bold text-gray-500">車隊現況與車位一覽</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div
                         v-for="v in vehicles"
@@ -319,7 +319,7 @@ const handleExport = () => {
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-left text-xs">
-                        <thead class="bg-gray-50 dark:bg-gray-900 text-gray-500 uppercase font-semibold">
+                        <thead class="bg-gray-50 dark:bg-gray-900 text-gray-500 font-semibold">
                             <tr>
                                 <th class="px-5 py-3">派車單號</th>
                                 <th class="px-5 py-3">借用同仁</th>
@@ -418,7 +418,7 @@ const handleExport = () => {
                                     <button
                                         v-if="d.status === 'approved'"
                                         @click="handleStartTrip(d)"
-                                        class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-xs transition"
+                                        class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-xs transition"
                                     >
                                         領車出發
                                     </button>

@@ -258,7 +258,7 @@ const typeLabel = (type) => {
                 <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl shadow-lg p-6 sm:p-8 text-white space-y-5">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div class="space-y-2 text-center md:text-left">
-                            <p class="text-blue-200 text-xs font-semibold tracking-wider uppercase">今日工作排程 · 09:00 - 18:00</p>
+                            <p class="text-blue-200 text-xs font-semibold">今日工作排程 · 09:00 - 18:00</p>
                             <div class="text-4xl sm:text-5xl font-mono font-extrabold tracking-tight">{{ currentTime }}</div>
                             <p class="text-sm text-blue-100">{{ new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }) }}</p>
                         </div>
@@ -366,19 +366,19 @@ const typeLabel = (type) => {
                 <!-- 本月出勤統計 -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
-                        <p class="text-xs font-semibold text-gray-400 uppercase">本月累計工時</p>
+                        <p class="text-xs font-semibold text-gray-400">本月累計工時</p>
                         <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.totalWorkHours }} <span class="text-xs text-gray-400 font-normal">小時</span></p>
                     </div>
                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
-                        <p class="text-xs font-semibold text-gray-400 uppercase">出勤天數</p>
+                        <p class="text-xs font-semibold text-gray-400">出勤天數</p>
                         <p class="text-2xl font-bold text-blue-600 mt-1">{{ stats.daysWorked }} <span class="text-xs text-gray-400 font-normal">天</span></p>
                     </div>
                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
-                        <p class="text-xs font-semibold text-gray-400 uppercase">遲到次數</p>
+                        <p class="text-xs font-semibold text-gray-400">遲到次數</p>
                         <p class="text-2xl font-bold text-rose-600 mt-1">{{ stats.lateCount }} <span class="text-xs text-gray-400 font-normal">次</span></p>
                     </div>
                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center">
-                        <p class="text-xs font-semibold text-gray-400 uppercase">早退次數</p>
+                        <p class="text-xs font-semibold text-gray-400">早退次數</p>
                         <p class="text-2xl font-bold text-amber-600 mt-1">{{ stats.earlyLeaveCount }} <span class="text-xs text-gray-400 font-normal">次</span></p>
                     </div>
                 </div>
@@ -420,7 +420,7 @@ const typeLabel = (type) => {
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-700 font-semibold uppercase border-b border-gray-200">
+                            <thead class="bg-gray-50 text-gray-700 font-semibold border-b border-gray-200">
                                 <tr>
                                     <th class="py-3 px-4">日期</th>
                                     <th class="py-3 px-4">打卡地點 / 型態</th>
@@ -450,7 +450,7 @@ const typeLabel = (type) => {
                                                     class="text-[10px] text-blue-600 hover:underline flex items-center"
                                                     title="在 Google Maps 查看打卡經緯度"
                                                 >
-                                                    📍 地圖
+                                                     地圖
                                                 </a>
                                             </div>
                                             <p v-if="att.field_work_note" class="text-[10px] text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-100">
@@ -538,7 +538,7 @@ const typeLabel = (type) => {
                         type="button"
                         @click="confirmModalSubmit"
                         :disabled="clockInForm.processing || clockOutForm.processing"
-                        class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow transition disabled:opacity-50"
+                        class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow transition disabled:opacity-50"
                     >
                         填寫完成，確認打卡
                     </button>

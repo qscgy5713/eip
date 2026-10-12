@@ -136,19 +136,19 @@ const getStatusBadge = (s) => {
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-xs">
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-xs">
                         <div :class="['p-3 rounded-xl border transition', ticket.status === 'open' ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 font-bold text-amber-800' : 'bg-gray-50 dark:bg-gray-700/50 text-gray-400']">
-                            <p class="text-base mb-1">1️⃣</p>
+                            <p class="text-base mb-1">1</p>
                             <p>待工程師受理</p>
                         </div>
                         <div :class="['p-3 rounded-xl border transition', ['in_progress', 'pending_user'].includes(ticket.status) ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-300 font-bold text-blue-800' : 'bg-gray-50 dark:bg-gray-700/50 text-gray-400']">
-                            <p class="text-base mb-1">2️⃣</p>
+                            <p class="text-base mb-1">2</p>
                             <p>{{ ticket.status === 'pending_user' ? '待同仁確認中' : '工程師處理中' }}</p>
                         </div>
                         <div :class="['p-3 rounded-xl border transition', ticket.status === 'resolved' ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 font-bold text-emerald-800' : 'bg-gray-50 dark:bg-gray-700/50 text-gray-400']">
-                            <p class="text-base mb-1">3️⃣</p>
+                            <p class="text-base mb-1">3</p>
                             <p>已完修 (待同仁驗收)</p>
                         </div>
                         <div :class="['p-3 rounded-xl border transition', ticket.status === 'closed' ? 'bg-gray-100 dark:bg-gray-900 border-gray-400 font-bold text-gray-800 dark:text-gray-200' : 'bg-gray-50 dark:bg-gray-700/50 text-gray-400']">
-                            <p class="text-base mb-1">4️⃣</p>
+                            <p class="text-base mb-1">4</p>
                             <p>已評分結案</p>
                         </div>
                     </div>
@@ -192,7 +192,7 @@ const getStatusBadge = (s) => {
 
                             <div v-if="ticket.location">
                                 <p class="text-gray-400 font-medium">故障地點 / 座位</p>
-                                <p class="font-bold text-gray-800 dark:text-gray-200 mt-1">📍 {{ ticket.location }}</p>
+                                <p class="font-bold text-gray-800 dark:text-gray-200 mt-1">{{ ticket.location }}</p>
                             </div>
 
                             <div>
@@ -226,14 +226,14 @@ const getStatusBadge = (s) => {
                                     <button
                                         v-if="ticket.status === 'open'"
                                         @click="updateStatus('in_progress')"
-                                        class="py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition text-center shadow-xs"
+                                        class="py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition text-center shadow-xs"
                                     >
                                         接單處理
                                     </button>
                                     <button
                                         v-if="ticket.status === 'in_progress'"
                                         @click="updateStatus('pending_user')"
-                                        class="py-2 px-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition text-center shadow-xs"
+                                        class="py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition text-center shadow-xs"
                                     >
                                         待同仁確認
                                     </button>
@@ -251,7 +251,6 @@ const getStatusBadge = (s) => {
                         <!-- 滿意度結案卡片 (若完修待評分，或已結案展示評價) -->
                         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-xs text-xs">
                             <h3 class="font-bold text-gray-900 dark:text-gray-100 text-sm border-b border-gray-100 dark:border-gray-700 pb-2 flex items-center gap-1.5">
-                                <span>⭐</span>
                                 <span>服務滿意度評分與結案</span>
                             </h3>
 
@@ -274,7 +273,7 @@ const getStatusBadge = (s) => {
                             <!-- 完修狀態供提單同仁評分 -->
                             <div v-else-if="ticket.status === 'resolved'" class="mt-3 space-y-3">
                                 <p class="text-emerald-700 dark:text-emerald-400 font-semibold">
-                                    🎉 工程師已標記修復完成！請確認設備運作正常，並為本次服務給予評分：
+                                     工程師已標記修復完成！請確認設備運作正常，並為本次服務給予評分：
                                 </p>
                                 <form @submit.prevent="submitRate" class="space-y-3">
                                     <div>
@@ -283,11 +282,11 @@ const getStatusBadge = (s) => {
                                             v-model="ratingForm.satisfaction_rating"
                                             class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 text-xs"
                                         >
-                                            <option :value="5">⭐⭐⭐⭐⭐ 5 星 (非常滿意，神速修復)</option>
-                                            <option :value="4">⭐⭐⭐⭐ 4 星 (滿意)</option>
-                                            <option :value="3">⭐⭐⭐ 3 星 (普通)</option>
-                                            <option :value="2">⭐⭐ 2 星 (尚可)</option>
-                                            <option :value="1">⭐ 1 星 (不滿意)</option>
+                                            <option :value="5">5 星 (非常滿意，神速修復)</option>
+                                            <option :value="4">4 星 (滿意)</option>
+                                            <option :value="3">3 星 (普通)</option>
+                                            <option :value="2">2 星 (尚可)</option>
+                                            <option :value="1">1 星 (不滿意)</option>
                                         </select>
                                     </div>
 
@@ -312,7 +311,7 @@ const getStatusBadge = (s) => {
                             </div>
 
                             <div v-else class="mt-3 text-center py-4 text-gray-400">
-                                ⏳ 工單處理完成後即可進行結案滿意度評分
+                                 工單處理完成後即可進行結案滿意度評分
                             </div>
                         </div>
                     </div>
@@ -322,7 +321,7 @@ const getStatusBadge = (s) => {
                         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 shadow-xs flex flex-col justify-between min-h-[500px]">
                             <div>
                                 <h3 class="font-bold text-gray-900 dark:text-gray-100 text-sm border-b border-gray-100 dark:border-gray-700 pb-3 flex items-center justify-between">
-                                    <span>💬 處理歷程與對話交流</span>
+                                    <span>處理歷程與對話交流</span>
                                     <span class="text-xs font-normal text-gray-400">共 {{ replies.length }} 則溝通紀錄</span>
                                 </h3>
 
@@ -344,7 +343,7 @@ const getStatusBadge = (s) => {
                                                     {{ reply.user?.role === 'admin' ? '系統管理員' : '工程師' }}
                                                 </span>
                                                 <span v-if="reply.is_internal" class="px-1.5 py-0.2 rounded text-[10px] bg-amber-200 text-amber-900 font-bold">
-                                                    🔒 內部備註 (同仁不可見)
+                                                     內部備註 (同仁不可見)
                                                 </span>
                                             </div>
                                             <span class="text-gray-400 text-[11px]">{{ new Date(reply.created_at).toLocaleString() }}</span>
@@ -363,7 +362,7 @@ const getStatusBadge = (s) => {
                                                 target="_blank"
                                                 class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-medium text-gray-700 dark:text-gray-300 hover:text-rose-600 mr-2"
                                             >
-                                                <span>📎 {{ att.name }}</span>
+                                                <span>{{ att.name }}</span>
                                             </a>
                                         </div>
                                     </div>
@@ -414,7 +413,7 @@ const getStatusBadge = (s) => {
                                         <button
                                             type="submit"
                                             :disabled="replyForm.processing"
-                                            class="px-5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition active:scale-95"
+                                            class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition active:scale-95"
                                         >
                                             送出回覆
                                         </button>
@@ -423,7 +422,7 @@ const getStatusBadge = (s) => {
                             </div>
 
                             <div v-else class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 text-center text-xs text-gray-400">
-                                🔒 本工單已完成結案，對話溝通已關閉存檔。
+                                 本工單已完成結案，對話溝通已關閉存檔。
                             </div>
                         </div>
                     </div>

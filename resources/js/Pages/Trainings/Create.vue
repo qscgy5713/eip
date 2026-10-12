@@ -38,7 +38,7 @@ const submit = () => {
                 </Link>
                 <div>
                     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                        🎓 開設新企業內訓課程
+                         開設新企業內訓課程
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                         規劃內部研討或外部專家名師講座，發布後系統將公告於學習中心並開放同仁報名。
@@ -53,7 +53,7 @@ const submit = () => {
                     <!-- 基本課程資訊 -->
                     <div class="space-y-4">
                         <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 pb-2 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
-                            <span>📌 課程主軸與講師經歷</span>
+                            <span>課程主軸與講師經歷</span>
                         </h3>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -122,7 +122,7 @@ const submit = () => {
                     <!-- 開課時段與研習地點 -->
                     <div class="space-y-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 pb-2 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
-                            <span>🕒 開課時程與名額學分配置</span>
+                            <span>開課時程與名額學分配置</span>
                         </h3>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

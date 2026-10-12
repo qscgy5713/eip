@@ -176,7 +176,7 @@ const statusLabel = (status) => {
                     <button
                         v-if="asset.status === 'available'"
                         @click="openBorrowModal"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold shadow-sm transition"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-sm transition"
                     >
                         <span>登記借調</span>
                     </button>
@@ -211,7 +211,7 @@ const statusLabel = (status) => {
 
                         <!-- 規格配置 -->
                         <div class="space-y-2">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400">規格配備描述</h4>
+                            <h4 class="text-xs font-bold text-gray-400">規格配備描述</h4>
                             <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-gray-900/40 p-3.5 rounded-lg border border-gray-100 dark:border-gray-700/60">
                                 {{ asset.specification || '無特殊規格描述，標準公司公務設備。' }}
                             </p>
@@ -247,7 +247,7 @@ const statusLabel = (status) => {
 
                         <!-- 備註說明 -->
                         <div v-if="asset.notes" class="pt-2">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">備註說明</h4>
+                            <h4 class="text-xs font-bold text-gray-400 mb-1">備註說明</h4>
                             <p class="text-xs text-gray-500 dark:text-gray-400">{{ asset.notes }}</p>
                         </div>
                     </div>

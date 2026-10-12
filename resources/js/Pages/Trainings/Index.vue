@@ -49,7 +49,7 @@ const resetFilter = () => {
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                        🎓 企業內訓課程與員工學習學分系統
+                         企業內訓課程與員工學習學分系統
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         賦能同仁持續精進成長，研習專業技術、領導管理與法規通識，打造高學習力企業組織。
@@ -86,7 +86,7 @@ const resetFilter = () => {
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl shrink-0">
-                        📚
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500 dark:text-gray-400">開放報名課程</p>
@@ -98,7 +98,7 @@ const resetFilter = () => {
 
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl shrink-0">
-                        👥
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500 dark:text-gray-400">同仁參訓總人次</p>
@@ -110,7 +110,7 @@ const resetFilter = () => {
 
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shrink-0">
-                        🏅
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500 dark:text-gray-400">我已獲認證學分</p>
@@ -122,7 +122,7 @@ const resetFilter = () => {
 
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
                     <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl shrink-0">
-                        ⏱️
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500 dark:text-gray-400">我累計研習時數</p>
@@ -253,16 +253,16 @@ const resetFilter = () => {
                         <!-- 講師與開課資訊 -->
                         <div class="space-y-1.5 pt-2 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-400">
                             <div class="flex items-center gap-2">
-                                <span class="text-gray-400">👨‍🏫 主講：</span>
+                                <span class="text-gray-400">主講：</span>
                                 <span class="font-medium text-gray-900 dark:text-gray-200">{{ course.instructor }}</span>
                                 <span v-if="course.instructor_title" class="text-2xs text-gray-400">({{ course.instructor_title }})</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="text-gray-400">📅 時間：</span>
+                                <span class="text-gray-400">時間：</span>
                                 <span>{{ new Date(course.start_time).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="text-gray-400">📍 地點：</span>
+                                <span class="text-gray-400">地點：</span>
                                 <span class="truncate">{{ course.location }}</span>
                             </div>
                         </div>
@@ -292,7 +292,7 @@ const resetFilter = () => {
                     <div class="p-4 bg-gray-50/70 dark:bg-gray-750 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <span class="px-2 py-0.5 rounded text-2xs font-bold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300">
-                                🏅 {{ course.credits }} 學分
+                                 {{ course.credits }} 學分
                             </span>
                             <span class="text-2xs text-gray-400 font-mono">
                                 {{ course.hours }} 小時
@@ -311,13 +311,13 @@ const resetFilter = () => {
                                 v-else-if="course.my_registration_status === 'waitlist'"
                                 class="px-2.5 py-1 text-2xs font-bold rounded-lg bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
                             >
-                                ⏳ 候補名單中
+                                 候補名單中
                             </span>
                             <span
                                 v-else-if="course.my_registration_status === 'attended'"
                                 class="px-2.5 py-1 text-2xs font-bold rounded-lg bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300"
                             >
-                                🎓 完訓合格
+                                 完訓合格
                             </span>
 
                             <Link
@@ -334,7 +334,7 @@ const resetFilter = () => {
             <!-- 空狀態 -->
             <div v-if="courses.data.length === 0" class="p-12 text-center bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
                 <div class="w-16 h-16 mx-auto mb-4 bg-indigo-50 dark:bg-indigo-950/40 rounded-full flex items-center justify-center text-3xl">
-                    🎓
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <h3 class="text-base font-bold text-gray-800 dark:text-gray-200">查無符合條件的內訓課程</h3>
                 <p class="text-xs text-gray-400 mt-1">您可以更換領域分類或搜尋字詞，或聯絡人資學習發展小組諮詢。</p>

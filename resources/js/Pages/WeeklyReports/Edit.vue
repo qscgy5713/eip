@@ -33,7 +33,7 @@ const submitUpdate = (asDraft = false) => {
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
-                        <span>✏️ 編輯工作週報</span>
+                        <span>編輯工作週報</span>
                         <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300">
                             {{ report.year }} 年 第 {{ report.week_number }} 週
                         </span>
@@ -59,7 +59,7 @@ const submitUpdate = (asDraft = false) => {
                         
                         <!-- 1. 本週工作重點概述 -->
                         <div>
-                            <InputLabel for="summary" value="📌 本週工作重點概述 (Summary) *" class="text-sm font-bold" />
+                            <InputLabel for="summary" value="本週工作重點概述 (Summary) *" class="text-sm font-bold" />
                             <textarea
                                 id="summary"
                                 v-model="form.summary"
@@ -72,7 +72,7 @@ const submitUpdate = (asDraft = false) => {
 
                         <!-- 2. 具體完成事項 -->
                         <div>
-                            <InputLabel for="achievements" value="🎯 具體完成事項 (Achievements) *" class="text-sm font-bold" />
+                            <InputLabel for="achievements" value="具體完成事項 (Achievements) *" class="text-sm font-bold" />
                             <textarea
                                 id="achievements"
                                 v-model="form.achievements"
@@ -85,7 +85,7 @@ const submitUpdate = (asDraft = false) => {
 
                         <!-- 3. 下週工作計畫 -->
                         <div>
-                            <InputLabel for="plans_next_week" value="🚀 下週工作計畫 (Next Week Plans) *" class="text-sm font-bold" />
+                            <InputLabel for="plans_next_week" value="下週工作計畫 (Next Week Plans) *" class="text-sm font-bold" />
                             <textarea
                                 id="plans_next_week"
                                 v-model="form.plans_next_week"
@@ -98,7 +98,7 @@ const submitUpdate = (asDraft = false) => {
 
                         <!-- 4. 遭遇困難或需跨部門支援 -->
                         <div>
-                            <InputLabel for="challenges_or_support" value="💡 遭遇困難、阻礙或需跨部門協助事項 (Challenges & Support)" class="text-sm font-bold" />
+                            <InputLabel for="challenges_or_support" value="遭遇困難、阻礙或需跨部門協助事項 (Challenges & Support)" class="text-sm font-bold" />
                             <textarea
                                 id="challenges_or_support"
                                 v-model="form.challenges_or_support"
@@ -116,7 +116,7 @@ const submitUpdate = (asDraft = false) => {
                                 :disabled="form.processing"
                                 class="text-xs"
                             >
-                                💾 暫存為草稿
+                                 暫存為草稿
                             </SecondaryButton>
                             <PrimaryButton
                                 type="button"
@@ -124,7 +124,7 @@ const submitUpdate = (asDraft = false) => {
                                 :disabled="form.processing"
                                 class="text-xs"
                             >
-                                🚀 正式提交更新週報
+                                 正式提交更新週報
                             </PrimaryButton>
                         </div>
                     </form>

@@ -205,7 +205,7 @@ const statusBadge = (status) => {
                 </div>
 
                 <!-- 常用快捷行動列 (Quick Action Bar) -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-3">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     <Link :href="route('forms.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition flex items-center space-x-3 group">
                         <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h2.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -269,7 +269,7 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">特休與補休明細</p>
                         </div>
                     </Link>
-                    <Link :href="route('organization.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition flex items-center space-x-3 group">
+                    <Link :href="route('org-management.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition flex items-center space-x-3 group">
                         <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                         </div>
@@ -278,7 +278,7 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">同仁分機與主管</p>
                         </div>
                     </Link>
-                    <Link :href="route('knowledge.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-md transition flex items-center space-x-3 group">
+                    <Link :href="route('documents.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-md transition flex items-center space-x-3 group">
                         <div class="w-9 h-9 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
@@ -631,7 +631,7 @@ const statusBadge = (status) => {
                                 </template>
                                 <template v-else>
                                     <div class="p-3 bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 rounded-lg text-xs text-amber-800 dark:text-amber-300">
-                                        <p class="font-semibold">⚠️ 提醒您本週尚未提交工作週報</p>
+                                        <p class="font-semibold">提醒您本週尚未提交工作週報</p>
                                         <p class="text-[11px] mt-1 text-amber-700 dark:text-amber-400">總結本週完成任務與跨部門成果，方便主管點評與團隊同步。</p>
                                     </div>
                                 </template>
@@ -641,7 +641,7 @@ const statusBadge = (status) => {
                             <Link
                                 v-if="myWeeklyReport"
                                 :href="route('weekly-reports.show', myWeeklyReport.id)"
-                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white shadow-xs transition"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition"
                             >
                                 檢視我的週報 &rarr;
                             </Link>
@@ -692,7 +692,7 @@ const statusBadge = (status) => {
                                     </div>
                                     <Link
                                         :href="route('meal-orders.show', order.id)"
-                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-orange-500 text-white hover:bg-orange-600 transition shrink-0 shadow-xs"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-indigo-500 text-white hover:bg-indigo-600 transition shrink-0 shadow-xs"
                                     >
                                         點餐
                                     </Link>
@@ -705,7 +705,7 @@ const statusBadge = (status) => {
                         <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
                             <Link
                                 :href="route('meal-orders.index')"
-                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-orange-600 hover:bg-orange-700 text-white shadow-xs transition"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition"
                             >
                                 我要開團 / 點餐 &rarr;
                             </Link>
@@ -824,7 +824,7 @@ const statusBadge = (status) => {
                         <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
                             <Link
                                 :href="route('visitor-reservations.create')"
-                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white shadow-xs transition"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition"
                             >
                                 發起訪客預約 &rarr;
                             </Link>

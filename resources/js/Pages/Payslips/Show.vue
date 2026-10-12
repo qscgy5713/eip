@@ -129,7 +129,7 @@ const handlePrint = () => {
                         <!-- 左欄：應發項目 (Earnings) -->
                         <div class="rounded-xl border border-blue-100 dark:border-blue-900/60 overflow-hidden">
                             <div class="bg-blue-50 dark:bg-blue-950/40 px-4 py-2.5 border-b border-blue-100 dark:border-blue-900/60 flex justify-between items-center">
-                                <span class="font-bold text-xs text-blue-800 dark:text-blue-300 uppercase tracking-wider">應發薪資項目 (EARNINGS)</span>
+                                <span class="font-bold text-xs text-blue-800 dark:text-blue-300">應發薪資項目 (EARNINGS)</span>
                                 <span class="text-[11px] text-blue-600 dark:text-blue-400 font-mono">NTD</span>
                             </div>
                             <div class="divide-y divide-gray-100 dark:divide-gray-700 text-xs">
@@ -163,7 +163,7 @@ const handlePrint = () => {
                         <!-- 右欄：應扣項目 (Deductions) -->
                         <div class="rounded-xl border border-rose-100 dark:border-rose-900/60 overflow-hidden">
                             <div class="bg-rose-50 dark:bg-rose-950/40 px-4 py-2.5 border-b border-rose-100 dark:border-rose-900/60 flex justify-between items-center">
-                                <span class="font-bold text-xs text-rose-800 dark:text-rose-300 uppercase tracking-wider">法定扣繳項目 (DEDUCTIONS)</span>
+                                <span class="font-bold text-xs text-rose-800 dark:text-rose-300">法定扣繳項目 (DEDUCTIONS)</span>
                                 <span class="text-[11px] text-rose-600 dark:text-rose-400 font-mono">NTD</span>
                             </div>
                             <div class="divide-y divide-gray-100 dark:divide-gray-700 text-xs">
@@ -199,7 +199,7 @@ const handlePrint = () => {
                     <!-- 實發總計結算 (Net Pay Highlight) -->
                     <div class="rounded-xl bg-gradient-to-r from-emerald-900 to-teal-900 text-white p-6 my-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm print:bg-none print:border-2 print:border-black print:text-black">
                         <div>
-                            <span class="text-xs font-bold text-emerald-300 print:text-black tracking-wider uppercase">實際發放金額 (NET PAYABLE)</span>
+                            <span class="text-xs font-bold text-emerald-300 print:text-black">實際發放金額 (NET PAYABLE)</span>
                             <p class="text-xs text-emerald-100 print:text-gray-600 mt-0.5">應發金額減除各項法定扣繳後之轉帳淨額</p>
                         </div>
                         <div class="text-right">

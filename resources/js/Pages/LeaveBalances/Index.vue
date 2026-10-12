@@ -400,7 +400,7 @@ const overtimeStatusLabel = (status, isComp) => {
                     <!-- 頁籤 1: 請假扣額明細表格 -->
                     <div v-show="activeLedgerTab === 'leave'" class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-700 uppercase font-bold border-b border-gray-200">
+                            <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
                                 <tr>
                                     <th class="px-5 py-3">申請公文單號 / 主旨</th>
                                     <th class="px-5 py-3">假別類型</th>
@@ -463,7 +463,7 @@ const overtimeStatusLabel = (status, isComp) => {
                     <!-- 頁籤 2: 加班補休折算入帳明細表格 -->
                     <div v-show="activeLedgerTab === 'overtime'" class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-gray-600">
-                            <thead class="bg-gray-50 text-gray-700 uppercase font-bold border-b border-gray-200">
+                            <thead class="bg-gray-50 text-gray-700 font-bold border-b border-gray-200">
                                 <tr>
                                     <th class="px-5 py-3">加班單號 / 主旨</th>
                                     <th class="px-5 py-3">加班日期</th>

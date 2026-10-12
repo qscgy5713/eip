@@ -13,9 +13,12 @@ const props = defineProps({
 });
 
 const classes = computed(() =>
-    props.active
-        ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-500 dark:border-indigo-400 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-        : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none focus:text-gray-700 dark:focus:text-gray-200 focus:border-gray-300 transition duration-150 ease-in-out',
+    [
+        'inline-flex items-center rounded-lg px-2.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors focus:outline-none',
+        props.active
+            ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-50'
+            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100',
+    ].join(' '),
 );
 </script>
 
