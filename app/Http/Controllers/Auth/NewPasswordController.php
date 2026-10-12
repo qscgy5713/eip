@@ -46,6 +46,12 @@ class NewPasswordController extends Controller
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
+                if (app(\App\Services\PasswordPolicyService::class)->wasUsedRecently($user, (string) $request->password)) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'password' => '新密碼不可與目前或最近用過的密碼相同。',
+                    ]);
+                }
+                app(\App\Services\PasswordPolicyService::class)->remember($user);
                 $user->forceFill([
                     'password' => Hash::make($request->password),
                     'must_change_password' => false,

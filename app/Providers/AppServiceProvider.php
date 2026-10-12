@@ -28,6 +28,15 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
 
+        // Queue worker 心跳:每次輪詢更新(最多每 20 秒寫一次快取),供「系統健康」頁判斷 worker 是否還活著
+        $lastBeat = 0;
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Queue\Events\Looping::class, function () use (&$lastBeat) {
+            if (time() - $lastBeat >= 20) {
+                $lastBeat = time();
+                \Illuminate\Support\Facades\Cache::put('eip:queue_heartbeat', $lastBeat, 600);
+            }
+        });
+
         // JSON 日期帶上應用時區位移(如 2026-10-12T00:00:00+08:00),前端截取 YYYY-MM-DD 才不會因 UTC 轉換差一天
         Carbon::serializeUsing(fn (Carbon $date) => $date->format('Y-m-d\TH:i:sP'));
 
@@ -61,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
 
         // 模型綁定參數一律限數字:避免 /assets/create 這類非數字網址在 PostgreSQL 觸發型別錯誤而回 500,改為正常 404
         foreach ([
-            'announcement', 'asset', 'booking', 'delegation', 'department', 'document', 'form', 'formRequest',
+            'announcement', 'asset', 'booking', 'delegation', 'department', 'document', 'form', 'formRequest', 'holiday',
             'mealOrder', 'meetingRoom', 'payslip', 'poll', 'project', 'recognitionPost', 'registration', 'task',
             'ticket', 'trainingCourse', 'user', 'vehicleDispatch', 'visitorReservation', 'webhook', 'weeklyReport',
             'welfareRedemption', 'welfareReward',

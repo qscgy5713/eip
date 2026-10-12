@@ -22,6 +22,12 @@ class ProfileController extends Controller
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
             'twoFactor' => $this->twoFactorState($request),
+            'loginEvents' => \App\Models\LoginEvent::where('user_id', $request->user()->id)
+                ->latest('id')->limit(15)->get(['id', 'event', 'ip', 'user_agent', 'created_at'])
+                ->map(fn ($e) => [
+                    'id' => $e->id, 'event' => $e->event, 'ip' => $e->ip, 'created_at' => $e->created_at,
+                    'device' => \App\Models\LoginEvent::describeAgent($e->user_agent),
+                ])->values(),
             'mailNotifications' => (bool) $request->user()->mail_notifications,
             'mailNotificationsAvailable' => (bool) config('eip.mail_notifications'),
         ]);
@@ -42,6 +48,21 @@ class ProfileController extends Controller
             'recoveryCodes' => session('two_factor_recovery_codes'),
             'recoveryRemaining' => $user->hasTwoFactorEnabled() ? count($user->two_factor_recovery_codes ?? []) : 0,
         ];
+    }
+
+    /** 登出這個帳號在其他裝置/瀏覽器的登入(本機維持登入),需再輸入密碼 */
+    public function logoutOtherDevices(Request $request): RedirectResponse
+    {
+        $request->validate(['password' => ['required', 'current_password']]);
+
+        Auth::logoutOtherDevices($request->input('password'));
+        \App\Models\AuditLog::log(
+            action: 'logout_other_devices',
+            description: "同仁 {$request->user()->name} 登出了其他裝置的登入",
+            auditable: $request->user()
+        );
+
+        return Redirect::route('profile.edit')->with('success', '已登出其他所有裝置。');
     }
 
     /** 切換是否同步以 Email 接收系統通知 */

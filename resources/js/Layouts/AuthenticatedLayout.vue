@@ -12,6 +12,14 @@ import { Link, usePage } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 
+// 手機選單展開時鎖住背景捲動,避免手指滑選單時帶動後面的頁面
+watch(showingNavigationDropdown, (open) => {
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+});
+onBeforeUnmount(() => {
+    document.documentElement.style.overflow = '';
+});
+
 // 全站錯誤提示:許多頁面的表單沒有逐欄顯示驗證錯誤,這裡統一以提示條呈現,避免操作失敗卻毫無回饋
 const page = usePage();
 const errorToast = ref([]);
@@ -186,6 +194,9 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                                             <DropdownLink v-if="$page.props.auth.user.role === 'admin'" :href="route('webhooks.index')">
                                                 整合設定 (Webhook)
                                             </DropdownLink>
+                                            <DropdownLink v-if="$page.props.auth.user.role === 'admin'" :href="route('system-health.index')">
+                                                系統健康
+                                            </DropdownLink>
                                             <DropdownLink v-if="$page.props.auth.user.role === 'admin'" :href="route('branding.edit')">
                                                 品牌設定
                                             </DropdownLink>
@@ -351,6 +362,9 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                                         >
                                             表單統計報表
                                         </DropdownLink>
+                                        <DropdownLink :href="route('holidays.index')">
+                                            假日日曆
+                                        </DropdownLink>
                                         <DropdownLink
                                             :href="route('profile.edit')"
                                         >
@@ -417,7 +431,7 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                         block: showingNavigationDropdown,
                         hidden: !showingNavigationDropdown,
                     }"
-                    class="sm:hidden"
+                    class="sm:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain"
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
@@ -555,6 +569,13 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"
+                            :href="route('system-health.index')"
+                            :active="route().current('system-health.*')"
+                        >
+                            系統健康
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.role === 'admin'"
                             :href="route('webhooks.index')"
                             :active="route().current('webhooks.*')"
                         >
@@ -638,6 +659,9 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                                 :href="route('reports.index')"
                             >
                                 表單統計報表
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('holidays.index')">
+                                假日日曆
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('profile.edit')">
                                 個人帳號設定

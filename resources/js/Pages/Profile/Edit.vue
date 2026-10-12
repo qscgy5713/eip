@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
+import LoginActivityForm from './Partials/LoginActivityForm.vue';
 import NotificationPreferencesForm from './Partials/NotificationPreferencesForm.vue';
 import TwoFactorForm from './Partials/TwoFactorForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
@@ -16,6 +17,10 @@ defineProps({
     twoFactor: {
         type: Object,
         required: true,
+    },
+    loginEvents: {
+        type: Array,
+        default: () => [],
     },
     mailNotifications: {
         type: Boolean,
@@ -62,6 +67,12 @@ defineProps({
                     class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
                 >
                     <TwoFactorForm :two-factor="twoFactor" />
+                </div>
+
+                <div
+                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+                >
+                    <LoginActivityForm :events="loginEvents" />
                 </div>
 
                 <div

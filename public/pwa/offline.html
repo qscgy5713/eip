@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>目前離線</title>
+    <style>
+        :root { color-scheme: light dark; }
+        body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: system-ui, "Noto Sans TC", sans-serif; background: #f9fafb; color: #111827; }
+        main { max-width: 22rem; padding: 1.5rem; text-align: center; }
+        h1 { font-size: 1.25rem; margin: 0 0 .5rem; }
+        p { margin: 0 0 1.25rem; line-height: 1.6; color: #4b5563; }
+        button { border: 0; border-radius: .5rem; background: #2547d9; color: #fff; padding: .6rem 1.2rem; font-size: .9rem; }
+        @media (prefers-color-scheme: dark) { body { background: #111827; color: #f3f4f6; } p { color: #9ca3af; } }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>目前沒有網路連線</h1>
+        <p>為了保護公司資料,離線時不會顯示任何內容。請確認網路連線後再重新載入。</p>
+        <button type="button" onclick="location.reload()">重新載入</button>
+    </main>
+</body>
+</html>

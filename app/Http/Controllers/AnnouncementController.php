@@ -163,17 +163,73 @@ class AnnouncementController extends Controller
             'read_at' => now(),
         ]);
 
-        $announcement->load(['author', 'reads.user']);
+        $canManage = $user->isAdmin() || $user->isHr() || $announcement->author_id === $user->id;
+        $announcement->load(['author']);
         $announcement->reads_count = $announcement->reads()->count();
 
-        return Inertia::render('Announcements/Show', [
-            'announcement' => $announcement,
-            'canManage' => $user->isAdmin() || $user->isHr() || $announcement->author_id === $user->id,
-            'readers' => $announcement->reads->map(fn($r) => [
+        // 已讀 / 未讀名單只給管理者看,一般同仁不應看到誰在何時讀過
+        $readers = [];
+        $unread = [];
+        if ($canManage) {
+            $reads = $announcement->reads()->with('user:id,name')->get();
+            $readers = $reads->map(fn ($r) => [
                 'name' => $r->user?->name ?? '離職同仁',
                 'read_at' => $r->read_at?->format('Y-m-d H:i') ?? '',
-            ]),
+            ])->values();
+            $unread = $announcement->status === 'published'
+                ? User::where('status', 'active')->whereNotIn('id', $reads->pluck('user_id'))->orderBy('name')->get(['id', 'name', 'job_title'])
+                : collect();
+        }
+
+        return Inertia::render('Announcements/Show', [
+            'announcement' => $announcement->makeHidden('reads'),
+            'canManage' => $canManage,
+            'readers' => $readers,
+            'unread' => $unread,
+            'lastRemindedAt' => $canManage ? \Illuminate\Support\Facades\Cache::get("announcement:{$announcement->id}:reminded_at") : null,
         ]);
+    }
+
+    /** 對尚未閱讀的在職同仁發出催讀通知(同一則公告 1 小時內只能催一次) */
+    public function remind(Request $request, Announcement $announcement): RedirectResponse
+    {
+        $user = $request->user();
+        abort_unless($user->isAdmin() || $user->isHr() || $announcement->author_id === $user->id, 403);
+
+        if ($announcement->status !== 'published') {
+            return back()->with('error', '這則公告尚未發布,無法催讀。');
+        }
+
+        $cacheKey = "announcement:{$announcement->id}:reminded_at";
+        $last = \Illuminate\Support\Facades\Cache::get($cacheKey);
+        if ($last && now()->timestamp - (int) $last < 3600) {
+            return back()->with('error', '剛剛才催過讀,請 1 小時後再試。');
+        }
+
+        $targets = User::where('status', 'active')
+            ->where('id', '!=', $user->id)
+            ->whereNotIn('id', $announcement->reads()->pluck('user_id'))
+            ->get();
+
+        foreach ($targets as $target) {
+            $target->notify(new EipSystemNotification(
+                title: "【請閱讀公告】{$announcement->title}",
+                message: "這則公告還沒有閱讀紀錄,請撥冗查閱。",
+                type: 'announcement',
+                actionUrl: route('announcements.show', $announcement->id),
+                senderName: $user->name,
+                extra: ['announcement_id' => $announcement->id, 'reminder' => true]
+            ));
+        }
+        \Illuminate\Support\Facades\Cache::put($cacheKey, now()->timestamp, 3600);
+
+        AuditLog::log(
+            action: 'remind_announcement_unread',
+            description: "{$user->name} 對公告「{$announcement->title}」的 {$targets->count()} 位未讀同仁發出催讀通知",
+            auditable: $announcement
+        );
+
+        return back()->with('success', "已通知 {$targets->count()} 位尚未閱讀的同仁。");
     }
 
     public function update(Request $request, Announcement $announcement): RedirectResponse

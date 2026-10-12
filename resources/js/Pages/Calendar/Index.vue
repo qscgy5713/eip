@@ -7,10 +7,17 @@ const props = defineProps({
     events: Array,
     departments: Array,
     filters: Object,
+    holidays: { type: Array, default: () => [] },
 });
 
+// 以「本地時區」格式化日期(toISOString 會轉成 UTC,台北早上 8 點前會差一天)
+const localDateStr = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+// 假日 / 補班日對照 { 'YYYY-MM-DD': { name, type } }
+const holidayMap = computed(() => Object.fromEntries(props.holidays.map((h) => [h.date, h])));
+
 // 當前檢視的年月份 (YYYY-MM)
-const currentMonth = ref(props.filters.month || new Date().toISOString().slice(0, 7));
+const currentMonth = ref(props.filters.month || localDateStr(new Date()).slice(0, 7));
 const selectedType = ref(props.filters.type || 'all');
 const selectedDept = ref(props.filters.department_id || '');
 
@@ -47,8 +54,7 @@ const nextMonth = () => {
 };
 
 const goToday = () => {
-    const todayStr = new Date().toISOString().slice(0, 7);
-    updateView(todayStr);
+    updateView(localDateStr(new Date()).slice(0, 7));
 };
 
 // 格式化當前月份標題 (例如：2026 年 10 月)
@@ -67,14 +73,14 @@ const calendarDays = computed(() => {
     const totalDaysInMonth = lastDayOfMonth.getDate();
 
     const days = [];
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = localDateStr(new Date());
 
     // 1. 上個月補足的前置天數
     const prevMonthLastDay = new Date(year, month - 1, 0).getDate();
     for (let i = startDayOfWeek - 1; i >= 0; i--) {
         const d = prevMonthLastDay - i;
         const dateObj = new Date(year, month - 2, d);
-        const dateStr = dateObj.toISOString().slice(0, 10);
+        const dateStr = localDateStr(dateObj);
         days.push({
             dateStr,
             dayNumber: d,
@@ -101,7 +107,7 @@ const calendarDays = computed(() => {
     const remaining = (7 - (days.length % 7)) % 7;
     for (let d = 1; d <= remaining; d++) {
         const dateObj = new Date(year, month, d);
-        const dateStr = dateObj.toISOString().slice(0, 10);
+        const dateStr = localDateStr(dateObj);
         days.push({
             dateStr,
             dayNumber: d,
@@ -336,6 +342,14 @@ const openDateEventsModal = (dateStr, evList) => {
                                     ]"
                                 >
                                     {{ day.dayNumber }}
+                                </span>
+                                <span
+                                    v-if="holidayMap[day.dateStr]"
+                                    :class="holidayMap[day.dateStr].type === 'holiday' ? 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200'"
+                                    class="mx-1 truncate rounded px-1.5 py-0.5 text-[10px] font-medium"
+                                    :title="holidayMap[day.dateStr].name"
+                                >
+                                    {{ holidayMap[day.dateStr].type === 'holiday' ? '' : '補班 ' }}{{ holidayMap[day.dateStr].name }}
                                 </span>
                                 <span
                                     v-if="eventsByDate[day.dateStr]?.length > 0"

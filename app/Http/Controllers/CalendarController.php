@@ -33,6 +33,7 @@ class CalendarController extends Controller
 
         return Inertia::render('Calendar/Index', [
             'events' => $events,
+            'holidays' => \App\Models\Holiday::whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])->get(['date', 'name', 'type']),
             'departments' => $departments,
             'filters' => [
                 'month' => $month,

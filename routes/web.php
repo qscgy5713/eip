@@ -39,6 +39,8 @@ Route::get('/', function () {
 // 品牌 Logo / Favicon 檔案 (登入頁也會用到,不需登入)
 Route::get('/branding/{kind}', [\App\Http\Controllers\BrandingController::class, 'asset'])->where('kind', 'logo|favicon')->name('branding.asset');
 
+Route::get('/manifest.webmanifest', [\App\Http\Controllers\PwaController::class, 'manifest'])->name('pwa.manifest');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/global-search', [GlobalSearchController::class, 'search'])->name('global-search');
@@ -78,6 +80,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
     Route::get('/attendance/reports', [AttendanceReportController::class, 'index'])->name('attendance.reports.index');
+    Route::post('/announcements/{announcement}/remind', [\App\Http\Controllers\AnnouncementController::class, 'remind'])->name('announcements.remind');
+    Route::get('/system-health', [\App\Http\Controllers\SystemHealthController::class, 'index'])->name('system-health.index');
+    Route::post('/system-health/failed-jobs/retry-all', [\App\Http\Controllers\SystemHealthController::class, 'retryAll'])->name('system-health.retry-all');
+    Route::post('/system-health/failed-jobs/{id}/retry', [\App\Http\Controllers\SystemHealthController::class, 'retry'])->name('system-health.retry');
+    Route::delete('/system-health/failed-jobs/{id}', [\App\Http\Controllers\SystemHealthController::class, 'forget'])->name('system-health.forget');
+    Route::get('/holidays', [\App\Http\Controllers\HolidayController::class, 'index'])->name('holidays.index');
+    Route::get('/holidays/workdays', [\App\Http\Controllers\HolidayController::class, 'workdays'])->name('holidays.workdays');
+    Route::post('/holidays', [\App\Http\Controllers\HolidayController::class, 'store'])->name('holidays.store');
+    Route::post('/holidays/seed-fixed', [\App\Http\Controllers\HolidayController::class, 'seedFixed'])->name('holidays.seed-fixed');
+    Route::delete('/holidays/{holiday}', [\App\Http\Controllers\HolidayController::class, 'destroy'])->name('holidays.destroy');
     Route::get('/reports', [\App\Http\Controllers\FormReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/export', [\App\Http\Controllers\FormReportController::class, 'export'])->name('reports.export');
     Route::get('/attendance/reports/export-summary', [AttendanceReportController::class, 'exportSummary'])->name('attendance.reports.exportSummary');
@@ -276,6 +288,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/logout-other-devices', [\App\Http\Controllers\ProfileController::class, 'logoutOtherDevices'])->name('profile.logout-other-devices');
     Route::put('/profile/notification-preferences', [\App\Http\Controllers\ProfileController::class, 'updateNotificationPreferences'])->name('profile.notification-preferences');
 });
 

@@ -678,6 +678,7 @@ class OrgManagementController extends Controller
             'password' => ['required', 'string', Password::defaults(), 'confirmed'],
         ]);
 
+        app(\App\Services\PasswordPolicyService::class)->remember($user);
         $user->update([
             'password' => Hash::make($validated['password']),
             'must_change_password' => true,

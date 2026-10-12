@@ -8,11 +8,19 @@ import { confirmDialog } from '@/Components/useDialog';
 const props = defineProps({
     announcement: Object,
     readers: Array,
+    unread: { type: Array, default: () => [] },
+    lastRemindedAt: { type: [Number, String], default: null },
     canManage: Boolean,
 });
 
 // 編輯公告 (附件僅能追加)
 const showEdit = ref(false);
+
+const remind = async () => {
+    if (await confirmDialog(`確定要通知尚未閱讀的 ${props.unread.length} 位同仁嗎?`)) {
+        router.post(route('announcements.remind', props.announcement.id), {}, { preserveScroll: true });
+    }
+};
 const editForm = useForm({
     title: props.announcement.title,
     content: props.announcement.content,
@@ -167,7 +175,7 @@ const priorityBadge = (priority) => {
                 </div>
 
                 <!-- 主管/行政 查閱追蹤名單 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 dark:bg-gray-800 dark:border-gray-700">
+                <div v-if="canManage" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 dark:bg-gray-800 dark:border-gray-700">
                     <h3 class="font-bold text-gray-800 text-sm mb-3 flex items-center space-x-2 dark:text-gray-100">
                         <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         <span>已讀同仁追蹤 (共 {{ readers.length }} 人)</span>
@@ -182,6 +190,28 @@ const priorityBadge = (priority) => {
                             <span class="text-gray-400">({{ r.read_at }})</span>
                         </span>
                         <span v-if="readers.length === 0" class="text-xs text-gray-400">尚無同仁已讀</span>
+                    </div>
+
+                    <div v-if="announcement.status === 'published'" class="mt-5 border-t border-gray-100 pt-4 dark:border-gray-700">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h4 class="text-sm font-bold text-gray-800 dark:text-gray-100">尚未閱讀 (共 {{ unread.length }} 人)</h4>
+                            <button
+                                v-if="unread.length"
+                                type="button"
+                                class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700"
+                                @click="remind"
+                            >
+                                一鍵催讀
+                            </button>
+                        </div>
+                        <div class="mt-2 flex flex-wrap gap-2">
+                            <span
+                                v-for="u in unread"
+                                :key="u.id"
+                                class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs text-amber-900 dark:border-amber-700/50 dark:bg-amber-900/20 dark:text-amber-100"
+                            >{{ u.name }}<span v-if="u.job_title" class="ml-1 text-amber-700/70 dark:text-amber-200/70">{{ u.job_title }}</span></span>
+                            <span v-if="!unread.length" class="text-xs text-emerald-600 dark:text-emerald-400">全員都已閱讀。</span>
+                        </div>
                     </div>
                 </div>
             </div>

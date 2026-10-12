@@ -64,6 +64,7 @@ class TwoFactorChallengeController extends Controller
 
         if (! $ok) {
             RateLimiter::hit($key);
+            app(\App\Services\LoginActivityService::class)->recordFailure($user->email, $user, $request, \App\Models\LoginEvent::TWO_FACTOR_FAILED);
             throw ValidationException::withMessages([
                 $request->filled('code') ? 'code' : 'recovery_code' => '驗證碼不正確或已使用過。',
             ]);
@@ -75,6 +76,7 @@ class TwoFactorChallengeController extends Controller
 
         Auth::login($user, $remember);
         $request->session()->regenerate();
+        app(\App\Services\LoginActivityService::class)->recordSuccess($user, $request);
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

@@ -8,6 +8,13 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+// 註冊 Service Worker(僅提供「可安裝」與離線提示,不快取任何業務資料)
+if ('serviceWorker' in navigator && window.isSecureContext) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+}
+
 createInertiaApp({
     title: (title) => `${title} - ${window.__BRAND__ || appName}`,
     resolve: (name) =>

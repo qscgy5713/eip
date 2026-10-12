@@ -1,7 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
     form: Object,
@@ -41,6 +42,25 @@ const isQuotaExceeded = computed(() => {
     const requested = parseFloat(formState.fields.days || 0);
     return requested > selectedLeaveTypeBalance.value.available_days;
 });
+
+// 請假:選好起訖日後,依假日日曆自動帶入工作日數(仍可手動修改,例如半天或連假也計算的假別)
+const autoDays = ref(null);
+watch(
+    () => [formState.fields.start_date, formState.fields.end_date],
+    async ([start, end]) => {
+        if (props.form.code !== 'LEAVE' || !start || !end || end < start) {
+            autoDays.value = null;
+            return;
+        }
+        try {
+            const { data } = await axios.get(route('holidays.workdays'), { params: { start, end } });
+            autoDays.value = data.days;
+            formState.fields.days = data.days;
+        } catch (e) {
+            autoDays.value = null;
+        }
+    },
+);
 
 const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -177,6 +197,9 @@ const submit = () => {
                                 class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm dark:border-gray-700"
                             />
 
+                            <p v-if="form.code === 'LEAVE' && field.key === 'days' && autoDays !== null" class="text-xs text-gray-500 mt-1 dark:text-gray-400">
+                                已依假日日曆自動計算 {{ autoDays }} 個工作日(扣除週末與國定假日),可自行修改。
+                            </p>
                             <p v-if="formState.errors['data.' + field.key]" class="text-xs text-red-600 mt-1">{{ formState.errors['data.' + field.key] }}</p>
                         </div>
 

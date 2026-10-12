@@ -311,11 +311,11 @@ const typeLabel = (type) => {
                             </span>
                             <span v-else-if="locationStatus === 'in_fence'" class="flex items-center space-x-1.5 text-emerald-300 font-semibold">
                                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <span>已定位：位於【{{ geofenceConfig?.name }}】圍欄內（距中心 {{ formatDistance(detectedDistance) }}，半徑 {{ geofenceConfig?.radius }}m）— 辦公室內勤模式</span>
+                                <span>已定位：位於【{{ geofenceConfig?.name }}】圍欄內（距中心 {{ formatDistance(detectedDistance) }}，半徑 {{ geofenceConfig?.radius }}m；手機定位精度約 ±{{ formatDistance(currentCoords?.accuracy) }}）— 辦公室內勤模式</span>
                             </span>
                             <span v-else-if="locationStatus === 'out_of_fence'" class="flex items-center space-x-1.5 text-indigo-200 font-semibold">
                                 <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <span>已定位：位於公司圍欄外（距總部 {{ formatDistance(detectedDistance) }}）— 外勤/遠端模式 (需填寫事由)</span>
+                                <span>已定位：位於公司圍欄外（距總部 {{ formatDistance(detectedDistance) }}；手機定位精度約 ±{{ formatDistance(currentCoords?.accuracy) }}）— 外勤/遠端模式 (需填寫事由)</span>
                             </span>
                             <span v-else-if="locationStatus === 'all_remote'" class="flex items-center space-x-1.5 text-indigo-200 font-semibold">
                                 <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>

@@ -44,6 +44,9 @@ class LoginRequest extends FormRequest
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+            app(\App\Services\LoginActivityService::class)->recordFailure(
+                (string) $this->input('email'), \App\Models\User::where('email', (string) $this->input('email'))->first(), $this
+            );
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -54,6 +57,7 @@ class LoginRequest extends FormRequest
         if ($user && $user->status !== 'active') {
             Auth::logout();
             RateLimiter::hit($this->throttleKey());
+            app(\App\Services\LoginActivityService::class)->recordFailure((string) $user->email, $user, $this);
 
             throw ValidationException::withMessages([
                 'email' => '該帳號目前處於停用或離職狀態，無法登入系統。請洽詢人事管理員。',

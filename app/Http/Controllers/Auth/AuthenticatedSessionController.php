@@ -43,6 +43,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         $request->session()->regenerate();
+        app(\App\Services\LoginActivityService::class)->recordSuccess($user, $request);
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
