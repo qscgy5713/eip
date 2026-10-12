@@ -85,7 +85,5 @@
 - [x] 企業公務車輛借調與出差派車系統 (Company Fleet & Vehicle Dispatch Hub：公務車檔案建檔、車型/容量/目前里程/5000km保養檢核；派車申請與主管簽核；防時段重疊衝突演算；領車出車與還車里程即時回報累計；出差里程油料稽核 CSV 匯出；全站 CommandPalette 與 Dashboard 派車行程整合，全系統 306 項 Feature 測試 100% 通過)
 - [x] 企業內訓課程與員工學習學分系統 (Corporate Training & Learning Credits Hub：專業技術/領導管理/法規資安/職場通識四領域開課、TC-YYYYMM-XXXX 自動代碼；線上報名與防爆額候補遞補機制；講師/HR 一鍵點名簽到完訓並正式核發學分；個人累計學分與研習時數存摺；課後滿意度星級與心得評價；符合 ESG 人力資本培訓總表 CSV 匯出；Dashboard 內訓卡片與全站 CommandPalette 整合，全系統 316 項 Feature 測試 100% 通過，1784 assertions)
 - [x] 企業福利點數、同仁互贈感謝幣與文化牆系統 (Peer Recognition & Welfare Points Hub：每月 100 枚感謝幣額度互贈 (1~50 枚/次，跨月惰性重置、悲觀鎖防超額)、核心價值標籤、匿名送出（文化牆與通知皆隱藏寄件者）、點讚與本人/管理員刪除；收到的感謝幣即時轉為福利點數；本月感謝之星 Top 5；福利商城（便利禮券/咖啡飲品/休閒育樂/榮譽休假）以點數兌換，防超賣與重複扣點、WR-YYYYMMDD-XXXX 兌換序號；HR/Admin 上下架商品、核銷發放與取消退點（點數與庫存同步退回）；個人工作台 Dashboard 錢包卡片、Cmd+K 檢索福利商品、AuditLog 留痕；全系統 330 項測試 100% 通過，1907 assertions)
-
-
-
-
+- [x] 應用層安全標頭中介層 (SecurityHeaders：Referrer-Policy、Permissions-Policy、nosniff、HTTPS 時 HSTS；CSP 待正式部署評估)
+- [ ] 正式上線前置：`.env` 改 `APP_DEBUG=false`/`APP_ENV=production`、nginx HTTPS 與 CSP、郵件改真實 SMTP、排程/佇列 worker 設定
