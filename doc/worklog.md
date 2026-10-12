@@ -9,6 +9,7 @@
 - **管理員重設 2FA**(自我 code review 發現缺口):同仁手機遺失又沒復原碼會被永久鎖住 → 組織管理列表新增「重設2FA」(管理員/人資;人資不可動管理員),AuditLog。review 同時抓到列表查詢只選部分欄位導致拿不到 2FA 欄位,已補。
 - 全系統 418 項測試通過(2,565 assertions)。已知限制不變:PHPUnit 的 SQLite 無法執行 PostgreSQL `ilike` 搜尋。
 - **Gmail SMTP 實測**:`.env` 設定 Gmail(應用程式密碼,`.env` 不進版控),暫用 `+` 別名走完「員工送單 → 主管收信 → 主管駁回 → 員工收信」與忘記密碼信,queue worker 1~3 秒寄出;信內「立即查看」連結格式 `/forms/requests/{id}` 正確(單據被刪後舊連結 404 屬正常)。測試資料已清除(含直接刪單殘留的 1 天請假預扣,已歸零——日後清測試單應走撤回流程而非直接刪除)。重建 app 容器後須 `docker compose restart web`,否則 nginx 回 502。
+- **CSP 改用 nonce(處理先前遺留的 `unsafe-inline`)**:`SecurityHeaders` 每個請求產生 nonce,`Vite::useCspNonce` 讓 Vite 標籤自動帶上,`app.blade.php` 的兩段內嵌腳本與 Ziggy `@routes` 都加 nonce;CSP 為 `script-src 'self' 'nonce-…'`(不再 unsafe-inline)、`frame-ancestors 'self'`、`object-src 'self'`、`form-action 'self'` 等;字型仍允許 `fonts.bunny.net`;`style-src` 保留 `'unsafe-inline'`(Vue 動態樣式與字型 CSS,風險低)。若回應已自帶 CSP(文件預覽的 `sandbox`)不覆蓋;Vite 開發伺服器(`public/hot`)存在時不送 CSP。nginx 範本已移除重複的 CSP 以免兩份並存。瀏覽器實測:主要頁面零違規,注入無 nonce 內嵌腳本與外部圖片皆被擋。測試新增 3 項,全系統 421 項通過。
 - **上線範本**:新增 `.env.production.example`、`docker/nginx/production.conf.example`(HTTPS、HSTS、CSP)與 `doc/plan.md` 部署清單。
 - **深色模式補強**:靜態掃描找出只有淺色樣式的地方——34 個「×」關閉鈕 hover 變暗看不見(補 `dark:hover:text-gray-200`)、通訊錄/組織管理圖示鈕 hover 變白底淺灰字(補 `dark:hover:bg-gray-700`);Print 列印版、QR Code 與 Logo 預覽底刻意保留白色。新頁面(報表、個人設定 2FA/Email)深色實測正常。
 

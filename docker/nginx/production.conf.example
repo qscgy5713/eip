@@ -19,13 +19,12 @@ server {
     ssl_certificate_key /etc/nginx/certs/privkey.pem;
     ssl_protocols       TLSv1.2 TLSv1.3;
 
-    # 應用層 (SecurityHeaders 中介層) 已送出 Referrer-Policy / Permissions-Policy / nosniff / HSTS,
-    # 這裡補上它管不到的部分:框架嵌入限制與 CSP。
+    # 應用層 (SecurityHeaders 中介層) 已送出 Referrer-Policy / Permissions-Policy / nosniff / HSTS / CSP,
+    # 這裡只補框架嵌入限制與 HSTS(雙重保險)。
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    # CSP:前端有一小段內嵌腳本(防深色模式閃爍),因此 script-src 暫時允許 'unsafe-inline';
-    # 若要更嚴格,需改用 nonce 並調整 resources/views/app.blade.php。
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'" always;
+    # CSP 由應用層 SecurityHeaders 中介層送出(每次請求產生 nonce,不使用 unsafe-inline),這裡不要再重複設定,
+    # 否則兩份 CSP 會同時生效,以較嚴格者為準而造成頁面異常。
 
     client_max_body_size 20m;
     index index.php;
