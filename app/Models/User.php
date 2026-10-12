@@ -174,5 +174,72 @@ class User extends Authenticatable
     {
         return in_array($this->role, ['admin', 'manager']);
     }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    public function hasAnyRole(array $roles): bool
+    {
+        return in_array($this->role, $roles);
+    }
+
+    public function createdMealOrders(): HasMany
+    {
+        return $this->hasMany(MealOrder::class, 'creator_id');
+    }
+
+    public function mealOrderItems(): HasMany
+    {
+        return $this->hasMany(MealOrderItem::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function assignedTickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'assigned_to');
+    }
+
+    public function visitorReservations(): HasMany
+    {
+        return $this->hasMany(VisitorReservation::class, 'host_id');
+    }
+
+    public function vehicleDispatches(): HasMany
+    {
+        return $this->hasMany(VehicleDispatch::class);
+    }
+
+    public function courseRegistrations(): HasMany
+    {
+        return $this->hasMany(CourseRegistration::class);
+    }
+
+    /**
+     * 累計已獲內訓認證學分數
+     */
+    public function getEarnedCreditsAttribute(): int
+    {
+        return $this->courseRegistrations()
+            ->where('course_registrations.status', 'attended')
+            ->join('training_courses', 'course_registrations.training_course_id', '=', 'training_courses.id')
+            ->sum('training_courses.credits');
+    }
+
+    /**
+     * 累計已獲內訓研習時數 (小時)
+     */
+    public function getEarnedHoursAttribute(): float
+    {
+        return (float) $this->courseRegistrations()
+            ->where('course_registrations.status', 'attended')
+            ->join('training_courses', 'course_registrations.training_course_id', '=', 'training_courses.id')
+            ->sum('training_courses.hours');
+    }
 }
 

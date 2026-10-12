@@ -78,6 +78,14 @@
 - [x] 企業工作週報與團隊協同簡報系統 (Weekly Digest & Team Briefing Hub：支援年度/ISO週次管理、重點摘要/具體成果/下週計畫/支援需求四大維度、草稿與正式提交生命週期；專案看板本週完成任務一鍵智慧帶入；提交自動通知部門主管；主管與團隊點評討論區、點評自動標記 reviewed 並通知作者；主管所轄部門未繳交同仁名冊與一鍵催繳通知；個人工作台 Dashboard 本週週報卡片與未交警示、8 欄快捷行動列；全站 Cmd+K 模糊檢索與 AuditLog 留痕；全系統 267 項 Feature 測試 100% 通過，1548 assertions)
 - [x] 個人機密薪資條與薪酬明細存摺系統 (Confidential Payslips & Compensation Hub：支援應發項目【本薪/職務加給/績效獎金/加班費/其他應發】與應扣項目【勞保自付額/健保自付額/勞退自提/代扣所得稅/其他扣除】雙欄對帳與實發金額自動精確試算；草稿與已發布生命週期；HR/Admin 一鍵批次發布指定月份全體同仁薪資單並自動發送 EipSystemNotification 站內系統通知；一般同仁只能查閱本人已發布薪資條防止水平越權 (IDOR)；每次調閱強制寫入 AuditLog 審計留痕；前端辦公室「防窺遮罩模式 (Privacy Shield)」一鍵隱藏/顯示金額；A4 正式員工薪資明細單 (Payslip Voucher) 純白列印與 PDF 匯出版面；個人工作台 Dashboard「最新薪資條已送達」即時通知橫幅與 9 欄快捷行動列；全站指揮中心 Cmd+K 模糊檢索與權限過濾；全系統 275 項 Feature 測試 100% 通過，1595 assertions)
 
+## 階段 7：企業全方位數位生態旗艦大擴充 (Ultimate Enterprise Ecosystem Expansion)
+- [x] 企業同仁訂餐與下午茶揪團系統 (Corporate Meal & Tea Group Order Hub：支援同仁發起揪團活動、自訂規格甜度冰塊、截止倒數計時、公司補助金額設定；同仁線上點餐加料；自動品項數量彙整清單方便行政電話訂餐；自動應付金額試算與收款標記對帳；一鍵催繳站內通知；個人工作台倒數提醒與全站指揮中心 Cmd+K 整合，全系統 283 項 Feature 測試 100% 通過，1633 assertions)
+- [x] 內部 IT / 總務叫修與服務工單系統 (Internal Helpdesk & Service Ticketing Hub：支援同仁線上快速提單、多分類派工、故障照片截圖上傳、緊急度分級；權責工程師認領與指派、四態進度管線 Open/In Progress/Pending User/Resolved、SLA 時效追蹤；結案五星滿意度評價；個人工作台維修進度卡片整合，全系統 291 項 Feature 測試 100% 通過，1699 assertions)
+- [x] 企業訪客預約與門禁貴賓接待系統 (Visitor Management & Guest Reception Hub：同仁提前發起訪客預約、自動生成專屬預約單號 VR-YYYYMMDD-XXXX；前台大廳快速 Check-in 與 Check-out、連鎖即時通知接待同仁到大廳迎賓；訪客出入安全日誌與符合 ISO 27001 實體安全要求之 CSV 匯出防 Formula Injection、全站 CommandPalette 與 Dashboard 今日來訪小卡整合，全系統 299 項 Feature 測試 100% 通過)
+- [x] 企業公務車輛借調與出差派車系統 (Company Fleet & Vehicle Dispatch Hub：公務車檔案建檔、車型/容量/目前里程/5000km保養檢核；派車申請與主管簽核；防時段重疊衝突演算；領車出車與還車里程即時回報累計；出差里程油料稽核 CSV 匯出；全站 CommandPalette 與 Dashboard 派車行程整合，全系統 306 項 Feature 測試 100% 通過)
+- [x] 企業內訓課程與員工學習學分系統 (Corporate Training & Learning Credits Hub：專業技術/領導管理/法規資安/職場通識四領域開課、TC-YYYYMM-XXXX 自動代碼；線上報名與防爆額候補遞補機制；講師/HR 一鍵點名簽到完訓並正式核發學分；個人累計學分與研習時數存摺；課後滿意度星級與心得評價；符合 ESG 人力資本培訓總表 CSV 匯出；Dashboard 內訓卡片與全站 CommandPalette 整合，全系統 316 項 Feature 測試 100% 通過，1784 assertions)
+- [ ] 企業福利點數、同仁互贈感謝幣與文化牆系統 (Peer Recognition & Welfare Points Hub：每月固定感謝幣額度互贈 Kudos、同仁感謝留話；首頁企業文化感謝牆輪播；公司三節生日福利點數 Welfare Points 存摺與福利商城兌換券；月度感謝之星榮譽榜，已建立資料表與錢包模型，待後續階段擴展)
+
 
 
 

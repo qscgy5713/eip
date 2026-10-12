@@ -382,6 +382,160 @@ class GlobalSearchController extends Controller
             ];
         }
 
+        // 12. 檢索訂餐揪團活動 (Meal Orders)
+        $mealOrders = \App\Models\MealOrder::with('creator')
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('store_name', 'like', "%{$query}%");
+            })
+            ->latest('id')
+            ->limit(5)
+            ->get()
+            ->map(function ($mo) {
+                return [
+                    'id' => $mo->id,
+                    'title' => "【揪團】{$mo->title} ({$mo->store_name})",
+                    'subtitle' => "截止: {$mo->cutoff_time->format('m/d H:i')} · 狀態: {$mo->status_label} · 發起人: {$mo->creator->name}",
+                    'url' => route('meal-orders.show', $mo->id),
+                    'badge' => '揪團',
+                    'type' => 'meal_order',
+                ];
+            });
+
+        if ($mealOrders->isNotEmpty()) {
+            $results['meal_orders'] = [
+                'title' => '訂餐與下午茶揪團',
+                'items' => $mealOrders,
+            ];
+        }
+
+        // 13. 檢索叫修服務工單 (Tickets)
+        $ticketsQuery = \App\Models\Ticket::with(['user:id,name', 'assignee:id,name']);
+        if (! $user->isAdmin() && ! $user->isHr()) {
+            $ticketsQuery->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                  ->orWhere('assigned_to', $user->id);
+            });
+        }
+        $tickets = $ticketsQuery->where(function ($q) use ($query) {
+                $q->where('ticket_number', 'like', "%{$query}%")
+                  ->orWhere('title', 'like', "%{$query}%")
+                  ->orWhere('location', 'like', "%{$query}%");
+            })
+            ->latest('id')
+            ->limit(5)
+            ->get()
+            ->map(function ($t) {
+                return [
+                    'id' => $t->id,
+                    'title' => "【工單】{$t->ticket_number} - {$t->title}",
+                    'subtitle' => "分類: {$t->category_label} · 狀態: {$t->status_label} · 優先級: {$t->priority_label}",
+                    'url' => route('tickets.show', $t->id),
+                    'badge' => '工單',
+                    'type' => 'ticket',
+                ];
+            });
+
+        if ($tickets->isNotEmpty()) {
+            $results['tickets'] = [
+                'title' => 'IT / 總務叫修工單',
+                'items' => $tickets,
+            ];
+        }
+
+        // 14. 檢索訪客預約接待紀錄 (Visitor Reservations)
+        $visitorsQuery = \App\Models\VisitorReservation::with(['host:id,name', 'meetingRoom:id,name']);
+        if (! $user->isAdmin() && ! $user->isHr()) {
+            $visitorsQuery->where('host_id', $user->id);
+        }
+        $visitors = $visitorsQuery->where(function ($q) use ($query) {
+                $q->where('reservation_code', 'like', "%{$query}%")
+                  ->orWhere('visitor_name', 'like', "%{$query}%")
+                  ->orWhere('visitor_company', 'like', "%{$query}%")
+                  ->orWhere('badge_number', 'like', "%{$query}%");
+            })
+            ->latest('visit_date')
+            ->limit(5)
+            ->get()
+            ->map(function ($v) {
+                $comp = $v->visitor_company ? " ({$v->visitor_company})" : '';
+                return [
+                    'id' => $v->id,
+                    'title' => "【訪客】{$v->visitor_name}{$comp} · 通行碼 {$v->reservation_code}",
+                    'subtitle' => "日期: {$v->visit_date->format('Y-m-d')} · 事由: {$v->purpose_label} · 狀態: {$v->status_label}",
+                    'url' => route('visitor-reservations.show', $v->id),
+                    'badge' => '訪客',
+                    'type' => 'visitor_reservation',
+                ];
+            });
+
+        if ($visitors->isNotEmpty()) {
+            $results['visitor_reservations'] = [
+                'title' => '企業訪客與門禁接待',
+                'items' => $visitors,
+            ];
+        }
+
+        // 15. 檢索公務車輛與派車單 (Vehicles & Dispatches)
+        $vehicleDispatchesQuery = \App\Models\VehicleDispatch::with(['user:id,name', 'vehicle:id,plate_number,name']);
+        if (! $user->isAdmin() && ! $user->isManager()) {
+            $vehicleDispatchesQuery->where('user_id', $user->id);
+        }
+        $dispatches = $vehicleDispatchesQuery->where(function ($q) use ($query) {
+                $q->where('dispatch_number', 'like', "%{$query}%")
+                  ->orWhere('destination', 'like', "%{$query}%")
+                  ->orWhereHas('vehicle', fn ($vq) => $vq->where('plate_number', 'like', "%{$query}%")->orWhere('name', 'like', "%{$query}%"));
+            })
+            ->latest('start_time')
+            ->limit(5)
+            ->get()
+            ->map(function ($vd) {
+                return [
+                    'id' => $vd->id,
+                    'title' => "【派車】{$vd->dispatch_number} · {$vd->vehicle?->plate_number} ({$vd->destination})",
+                    'subtitle' => "用車: " . ($vd->start_time ? $vd->start_time->format('m/d H:i') : '') . " · 事由: {$vd->purpose_label} · 狀態: {$vd->status_label}",
+                    'url' => route('vehicles.show', $vd->id),
+                    'badge' => '派車',
+                    'type' => 'vehicle_dispatch',
+                ];
+            });
+
+        if ($dispatches->isNotEmpty()) {
+            $results['vehicle_dispatches'] = [
+                'title' => '公務車借調與出差派車',
+                'items' => $dispatches,
+            ];
+        }
+
+        // 16. 檢索企業內訓課程 (Training Courses)
+        $trainings = \App\Models\TrainingCourse::where('status', '!=', 'draft')
+            ->where(function ($q) use ($query) {
+                $q->where('course_code', 'like', "%{$query}%")
+                  ->orWhere('title', 'like', "%{$query}%")
+                  ->orWhere('instructor', 'like', "%{$query}%")
+                  ->orWhere('location', 'like', "%{$query}%");
+            })
+            ->latest('start_time')
+            ->limit(5)
+            ->get()
+            ->map(function ($tc) {
+                return [
+                    'id' => $tc->id,
+                    'title' => "【內訓】{$tc->course_code} · {$tc->title}",
+                    'subtitle' => "講師: {$tc->instructor} · 開課: " . ($tc->start_time ? $tc->start_time->format('m/d H:i') : '') . " · {$tc->credits} 學分 · 狀態: {$tc->status_label}",
+                    'url' => route('trainings.show', $tc->id),
+                    'badge' => '內訓',
+                    'type' => 'training_course',
+                ];
+            });
+
+        if ($trainings->isNotEmpty()) {
+            $results['training_courses'] = [
+                'title' => '企業內訓與研習課程',
+                'items' => $trainings,
+            ];
+        }
+
         return response()->json([
             'query' => $query,
             'results' => $results,
@@ -394,6 +548,38 @@ class GlobalSearchController extends Controller
     private function getQuickShortcuts(User $user): array
     {
         $shortcuts = [
+            [
+                'id' => 'quick-vehicles',
+                'title' => '公務車輛借調與出差派車',
+                'subtitle' => '查詢在庫公務車輛、預約出差用車、領車出發與里程油料回報',
+                'url' => route('vehicles.index'),
+                'badge' => '派車',
+                'type' => 'shortcut',
+            ],
+            [
+                'id' => 'quick-visitor-reservations',
+                'title' => '訪客預約與門禁貴賓接待',
+                'subtitle' => '貴賓來訪通行碼發行、前台自助報到、證號登記與接待通知',
+                'url' => route('visitor-reservations.index'),
+                'badge' => '訪客',
+                'type' => 'shortcut',
+            ],
+            [
+                'id' => 'quick-tickets',
+                'title' => 'IT / 總務叫修工單',
+                'subtitle' => '快速提報硬體電腦、網路、水電與辦公環境故障叫修',
+                'url' => route('tickets.index'),
+                'badge' => '叫修',
+                'type' => 'shortcut',
+            ],
+            [
+                'id' => 'quick-meal-orders',
+                'title' => '訂餐與下午茶揪團',
+                'subtitle' => '發起午餐/飲料揪團、線上點餐自訂規格與自動結算',
+                'url' => route('meal-orders.index'),
+                'badge' => '揪團',
+                'type' => 'shortcut',
+            ],
             [
                 'id' => 'quick-payslips',
                 'title' => '個人薪資條與薪酬明細',

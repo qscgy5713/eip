@@ -44,6 +44,26 @@
   - Slack / Microsoft Teams / LINE Notify 機器人推播
   - Google Calendar 同步
 
+### Phase 4: 企業全方位數位生態旗艦大擴充 (Ultimate Enterprise Ecosystem Expansion)
+1. **企業同仁訂餐與下午茶揪團系統 (Corporate Meal & Tea Group Order Hub)** `[✅ 已完工上線]`
+   - 發起訂單、自訂規格甜度冰塊、截止倒數計時、補助金額設定
+   - 自動品項數量即時彙總清單（方便行政電話訂餐）、自動應付金額試算與收款標記對帳
+2. **內部專屬客服工單與 IT / 行政叫修派單系統 (Internal Helpdesk & Service Ticketing Hub)** `[✅ 已完工上線]`
+   - 快速提單（IT資訊、總務設施、人資財務問題）、附檔上傳、急迫度分級
+   - 權責工程師認領與指派、四態進度流轉 (Open/In Progress/Pending User/Resolved)、五星滿意度評價
+3. **企業訪客預約與門禁貴賓接待系統 (Visitor Management & Guest Reception Hub)** `[✅ 已完工上線]`
+   - 同仁提前預約訪客、專屬數位通行卡單號與防偽驗證
+   - 前台大廳快速簽到 Check-in、連鎖即時通知接待同仁、出入安全日誌與符合 ISO 27001 實體安全稽核
+4. **企業公務車輛派車與出差調派系統 (Company Fleet & Vehicle Dispatch Hub)** `[✅ 已完工上線]`
+   - 公務車檔案（車牌/型號/保養里程檢核）、派車預約申請（事由/時段/目的地/隨行同仁）
+   - 防時段重疊衝堂衝突演算、出車與還車里程/油料報支登記、行駛里程自動試算與每 5000km 保養提醒
+5. **企業內訓課程與員工學習學分系統 (Corporate Training & Learning Credits Hub)** `[✅ 已完工上線]`
+   - 訓練課程發布（主題/講師/教材下載/教室/學分）、線上報名與防爆額候補遞補機制
+   - 個人學分存摺（累計學分與研習總時數）、完訓評量滿意度、符合 ESG 人力資本培訓總表 CSV 匯出
+6. **企業福利點數、同仁互贈感謝幣與文化牆系統 (Peer Recognition & Welfare Points Hub)** `[🟡 架構與資料表已備妥，待後續階段實作]`
+   - 每月固定額度感謝幣互贈 (Kudos) 與感謝留言、公開企業文化感謝牆輪播
+   - 福利點數存摺 (Welfare Points)、福利商城兌換券、月度感謝之星榮譽榜
+
 ---
 
 ## 3. 已定案技術架構 (Finalized Tech Stack)

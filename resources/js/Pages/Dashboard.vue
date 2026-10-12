@@ -18,6 +18,11 @@ defineProps({
     myWeeklyReport: Object,
     currentWeekNumber: Number,
     latestPayslip: Object,
+    activeMealOrders: Array,
+    myActiveTickets: Array,
+    todayVisitors: Array,
+    myActiveDispatches: Array,
+    upcomingTrainings: Array,
 });
 
 const showSalary = ref(false);
@@ -279,6 +284,51 @@ const statusBadge = (status) => {
                         <div>
                             <p class="text-xs font-bold text-gray-800 dark:text-gray-200">企業知識庫</p>
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">規章辦法與手冊</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('meal-orders.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-orange-400 dark:hover:border-orange-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">訂餐揪團</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">午餐下午茶開團</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('tickets.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-rose-400 dark:hover:border-rose-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">服務叫修</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">IT總務故障通報</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('visitor-reservations.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-sky-400 dark:hover:border-sky-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">訪客接待</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">預約通行與門禁</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('vehicles.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17a2 2 0 100-4 2 2 0 000 4zm8 0a2 2 0 100-4 2 2 0 000 4m-11-7l2.5-5h9L19 10m-14 0h14m-14 0a2 2 0 00-2 2v5a2 2 0 002 2h1m12 0h1a2 2 0 002-2v-5a2 2 0 00-2-2"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">公務派車</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">公務借調與出差</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('trainings.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14v7"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">企業內訓</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">課程研習與學分</p>
                         </div>
                     </Link>
                 </div>
@@ -591,6 +641,299 @@ const statusBadge = (status) => {
                                 class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition"
                             >
                                 立即撰寫本週週報 &rarr;
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- 進行中同仁訂餐與下午茶揪團 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse"></span>
+                                    <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">進行中訂餐揪團</h3>
+                                </div>
+                                <Link :href="route('meal-orders.index')" class="text-sm text-orange-600 dark:text-orange-400 font-semibold hover:underline">
+                                    全部揪團 &rarr;
+                                </Link>
+                            </div>
+                            <div class="mt-4 space-y-2.5">
+                                <div
+                                    v-for="order in activeMealOrders"
+                                    :key="order.id"
+                                    class="p-3 rounded-lg bg-orange-50/40 dark:bg-orange-950/20 border border-orange-100 dark:border-orange-900/50 flex items-center justify-between gap-3 text-xs"
+                                >
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-orange-100 dark:bg-orange-900/60 text-orange-700 dark:text-orange-300 shrink-0">
+                                                {{ order.restaurant_name }}
+                                            </span>
+                                            <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                                {{ order.title }}
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
+                                            <span>發起人：{{ order.creator_name }}</span>
+                                            <span>· 已有 {{ order.participants_count }} 人點餐</span>
+                                            <span v-if="order.cutoff_time" class="text-rose-600 dark:text-rose-400 font-semibold">
+                                                · 截止：{{ order.cutoff_time }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <Link
+                                        :href="route('meal-orders.show', order.id)"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-orange-500 text-white hover:bg-orange-600 transition shrink-0 shadow-xs"
+                                    >
+                                        點餐
+                                    </Link>
+                                </div>
+                                <div v-if="!activeMealOrders || activeMealOrders.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                                    目前無進行中的揪團訂餐活動，您也可以自行發起！
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                            <Link
+                                :href="route('meal-orders.index')"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-orange-600 hover:bg-orange-700 text-white shadow-xs transition"
+                            >
+                                我要開團 / 點餐 &rarr;
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- 我提報的服務叫修工單 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 bg-rose-500 rounded-full"></span>
+                                    <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">我的服務叫修工單</h3>
+                                    <span v-if="stats.myPendingTicketsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300">
+                                        {{ stats.myPendingTicketsCount }} 件處理中
+                                    </span>
+                                </div>
+                                <Link :href="route('tickets.index')" class="text-sm text-rose-600 dark:text-rose-400 font-semibold hover:underline">
+                                    叫修中心 &rarr;
+                                </Link>
+                            </div>
+                            <div class="mt-4 space-y-2.5">
+                                <div
+                                    v-for="ticket in myActiveTickets"
+                                    :key="ticket.id"
+                                    class="p-3 rounded-lg bg-rose-50/40 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/50 flex items-center justify-between gap-3 text-xs"
+                                >
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 shrink-0">
+                                                {{ ticket.ticket_number }}
+                                            </span>
+                                            <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                                {{ ticket.title }}
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
+                                            <span>分類：{{ ticket.category_label }}</span>
+                                            <span v-if="ticket.assignee">· 工程師：{{ ticket.assignee.name }}</span>
+                                            <span class="font-semibold text-rose-600 dark:text-rose-400">· {{ ticket.status_label }}</span>
+                                        </div>
+                                    </div>
+                                    <Link
+                                        :href="route('tickets.show', ticket.id)"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-50 dark:hover:bg-gray-600 transition shrink-0"
+                                    >
+                                        進度
+                                    </Link>
+                                </div>
+                                <div v-if="!myActiveTickets || myActiveTickets.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                                    目前無處理中的故障叫修工單，一切運作良好！
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                            <Link
+                                :href="route('tickets.create')"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition"
+                            >
+                                我要報修 / 提工單 &rarr;
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- 今日預約來訪貴賓 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 bg-sky-500 rounded-full"></span>
+                                    <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">今日預約來訪貴賓</h3>
+                                    <span v-if="stats.todayVisitorsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300">
+                                        {{ stats.todayVisitorsCount }} 位預約
+                                    </span>
+                                </div>
+                                <Link :href="route('visitor-reservations.index')" class="text-sm text-sky-600 dark:text-sky-400 font-semibold hover:underline">
+                                    前台接待大廳 &rarr;
+                                </Link>
+                            </div>
+                            <div class="mt-4 space-y-2.5">
+                                <div
+                                    v-for="visitor in todayVisitors"
+                                    :key="visitor.id"
+                                    class="p-3 rounded-lg bg-sky-50/40 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/50 flex items-center justify-between gap-3 text-xs"
+                                >
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 shrink-0">
+                                                {{ visitor.reservation_code }}
+                                            </span>
+                                            <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                                {{ visitor.visitor_name }}
+                                                <span v-if="visitor.visitor_company" class="text-gray-400 font-normal">({{ visitor.visitor_company }})</span>
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
+                                            <span>預計：{{ visitor.expected_arrival_time || '全天' }}</span>
+                                            <span v-if="visitor.meeting_room">· 會議室：{{ visitor.meeting_room.name }}</span>
+                                            <span :class="['font-semibold', visitor.status === 'checked_in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-sky-600 dark:text-sky-400']">
+                                                · {{ visitor.status_label }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <Link
+                                        :href="route('visitor-reservations.show', visitor.id)"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 hover:bg-sky-50 dark:hover:bg-gray-600 transition shrink-0"
+                                    >
+                                        通行卡
+                                    </Link>
+                                </div>
+                                <div v-if="!todayVisitors || todayVisitors.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                                    今日暫無外部貴賓預約來訪
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                            <Link
+                                :href="route('visitor-reservations.create')"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-700 text-white shadow-xs transition"
+                            >
+                                發起訪客預約 &rarr;
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- 我的公務派車單 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
+                                    <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">我的出差派車單</h3>
+                                    <span v-if="stats.myActiveDispatchesCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">
+                                        {{ stats.myActiveDispatchesCount }} 單出差中
+                                    </span>
+                                </div>
+                                <Link :href="route('vehicles.index')" class="text-sm text-amber-600 dark:text-amber-400 font-semibold hover:underline">
+                                    派車總表 &rarr;
+                                </Link>
+                            </div>
+                            <div class="mt-4 space-y-2.5">
+                                <div
+                                    v-for="dispatch in myActiveDispatches"
+                                    :key="dispatch.id"
+                                    class="p-3 rounded-lg bg-amber-50/40 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/50 flex items-center justify-between gap-3 text-xs"
+                                >
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 shrink-0">
+                                                {{ dispatch.vehicle?.plate_number }}
+                                            </span>
+                                            <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                                {{ dispatch.vehicle?.name }} · {{ dispatch.destination }}
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
+                                            <span>出發：{{ new Date(dispatch.start_time).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}</span>
+                                            <span :class="['font-semibold', dispatch.status === 'active' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-600 dark:text-blue-400']">
+                                                · {{ dispatch.status_label }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <Link
+                                        :href="route('vehicles.show', dispatch.id)"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-50 dark:hover:bg-gray-600 transition shrink-0"
+                                    >
+                                        行程
+                                    </Link>
+                                </div>
+                                <div v-if="!myActiveDispatches || myActiveDispatches.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                                    目前無進行中的公務車借調或出差行程
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                            <Link
+                                :href="route('vehicles.create')"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-amber-600 hover:bg-amber-700 text-white shadow-xs transition"
+                            >
+                                預約派車 &rarr;
+                            </Link>
+                        </div>
+                    </div>
+
+                    <!-- 企業內訓課程與員工學習學分進度 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
+                                    <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">企業內訓與學分檔案</h3>
+                                </div>
+                                <span class="px-2 py-0.5 text-2xs font-bold rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                                    已獲 {{ stats.myEarnedCredits || 0 }} 學分
+                                </span>
+                            </div>
+                            <div class="mt-3 divide-y divide-gray-100 dark:divide-gray-700">
+                                <div v-for="course in upcomingTrainings" :key="course.id" class="py-2.5 flex items-center justify-between text-sm">
+                                    <div class="truncate mr-2">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="font-mono text-[11px] font-bold text-indigo-600 dark:text-indigo-400">
+                                                {{ course.course_code }}
+                                            </span>
+                                            <p class="font-semibold text-gray-900 dark:text-gray-100 truncate text-xs">
+                                                {{ course.title }}
+                                            </p>
+                                        </div>
+                                        <p class="text-[11px] text-gray-400 mt-0.5">
+                                            講師：{{ course.instructor }} · {{ course.credits }} 學分 ({{ course.hours }} hrs)
+                                        </p>
+                                    </div>
+                                    <div class="shrink-0">
+                                        <span v-if="course.my_registration_status === 'registered'" class="px-2 py-0.5 text-[10px] font-bold rounded bg-emerald-100 text-emerald-700">
+                                            已報名
+                                        </span>
+                                        <span v-else-if="course.my_registration_status === 'waitlist'" class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-100 text-amber-700">
+                                            候補中
+                                        </span>
+                                        <Link
+                                            v-else
+                                            :href="route('trainings.show', course.id)"
+                                            class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 transition"
+                                        >
+                                            報名
+                                        </Link>
+                                    </div>
+                                </div>
+                                <div v-if="!upcomingTrainings || upcomingTrainings.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
+                                    近期暫無開辦之熱門內訓課程
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                            <Link
+                                :href="route('trainings.index')"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition"
+                            >
+                                探索內訓學習中心 &rarr;
                             </Link>
                         </div>
                     </div>

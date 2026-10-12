@@ -141,6 +141,41 @@ const commandPaletteRef = ref(null);
                                 >
                                     薪資明細
                                 </NavLink>
+                                <NavLink
+                                    :href="route('meal-orders.index')"
+                                    :active="route().current('meal-orders.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    訂餐揪團
+                                </NavLink>
+                                <NavLink
+                                    :href="route('tickets.index')"
+                                    :active="route().current('tickets.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    服務叫修
+                                </NavLink>
+                                <NavLink
+                                    :href="route('visitor-reservations.index')"
+                                    :active="route().current('visitor-reservations.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    訪客接待
+                                </NavLink>
+                                <NavLink
+                                    :href="route('vehicles.index')"
+                                    :active="route().current('vehicles.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    公務派車
+                                </NavLink>
+                                <NavLink
+                                    :href="route('trainings.index')"
+                                    :active="route().current('trainings.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    企業內訓
+                                </NavLink>
 
                                 <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
@@ -491,6 +526,36 @@ const commandPaletteRef = ref(null);
                             :active="route().current('payslips.*')"
                         >
                             薪資明細
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('meal-orders.index')"
+                            :active="route().current('meal-orders.*')"
+                        >
+                            訂餐揪團
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('tickets.index')"
+                            :active="route().current('tickets.*')"
+                        >
+                            服務叫修
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('visitor-reservations.index')"
+                            :active="route().current('visitor-reservations.*')"
+                        >
+                            訪客接待
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('vehicles.index')"
+                            :active="route().current('vehicles.*')"
+                        >
+                            公務派車
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('trainings.index')"
+                            :active="route().current('trainings.*')"
+                        >
+                            企業內訓
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"

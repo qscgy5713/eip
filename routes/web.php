@@ -13,6 +13,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FormRequestController;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\LeaveBalanceController;
+use App\Http\Controllers\MealOrderController;
 use App\Http\Controllers\MeetingRoomController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrganizationController;
@@ -22,6 +23,9 @@ use App\Http\Controllers\PollController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\VehicleDispatchController;
+use App\Http\Controllers\VisitorReservationController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\WeeklyReportController;
 use Illuminate\Foundation\Application;
@@ -150,6 +154,63 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/payslips/{payslip}', [PayslipController::class, 'show'])->name('payslips.show');
     Route::put('/payslips/{payslip}', [PayslipController::class, 'update'])->name('payslips.update');
     Route::delete('/payslips/{payslip}', [PayslipController::class, 'destroy'])->name('payslips.destroy');
+
+    // 企業同仁訂餐與下午茶揪團系統
+    Route::get('/meal-orders', [MealOrderController::class, 'index'])->name('meal-orders.index');
+    Route::post('/meal-orders', [MealOrderController::class, 'store'])->name('meal-orders.store');
+    Route::get('/meal-orders/{mealOrder}', [MealOrderController::class, 'show'])->name('meal-orders.show');
+    Route::post('/meal-orders/{mealOrder}/items', [MealOrderController::class, 'addItem'])->name('meal-orders.items.store');
+    Route::delete('/meal-orders/{mealOrder}/items/{item}', [MealOrderController::class, 'removeItem'])->name('meal-orders.items.destroy');
+    Route::patch('/meal-orders/{mealOrder}/items/{item}/toggle-payment', [MealOrderController::class, 'togglePayment'])->name('meal-orders.items.toggle-payment');
+    Route::post('/meal-orders/{mealOrder}/close', [MealOrderController::class, 'close'])->name('meal-orders.close');
+    Route::post('/meal-orders/{mealOrder}/complete', [MealOrderController::class, 'complete'])->name('meal-orders.complete');
+    Route::post('/meal-orders/{mealOrder}/cancel', [MealOrderController::class, 'cancel'])->name('meal-orders.cancel');
+    Route::post('/meal-orders/{mealOrder}/notify', [MealOrderController::class, 'notifyParticipants'])->name('meal-orders.notify');
+
+    // 內部 IT / 總務叫修與服務工單系統
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+    Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
+    Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+    Route::patch('/tickets/{ticket}/assign', [TicketController::class, 'assign'])->name('tickets.assign');
+    Route::patch('/tickets/{ticket}/status', [TicketController::class, 'updateStatus'])->name('tickets.update-status');
+    Route::post('/tickets/{ticket}/reply', [TicketController::class, 'reply'])->name('tickets.reply');
+    Route::post('/tickets/{ticket}/rate', [TicketController::class, 'rate'])->name('tickets.rate');
+    Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
+
+    // 企業訪客預約與門禁貴賓接待系統
+    Route::get('/visitor-reservations', [VisitorReservationController::class, 'index'])->name('visitor-reservations.index');
+    Route::get('/visitor-reservations/create', [VisitorReservationController::class, 'create'])->name('visitor-reservations.create');
+    Route::get('/visitor-reservations/export', [VisitorReservationController::class, 'exportLog'])->name('visitor-reservations.export');
+    Route::post('/visitor-reservations', [VisitorReservationController::class, 'store'])->name('visitor-reservations.store');
+    Route::get('/visitor-reservations/{visitorReservation}', [VisitorReservationController::class, 'show'])->name('visitor-reservations.show');
+    Route::post('/visitor-reservations/{visitorReservation}/check-in', [VisitorReservationController::class, 'checkIn'])->name('visitor-reservations.check-in');
+    Route::post('/visitor-reservations/{visitorReservation}/check-out', [VisitorReservationController::class, 'checkOut'])->name('visitor-reservations.check-out');
+    Route::post('/visitor-reservations/{visitorReservation}/cancel', [VisitorReservationController::class, 'cancel'])->name('visitor-reservations.cancel');
+
+    // 企業公務車輛借調與出差派車系統
+    Route::get('/vehicles', [VehicleDispatchController::class, 'index'])->name('vehicles.index');
+    Route::get('/vehicles/create', [VehicleDispatchController::class, 'create'])->name('vehicles.create');
+    Route::get('/vehicles/export', [VehicleDispatchController::class, 'exportLog'])->name('vehicles.export');
+    Route::post('/vehicles', [VehicleDispatchController::class, 'store'])->name('vehicles.store');
+    Route::get('/vehicles/{vehicleDispatch}', [VehicleDispatchController::class, 'show'])->name('vehicles.show');
+    Route::match(['post', 'patch'], '/vehicles/{vehicleDispatch}/approve', [VehicleDispatchController::class, 'approve'])->name('vehicles.approve');
+    Route::match(['post', 'patch'], '/vehicles/{vehicleDispatch}/reject', [VehicleDispatchController::class, 'reject'])->name('vehicles.reject');
+    Route::post('/vehicles/{vehicleDispatch}/start', [VehicleDispatchController::class, 'startTrip'])->name('vehicles.start');
+    Route::post('/vehicles/{vehicleDispatch}/return', [VehicleDispatchController::class, 'returnTrip'])->name('vehicles.return');
+    Route::post('/vehicles/{vehicleDispatch}/cancel', [VehicleDispatchController::class, 'cancel'])->name('vehicles.cancel');
+
+    // 企業內訓課程與員工學習學分系統
+    Route::get('/trainings', [\App\Http\Controllers\TrainingCourseController::class, 'index'])->name('trainings.index');
+    Route::get('/trainings/create', [\App\Http\Controllers\TrainingCourseController::class, 'create'])->name('trainings.create');
+    Route::get('/trainings/export', [\App\Http\Controllers\TrainingCourseController::class, 'exportLog'])->name('trainings.export');
+    Route::post('/trainings', [\App\Http\Controllers\TrainingCourseController::class, 'store'])->name('trainings.store');
+    Route::get('/trainings/{trainingCourse}', [\App\Http\Controllers\TrainingCourseController::class, 'show'])->name('trainings.show');
+    Route::post('/trainings/{trainingCourse}/register', [\App\Http\Controllers\TrainingCourseController::class, 'register'])->name('trainings.register');
+    Route::post('/trainings/{trainingCourse}/cancel', [\App\Http\Controllers\TrainingCourseController::class, 'cancelRegistration'])->name('trainings.cancel');
+    Route::post('/trainings/{trainingCourse}/check-in/{registration}', [\App\Http\Controllers\TrainingCourseController::class, 'checkIn'])->name('trainings.check-in');
+    Route::post('/trainings/{trainingCourse}/feedback', [\App\Http\Controllers\TrainingCourseController::class, 'submitFeedback'])->name('trainings.feedback');
+    Route::patch('/trainings/{trainingCourse}/status', [\App\Http\Controllers\TrainingCourseController::class, 'updateStatus'])->name('trainings.status');
 
     // 站內通知中心
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

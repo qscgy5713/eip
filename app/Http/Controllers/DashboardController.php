@@ -191,6 +191,53 @@ class DashboardController extends Controller
             ->orderByDesc('month')
             ->first(['id', 'year', 'month', 'net_pay', 'status', 'published_at']);
 
+        // 13. 進行中的訂餐揪團活動
+        $activeMealOrders = \App\Models\MealOrder::with(['creator'])
+            ->where('status', 'open')
+            ->where('cutoff_time', '>', $now)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        // 14. 我提報的進行中叫修工單
+        $myActiveTickets = \App\Models\Ticket::with(['assignee:id,name'])
+            ->where('user_id', $user->id)
+            ->whereIn('status', ['open', 'in_progress', 'pending_user'])
+            ->latest()
+            ->take(3)
+            ->get();
+
+        // 15. 今日預約來訪貴賓 (接待人為自己，管理者可視全局)
+        $todayVisitorsQuery = \App\Models\VisitorReservation::with(['host:id,name', 'meetingRoom:id,name'])
+            ->whereDate('visit_date', $now->toDateString())
+            ->whereIn('status', ['expected', 'checked_in']);
+        if (! $user->isAdmin() && ! $user->isManager()) {
+            $todayVisitorsQuery->where('host_id', $user->id);
+        }
+        $todayVisitors = $todayVisitorsQuery->orderBy('expected_arrival_time')->take(3)->get();
+
+        // 16. 我的出差公務派車單 (已核准或出勤中)
+        $myActiveDispatches = \App\Models\VehicleDispatch::with(['vehicle'])
+            ->where('user_id', $user->id)
+            ->whereIn('status', ['approved', 'active'])
+            ->orderBy('start_time')
+            ->take(3)
+            ->get();
+
+        // 17. 即將開辦之企業熱門內訓課程
+        $upcomingTrainings = \App\Models\TrainingCourse::where('status', 'upcoming')
+            ->where('start_time', '>', now())
+            ->orderBy('start_time')
+            ->take(3)
+            ->get()
+            ->map(function ($tc) use ($user) {
+                $reg = \App\Models\CourseRegistration::where('training_course_id', $tc->id)
+                    ->where('user_id', $user->id)
+                    ->first();
+                $tc->my_registration_status = $reg?->status;
+                return $tc;
+            });
+
         return Inertia::render('Dashboard', [
             'announcements' => $announcements,
             'pendingApprovals' => $pendingApprovals,
@@ -205,6 +252,11 @@ class DashboardController extends Controller
             'myWeeklyReport' => $myWeeklyReport,
             'currentWeekNumber' => $currentWeek,
             'latestPayslip' => $latestPayslip,
+            'activeMealOrders' => $activeMealOrders,
+            'myActiveTickets' => $myActiveTickets,
+            'todayVisitors' => $todayVisitors,
+            'myActiveDispatches' => $myActiveDispatches,
+            'upcomingTrainings' => $upcomingTrainings,
             'stats' => [
                 'unreadAnnouncementsCount' => Announcement::where('status', 'published')->whereDoesntHave('reads', fn($q) => $q->where('user_id', $user->id))->count(),
                 'pendingApprovalsCount' => $totalPendingApprovalsCount,
@@ -212,6 +264,11 @@ class DashboardController extends Controller
                 'myPendingTasksCount' => \App\Models\Task::where('assignee_id', $user->id)->whereIn('status', ['todo', 'in_progress', 'review'])->count(),
                 'myHeldAssetsCount' => \App\Models\Asset::where('current_holder_id', $user->id)->count(),
                 'isWeeklyReportSubmitted' => $myWeeklyReport && $myWeeklyReport->status !== 'draft',
+                'myPendingTicketsCount' => \App\Models\Ticket::where('user_id', $user->id)->whereIn('status', ['open', 'in_progress', 'pending_user'])->count(),
+                'todayVisitorsCount' => $todayVisitors->count(),
+                'myActiveDispatchesCount' => $myActiveDispatches->count(),
+                'upcomingTrainingsCount' => $upcomingTrainings->count(),
+                'myEarnedCredits' => $user->earned_credits,
             ],
         ]);
     }

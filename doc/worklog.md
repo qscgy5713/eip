@@ -2,6 +2,101 @@
 
 ## 2026-10-12
 ### 做了什麼
+- 實作**企業內訓課程與員工學習學分系統 (Corporate Training & Learning Credits Hub)**：
+  - **資料架構與資料表設計 (`TrainingCourse`, `CourseRegistration` 模型與 migration)**：
+    - `training_courses`：流水開課代號 (`course_code`: TC-YYYYMM-XXXX)、課程主題 (`title`)、領域分類 (`category`: technical, management, compliance, general)、講師資訊 (`instructor`)、開課日期與時段 (`course_date`, `start_time`, `end_time`)、研習時數 (`hours`)、可得學分 (`credits`)、上課地點/會議室 (`location`)、招生名額上限 (`capacity`)、目前狀態 (`status`: open, in_progress, completed, cancelled)、課程大綱與講義教材 (`syllabus`, `materials`)。
+    - `course_registrations`：學員關聯 (`user_id`)、課程關聯 (`training_course_id`)、報名狀態 (`status`: registered 正取, waitlist 候補, attended 已完訓合格, cancelled 已取消)、報名時間戳記 (`registered_at`)、簽到完訓時間 (`attended_at`)、完訓滿意度星級 (`satisfaction_rating`: 1~5)、課後心得回饋 (`feedback`)。
+    - `User` 模型擴充：定義 `courseRegistrations()` 關聯，封裝 `earned_credits` 與 `earned_hours` 動態計算累計學分與研習總時數，加入 `hasRole()` 與 `hasAnyRole()` 角色輔助方法。
+  - **後端業務邏輯、額滿候補遞補與 ESG 培訓時數匯出 (`TrainingCourseController`)**：
+    - **招生防爆額與自動候補**：報名人數達上限自動轉為 `waitlist` 候補狀態；正取學員取消報名時，系統自動尋找最早候補同仁升格為 `registered` 正取，並連鎖發送 `EipSystemNotification` 補位成功通知。
+    - **講師/HR 一鍵點名核發學分**：開課人、講師或 HR/Admin 可在後台控制台即時勾選點名簽到，標記 `attended` 並將學分與培訓時數正式入帳同仁終身履歷。
+    - **課後五星滿意度評估閉環**：已完訓學員可針對課程內容與講師給予 1~5 星評等並留下心得回饋，供人資作為後續內訓改進指標。
+    - **符合 ESG 人力資本培訓總表 CSV 匯出**：一鍵匯出全公司參訓同仁、課程代碼、學分、研習時數之培訓清冊，具備 UTF-8 BOM 與 Formula Injection 防護。
+  - **前端視圖與互動元件 (`Trainings/Index.vue`, `Trainings/Create.vue`, `Trainings/Show.vue`)**：
+    - **研習中心看板與開課矩陣 (`Trainings/Index.vue`)**：4 大指標卡（全部課程、進行中、我的累計學分、我的研習時數）；全體課程 / 我的研習紀錄 Tab 切換；領域分類篩選器；課程卡片矩陣附名額進度條與熱門標籤。
+    - **線上開課表單 (`Trainings/Create.vue`)**：人資/講師在線建立課程大綱、設定名額、學分、教材連結與時段。
+    - **課程詳情與學員管理控制台 (`Trainings/Show.vue`)**：課程大綱與教材下載；同仁線上報名/取消/候補按鈕；課後滿意度評價 Modal；講師與 HR 專屬點名簽到控制台與名冊分組（正取/候補/已完訓）。
+  - **全站整合與自動化測試**：
+    - 個人工作台 Dashboard 加入「企業內訓」快捷鈕與「即將開始之內訓課程」首頁卡片。
+    - 全站指揮中心 `Cmd+K` 支援內訓代碼與主題模糊檢索，配屬學士帽圖示與靛藍色徽章。
+    - 新增 `tests/Feature/TrainingCourseTest.php` 涵蓋 10 項測試（47 assertions），全數綠燈通過。
+- 實作**企業公務車輛借調與出差派車系統 (Company Fleet & Vehicle Dispatch Hub)**：
+  - **資料架構與資料表設計 (`CompanyVehicle`, `VehicleDispatch` 模型與 migration)**：
+    - `company_vehicles`：車輛牌號 (`license_plate`)、品牌型號 (`brand_model`)、乘載人數 (`capacity`)、目前行駛里程 (`current_mileage`)、上次保養里程 (`last_maintenance_mileage`)、下次預計保養里程 (`next_maintenance_mileage`)、保養狀態警告 (`needs_maintenance` 每 5000km 自動警示)、狀態 (`status`: available 在庫可借, dispatched 出差外派中, maintenance 進廠保養, retired 除役)。
+    - `vehicle_dispatches`：派車單號 (`dispatch_number`: VD-YYYYMMDD-XXXX)、申請同仁 (`applicant_id`)、審核主管 (`approved_by`)、指派公務車 (`company_vehicle_id`)、出差目的 (`purpose`)、目的地 (`destination`)、乘車同仁名冊 (`passengers`)、預計出車與還車時段 (`start_time`, `end_time`)、實際出車里程 (`start_mileage`)、還車里程 (`end_mileage`)、行駛公里數 (`total_mileage`)、核准狀態 (`status`: pending, approved, in_use, completed, rejected, cancelled)。
+  - **後端業務邏輯、時段重疊防衝突與油料里程稽核 (`VehicleDispatchController`)**：
+    - **防時段重疊排程演算法**：申請派車時，針對同一公務車即時檢核預約時段是否與其他未取消/未駁回之單據重疊，徹底杜絕撞車衝堂。
+    - **主管線上簽核流轉**：申請人直屬主管或管理員線上核准 (`approved`) 或附理由駁回 (`rejected`)，連鎖發送 `EipSystemNotification` 站內通知。
+    - **出車領車與還車里程即時回報閉環**：出差同仁出發時登記儀表板里程啟動派車 (`in_use`)；出差結束歸還時填寫還車里程，系統自動計算行駛總公里數，同步更新車輛當前總里程，並智慧判定是否已達 5000km 保養門檻。
+    - **出差里程與油料公務報銷清冊 CSV 匯出**：提供符合財務稽核之 UTF-8 BOM CSV 匯出，過濾跳脫特殊字元防止 Formula Injection。
+  - **前端視圖與互動體驗 (`Vehicles/Index.vue`, `Vehicles/Create.vue`, `Vehicles/Show.vue`)**：
+    - **車隊現況與派車中心 (`Vehicles/Index.vue`)**：車輛現況卡片（在庫/出勤/保養進度條）；派車單表格與多維過濾；領車與還車 Modal。
+    - **派車申請表單 (`Vehicles/Create.vue`)**：選擇可用公務車、乘載人數校驗、出差目的地與預約時段。
+    - **派車單詳情 (`Vehicles/Show.vue`)**：進度時間軸；主管審批 Modal；出車/還車里程即時回報控制台。
+  - **全站整合與自動化測試**：
+    - 個人工作台 Dashboard 加入「公務車輛」快捷鈕與「出差派車行程」卡片。
+    - 全站指揮中心 `Cmd+K` 支援車牌與派車單號檢索。
+    - 新增 `tests/Feature/VehicleDispatchTest.php` 涵蓋 7 項測試（38 assertions），全數綠燈通過。
+- 實作**企業訪客預約與門禁貴賓接待系統 (Visitor Management & Guest Reception Hub)**：
+  - **資料架構與資料表設計 (`VisitorReservation` 模型與 migration)**：
+    - `visitor_reservations`：預約流水號 (`reservation_number`: VR-YYYYMMDD-XXXX)、接待同仁 (`host_id`)、貴賓姓名 (`visitor_name`)、來訪單位 (`visitor_company`)、聯絡電話/Email (`visitor_phone`, `visitor_email`)、預約來訪日期與時段 (`visit_date`, `expected_arrival_time`)、來訪事由 (`purpose`)、預定會客地點/會議室 (`meeting_location`)、訪客識別證代碼 (`badge_number`)、生命週期狀態 (`status`: pending, checked_in, checked_out, cancelled)、實際簽到與離開時間 (`check_in_at`, `check_out_at`)。
+  - **後端業務邏輯、前台接待聯動與 ISO 27001 門禁安全稽核 (`VisitorReservationController`)**：
+    - **同仁提前預約與單號生成**：同仁線上填寫訪客資料，系統自動產生防偽預約代碼。
+    - **前台大廳快速簽到 Check-in**：訪客抵達公司前台時，櫃台接待人員輸入預約單號或訪客姓名即可一鍵簽到並發放識別證；系統立即連鎖向接待同仁發送 `EipSystemNotification` 站內推播通知：「您的訪客已抵達前台大廳，請前往接待」。
+    - **離廠簽退 Check-out 閉環**：訪客會晤完畢離開時，前台人員一鍵簽退收回識別證，系統自動記錄離廠時間戳記。
+    - **符合 ISO 27001 實體安全規範之訪客出入日誌 CSV 匯出**：支援前台與資安人員匯出訪客出入安全清冊，具備 UTF-8 BOM 與 Excel 公式注入防護。
+  - **前端視圖與互動體驗 (`Visitors/Index.vue`, `Visitors/Create.vue`, `Visitors/Show.vue`)**：
+    - **訪客接待中心看板 (`Visitors/Index.vue`)**：今日預約、廠內訪客、累計接待 3 大指標卡；前台大廳快速 Check-in/Check-out 控制台；多維日期與狀態篩選。
+    - **線上預約表單 (`Visitors/Create.vue`)**：貴賓姓名、所屬公司、事由、時段與會議地點。
+    - **預約詳情與數位通行卡 (`Visitors/Show.vue`)**：專屬數位通行卡卡面、門禁進度時間軸。
+  - **全站整合與自動化測試**：
+    - 個人工作台 Dashboard 加入「訪客預約」快捷鈕與「今日預約訪客」卡片。
+    - 全站指揮中心 `Cmd+K` 支援訪客姓名、公司與預約單號模糊檢索。
+    - 新增 `tests/Feature/VisitorReservationTest.php` 涵蓋 8 項測試（48 assertions），全數綠燈通過。
+- 實作**內部 IT / 總務叫修與服務工單系統 (Internal Helpdesk & Service Ticketing Hub)**：
+  - **資料架構與資料表設計 (`Ticket`, `TicketReply` 模型與 migration)**：
+    - `tickets`：唯一流水工單號 (`ticket_number`: TK-YYYYMMDD-XXXX)、提單同仁 (`user_id`)、承辦工程師 (`assigned_to`)、分類 (`category`: 電腦硬體/軟體系統/網路通訊/水電環境/行政耗材/其他)、優先級 (`priority`: low/normal/high/urgent)、狀態 (`status`: open/in_progress/pending_user/resolved/closed)、主旨 (`title`)、詳細描述 (`description`)、故障地點 (`location`)、附件截圖 (`attachments`)、完修時間 (`resolved_at`)、結案時間 (`closed_at`)、滿意度評分 (`satisfaction_rating`: 1~5 星)、反饋意見 (`satisfaction_feedback`)。
+    - `ticket_replies`：工單關聯 (`ticket_id`)、回覆同仁 (`user_id`)、處理說明訊息 (`message`)、內部專屬備註 (`is_internal`)、進度附件 (`attachments`)。
+    - `User` 模型擴充：定義 `tickets()` 與 `assignedTickets()` 關聯。
+  - **後端業務邏輯、權限保護與派工流程 (`TicketController`)**：
+    - **提單與派工通知**：同仁線上提單後，自動生成當日流水號，並向 IT/總務管理人員發送 `EipSystemNotification` 站內系統通知。
+    - **IDOR 越權調閱隔離**：非提單本人、非指派工程師或非管理員一律嚴格拒絕調閱（回傳 403 Forbidden）。
+    - **派工調度與狀態流轉**：Admin/專員指派處理工程師後自動轉為 `in_progress` 並通知工程師；工程師完修標記為 `resolved` 自動記錄 `resolved_at` 並連鎖推播通知提單同仁驗收。
+    - **雙向溝通對話與內部備註權限**：同仁與工程師在線交流，同仁回覆自動將 `pending_user` 轉回 `in_progress`；IT 工程師可勾選 `is_internal` 撰寫內部排查筆記，一般同仁檢視時徹底隔離不可見。
+    - **五星滿意度結案閉環**：提單同仁驗收設備正常後進行 1~5 星評分並留下回饋，正式歸檔為 `closed`。
+  - **前端視圖與互動體驗 (`Tickets/Index.vue`, `Tickets/Create.vue`, `Tickets/Show.vue`)**：
+    - **工單總覽與多維看板 (`Tickets/Index.vue`)**：4 大統計指標卡片（待受理、處理中、我提報處理中、已完修）；4 大分類 Tabs（我提報的、指派給我、處理中、全員管理視圖）；分類、優先級與關鍵字多維篩選；深色模式全面適配。
+    - **線上提單報修表單 (`Tickets/Create.vue`)**：問題主旨、分類、優先級、故障位置、詳細描述、故障截圖拖曳多檔上傳。
+    - **工單詳情與溝通時間軸 (`Tickets/Show.vue`)**：視覺化 4 步進度 Stepper 管線；完修耗時計算；指派工程師下拉與工程師快捷操作控制台；五星滿意度評分小卡；對話時間軸與附件下載。
+  - **個人工作台與全站生態整合**：
+    - **個人工作台 Dashboard (`Dashboard.vue`, `DashboardController`)**：快捷行動列擴充為 11 欄並加入「服務叫修」捷徑；卡片區塊加入「我的服務叫修工單」小卡與提單快速入口。
+    - **全站搜尋指揮中心 (`GlobalSearchController`, `CommandPalette.vue`)**：`Cmd+K` 支援工單流水號與問題模糊檢索，提供專屬扳手圖示與快捷指令 `quick-tickets`。
+    - **全站導覽列 (`AuthenticatedLayout.vue`)**：桌機與手機導覽列全面納入「服務叫修」入口。
+  - **品質驗證與自動化測試**：
+    - 新增 `tests/Feature/TicketTest.php` 涵蓋 8 項測試（60 assertions），覆蓋工單首頁、建立工單、IDOR 隔離、工程師派工、完修通知、對話回覆與內部備註權限、五星結案評分與全站搜尋。
+    - 全系統自動化測試累積達到 **291 項 Feature / Unit 測試 100% 全數通過 (1,699 assertions)**。
+    - 前端 Vite 打包編譯無警告無錯誤。
+- 實作**企業同仁訂餐與下午茶揪團系統 (Corporate Meal & Tea Group Order Hub)**：
+  - **資料架構與資料表設計 (`MealOrder`, `MealOrderItem` 模型與 migration)**：
+    - `meal_orders`：揪團發起人 (`creator_id`)、活動主題 (`title`)、店家名稱 (`store_name`)、店家電話 (`store_phone`)、官方菜單連結 (`menu_url`)、備註說明 (`description`)、截止時間 (`cutoff_time`)、公司補助每人額度 (`subsidy_per_person`)、活動生命週期狀態 (`status`: open, closed, completed, cancelled)。
+    - `meal_order_items`：所屬活動 (`meal_order_id`)、點餐同仁 (`user_id`)、品項名稱 (`item_name`)、客製化規格如甜度冰塊 (`specification`)、單價 (`unit_price`)、數量 (`quantity`)、自動計算小計 (`subtotal`)、備註 (`notes`)、繳款狀態 (`payment_status`: unpaid, paid)、付款時間戳記 (`paid_at`)。模型 saving 事件自動重算小計，並封裝雙向欄位別名 (`restaurant_name`, `restaurant_phone`, `options`, `user_id`)。
+    - `User` 模型擴充：定義 `createdMealOrders()` 與 `mealOrderItems()` 關聯。
+  - **後端業務邏輯、行政下單彙總與結算對帳 (`MealOrderController`)**：
+    - **店家出餐/電話下單自動統計彙總表 (`summaryItems`)**：依品項名稱與規格甜度冰塊自動合併加總（例：「珍珠紅茶拿鐵 (微糖微冰/大杯) x 8 杯」），附點餐同仁名單，解決行政看幾十行名冊人工統計之痛點。
+    - **同仁自費結算清冊 (`settlements`)**：依同仁分組計算每人點餐總額，自動扣抵公司補助，精確產出每人實付自費金額 (`net_payable`) 與繳款狀態。
+    - **防呆與逾期防護**：非 open 或過截止時間全面拒絕新增點餐；非發起人/管理員禁止擅改他人品項。
+    - **活動生命週期閉環與通知**：發起開團、結單 (close)、餐點送達 (complete)、取消活動、一鍵催繳未付款同仁 (notifyParticipants)，全方位推播 `EipSystemNotification` 站內通知並留存 `AuditLog`。
+  - **前端視圖與互動體驗 (`MealOrders/Index.vue`, `MealOrders/Show.vue`)**：
+    - **訂餐活動中心與開團看板 (`MealOrders/Index.vue`)**：進行中/今日開團/我參與次數/待繳自費 4 大統計看板；全部/進行中/店家出餐中/已送達/我發起的 5 大分頁 Tabs；外送門檻進度條（例：差 $80 達標）；發起開團 Modal；深色模式全面適配。
+    - **點餐工作台與出餐結算詳情 (`MealOrders/Show.vue`)**：進行中/已逾期醒目標籤、外送門檻動態百分比進度條；同仁線上即時點餐卡片；4 大功能 Tabs【📋 廚房出餐/電話下單彙總表、💰 同仁自費結算清冊、👥 全部品項明細、🙋 我的點餐】；開團者管理功能列（結單、送達、一鍵催繳自費、切換付款狀態）。
+  - **個人工作台與全站生態整合**：
+    - **個人工作台 Dashboard (`Dashboard.vue`, `DashboardController`)**：載入進行中揪團活動；快捷行動列擴充為 10 欄並加入「訂餐揪團」捷徑；主要工作台加入「進行中訂餐揪團」卡片與快速點餐入口。
+    - **全站搜尋指揮中心 (`GlobalSearchController`, `CommandPalette.vue`)**：`Cmd+K` 支援訂餐活動模糊檢索與 `quick-meal-orders` 快捷指令，專屬購物車圖示與橘色標籤。
+    - **全站導覽列 (`AuthenticatedLayout.vue`)**：桌機與手機導覽列全面納入「訂餐揪團」入口。
+  - **品質驗證與自動化測試**：
+    - 新增 `tests/Feature/MealOrderTest.php` 涵蓋 8 項測試（32 assertions），覆蓋列表統計、發起開團、點餐小計、截止防呆、移除點餐、結單送達、自費付款狀態切換與催繳通知。
+    - 全系統自動化測試累積達到 **283 項 Feature / Unit 測試 100% 全數通過 (1,633 assertions)**。
+    - 前端 Vite 打包編譯無警告無錯誤。
 - 實作**個人機密薪資條與薪酬明細存摺系統 (Confidential Payslips & Compensation Hub)**：
   - **資料架構與資料表設計 (`Payslip` 模型與 migration)**：
     - `payslips`：所屬同仁 (`user_id`)、年度 (`year`)、月份 (`month`)、應發項目【底薪/本薪 (`base_salary`)、職務加給 (`allowance`)、績效獎金 (`performance_bonus`)、加班費 (`overtime_pay`)、其他應發 (`other_earnings`)、應發總額 (`total_earnings`)】、應扣項目【勞保自付額 (`labor_insurance`)、健保自付額 (`health_insurance`)、勞退自提額 (`pension_contribution`)、代扣所得稅 (`tax_withholding`)、其他扣款 (`other_deductions`)、應扣總額 (`total_deductions`)】、實發淨額 (`net_pay`)、發放狀態 (`status`: draft, published)、人資附註說明 (`notes`)、正式發布時間 (`published_at`)，設定 `unique(user_id, year, month)` 嚴格防呆防止同仁同月重複建單。
