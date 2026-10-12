@@ -421,7 +421,7 @@ const isText = (mimeType, fileName = '') => {
             <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">上傳新文件至企業文件庫</h3>
-                    <button @click="isUploadModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button @click="isUploadModalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitUpload" class="space-y-4 text-sm">
@@ -537,7 +537,7 @@ const isText = (mimeType, fileName = '') => {
                     <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">
                         發布新修訂版本：{{ targetDocForVersion?.title }}
                     </h3>
-                    <button @click="isNewVersionModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button @click="isNewVersionModalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitNewVersion" class="space-y-4 text-sm">
@@ -602,7 +602,7 @@ const isText = (mimeType, fileName = '') => {
                         </h3>
                         <p class="text-xs text-gray-400 mt-0.5">點擊各版本下載圖示即可下載當時的檔案版本</p>
                     </div>
-                    <button @click="isHistoryModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button @click="isHistoryModalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <div v-if="loadingHistory" class="py-12 text-center text-xs text-gray-400">載入歷史版本中...</div>
@@ -693,7 +693,7 @@ const isText = (mimeType, fileName = '') => {
                         <button
                             type="button"
                             @click="closePreviewModal"
-                            class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-200 transition"
+                            class="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-200 transition"
                             title="關閉預覽"
                         >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -768,7 +768,7 @@ const isText = (mimeType, fileName = '') => {
             <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">編輯文件屬性與存取權限</h3>
-                    <button @click="closeEditModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button @click="closeEditModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitEdit" class="space-y-4 text-xs">

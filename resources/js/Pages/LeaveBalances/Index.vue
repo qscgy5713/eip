@@ -724,7 +724,7 @@ const overtimeStatusLabel = (status, isComp) => {
                         <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">
                             調整同仁休假配額
                         </h4>
-                        <button type="button" @click="showEditModal = false" class="text-gray-400 hover:text-gray-600">
+                        <button type="button" @click="showEditModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -808,7 +808,7 @@ const overtimeStatusLabel = (status, isComp) => {
                         <h4 class="text-base font-bold text-gray-900 dark:text-gray-100">
                             批次初始化年度休假配額
                         </h4>
-                        <button type="button" @click="showBatchModal = false" class="text-gray-400 hover:text-gray-600">
+                        <button type="button" @click="showBatchModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>

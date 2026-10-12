@@ -231,7 +231,7 @@ const getStatusBadge = (delegation) => {
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">設定簽核職務代理人</h3>
                         <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">指定同仁在特定日期區間內擁有您的待審表單代理簽核權限</p>
                     </div>
-                    <button @click="closeModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button @click="closeModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitDelegation" class="space-y-4 text-sm">

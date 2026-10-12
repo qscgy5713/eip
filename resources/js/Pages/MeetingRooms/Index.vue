@@ -450,7 +450,7 @@ const formatTime = (isoString) => {
             <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">預約內部會議室</h3>
-                    <button @click="closeBookingModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button @click="closeBookingModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitBooking" class="space-y-4 text-sm">
@@ -622,7 +622,7 @@ const formatTime = (isoString) => {
             <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 dark:bg-gray-800">
                 <div class="flex items-center justify-between border-b pb-3">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">新增會議室 (管理員)</h3>
-                    <button @click="closeRoomModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button @click="closeRoomModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitRoom" class="space-y-4 text-sm">

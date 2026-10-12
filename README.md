@@ -265,6 +265,9 @@ npm run dev
 | `EIP_MAIL_NOTIFICATIONS` | 是否把站內通知同步寄 Email | `true` |
 | `EIP_REQUIRE_2FA_ROLES` | 強制啟用雙因素驗證的角色(逗號分隔,如 `admin,hr`) | 空(不強制) |
 
+### 5. 正式環境部署
+正式上線請依 `doc/plan.md` 的「正式環境部署清單」,使用 `.env.production.example`(`APP_DEBUG=false`、SMTP、強制 2FA 角色)與 `docker/nginx/production.conf.example`(HTTPS、HSTS、CSP)。上線前務必刪除或更改預設測試帳號。
+
 ---
 
 ## 預設測試帳號 (密碼皆為 `password`)

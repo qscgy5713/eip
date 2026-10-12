@@ -221,7 +221,7 @@ onUnmounted(() => {
                     v-if="searchQuery"
                     type="button"
                     @click.stop="searchQuery = ''"
-                    class="p-1 text-gray-400 hover:text-gray-600 rounded text-3xs"
+                    class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded text-3xs"
                     title="清空關鍵字"
                 >
                     清空

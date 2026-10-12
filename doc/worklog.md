@@ -8,6 +8,9 @@
 - **表單統計報表** `/reports`(人資/管理員全公司、部門主管鎖定本部門、員工 403):只計已核准單據;歸月依請假開始日、加班日期、報銷/請購申請日;摘要卡、假別與報銷項目長條、本月申請處理狀態、個人明細、CSV 匯出(Formula Injection 跳脫、AuditLog)。回溯 12 個月申請以涵蓋提早請假;歸月在 PHP 端判斷以相容 PostgreSQL 與 SQLite。測試 `FormReportTest`(10 項)。
 - **管理員重設 2FA**(自我 code review 發現缺口):同仁手機遺失又沒復原碼會被永久鎖住 → 組織管理列表新增「重設2FA」(管理員/人資;人資不可動管理員),AuditLog。review 同時抓到列表查詢只選部分欄位導致拿不到 2FA 欄位,已補。
 - 全系統 418 項測試通過(2,565 assertions)。已知限制不變:PHPUnit 的 SQLite 無法執行 PostgreSQL `ilike` 搜尋。
+- **Gmail SMTP 實測**:`.env` 設定 Gmail(應用程式密碼,`.env` 不進版控),暫用 `+` 別名走完「員工送單 → 主管收信 → 主管駁回 → 員工收信」與忘記密碼信,queue worker 1~3 秒寄出;信內「立即查看」連結格式 `/forms/requests/{id}` 正確(單據被刪後舊連結 404 屬正常)。測試資料已清除(含直接刪單殘留的 1 天請假預扣,已歸零——日後清測試單應走撤回流程而非直接刪除)。重建 app 容器後須 `docker compose restart web`,否則 nginx 回 502。
+- **上線範本**:新增 `.env.production.example`、`docker/nginx/production.conf.example`(HTTPS、HSTS、CSP)與 `doc/plan.md` 部署清單。
+- **深色模式補強**:靜態掃描找出只有淺色樣式的地方——34 個「×」關閉鈕 hover 變暗看不見(補 `dark:hover:text-gray-200`)、通訊錄/組織管理圖示鈕 hover 變白底淺灰字(補 `dark:hover:bg-gray-700`);Print 列印版、QR Code 與 Logo 預覽底刻意保留白色。新頁面(報表、個人設定 2FA/Email)深色實測正常。
 
 ## 2026-10-12(續)全選單 × 多角色功能走查
 ### 時區、色系、品牌設定與觀察項修正

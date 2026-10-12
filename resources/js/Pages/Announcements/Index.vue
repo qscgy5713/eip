@@ -275,7 +275,7 @@ const submitAnnouncement = () => {
             <form @submit.prevent="submitAnnouncement" class="p-6 space-y-5">
                 <div class="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">發布企業內部公告</h3>
-                    <button type="button" @click="closeCreateModal" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button type="button" @click="closeCreateModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <!-- 標題 -->

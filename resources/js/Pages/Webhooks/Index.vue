@@ -204,7 +204,7 @@ const deleteWebhook = async (id, name) => {
                     <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">
                         配置新外部 Webhook 端點
                     </h3>
-                    <button @click="showModal = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">
+                    <button @click="showModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">
                         ×
                     </button>
                 </div>

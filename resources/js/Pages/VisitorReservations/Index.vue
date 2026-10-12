@@ -380,7 +380,7 @@ const handleExport = () => {
                         </span>
                         貴賓前台簽到登記
                     </h3>
-                    <button @click="showCheckInModal = false" class="text-gray-400 hover:text-gray-600">✕</button>
+                    <button @click="showCheckInModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">✕</button>
                 </div>
 
                 <div class="mt-4 space-y-4">

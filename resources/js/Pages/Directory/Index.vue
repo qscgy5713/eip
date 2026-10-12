@@ -246,7 +246,7 @@ const closeMembersDrawer = () => {
                                     <button
                                         @click="clearCanvasSearch"
                                         type="button"
-                                        class="p-1 text-gray-400 hover:text-gray-600 rounded transition"
+                                        class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded transition"
                                         title="清除搜尋"
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -260,7 +260,7 @@ const closeMembersDrawer = () => {
                             <div class="inline-flex items-center rounded-lg border border-gray-200 bg-gray-50 p-0.5 text-xs dark:bg-gray-800/60 dark:border-gray-700">
                                 <button
                                     @click="zoomOut"
-                                    class="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white rounded transition dark:text-gray-400"
+                                    class="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white dark:hover:bg-gray-700 rounded transition dark:text-gray-400"
                                     title="縮小"
                                     :disabled="zoomLevel <= 60"
                                 >
@@ -275,7 +275,7 @@ const closeMembersDrawer = () => {
                                 </button>
                                 <button
                                     @click="zoomIn"
-                                    class="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white rounded transition dark:text-gray-400"
+                                    class="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white dark:hover:bg-gray-700 rounded transition dark:text-gray-400"
                                     title="放大"
                                     :disabled="zoomLevel >= 140"
                                 >
@@ -365,7 +365,7 @@ const closeMembersDrawer = () => {
                                 在職成員：<span class="font-bold text-indigo-600">{{ activeDrawerDept.users?.length || 0 }}</span> 人
                             </p>
                         </div>
-                        <button @click="closeMembersDrawer" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-200/60 transition">
+                        <button @click="closeMembersDrawer" class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-200/60 transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>

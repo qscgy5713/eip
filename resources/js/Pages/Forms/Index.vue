@@ -271,7 +271,7 @@ const deleteForm = async (formId, formName) => {
                         <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">自訂新表單設計器</h3>
                         <p class="text-xs text-gray-500 mt-0.5 dark:text-gray-400">定義表單代碼、簽核流程層級與動態欄位結構</p>
                     </div>
-                    <button @click="isCreateFormModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                    <button @click="isCreateFormModalOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                 </div>
 
                 <form @submit.prevent="submitCustomForm" class="space-y-4 text-sm">

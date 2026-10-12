@@ -566,7 +566,7 @@ const extractDataSummary = (data, formCode) => {
                             ></span>
                             確認批次{{ batchActionType === 'approved' ? '核准' : '駁回' }} ({{ selectedIds.length }} 筆)
                         </h4>
-                        <button type="button" @click="showBatchModal = false" class="text-gray-400 hover:text-gray-600">
+                        <button type="button" @click="showBatchModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>

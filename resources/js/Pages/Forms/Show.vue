@@ -634,7 +634,7 @@ const openDiffViewer = (rev = null) => {
                     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
                         <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">協同轉簽派審</h3>
-                            <button @click="showTransferModal = false" class="text-gray-400 hover:text-gray-600">&times;</button>
+                            <button @click="showTransferModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">&times;</button>
                         </div>
 
                         <p class="text-xs text-gray-500 dark:text-gray-400">
@@ -694,7 +694,7 @@ const openDiffViewer = (rev = null) => {
                     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
                         <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">發起會辦加簽</h3>
-                            <button @click="showAddSignModal = false" class="text-gray-400 hover:text-gray-600">&times;</button>
+                            <button @click="showAddSignModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">&times;</button>
                         </div>
 
                         <p class="text-xs text-gray-500 dark:text-gray-400">
@@ -853,7 +853,7 @@ const openDiffViewer = (rev = null) => {
                                 <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                 <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">修改表單內容並重新送審</h3>
                             </div>
-                            <button @click="showResubmitModal = false" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+                            <button @click="showResubmitModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold">&times;</button>
                         </div>
 
                         <!-- 主管退回意見提醒 -->
@@ -956,7 +956,7 @@ const openDiffViewer = (rev = null) => {
                         <button
                             type="button"
                             @click="showDiffViewer = false"
-                            class="text-gray-400 hover:text-gray-600 transition p-1 rounded-lg"
+                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition p-1 rounded-lg"
                         >
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>

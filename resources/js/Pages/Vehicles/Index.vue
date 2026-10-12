@@ -480,7 +480,7 @@ const handleExport = () => {
             <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 dark:border-gray-700 text-xs">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">公務車還車檢核與里程回報</h3>
-                    <button @click="showReturnModal = false" class="text-gray-400 hover:text-gray-600">✕</button>
+                    <button @click="showReturnModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">✕</button>
                 </div>
 
                 <div class="mt-4 space-y-4">
@@ -545,7 +545,7 @@ const handleExport = () => {
             <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 dark:border-gray-700 text-xs">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="text-base font-bold text-red-600">駁回派車借調單</h3>
-                    <button @click="showRejectModal = false" class="text-gray-400 hover:text-gray-600">✕</button>
+                    <button @click="showRejectModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">✕</button>
                 </div>
                 <div class="mt-4 space-y-3">
                     <p class="text-gray-600 dark:text-gray-300">

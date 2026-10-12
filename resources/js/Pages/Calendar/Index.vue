@@ -401,7 +401,7 @@ const openDateEventsModal = (dateStr, evList) => {
                     </div>
                     <button
                         @click="selectedEvent = null"
-                        class="text-gray-400 hover:text-gray-600 text-xl font-bold"
+                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold"
                     >
                         &times;
                     </button>
@@ -519,7 +519,7 @@ const openDateEventsModal = (dateStr, evList) => {
                     </div>
                     <button
                         @click="selectedDateEvents = null"
-                        class="text-gray-400 hover:text-gray-600 text-xl font-bold"
+                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl font-bold"
                     >
                         &times;
                     </button>

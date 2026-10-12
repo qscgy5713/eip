@@ -92,3 +92,10 @@
 2. **基礎骨架建置**：資料庫遷移、會員認證、組織架構管理。
 3. **功能反覆迭代**：以 MVP 為基準分批驗證上線。
 4. **壓力測試與安全檢查**：權限越權檢查 (IDOR)、高併發打卡壓測。
+
+## 正式環境部署清單
+1. 複製 `.env.production.example` 為 `.env`,填入 `APP_KEY`、資料庫、SMTP;確認 `APP_DEBUG=false`、`APP_ENV=production`、`SESSION_SECURE_COOKIE=true`。
+2. 複製 `docker/nginx/production.conf.example` 為 `docker/nginx/default.conf`,換成實際網域與憑證路徑(HTTPS、HSTS、CSP)。
+3. 啟動 `docker compose up -d`(含 `queue` 容器);首次執行 `php artisan migrate --force`、`php artisan config:cache route:cache view:cache`。
+4. 以 `EIP_REQUIRE_2FA_ROLES=admin,hr` 強制高權限角色啟用雙因素驗證;預設測試帳號(密碼 `password`)正式上線前必須刪除或改密碼。
+5. 定期備份 PostgreSQL 與 `storage/app`。

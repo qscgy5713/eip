@@ -247,7 +247,7 @@ const printPass = () => {
             <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 dark:border-gray-700">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                     <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">前台訪客簽到登記</h3>
-                    <button @click="isCheckInOpen = false" class="text-gray-400 hover:text-gray-600">✕</button>
+                    <button @click="isCheckInOpen = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">✕</button>
                 </div>
 
                 <div class="mt-4 space-y-4 text-xs">
