@@ -39,7 +39,7 @@ const getStatusBadge = (status) => {
         case 'draft':
             return { text: '草稿暫存', class: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' };
         case 'submitted':
-            return { text: '已提交待點評', class: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' };
+            return { text: '已提交待點評', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300' };
         case 'reviewed':
             return { text: '主管已點評', class: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300' };
         default:
@@ -55,7 +55,7 @@ const getStatusBadge = (status) => {
         <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-600 text-white font-black text-lg flex items-center justify-center shadow-md">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-indigo-600 text-white font-black text-lg flex items-center justify-center shadow-md">
                         {{ report.user?.name.charAt(0) }}
                     </div>
                     <div>
@@ -83,7 +83,7 @@ const getStatusBadge = (status) => {
                         v-if="canEdit || currentUser.role === 'admin'"
                         type="button"
                         @click="deleteReport"
-                        class="px-3.5 py-2 text-xs font-bold rounded-lg bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/50 dark:hover:bg-rose-900 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 transition"
+                        class="px-3.5 py-2 text-xs font-bold rounded-lg bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-900 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 transition"
                     >
                          刪除
                     </button>
@@ -144,7 +144,7 @@ const getStatusBadge = (status) => {
                         <!-- 3. 下週工作計畫 -->
                         <div class="pb-5 border-b border-gray-100 dark:border-gray-700">
                             <h3 class="text-sm font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 mb-2">
-                                <span class="inline-flex p-1 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                                <span class="inline-flex p-1 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
                                 <span>下週工作計畫 (Next Week Plans)</span>
                             </h3>
                             <div class="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl text-xs sm:text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-mono whitespace-pre-line">
@@ -176,7 +176,7 @@ const getStatusBadge = (status) => {
                 <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 space-y-6">
                     <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                         <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
                             <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">
                                  主管指導點評與交流反饋 ({{ report.comments?.length || 0 }})
                             </h3>
@@ -226,14 +226,14 @@ const getStatusBadge = (status) => {
                                 rows="3"
                                 required
                                 :placeholder="canManage && report.user_id !== currentUser.id ? '給予同仁具體指導建議、讚賞肯定或協助調度資源...' : '輸入回覆意見...'"
-                                class="w-full text-xs rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-cyan-500 focus:border-cyan-500 p-3"
+                                class="w-full text-xs rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 p-3"
                             ></textarea>
                             <InputError :message="commentForm.errors.comment" />
                             <div class="flex justify-end">
                                 <PrimaryButton
                                     type="submit"
                                     :disabled="commentForm.processing"
-                                    class="text-xs bg-cyan-600 hover:bg-cyan-700"
+                                    class="text-xs bg-indigo-600 hover:bg-indigo-700"
                                 >
                                     送出指導點評
                                 </PrimaryButton>

@@ -127,10 +127,10 @@ const handlePrint = () => {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
 
                         <!-- 左欄：應發項目 (Earnings) -->
-                        <div class="rounded-xl border border-blue-100 dark:border-blue-900/60 overflow-hidden">
-                            <div class="bg-blue-50 dark:bg-blue-950/40 px-4 py-2.5 border-b border-blue-100 dark:border-blue-900/60 flex justify-between items-center">
-                                <span class="font-bold text-xs text-blue-800 dark:text-blue-300">應發薪資項目 (EARNINGS)</span>
-                                <span class="text-[11px] text-blue-600 dark:text-blue-400 font-mono">NTD</span>
+                        <div class="rounded-xl border border-indigo-100 dark:border-indigo-900/60 overflow-hidden">
+                            <div class="bg-indigo-50 dark:bg-indigo-950/40 px-4 py-2.5 border-b border-indigo-100 dark:border-indigo-900/60 flex justify-between items-center">
+                                <span class="font-bold text-xs text-indigo-800 dark:text-indigo-300">應發薪資項目 (EARNINGS)</span>
+                                <span class="text-[11px] text-indigo-600 dark:text-indigo-400 font-mono">NTD</span>
                             </div>
                             <div class="divide-y divide-gray-100 dark:divide-gray-700 text-xs">
                                 <div class="px-4 py-3 flex justify-between">
@@ -154,50 +154,50 @@ const handlePrint = () => {
                                     <span class="font-mono font-semibold">{{ formatCurrency(payslip.other_additions) }}</span>
                                 </div>
                             </div>
-                            <div class="bg-blue-50/60 dark:bg-blue-950/20 px-4 py-3 border-t border-blue-100 dark:border-blue-900/60 flex justify-between items-center font-bold text-xs text-blue-900 dark:text-blue-200">
+                            <div class="bg-indigo-50/60 dark:bg-indigo-950/20 px-4 py-3 border-t border-indigo-100 dark:border-indigo-900/60 flex justify-between items-center font-bold text-xs text-indigo-900 dark:text-indigo-200">
                                 <span>應發總額 (Gross Earnings)</span>
-                                <span class="font-mono text-sm text-blue-600 dark:text-blue-400">{{ formatCurrency(payslip.gross_pay) }}</span>
+                                <span class="font-mono text-sm text-indigo-600 dark:text-indigo-400">{{ formatCurrency(payslip.gross_pay) }}</span>
                             </div>
                         </div>
 
                         <!-- 右欄：應扣項目 (Deductions) -->
-                        <div class="rounded-xl border border-rose-100 dark:border-rose-900/60 overflow-hidden">
-                            <div class="bg-rose-50 dark:bg-rose-950/40 px-4 py-2.5 border-b border-rose-100 dark:border-rose-900/60 flex justify-between items-center">
-                                <span class="font-bold text-xs text-rose-800 dark:text-rose-300">法定扣繳項目 (DEDUCTIONS)</span>
-                                <span class="text-[11px] text-rose-600 dark:text-rose-400 font-mono">NTD</span>
+                        <div class="rounded-xl border border-red-100 dark:border-red-900/60 overflow-hidden">
+                            <div class="bg-red-50 dark:bg-red-950/40 px-4 py-2.5 border-b border-red-100 dark:border-red-900/60 flex justify-between items-center">
+                                <span class="font-bold text-xs text-red-800 dark:text-red-300">法定扣繳項目 (DEDUCTIONS)</span>
+                                <span class="text-[11px] text-red-600 dark:text-red-400 font-mono">NTD</span>
                             </div>
                             <div class="divide-y divide-gray-100 dark:divide-gray-700 text-xs">
                                 <div class="px-4 py-3 flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">勞工保險自付額</span>
-                                    <span class="font-mono font-semibold text-rose-600 dark:text-rose-400">-{{ formatCurrency(payslip.labor_insurance) }}</span>
+                                    <span class="font-mono font-semibold text-red-600 dark:text-red-400">-{{ formatCurrency(payslip.labor_insurance) }}</span>
                                 </div>
                                 <div class="px-4 py-3 flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">全民健保自付額</span>
-                                    <span class="font-mono font-semibold text-rose-600 dark:text-rose-400">-{{ formatCurrency(payslip.health_insurance) }}</span>
+                                    <span class="font-mono font-semibold text-red-600 dark:text-red-400">-{{ formatCurrency(payslip.health_insurance) }}</span>
                                 </div>
                                 <div class="px-4 py-3 flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">勞工退休金自願提繳</span>
-                                    <span class="font-mono font-semibold text-rose-600 dark:text-rose-400">-{{ formatCurrency(payslip.pension_self) }}</span>
+                                    <span class="font-mono font-semibold text-red-600 dark:text-red-400">-{{ formatCurrency(payslip.pension_self) }}</span>
                                 </div>
                                 <div class="px-4 py-3 flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">代扣綜合所得稅額</span>
-                                    <span class="font-mono font-semibold text-rose-600 dark:text-rose-400">-{{ formatCurrency(payslip.tax_withholding) }}</span>
+                                    <span class="font-mono font-semibold text-red-600 dark:text-red-400">-{{ formatCurrency(payslip.tax_withholding) }}</span>
                                 </div>
                                 <div class="px-4 py-3 flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">其他扣款 / 請假扣薪</span>
-                                    <span class="font-mono font-semibold text-rose-600 dark:text-rose-400">-{{ formatCurrency(payslip.other_deductions) }}</span>
+                                    <span class="font-mono font-semibold text-red-600 dark:text-red-400">-{{ formatCurrency(payslip.other_deductions) }}</span>
                                 </div>
                             </div>
-                            <div class="bg-rose-50/60 dark:bg-rose-950/20 px-4 py-3 border-t border-rose-100 dark:border-rose-900/60 flex justify-between items-center font-bold text-xs text-rose-900 dark:text-rose-200">
+                            <div class="bg-red-50/60 dark:bg-red-950/20 px-4 py-3 border-t border-red-100 dark:border-red-900/60 flex justify-between items-center font-bold text-xs text-red-900 dark:text-red-200">
                                 <span>扣繳總計 (Total Deductions)</span>
-                                <span class="font-mono text-sm text-rose-600 dark:text-rose-400">-{{ formatCurrency(payslip.total_deductions) }}</span>
+                                <span class="font-mono text-sm text-red-600 dark:text-red-400">-{{ formatCurrency(payslip.total_deductions) }}</span>
                             </div>
                         </div>
 
                     </div>
 
                     <!-- 實發總計結算 (Net Pay Highlight) -->
-                    <div class="rounded-xl bg-gradient-to-r from-emerald-900 to-teal-900 text-white p-6 my-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm print:bg-none print:border-2 print:border-black print:text-black">
+                    <div class="rounded-xl bg-gradient-to-r from-emerald-900 to-indigo-900 text-white p-6 my-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm print:bg-none print:border-2 print:border-black print:text-black">
                         <div>
                             <span class="text-xs font-bold text-emerald-300 print:text-black">實際發放金額 (NET PAYABLE)</span>
                             <p class="text-xs text-emerald-100 print:text-gray-600 mt-0.5">應發金額減除各項法定扣繳後之轉帳淨額</p>

@@ -140,11 +140,11 @@ const submitResubmit = () => {
 const statusBadge = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
-        case 'rejected': return 'bg-rose-100 text-rose-800 border-rose-200';
-        case 'transferred': return 'bg-purple-100 text-purple-800 border-purple-200';
+        case 'rejected': return 'bg-red-100 text-red-800 border-red-200';
+        case 'transferred': return 'bg-indigo-100 text-indigo-800 border-indigo-200';
         case 'withdrawn': return 'bg-gray-100 text-gray-700 border-gray-300';
         case 'revision_required': return 'bg-amber-100 text-amber-800 border-amber-300';
-        default: return 'bg-blue-100 text-blue-800 border-blue-200';
+        default: return 'bg-indigo-100 text-indigo-800 border-indigo-200';
     }
 };
 
@@ -195,7 +195,7 @@ const openDiffViewer = (rev = null) => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center space-x-3">
-                <Link :href="route('forms.index')" class="text-sm text-blue-600 hover:underline">&larr; 返回簽核中心</Link>
+                <Link :href="route('forms.index')" class="text-sm text-indigo-600 hover:underline">&larr; 返回簽核中心</Link>
                 <span class="text-gray-300">/</span>
                 <h2 class="text-xl font-bold leading-tight text-gray-800 truncate dark:text-gray-100">申請單明細</h2>
             </div>
@@ -218,7 +218,7 @@ const openDiffViewer = (rev = null) => {
                     <Link
                         v-if="formRequest.user_id === $page.props.auth.user.id"
                         :href="route('forms.create', { form: formRequest.form_id, copy_from: formRequest.id })"
-                        class="text-xs font-semibold text-blue-600 underline hover:text-blue-800 shrink-0"
+                        class="text-xs font-semibold text-indigo-600 underline hover:text-indigo-800 shrink-0"
                     >
                         複製內容重新申請 &rarr;
                     </Link>
@@ -274,10 +274,10 @@ const openDiffViewer = (rev = null) => {
                             <Link
                                 v-if="formRequest.user_id === $page.props.auth.user.id && (formRequest.status === 'withdrawn' || formRequest.status === 'rejected')"
                                 :href="route('forms.create', { form: formRequest.form_id, copy_from: formRequest.id })"
-                                class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg shadow-sm hover:bg-blue-100 transition"
+                                class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg shadow-sm hover:bg-indigo-100 transition"
                                 title="複製原單據內容發起新申請"
                             >
-                                <svg class="w-3.5 h-3.5 mr-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+                                <svg class="w-3.5 h-3.5 mr-1 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
                                 複製重新申請
                             </Link>
 
@@ -286,10 +286,10 @@ const openDiffViewer = (rev = null) => {
                                 v-if="formRequest.status === 'pending' && ($page.props.auth.user.id === formRequest.user_id || $page.props.auth.user.role === 'admin')"
                                 type="button"
                                 @click="openWithdrawModal"
-                                class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-lg shadow-sm hover:bg-rose-100 transition"
+                                class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 border border-red-200 rounded-lg shadow-sm hover:bg-red-100 transition"
                                 title="主動撤回此申請單據並釋放額度"
                             >
-                                <svg class="w-3.5 h-3.5 mr-1 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                <svg class="w-3.5 h-3.5 mr-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                 撤回申請
                             </button>
 
@@ -319,10 +319,10 @@ const openDiffViewer = (rev = null) => {
                             <div
                                 v-for="(file, idx) in formRequest.attachments"
                                 :key="idx"
-                                class="flex items-center justify-between p-3 rounded-lg border border-gray-200 bg-gray-50/60 hover:bg-white hover:border-blue-300 transition dark:bg-gray-800/60 dark:border-gray-700"
+                                class="flex items-center justify-between p-3 rounded-lg border border-gray-200 bg-gray-50/60 hover:bg-white hover:border-indigo-300 transition dark:bg-gray-800/60 dark:border-gray-700"
                             >
                                 <div class="flex items-center space-x-3 min-w-0 mr-3">
-                                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg flex-shrink-0">
+                                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg flex-shrink-0">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                     </div>
                                     <div class="truncate">
@@ -332,7 +332,7 @@ const openDiffViewer = (rev = null) => {
                                 </div>
                                 <a
                                     :href="route('forms.attachments.download', [formRequest.id, idx])"
-                                    class="inline-flex items-center px-2.5 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition shrink-0"
+                                    class="inline-flex items-center px-2.5 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md transition shrink-0"
                                     download
                                 >
                                     <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -377,7 +377,7 @@ const openDiffViewer = (rev = null) => {
                 <div v-if="formRequest.workflow_snapshot && formRequest.workflow_snapshot.length > 0" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4 dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
                         <h3 class="font-bold text-gray-900 text-sm flex items-center space-x-2 dark:text-gray-100">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                             <span>簽核流程進度鏈（共 {{ formRequest.total_steps || formRequest.workflow_snapshot.length }} 關）</span>
                         </h3>
                         <span class="text-xs text-gray-400">當前進度：關卡 {{ formRequest.current_step }} / {{ formRequest.total_steps || formRequest.workflow_snapshot.length }}</span>
@@ -393,9 +393,9 @@ const openDiffViewer = (rev = null) => {
                                 st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved')
                                     ? 'bg-emerald-50/50 border-emerald-200'
                                     : (st.step === formRequest.current_step && formRequest.status === 'pending'
-                                        ? 'bg-blue-50/70 border-blue-300 ring-2 ring-blue-100'
+                                        ? 'bg-indigo-50/70 border-indigo-300 ring-2 ring-indigo-100'
                                         : (st.step === formRequest.current_step && formRequest.status === 'rejected'
-                                            ? 'bg-rose-50/50 border-rose-200'
+                                            ? 'bg-red-50/50 border-red-200'
                                             : 'bg-gray-50/60 border-gray-200 opacity-60 dark:bg-gray-800/60 dark:border-gray-700'))
                             ]"
                         >
@@ -407,11 +407,11 @@ const openDiffViewer = (rev = null) => {
                                             st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved')
                                                 ? 'bg-emerald-600'
                                                 : (st.step === formRequest.current_step && formRequest.status === 'pending'
-                                                    ? 'bg-blue-600 animate-pulse'
+                                                    ? 'bg-indigo-600 animate-pulse'
                                                     : (st.step === formRequest.current_step && formRequest.status === 'revision_required'
                                                         ? 'bg-amber-600 animate-pulse'
                                                         : (st.step === formRequest.current_step && formRequest.status === 'rejected'
-                                                            ? 'bg-rose-600'
+                                                            ? 'bg-red-600'
                                                             : 'bg-gray-400')))
                                         ]"
                                     >
@@ -425,11 +425,11 @@ const openDiffViewer = (rev = null) => {
                                         st.step < formRequest.current_step || (st.step === formRequest.current_step && formRequest.status === 'approved')
                                             ? 'bg-emerald-100 text-emerald-800'
                                             : (st.step === formRequest.current_step && formRequest.status === 'pending'
-                                                ? 'bg-blue-100 text-blue-800'
+                                                ? 'bg-indigo-100 text-indigo-800'
                                                 : (st.step === formRequest.current_step && formRequest.status === 'revision_required'
                                                     ? 'bg-amber-100 text-amber-800'
                                                     : (st.step === formRequest.current_step && formRequest.status === 'rejected'
-                                                        ? 'bg-rose-100 text-rose-800'
+                                                        ? 'bg-red-100 text-red-800'
                                                         : 'bg-gray-200 text-gray-600 dark:text-gray-400')))
                                     ]"
                                 >
@@ -457,7 +457,7 @@ const openDiffViewer = (rev = null) => {
                             <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                             <span>{{ currentPendingRecord?.is_add_sign ? '會辦加簽意見簽署' : '簽核審批動作' }}</span>
                         </h3>
-                        <span v-if="currentPendingRecord" :class="['text-xs font-semibold px-2.5 py-1 rounded-lg', currentPendingRecord.is_add_sign ? 'bg-blue-100 text-blue-900' : 'bg-amber-200/70 text-amber-900']">
+                        <span v-if="currentPendingRecord" :class="['text-xs font-semibold px-2.5 py-1 rounded-lg', currentPendingRecord.is_add_sign ? 'bg-indigo-100 text-indigo-900' : 'bg-amber-200/70 text-amber-900']">
                             {{ currentPendingRecord.is_add_sign ? '受託會辦加簽' : (currentPendingRecord.step_title || ('關卡 ' + currentPendingRecord.step)) }}
                         </span>
                     </div>
@@ -512,7 +512,7 @@ const openDiffViewer = (rev = null) => {
                             type="button"
                             @click="handleAction('rejected')"
                             :disabled="approvalForm.processing"
-                            class="px-5 py-2 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-bold text-sm rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                            class="px-5 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold text-sm rounded-lg shadow-sm transition flex items-center space-x-1.5"
                         >
                             <svg v-if="approvalForm.processing && approvalForm.status === 'rejected'" class="animate-spin -ml-1 mr-1 h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                             <span>{{ currentPendingRecord?.is_add_sign ? '簽署保留意見' : '退件駁回' }}</span>
@@ -560,7 +560,7 @@ const openDiffViewer = (rev = null) => {
                     <div class="space-y-4 border-l-2 border-gray-200 ml-3 pl-4 dark:border-gray-700">
                         <!-- 申請送出節點 -->
                         <div class="relative">
-                            <span class="absolute -left-[23px] top-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></span>
+                            <span class="absolute -left-[23px] top-1 w-3 h-3 bg-indigo-500 rounded-full border-2 border-white"></span>
                             <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">單據送出</p>
                             <p class="text-xs text-gray-400">{{ formRequest.user?.name }} · {{ new Date(formRequest.created_at).toLocaleString() }}</p>
                         </div>
@@ -570,7 +570,7 @@ const openDiffViewer = (rev = null) => {
                             <span
                                 :class="[
                                     'absolute -left-[23px] top-1 w-3 h-3 rounded-full border-2 border-white',
-                                    rec.status === 'approved' ? 'bg-emerald-500' : (rec.status === 'rejected' ? 'bg-rose-500' : (rec.status === 'returned' ? 'bg-amber-500' : (rec.status === 'transferred' ? 'bg-purple-500' : 'bg-blue-500')))
+                                    rec.status === 'approved' ? 'bg-emerald-500' : (rec.status === 'rejected' ? 'bg-red-500' : (rec.status === 'returned' ? 'bg-amber-500' : (rec.status === 'transferred' ? 'bg-indigo-500' : 'bg-indigo-500')))
                                 ]"
                             ></span>
                             <div class="flex items-center space-x-2 flex-wrap gap-y-1">
@@ -592,10 +592,10 @@ const openDiffViewer = (rev = null) => {
                                 <span :class="['px-2 py-0.5 text-xs rounded', statusBadge(rec.status)]">
                                     {{ rec.status === 'approved' ? '核准/簽畢' : (rec.status === 'rejected' ? '退件駁回' : (rec.status === 'returned' ? '已退回修改' : (rec.status === 'transferred' ? '已轉簽' : '待審批'))) }}
                                 </span>
-                                <span v-if="rec.is_add_sign" class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-blue-700">
+                                <span v-if="rec.is_add_sign" class="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-700">
                                     會辦加簽
                                 </span>
-                                <span v-if="rec.delegated_from" class="px-2 py-0.5 text-[10px] font-bold rounded bg-purple-100 text-purple-700">
+                                <span v-if="rec.delegated_from" class="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-700">
                                     職務代理代簽
                                 </span>
                                 <span v-if="rec.transferred_from" class="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-700">
@@ -631,30 +631,30 @@ const openDiffViewer = (rev = null) => {
 
                         <form @submit.prevent="submitTransfer" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">受派審查主管 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">受派審查主管 <span class="text-red-500">*</span></label>
                                 <select
                                     v-model="transferForm.target_user_id"
                                     required
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-700"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 >
                                     <option value="">— 請選擇受派主管 —</option>
                                     <option v-for="u in activeUsers" :key="u.id" :value="u.id">
                                         {{ u.name }} ({{ u.job_title || '主管' }} · {{ u.role }})
                                     </option>
                                 </select>
-                                <p v-if="transferForm.errors.target_user_id" class="text-2xs text-rose-600 mt-1">{{ transferForm.errors.target_user_id }}</p>
+                                <p v-if="transferForm.errors.target_user_id" class="text-2xs text-red-600 mt-1">{{ transferForm.errors.target_user_id }}</p>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">轉簽派審事由說明 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">轉簽派審事由說明 <span class="text-red-500">*</span></label>
                                 <textarea
                                     v-model="transferForm.reason"
                                     required
                                     rows="3"
                                     placeholder="請說明轉簽的原因（例如：涉及該處管轄業務，轉請決行）..."
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-700"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 ></textarea>
-                                <p v-if="transferForm.errors.reason" class="text-2xs text-rose-600 mt-1">{{ transferForm.errors.reason }}</p>
+                                <p v-if="transferForm.errors.reason" class="text-2xs text-red-600 mt-1">{{ transferForm.errors.reason }}</p>
                             </div>
 
                             <div class="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
@@ -691,30 +691,30 @@ const openDiffViewer = (rev = null) => {
 
                         <form @submit.prevent="submitAddSign" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">會辦加簽對象 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">會辦加簽對象 <span class="text-red-500">*</span></label>
                                 <select
                                     v-model="addSignForm.target_user_id"
                                     required
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 >
                                     <option value="">— 請選擇會辦對象 —</option>
                                     <option v-for="u in activeUsers" :key="u.id" :value="u.id">
                                         {{ u.name }} ({{ u.job_title || '同仁' }} · {{ u.role }})
                                     </option>
                                 </select>
-                                <p v-if="addSignForm.errors.target_user_id" class="text-2xs text-rose-600 mt-1">{{ addSignForm.errors.target_user_id }}</p>
+                                <p v-if="addSignForm.errors.target_user_id" class="text-2xs text-red-600 mt-1">{{ addSignForm.errors.target_user_id }}</p>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">加簽會審事由說明 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">加簽會審事由說明 <span class="text-red-500">*</span></label>
                                 <textarea
                                     v-model="addSignForm.reason"
                                     required
                                     rows="3"
                                     placeholder="請說明需會辦說明的項目（例如：請 IT 評估伺服器規格、請會計覆核報銷單據）..."
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 ></textarea>
-                                <p v-if="addSignForm.errors.reason" class="text-2xs text-rose-600 mt-1">{{ addSignForm.errors.reason }}</p>
+                                <p v-if="addSignForm.errors.reason" class="text-2xs text-red-600 mt-1">{{ addSignForm.errors.reason }}</p>
                             </div>
 
                             <div class="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
@@ -739,9 +739,9 @@ const openDiffViewer = (rev = null) => {
                 <!-- ================= 撤回申請 Modal ================= -->
                 <div v-if="showWithdrawModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
                     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 dark:bg-gray-800">
-                        <div class="flex items-center space-x-3 text-rose-600 border-b border-gray-100 pb-3 dark:border-gray-700">
-                            <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center shrink-0">
-                                <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        <div class="flex items-center space-x-3 text-red-600 border-b border-gray-100 pb-3 dark:border-gray-700">
+                            <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </div>
                             <div>
                                 <h3 class="text-base font-bold text-gray-900 dark:text-gray-100">確認撤回申請單</h3>
@@ -760,7 +760,7 @@ const openDiffViewer = (rev = null) => {
                                     v-model="withdrawForm.reason"
                                     rows="3"
                                     placeholder="例：行程變更取消、日期時間填寫有誤重新申請..."
-                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-rose-500 focus:ring-rose-500 dark:border-gray-700"
+                                    class="w-full text-xs rounded-lg border-gray-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-700"
                                 ></textarea>
                             </div>
 
@@ -775,7 +775,7 @@ const openDiffViewer = (rev = null) => {
                                 <button
                                     type="submit"
                                     :disabled="withdrawForm.processing"
-                                    class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold shadow-sm disabled:opacity-50"
+                                    class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold shadow-sm disabled:opacity-50"
                                 >
                                     {{ withdrawForm.processing ? '撤回中...' : '確定撤回單據' }}
                                 </button>
@@ -803,7 +803,7 @@ const openDiffViewer = (rev = null) => {
 
                         <form @submit.prevent="submitRevision" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">退回修改原因與補件指示 <span class="text-rose-500">*</span></label>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">退回修改原因與補件指示 <span class="text-red-500">*</span></label>
                                 <textarea
                                     v-model="approvalForm.comment"
                                     required
@@ -985,8 +985,8 @@ const openDiffViewer = (rev = null) => {
                                     {{ fieldLabel(chg.key) }}
                                 </div>
                                 <div class="p-3 space-y-2 font-mono">
-                                    <div class="flex items-start gap-2 text-rose-700 bg-rose-50/70 p-2 rounded-lg">
-                                        <span class="font-bold shrink-0 text-rose-500">- 原值:</span>
+                                    <div class="flex items-start gap-2 text-red-700 bg-red-50/70 p-2 rounded-lg">
+                                        <span class="font-bold shrink-0 text-red-500">- 原值:</span>
                                         <span class="line-through break-all whitespace-pre-wrap">{{ chg.oldVal }}</span>
                                     </div>
                                     <div class="flex items-start gap-2 text-emerald-800 bg-emerald-50/70 p-2 rounded-lg">
@@ -1006,7 +1006,7 @@ const openDiffViewer = (rev = null) => {
                                 <div
                                     v-for="(att, aIdx) in activeDiffVersion.new_attachments"
                                     :key="aIdx"
-                                    class="flex items-center justify-between p-2.5 bg-blue-50/50 border border-blue-100 rounded-lg text-xs"
+                                    class="flex items-center justify-between p-2.5 bg-indigo-50/50 border border-indigo-100 rounded-lg text-xs"
                                 >
                                     <span class="font-medium text-gray-800 truncate mr-2 dark:text-gray-100">{{ att.name }}</span>
                                     <span class="text-gray-400 shrink-0">{{ formatSize(att.size) }}</span>

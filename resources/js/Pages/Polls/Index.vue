@@ -173,7 +173,7 @@ const submitCreate = () => {
                                     </span>
 
                                     <span
-                                        :class="poll.is_anonymous ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-blue-50 text-blue-700 border-blue-200'"
+                                        :class="poll.is_anonymous ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-indigo-50 text-indigo-700 border-indigo-200'"
                                         class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border"
                                     >
                                         {{ poll.is_anonymous ? '匿名投票' : '具名投票' }}
@@ -380,7 +380,7 @@ const submitCreate = () => {
                                     type="button"
                                     @click="removeOption(idx)"
                                     :disabled="form.options.length <= 2"
-                                    class="p-1 text-gray-400 hover:text-rose-500 disabled:opacity-20 transition-colors"
+                                    class="p-1 text-gray-400 hover:text-red-500 disabled:opacity-20 transition-colors"
                                     title="刪除此選項"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

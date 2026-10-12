@@ -125,9 +125,9 @@ const deleteProject = async () => {
 
 const priorityBadge = (priority) => {
     switch (priority) {
-        case 'urgent': return 'bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800';
+        case 'urgent': return 'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
         case 'high': return 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800';
-        case 'medium': return 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+        case 'medium': return 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
         default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700';
     }
 };
@@ -145,7 +145,7 @@ const statusBadge = (status) => {
     switch (status) {
         case 'active': return 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
         case 'on_hold': return 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800';
-        case 'completed': return 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+        case 'completed': return 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
         default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700';
     }
 };
@@ -486,7 +486,7 @@ const statusLabel = (status) => {
                             v-if="canManage || editingProject?.owner_id === $page.props.auth.user.id"
                             type="button"
                             @click="deleteProject"
-                            class="text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 font-semibold hover:underline"
+                            class="text-xs text-red-600 hover:text-red-700 dark:text-red-400 font-semibold hover:underline"
                         >
                             刪除此專案
                         </button>

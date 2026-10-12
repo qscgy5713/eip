@@ -119,7 +119,7 @@ class DashboardTest extends TestCase
         $formRequest = FormRequest::create([
             'request_no' => 'REQ-TEST-001',
             'form_id' => $this->leaveForm->id,
-            'user_id' => $this->employee->id,
+            'user_id' => \App\Models\User::factory()->create(['role' => 'employee'])->id,
             'title' => '員工送出審核單',
             'data' => ['days' => 1],
             'status' => 'pending',

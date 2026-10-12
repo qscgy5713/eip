@@ -59,12 +59,12 @@ const getStatusBadge = (order) => {
         return { label: '進行中開團', class: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 animate-pulse' };
     }
     if (order.status === 'closed') {
-        return { label: '已結單處理中', class: 'bg-blue-100 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300 border-blue-200 dark:border-blue-800' };
+        return { label: '已結單處理中', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/50 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' };
     }
     if (order.status === 'completed') {
         return { label: '已送達發送', class: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700' };
     }
-    return { label: '已取消', class: 'bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border-rose-200 dark:border-rose-800' };
+    return { label: '已取消', class: 'bg-red-100 text-red-800 dark:bg-red-950/50 dark:text-red-300 border-red-200 dark:border-red-800' };
 };
 </script>
 
@@ -99,9 +99,9 @@ const getStatusBadge = (order) => {
                     <div class="p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">進行中揪團</p>
-                            <p class="text-2xl font-black text-orange-600 dark:text-orange-400 mt-1">{{ stats.openOrders }} <span class="text-xs font-normal text-gray-400">團</span></p>
+                            <p class="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">{{ stats.openOrders }} <span class="text-xs font-normal text-gray-400">團</span></p>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                         </div>
                     </div>
@@ -109,9 +109,9 @@ const getStatusBadge = (order) => {
                     <div class="p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">今日發起開團</p>
-                            <p class="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1">{{ stats.todayOrders }} <span class="text-xs font-normal text-gray-400">團</span></p>
+                            <p class="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">{{ stats.todayOrders }} <span class="text-xs font-normal text-gray-400">團</span></p>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
                     </div>
@@ -129,9 +129,9 @@ const getStatusBadge = (order) => {
                     <div class="p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">我的待繳自費</p>
-                            <p class="text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">${{ Number(stats.myPendingPayable).toLocaleString() }}</p>
+                            <p class="text-2xl font-black text-red-600 dark:text-red-400 mt-1">${{ Number(stats.myPendingPayable).toLocaleString() }}</p>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                     </div>
@@ -198,17 +198,17 @@ const getStatusBadge = (order) => {
                                 <span :class="['px-2.5 py-1 text-[11px] font-bold rounded-lg border', getStatusBadge(order).class]">
                                     {{ getStatusBadge(order).label }}
                                 </span>
-                                <span v-if="order.cutoff_time" class="text-xs text-rose-600 dark:text-rose-400 font-semibold flex items-center gap-1">
+                                <span v-if="order.cutoff_time" class="text-xs text-red-600 dark:text-red-400 font-semibold flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     截止：{{ new Date(order.cutoff_time).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) }}
                                 </span>
                             </div>
 
                             <Link :href="route('meal-orders.show', order.id)" class="block group">
-                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition line-clamp-1">
+                                <h3 class="text-base font-bold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition line-clamp-1">
                                     {{ order.title }}
                                 </h3>
-                                <div class="flex items-center gap-2 mt-1 text-xs text-orange-600 dark:text-orange-400 font-semibold">
+                                <div class="flex items-center gap-2 mt-1 text-xs text-indigo-600 dark:text-indigo-400 font-semibold">
                                     <span>店家：{{ order.restaurant_name }}</span>
                                     <span v-if="order.restaurant_phone" class="text-gray-400 dark:text-gray-500 font-normal">({{ order.restaurant_phone }})</span>
                                 </div>
@@ -228,7 +228,7 @@ const getStatusBadge = (order) => {
                                 </div>
                                 <div v-if="order.minimum_order_amount" class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
                                     <div
-                                        class="bg-orange-500 h-1.5 rounded-full transition-all duration-300"
+                                        class="bg-indigo-500 h-1.5 rounded-full transition-all duration-300"
                                         :style="{ width: Math.min(100, Math.round((order.total_amount / order.minimum_order_amount) * 100)) + '%' }"
                                     ></div>
                                 </div>
@@ -246,7 +246,7 @@ const getStatusBadge = (order) => {
 
                         <div class="p-4 bg-gray-50 dark:bg-gray-900/40 border-t border-gray-100 dark:border-gray-700/60 flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/60 text-orange-700 dark:text-orange-300 flex items-center justify-center text-[10px] font-bold">
+                                <div class="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 flex items-center justify-center text-[10px] font-bold">
                                     {{ order.creator?.name?.slice(0, 1) }}
                                 </div>
                                 <span class="text-xs text-gray-600 dark:text-gray-400 font-medium">{{ order.creator?.name }} 發起</span>
@@ -265,7 +265,7 @@ const getStatusBadge = (order) => {
 
                 <!-- 空狀態 -->
                 <div v-else class="py-16 text-center bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs">
-                    <div class="w-16 h-16 mx-auto rounded-full bg-orange-50 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400 flex items-center justify-center text-3xl">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-3xl">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
                     <h3 class="text-base font-bold text-gray-800 dark:text-gray-200 mt-4">目前沒有符合條件的訂餐揪團</h3>
@@ -319,7 +319,7 @@ const getStatusBadge = (order) => {
                             type="text"
                             required
                             placeholder="例：週五午後 50嵐 手搖飲熱血揪團、梁社漢排骨午餐"
-                            class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
 
@@ -331,7 +331,7 @@ const getStatusBadge = (order) => {
                                 type="text"
                                 required
                                 placeholder="例：50嵐 (松山興安店)"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
                         <div>
@@ -340,7 +340,7 @@ const getStatusBadge = (order) => {
                                 v-model="form.restaurant_phone"
                                 type="text"
                                 placeholder="例：02-2712-3456"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
                     </div>
@@ -352,7 +352,7 @@ const getStatusBadge = (order) => {
                                 v-model="form.cutoff_time"
                                 type="datetime-local"
                                 required
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
                         <div>
@@ -362,7 +362,7 @@ const getStatusBadge = (order) => {
                                 type="number"
                                 min="0"
                                 placeholder="例：300 (免運/外送)"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
                         <div>
@@ -372,7 +372,7 @@ const getStatusBadge = (order) => {
                                 type="number"
                                 min="0"
                                 placeholder="例：50 (福委補助)"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-orange-500 focus:border-orange-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
                             />
                         </div>
                     </div>
@@ -383,7 +383,7 @@ const getStatusBadge = (order) => {
                             v-model="form.menu_url"
                             type="url"
                             placeholder="https://menu.example.com"
-                            class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
 
@@ -393,7 +393,7 @@ const getStatusBadge = (order) => {
                             v-model="form.description"
                             rows="2"
                             placeholder="例：預計 14:00 外送達 7F 茶水間，請大家準時拿取；現金或 LINE Pay 給發起人。"
-                            class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-orange-500 focus:border-orange-500"
+                            class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-indigo-500 focus:border-indigo-500"
                         ></textarea>
                     </div>
 

@@ -54,7 +54,7 @@ const priorityBadge = (priority) => {
         case 'urgent': return 'bg-red-100 text-red-800 border-red-200';
         case 'high': return 'bg-amber-100 text-amber-800 border-amber-200';
         case 'low': return 'bg-slate-100 text-slate-700 border-slate-200';
-        default: return 'bg-blue-100 text-blue-800 border-blue-200';
+        default: return 'bg-indigo-100 text-indigo-800 border-indigo-200';
     }
 };
 
@@ -203,7 +203,7 @@ const submitAnnouncement = () => {
                     >
                         <div class="space-y-2 flex-1">
                             <div class="flex items-center space-x-2 flex-wrap gap-y-1">
-                                <span v-if="item.is_pinned" class="px-2 py-0.5 text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200 rounded">
+                                <span v-if="item.is_pinned" class="px-2 py-0.5 text-xs font-semibold bg-red-50 text-red-600 border border-red-200 rounded">
                                     置頂
                                 </span>
                                 <span v-if="item.status === 'draft'" class="px-2 py-0.5 text-xs font-medium bg-amber-50 text-amber-700 border border-amber-300 rounded">
@@ -215,7 +215,7 @@ const submitAnnouncement = () => {
                                 <span :class="['px-2 py-0.5 text-xs font-medium border rounded', priorityBadge(item.priority)]">
                                     {{ item.priority === 'urgent' ? '緊急' : (item.priority === 'high' ? '重要' : (item.priority === 'low' ? '低優先' : '一般')) }}
                                 </span>
-                                <Link :href="route('announcements.show', item.id)" class="text-lg font-bold text-gray-900 hover:text-blue-600 dark:text-gray-100">
+                                <Link :href="route('announcements.show', item.id)" class="text-lg font-bold text-gray-900 hover:text-indigo-600 dark:text-gray-100">
                                     {{ item.title }}
                                 </Link>
                             </div>
@@ -225,7 +225,7 @@ const submitAnnouncement = () => {
                             <div class="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400 pt-1">
                                 <span>發布人：{{ item.author?.name || '系統' }}</span>
                                 <span>發布時間：{{ new Date(item.published_at || item.created_at).toLocaleString() }}</span>
-                                <span v-if="item.attachments && item.attachments.length > 0" class="inline-flex items-center text-blue-600 font-medium">
+                                <span v-if="item.attachments && item.attachments.length > 0" class="inline-flex items-center text-indigo-600 font-medium">
                                     <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                     </svg>
@@ -237,7 +237,7 @@ const submitAnnouncement = () => {
                         <div class="flex flex-col items-end justify-between self-stretch shrink-0">
                             <span v-if="!item.is_read" class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-700">未讀</span>
                             <span v-else class="text-xs text-gray-400">已讀</span>
-                            <Link :href="route('announcements.show', item.id)" class="text-sm font-medium text-blue-600 hover:underline mt-2">
+                            <Link :href="route('announcements.show', item.id)" class="text-sm font-medium text-indigo-600 hover:underline mt-2">
                                 查看內文 &rarr;
                             </Link>
                         </div>
@@ -299,7 +299,7 @@ const submitAnnouncement = () => {
                         <select
                             id="category"
                             v-model="form.category"
-                            class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                            class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         >
                             <option value="company">公司重大</option>
                             <option value="activity">全員活動</option>
@@ -313,7 +313,7 @@ const submitAnnouncement = () => {
                         <select
                             id="priority"
                             v-model="form.priority"
-                            class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                            class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         >
                             <option value="low">低優先 (Low)</option>
                             <option value="normal">一般 (Normal)</option>
@@ -331,7 +331,7 @@ const submitAnnouncement = () => {
                         id="content"
                         v-model="form.content"
                         rows="6"
-                        class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                        class="mt-1 block w-full rounded-md border-gray-300 text-sm shadow-xs focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         placeholder="請詳述公告內容、時程規範與相關配合事項..."
                         required
                     ></textarea>
@@ -341,13 +341,13 @@ const submitAnnouncement = () => {
                 <!-- 官方附件上傳 -->
                 <div>
                     <InputLabel value="檢附官方文件/檔案 (選填，單檔上限 10MB)" />
-                    <div class="mt-1 flex items-center justify-center px-4 pt-4 pb-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 transition bg-gray-50/50 dark:bg-gray-800/60 dark:border-gray-700">
+                    <div class="mt-1 flex items-center justify-center px-4 pt-4 pb-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-400 transition bg-gray-50/50 dark:bg-gray-800/60 dark:border-gray-700">
                         <div class="space-y-1 text-center">
                             <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                             <div class="flex text-xs text-gray-600 justify-center dark:text-gray-400">
-                                <label class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none dark:bg-gray-800">
+                                <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none dark:bg-gray-800">
                                     <span>選擇檔案上傳</span>
                                     <input
                                         ref="fileInputRef"
@@ -396,7 +396,7 @@ const submitAnnouncement = () => {
                     <div class="flex items-center space-x-4 text-sm">
                         <span class="text-gray-600 font-medium dark:text-gray-400">發布狀態：</span>
                         <label class="inline-flex items-center cursor-pointer">
-                            <input type="radio" value="published" v-model="form.status" class="text-blue-600 focus:ring-blue-500" />
+                            <input type="radio" value="published" v-model="form.status" class="text-indigo-600 focus:ring-indigo-500" />
                             <span class="ms-1.5 text-gray-800 dark:text-gray-100">立即正式發布</span>
                         </label>
                         <label class="inline-flex items-center cursor-pointer">
@@ -411,7 +411,7 @@ const submitAnnouncement = () => {
                     <SecondaryButton type="button" @click="closeCreateModal">
                         取消
                     </SecondaryButton>
-                    <PrimaryButton :disabled="form.processing" class="bg-blue-600 hover:bg-blue-700">
+                    <PrimaryButton :disabled="form.processing" class="bg-indigo-600 hover:bg-indigo-700">
                         {{ form.processing ? '發布儲存中...' : (form.status === 'draft' ? '儲存草稿' : '正式發布公告') }}
                     </PrimaryButton>
                 </div>

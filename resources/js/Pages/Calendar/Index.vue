@@ -157,9 +157,9 @@ const formatTime = (isoString) => {
 const getEventBadgeClass = (type) => {
     switch (type) {
         case 'meeting':
-            return 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100';
+            return 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100';
         case 'leave':
-            return 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100';
+            return 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100';
         case 'announcement':
             return 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100';
         default:
@@ -267,18 +267,18 @@ const openDateEventsModal = (dateStr, evList) => {
                             </button>
                             <button
                                 @click="selectedType = 'meeting'; updateView()"
-                                :class="selectedType === 'meeting' ? 'bg-white text-blue-700 shadow-sm dark:bg-gray-800' : 'text-gray-600 hover:text-blue-700 dark:text-gray-400'"
+                                :class="selectedType === 'meeting' ? 'bg-white text-indigo-700 shadow-sm dark:bg-gray-800' : 'text-gray-600 hover:text-indigo-700 dark:text-gray-400'"
                                 class="px-3 py-1.5 rounded-md transition flex items-center space-x-1"
                             >
-                                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                                 <span>會議</span>
                             </button>
                             <button
                                 @click="selectedType = 'leave'; updateView()"
-                                :class="selectedType === 'leave' ? 'bg-white text-purple-700 shadow-sm dark:bg-gray-800' : 'text-gray-600 hover:text-purple-700 dark:text-gray-400'"
+                                :class="selectedType === 'leave' ? 'bg-white text-indigo-700 shadow-sm dark:bg-gray-800' : 'text-gray-600 hover:text-indigo-700 dark:text-gray-400'"
                                 class="px-3 py-1.5 rounded-md transition flex items-center space-x-1"
                             >
-                                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                                 <span>休假/差勤</span>
                             </button>
                             <button
@@ -307,13 +307,13 @@ const openDateEventsModal = (dateStr, evList) => {
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                     <!-- 星期表頭 -->
                     <div class="grid grid-cols-7 border-b border-gray-200 bg-gray-50/80 text-center text-xs font-bold text-gray-600 py-3 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-400">
-                        <span class="text-rose-600">週日</span>
+                        <span class="text-red-600">週日</span>
                         <span>週一</span>
                         <span>週二</span>
                         <span>週三</span>
                         <span>週四</span>
                         <span>週五</span>
-                        <span class="text-rose-600">週六</span>
+                        <span class="text-red-600">週六</span>
                     </div>
 
                     <!-- 日期網格 -->
@@ -389,8 +389,8 @@ const openDateEventsModal = (dateStr, evList) => {
                         <span
                             :class="[
                                 'px-2 py-0.5 text-xs font-bold rounded-full',
-                                selectedEvent.type === 'meeting' ? 'bg-blue-100 text-blue-700' :
-                                selectedEvent.type === 'leave' ? 'bg-purple-100 text-purple-700' : 'bg-amber-100 text-amber-700'
+                                selectedEvent.type === 'meeting' ? 'bg-indigo-100 text-indigo-700' :
+                                selectedEvent.type === 'leave' ? 'bg-indigo-100 text-indigo-700' : 'bg-amber-100 text-amber-700'
                             ]"
                         >
                             {{ selectedEvent.type === 'meeting' ? '會議預約' : (selectedEvent.type === 'leave' ? '同仁請假/差勤' : '公司公告') }}
@@ -446,7 +446,7 @@ const openDateEventsModal = (dateStr, evList) => {
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">差勤類別</span>
-                            <span class="font-semibold text-purple-700">{{ selectedEvent.leave_type }}</span>
+                            <span class="font-semibold text-indigo-700">{{ selectedEvent.leave_type }}</span>
                         </div>
                         <div class="flex justify-between py-1 border-b border-gray-50">
                             <span class="text-gray-400">期間與天數</span>

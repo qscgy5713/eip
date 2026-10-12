@@ -1,6 +1,15 @@
 # 工作日誌 (Worklog)
 
 ## 2026-10-12(續)全選單 × 多角色功能走查
+### 時區、色系、品牌設定與觀察項修正
+- **時區改台北**:`config/app.php` 改讀 `APP_TIMEZONE`(預設 `Asia/Taipei`,`.env`/`.env.example` 已加)。`Carbon::serializeUsing` 輸出帶 `+08:00` 的日期,前端 `substring(0,10)` / `new Date()` 不會差一天。**注意**:資料庫內既有的時間戳是以 UTC 存的,切換後舊資料會顯示早 8 小時,新資料正確。
+- **色系統一**:全站裝飾用的 blue/sky/cyan/teal/violet/purple/orange/pink 一律改為品牌 indigo,rose→red、yellow→amber;只保留 emerald(成功)/amber(警示)/red(危險)作語意色。儀表板捷徑磚與統計卡統一為 indigo。
+- **通知鈴噹下拉**:`Dropdown` 補上 `60/80` 寬度(原本只有 48,傳 60 等於沒寬度),標題可換行、時間不再斷行。
+- **品牌設定頁** `/branding`(管理員):網站名稱、Logo、Favicon,即時預覽、還原預設、稽核日誌;`Services/Branding`、`BrandingController`、`BrandMark.vue`;分享縮圖 `og:image`/`twitter:card`。
+- **不可自審**:`WorkflowService::processAction` 擋下審核自己提出的單(僅在沒有其他在職主管/管理員時放行以免卡死);審批中心與儀表板不再列出自己的單。
+- **公告編輯**:公告詳情頁新增「編輯公告」modal(附件僅能追加)。
+- **更正**:全站搜尋本來就含內訓課程,先前判斷錯誤。
+
 ### 補測與對話框統一
 - **站內 popup 取代原生對話框**:新增 `Components/useDialog.js`(`confirmDialog` / `alertDialog` / `promptDialog`,Promise 版)與 `DialogHost.vue`(掛在 `AuthenticatedLayout`,支援 Esc、Enter、危險操作紅色按鈕、深色模式)。全站 40 多處原生 `confirm/alert/prompt`(含審批中心駁回原因)改為 `await confirmDialog(...)`。原生對話框會讓瀏覽器自動化卡死,也和站內風格不一致。
 - **個人設定頁**:中文化;移除「刪除自己帳號」(帳號由 HR 管理),連同 `profile.destroy` 路由與兩個舊測試。

@@ -62,7 +62,7 @@ const submit = () => {
                     <!-- 選擇車輛 -->
                     <div>
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                            借用公務車輛款型 <span class="text-rose-500">*</span>
+                            借用公務車輛款型 <span class="text-red-500">*</span>
                         </label>
                         <select
                             v-model="form.vehicle_id"
@@ -73,7 +73,7 @@ const submit = () => {
                                 【{{ v.plate_number }}】{{ v.name }} ({{ v.vehicle_type_label }} · 乘載 {{ v.capacity }} 人 · 里程 {{ v.current_mileage.toLocaleString() }} km)
                             </option>
                         </select>
-                        <p v-if="form.errors.vehicle_id" class="text-rose-500 text-2xs mt-1">{{ form.errors.vehicle_id }}</p>
+                        <p v-if="form.errors.vehicle_id" class="text-red-500 text-2xs mt-1">{{ form.errors.vehicle_id }}</p>
 
                         <!-- 所選車輛狀態小卡 -->
                         <div v-if="selectedVehicle" class="mt-2.5 p-3 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900/60 flex items-center justify-between text-2xs text-amber-900 dark:text-amber-200">
@@ -94,7 +94,7 @@ const submit = () => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                預計借車出發時間 <span class="text-rose-500">*</span>
+                                預計借車出發時間 <span class="text-red-500">*</span>
                             </label>
                             <input
                                 type="datetime-local"
@@ -102,11 +102,11 @@ const submit = () => {
                                 required
                                 class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-amber-500"
                             />
-                            <p v-if="form.errors.start_time" class="text-rose-500 text-2xs mt-1">{{ form.errors.start_time }}</p>
+                            <p v-if="form.errors.start_time" class="text-red-500 text-2xs mt-1">{{ form.errors.start_time }}</p>
                         </div>
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                預計用畢歸還時間 <span class="text-rose-500">*</span>
+                                預計用畢歸還時間 <span class="text-red-500">*</span>
                             </label>
                             <input
                                 type="datetime-local"
@@ -114,7 +114,7 @@ const submit = () => {
                                 required
                                 class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-amber-500"
                             />
-                            <p v-if="form.errors.end_time" class="text-rose-500 text-2xs mt-1">{{ form.errors.end_time }}</p>
+                            <p v-if="form.errors.end_time" class="text-red-500 text-2xs mt-1">{{ form.errors.end_time }}</p>
                         </div>
                     </div>
 
@@ -122,7 +122,7 @@ const submit = () => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                出差前往目的地 <span class="text-rose-500">*</span>
+                                出差前往目的地 <span class="text-red-500">*</span>
                             </label>
                             <input
                                 type="text"
@@ -131,11 +131,11 @@ const submit = () => {
                                 placeholder="例：新竹科學園區台積電十二廠、桃園國際機場"
                                 class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-amber-500"
                             />
-                            <p v-if="form.errors.destination" class="text-rose-500 text-2xs mt-1">{{ form.errors.destination }}</p>
+                            <p v-if="form.errors.destination" class="text-red-500 text-2xs mt-1">{{ form.errors.destination }}</p>
                         </div>
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                公務出差事由 <span class="text-rose-500">*</span>
+                                公務出差事由 <span class="text-red-500">*</span>
                             </label>
                             <select
                                 v-model="form.purpose"
@@ -153,7 +153,7 @@ const submit = () => {
                     <!-- 乘客人數 -->
                     <div>
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                            同行總人數 (含駕駛) <span class="text-rose-500">*</span>
+                            同行總人數 (含駕駛) <span class="text-red-500">*</span>
                         </label>
                         <input
                             type="number"
@@ -163,7 +163,7 @@ const submit = () => {
                             required
                             class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-amber-500"
                         />
-                        <p v-if="form.errors.passenger_count" class="text-rose-500 text-2xs mt-1">{{ form.errors.passenger_count }}</p>
+                        <p v-if="form.errors.passenger_count" class="text-red-500 text-2xs mt-1">{{ form.errors.passenger_count }}</p>
                     </div>
 
                     <div class="pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">

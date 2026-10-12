@@ -38,6 +38,7 @@ class DashboardController extends Controller
         $pendingApprovals = ApprovalRecord::with(['formRequest.user', 'formRequest.form', 'approver'])
             ->whereIn('approver_id', $validApproverIds)
             ->where('status', 'pending')
+            ->whereHas('formRequest', fn ($q) => $q->where('user_id', '!=', $user->id))
             ->latest()
             ->take(6)
             ->get()
@@ -48,6 +49,7 @@ class DashboardController extends Controller
 
         $totalPendingApprovalsCount = ApprovalRecord::whereIn('approver_id', $validApproverIds)
             ->where('status', 'pending')
+            ->whereHas('formRequest', fn ($q) => $q->where('user_id', '!=', $user->id))
             ->count();
 
         // 3. 我最近送出的申請單

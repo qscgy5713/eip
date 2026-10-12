@@ -240,7 +240,7 @@ const formatTime = (isoString) => {
                         </button>
                         <button
                             @click="changeDate(new Date().toISOString().split('T')[0])"
-                            class="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition"
+                            class="px-3 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition"
                         >
                             回到今天
                         </button>
@@ -259,19 +259,19 @@ const formatTime = (isoString) => {
                             type="date"
                             v-model="currentDate"
                             @change="changeDate(currentDate)"
-                            class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm text-gray-800 focus:ring-blue-500 focus:border-blue-500 dark:text-gray-100 dark:border-gray-700"
+                            class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm text-gray-800 focus:ring-indigo-500 focus:border-indigo-500 dark:text-gray-100 dark:border-gray-700"
                         />
                     </div>
                 </div>
 
                 <!-- 我的近期有效預約橫幅 (含發起與受邀出席) -->
-                <div v-if="myBookings && myBookings.length > 0" class="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-xl p-5 text-white shadow-xs">
-                    <div class="flex items-center justify-between mb-3 border-b border-blue-700/50 pb-2">
+                <div v-if="myBookings && myBookings.length > 0" class="bg-gradient-to-r from-indigo-900 to-indigo-900 rounded-xl p-5 text-white shadow-xs">
+                    <div class="flex items-center justify-between mb-3 border-b border-indigo-700/50 pb-2">
                         <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 bg-blue-400 rounded-full animate-pulse"></span>
+                            <span class="w-2.5 h-2.5 bg-indigo-400 rounded-full animate-pulse"></span>
                             <h3 class="font-bold text-sm tracking-wide">我的即將開始會議行程</h3>
                         </div>
-                        <span class="text-xs text-blue-200">共 {{ myBookings.length }} 場即將出席</span>
+                        <span class="text-xs text-indigo-200">共 {{ myBookings.length }} 場即將出席</span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         <div
@@ -283,31 +283,31 @@ const formatTime = (isoString) => {
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-1.5 truncate">
                                         <span v-if="mb.user_id !== currentUser?.id" class="px-1.5 py-0.5 text-[10px] font-bold bg-amber-400 text-amber-950 rounded">受邀出席</span>
-                                        <span v-else class="px-1.5 py-0.5 text-[10px] font-bold bg-blue-400 text-blue-950 rounded">我主辦</span>
+                                        <span v-else class="px-1.5 py-0.5 text-[10px] font-bold bg-indigo-400 text-indigo-950 rounded">我主辦</span>
                                         <span class="font-bold text-sm text-white truncate">{{ mb.title }}</span>
                                     </div>
                                     <button
                                         v-if="mb.user_id === currentUser?.id || isAdmin"
                                         @click="cancelBooking(mb.id)"
-                                        class="text-xs text-rose-300 hover:text-rose-100 hover:underline shrink-0 ms-1"
+                                        class="text-xs text-red-300 hover:text-red-100 hover:underline shrink-0 ms-1"
                                     >
                                         取消
                                     </button>
                                 </div>
-                                <p class="text-xs text-blue-200 mt-1 flex items-center">
-                                    <svg class="w-3.5 h-3.5 mr-1 text-blue-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                <p class="text-xs text-indigo-200 mt-1 flex items-center">
+                                    <svg class="w-3.5 h-3.5 mr-1 text-indigo-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                     {{ mb.room?.name }} ({{ mb.room?.location }})
                                 </p>
-                                <p v-if="mb.user_id !== currentUser?.id" class="text-[11px] text-blue-200 mt-0.5">
+                                <p v-if="mb.user_id !== currentUser?.id" class="text-[11px] text-indigo-200 mt-0.5">
                                     主辦發起人：{{ mb.user?.name }}
                                 </p>
                             </div>
-                            <div class="mt-2 text-xs font-mono text-blue-100 bg-white/5 px-2 py-1 rounded flex items-center justify-between dark:bg-gray-800">
+                            <div class="mt-2 text-xs font-mono text-indigo-100 bg-white/5 px-2 py-1 rounded flex items-center justify-between dark:bg-gray-800">
                                 <span class="flex items-center">
-                                    <svg class="w-3.5 h-3.5 mr-1 text-blue-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <svg class="w-3.5 h-3.5 mr-1 text-indigo-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     {{ new Date(mb.start_time).toLocaleDateString('sv-SE') }} {{ formatTime(mb.start_time) }} - {{ formatTime(mb.end_time) }}
                                 </span>
-                                <span v-if="mb.attendees && mb.attendees.length > 0" class="text-[10px] text-blue-200">
+                                <span v-if="mb.attendees && mb.attendees.length > 0" class="text-[10px] text-indigo-200">
                                     {{ mb.attendees.length + 1 }} 人出席
                                 </span>
                             </div>
@@ -326,7 +326,7 @@ const formatTime = (isoString) => {
                         <div class="p-5 border-b border-gray-100 bg-slate-50/50 dark:border-gray-700 dark:bg-gray-800/60">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ room.name }}</h3>
-                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800">
                                     容納 {{ room.capacity }} 人
                                 </span>
                             </div>
@@ -388,7 +388,7 @@ const formatTime = (isoString) => {
                                                 <button
                                                     v-if="isAdmin || b.user_id === currentUser?.id"
                                                     @click="cancelBooking(b.id)"
-                                                    class="text-rose-600 hover:text-rose-800 text-[11px] font-medium px-1.5 py-0.5 rounded hover:bg-rose-50"
+                                                    class="text-red-600 hover:text-red-800 text-[11px] font-medium px-1.5 py-0.5 rounded hover:bg-red-50"
                                                     title="取消此筆預約"
                                                 >
                                                     取消
@@ -396,7 +396,7 @@ const formatTime = (isoString) => {
                                             </div>
                                         </div>
 
-                                        <p class="text-blue-600 font-mono text-[11px]">
+                                        <p class="text-indigo-600 font-mono text-[11px]">
                                              {{ formatTime(b.start_time) }} ~ {{ formatTime(b.end_time) }}
                                         </p>
 
@@ -435,7 +435,7 @@ const formatTime = (isoString) => {
                             <!-- 底部預約按鈕 -->
                             <button
                                 @click="openBookingModal(room.id)"
-                                class="w-full py-2 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-600 hover:text-white transition text-center"
+                                class="w-full py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-600 hover:text-white transition text-center"
                             >
                                 預約此會議室
                             </button>
@@ -458,14 +458,14 @@ const formatTime = (isoString) => {
                         <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">選擇會議室 *</label>
                         <select
                             v-model="bookingForm.meeting_room_id"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                             required
                         >
                             <option v-for="r in rooms" :key="r.id" :value="r.id">
                                 {{ r.name }} ({{ r.location }} · 容納 {{ r.capacity }} 人)
                             </option>
                         </select>
-                        <p v-if="bookingForm.errors.meeting_room_id" class="text-xs text-rose-500 mt-1">{{ bookingForm.errors.meeting_room_id }}</p>
+                        <p v-if="bookingForm.errors.meeting_room_id" class="text-xs text-red-500 mt-1">{{ bookingForm.errors.meeting_room_id }}</p>
                     </div>
 
                     <div>
@@ -474,10 +474,10 @@ const formatTime = (isoString) => {
                             type="text"
                             v-model="bookingForm.title"
                             placeholder="例如：2026 Q4 專案進度與敏捷同步會"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                             required
                         />
-                        <p v-if="bookingForm.errors.title" class="text-xs text-rose-500 mt-1">{{ bookingForm.errors.title }}</p>
+                        <p v-if="bookingForm.errors.title" class="text-xs text-red-500 mt-1">{{ bookingForm.errors.title }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
@@ -486,7 +486,7 @@ const formatTime = (isoString) => {
                             <input
                                 type="datetime-local"
                                 v-model="bookingForm.start_time"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                                 required
                             />
                         </div>
@@ -495,13 +495,13 @@ const formatTime = (isoString) => {
                             <input
                                 type="datetime-local"
                                 v-model="bookingForm.end_time"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                                 required
                             />
                         </div>
                     </div>
-                    <p v-if="bookingForm.errors.start_time" class="text-xs text-rose-600 font-semibold">{{ bookingForm.errors.start_time }}</p>
-                    <p v-if="bookingForm.errors.end_time" class="text-xs text-rose-600 font-semibold">{{ bookingForm.errors.end_time }}</p>
+                    <p v-if="bookingForm.errors.start_time" class="text-xs text-red-600 font-semibold">{{ bookingForm.errors.start_time }}</p>
+                    <p v-if="bookingForm.errors.end_time" class="text-xs text-red-600 font-semibold">{{ bookingForm.errors.end_time }}</p>
 
                     <!-- 邀請與會同仁 -->
                     <div>
@@ -511,17 +511,17 @@ const formatTime = (isoString) => {
                         </div>
 
                         <!-- 已選同仁標籤 -->
-                        <div v-if="selectedAttendees.length > 0" class="flex flex-wrap gap-1.5 mb-2 p-2 bg-blue-50/50 rounded-lg border border-blue-100">
+                        <div v-if="selectedAttendees.length > 0" class="flex flex-wrap gap-1.5 mb-2 p-2 bg-indigo-50/50 rounded-lg border border-indigo-100">
                             <span
                                 v-for="u in selectedAttendees"
                                 :key="u.id"
-                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
+                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800"
                             >
                                 <span>{{ u.name }} ({{ u.department?.name || '無部門' }})</span>
                                 <button
                                     type="button"
                                     @click="removeAttendee(u.id)"
-                                    class="ml-1 text-blue-600 hover:text-blue-900 font-bold"
+                                    class="ml-1 text-indigo-600 hover:text-indigo-900 font-bold"
                                 >
                                     &times;
                                 </button>
@@ -534,7 +534,7 @@ const formatTime = (isoString) => {
                                 type="text"
                                 v-model="attendeeSearch"
                                 placeholder="輸入同仁姓名、部門或帳號快速搜尋加入..."
-                                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-xs focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                             />
                             <div
                                 v-if="attendeeSearch.trim() && availableUsers.length > 0"
@@ -544,7 +544,7 @@ const formatTime = (isoString) => {
                                     v-for="user in availableUsers.slice(0, 8)"
                                     :key="user.id"
                                     @click="addAttendee(user)"
-                                    class="cursor-pointer px-3 py-1.5 hover:bg-blue-50 flex items-center justify-between text-gray-700 dark:text-gray-300"
+                                    class="cursor-pointer px-3 py-1.5 hover:bg-indigo-50 flex items-center justify-between text-gray-700 dark:text-gray-300"
                                 >
                                     <span class="font-medium">{{ user.name }}</span>
                                     <span class="text-gray-400 text-[11px]">{{ user.department?.name }} · {{ user.email }}</span>
@@ -560,11 +560,11 @@ const formatTime = (isoString) => {
                             type="number"
                             :min="bookingForm.attendee_ids.length + 1"
                             v-model="bookingForm.attendees_count"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                             required
                         />
                         <p class="text-xs text-gray-400 mt-1">包含發起人本人，若選取受邀同仁會自動設定人數下限。</p>
-                        <p v-if="bookingForm.errors.attendees_count" class="text-xs text-rose-500 mt-1">{{ bookingForm.errors.attendees_count }}</p>
+                        <p v-if="bookingForm.errors.attendees_count" class="text-xs text-red-500 mt-1">{{ bookingForm.errors.attendees_count }}</p>
                     </div>
 
                     <!-- 設備借用需求勾選 -->
@@ -580,7 +580,7 @@ const formatTime = (isoString) => {
                                     type="checkbox"
                                     :checked="bookingForm.equipment_needed.includes(eq)"
                                     @change="toggleEquipmentNeeded(eq)"
-                                    class="rounded text-blue-600 focus:ring-blue-500"
+                                    class="rounded text-indigo-600 focus:ring-indigo-500"
                                 />
                                 <span>{{ eq }}</span>
                             </label>
@@ -593,7 +593,7 @@ const formatTime = (isoString) => {
                             v-model="bookingForm.description"
                             rows="2"
                             placeholder="如：請與會同仁自備筆記型電腦，預計有跨國客戶連線..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 
@@ -632,10 +632,10 @@ const formatTime = (isoString) => {
                             type="text"
                             v-model="roomForm.name"
                             placeholder="如：301 敏捷創新室"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                             required
                         />
-                        <p v-if="roomForm.errors.name" class="text-xs text-rose-500 mt-1">{{ roomForm.errors.name }}</p>
+                        <p v-if="roomForm.errors.name" class="text-xs text-red-500 mt-1">{{ roomForm.errors.name }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
@@ -645,7 +645,7 @@ const formatTime = (isoString) => {
                                 type="text"
                                 v-model="roomForm.location"
                                 placeholder="如：總部 B 棟 3F"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                                 required
                             />
                         </div>
@@ -655,7 +655,7 @@ const formatTime = (isoString) => {
                                 type="number"
                                 min="1"
                                 v-model="roomForm.capacity"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                                 required
                             />
                         </div>
@@ -673,7 +673,7 @@ const formatTime = (isoString) => {
                                     type="checkbox"
                                     :checked="roomForm.equipment.includes(eq)"
                                     @change="toggleEquipment(eq)"
-                                    class="rounded text-blue-600 focus:ring-blue-500"
+                                    class="rounded text-indigo-600 focus:ring-indigo-500"
                                 />
                                 <span>{{ eq }}</span>
                             </label>
@@ -686,7 +686,7 @@ const formatTime = (isoString) => {
                             v-model="roomForm.description"
                             rows="2"
                             placeholder="如：近茶水間，適合部門團隊站會..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 

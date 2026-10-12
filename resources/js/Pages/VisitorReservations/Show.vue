@@ -94,7 +94,7 @@ const printPass = () => {
                     <button
                         v-if="canManage && reservation.status === 'expected'"
                         @click="handleCancel"
-                        class="px-3 py-1.5 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl text-xs font-bold transition"
+                        class="px-3 py-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-xl text-xs font-bold transition"
                     >
                         取消預約
                     </button>
@@ -104,7 +104,7 @@ const printPass = () => {
             <!-- 數位訪客通行卡本體 (支援實體列印) -->
             <div class="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 shadow-xl overflow-hidden print:border-2 print:border-black print:shadow-none">
                 <!-- 卡片頂部漸層橫幅 -->
-                <div class="bg-gradient-to-r from-sky-600 via-indigo-600 to-blue-700 p-6 sm:p-8 text-white relative">
+                <div class="bg-gradient-to-r from-indigo-600 via-indigo-600 to-indigo-700 p-6 sm:p-8 text-white relative">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                             <span class="inline-block px-2.5 py-0.5 rounded-full text-2xs font-extrabold bg-white/20 backdrop-blur-xs dark:bg-gray-800">
@@ -112,24 +112,24 @@ const printPass = () => {
                             </span>
                             <h2 class="text-2xl sm:text-3xl font-black mt-2 tracking-tight">
                                 {{ reservation.visitor_name }}
-                                <span v-if="reservation.visitor_count > 1" class="text-sm font-normal text-sky-100">
+                                <span v-if="reservation.visitor_count > 1" class="text-sm font-normal text-indigo-100">
                                     (同行 {{ reservation.visitor_count }} 人)
                                 </span>
                             </h2>
-                            <p class="text-xs sm:text-sm text-sky-100 mt-1 font-medium">
+                            <p class="text-xs sm:text-sm text-indigo-100 mt-1 font-medium">
                                 {{ reservation.visitor_company || '貴賓個人預約' }}
                             </p>
                         </div>
 
                         <!-- 唯一通行代碼卡塊 -->
                         <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-center shrink-0 dark:bg-gray-800">
-                            <p class="text-2xs text-sky-200 font-mono">Reservation Code</p>
+                            <p class="text-2xs text-indigo-200 font-mono">Reservation Code</p>
                             <p class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5">
                                 {{ reservation.reservation_code }}
                             </p>
                             <button
                                 @click="copyCode"
-                                class="print:hidden mt-2 text-2xs text-sky-100 underline hover:text-white inline-flex items-center gap-1"
+                                class="print:hidden mt-2 text-2xs text-indigo-100 underline hover:text-white inline-flex items-center gap-1"
                             >
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                                 複製代碼
@@ -165,10 +165,10 @@ const printPass = () => {
                                 <span
                                     :class="[
                                         'px-2.5 py-0.5 rounded-full text-xs font-bold inline-block',
-                                        reservation.status === 'expected' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' :
+                                        reservation.status === 'expected' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' :
                                         reservation.status === 'checked_in' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' :
                                         reservation.status === 'checked_out' ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300' :
-                                        'bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300'
+                                        'bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300'
                                     ]"
                                 >
                                     {{ reservation.status_label }}
@@ -181,7 +181,7 @@ const printPass = () => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-6 border-b border-gray-100 dark:border-gray-700 text-xs">
                         <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl">
                             <p class="text-gray-400 font-semibold mb-2 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                 接待同仁 (Host)
                             </p>
                             <p class="text-sm font-bold text-gray-900 dark:text-gray-100">
@@ -194,7 +194,7 @@ const printPass = () => {
 
                         <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl">
                             <p class="text-gray-400 font-semibold mb-2 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                 安排會議室 / 接待區域
                             </p>
                             <p class="text-sm font-bold text-gray-900 dark:text-gray-100">

@@ -33,7 +33,7 @@ const getTypeBadge = (type) => {
         case 'meeting_room':
             return { label: '會議預約', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
         case 'document':
-            return { label: '文件修訂', bg: 'bg-blue-50 text-blue-700 border-blue-200' };
+            return { label: '文件修訂', bg: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
         default:
             return { label: '系統通知', bg: 'bg-gray-100 text-gray-700 border-gray-200' };
     }

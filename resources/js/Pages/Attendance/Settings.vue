@@ -85,15 +85,15 @@ const submit = () => {
                     <span class="text-sm font-medium">{{ $page.props.flash.success }}</span>
                 </div>
 
-                <div v-if="$page.props.flash?.error" class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center text-rose-800 shadow-sm">
-                    <svg class="w-5 h-5 mr-3 text-rose-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div v-if="$page.props.flash?.error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center text-red-800 shadow-sm">
+                    <svg class="w-5 h-5 mr-3 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span class="text-sm font-medium">{{ $page.props.flash.error }}</span>
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-                    <div class="px-6 py-5 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 border-b border-gray-100 flex items-center justify-between dark:border-gray-700">
+                    <div class="px-6 py-5 bg-gradient-to-r from-indigo-50/50 to-indigo-50/50 border-b border-gray-100 flex items-center justify-between dark:border-gray-700">
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,7 +106,7 @@ const submit = () => {
                                 <p class="text-xs text-gray-500 dark:text-gray-400">更新後同仁考勤打卡立即套用新規則</p>
                             </div>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">
                             管理員/人資專屬
                         </span>
                     </div>
@@ -116,16 +116,16 @@ const submit = () => {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1 dark:text-gray-300">
-                                    辦公室 / 總部名稱 <span class="text-rose-500">*</span>
+                                    辦公室 / 總部名稱 <span class="text-red-500">*</span>
                                 </label>
                                 <input
                                     v-model="form.office_name"
                                     type="text"
                                     required
                                     placeholder="例如：台北企業總部大樓"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition dark:border-gray-700"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition dark:border-gray-700"
                                 />
-                                <p v-if="form.errors.office_name" class="mt-1 text-xs text-rose-600">{{ form.errors.office_name }}</p>
+                                <p v-if="form.errors.office_name" class="mt-1 text-xs text-red-600">{{ form.errors.office_name }}</p>
                             </div>
 
                             <div>
@@ -136,9 +136,9 @@ const submit = () => {
                                     v-model="form.office_address"
                                     type="text"
                                     placeholder="例如：台北市信義區信義路五段7號"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition dark:border-gray-700"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition dark:border-gray-700"
                                 />
-                                <p v-if="form.errors.office_address" class="mt-1 text-xs text-rose-600">{{ form.errors.office_address }}</p>
+                                <p v-if="form.errors.office_address" class="mt-1 text-xs text-red-600">{{ form.errors.office_address }}</p>
                             </div>
                         </div>
 
@@ -154,12 +154,12 @@ const submit = () => {
                                         type="button"
                                         @click="getCurrentLocation"
                                         :disabled="isLocating"
-                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100/70 hover:bg-blue-200/80 rounded-lg transition disabled:opacity-50"
+                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-100/70 hover:bg-indigo-200/80 rounded-lg transition disabled:opacity-50"
                                     >
-                                        <svg v-if="!isLocating" class="w-3.5 h-3.5 mr-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg v-if="!isLocating" class="w-3.5 h-3.5 mr-1 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        <svg v-else class="animate-spin -ml-0.5 mr-1 h-3.5 w-3.5 text-blue-700" fill="none" viewBox="0 0 24 24">
+                                        <svg v-else class="animate-spin -ml-0.5 mr-1 h-3.5 w-3.5 text-indigo-700" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                         </svg>
@@ -189,13 +189,13 @@ const submit = () => {
                                 </div>
                             </div>
 
-                            <div v-if="locateError" class="text-xs text-rose-600 bg-rose-50 p-2.5 rounded-lg border border-rose-200">
+                            <div v-if="locateError" class="text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200">
                                 {{ locateError }}
                             </div>
 
                             <!-- 全遠端提示橫幅 -->
-                            <div v-if="!form.office_lat || !form.office_lng" class="p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800 flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div v-if="!form.office_lat || !form.office_lng" class="p-3 bg-indigo-50 border border-indigo-200 rounded-lg text-xs text-indigo-800 flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span>目前未指定座標：系統將啟用<strong>「全遠端自由打卡」</strong>模式，同仁打卡全數判定為遠端模式，無需設定距離限制，亦不會強制要求填寫外勤事由。</span>
                             </div>
 
@@ -209,9 +209,9 @@ const submit = () => {
                                         type="number"
                                         step="any"
                                         placeholder="未設定（例如 25.033964）"
-                                        class="w-full px-3.5 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono dark:border-gray-700"
+                                        class="w-full px-3.5 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-mono dark:border-gray-700"
                                     />
-                                    <p v-if="form.errors.office_lat" class="mt-1 text-xs text-rose-600">{{ form.errors.office_lat }}</p>
+                                    <p v-if="form.errors.office_lat" class="mt-1 text-xs text-red-600">{{ form.errors.office_lat }}</p>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-medium text-gray-600 mb-1 dark:text-gray-400">
@@ -222,9 +222,9 @@ const submit = () => {
                                         type="number"
                                         step="any"
                                         placeholder="未設定（例如 121.564468）"
-                                        class="w-full px-3.5 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-mono dark:border-gray-700"
+                                        class="w-full px-3.5 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-mono dark:border-gray-700"
                                     />
-                                    <p v-if="form.errors.office_lng" class="mt-1 text-xs text-rose-600">{{ form.errors.office_lng }}</p>
+                                    <p v-if="form.errors.office_lng" class="mt-1 text-xs text-red-600">{{ form.errors.office_lng }}</p>
                                 </div>
                             </div>
                         </div>
@@ -237,7 +237,7 @@ const submit = () => {
                                 </label>
                                 <span class="text-xs text-gray-500 dark:text-gray-400">
                                     <template v-if="form.office_lat && form.office_lng">
-                                        目前設定：<strong class="text-blue-600 font-bold">{{ form.allowed_radius || 500 }} 公尺</strong>
+                                        目前設定：<strong class="text-indigo-600 font-bold">{{ form.allowed_radius || 500 }} 公尺</strong>
                                     </template>
                                     <template v-else>
                                         （未設定公司座標，不限制距離）
@@ -253,11 +253,11 @@ const submit = () => {
                                     max="50000"
                                     :disabled="!form.office_lat || !form.office_lng"
                                     placeholder="500"
-                                    class="w-48 px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-semibold text-gray-900 disabled:bg-gray-100 disabled:text-gray-400 dark:text-gray-100 dark:border-gray-700"
+                                    class="w-48 px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-semibold text-gray-900 disabled:bg-gray-100 disabled:text-gray-400 dark:text-gray-100 dark:border-gray-700"
                                 />
                                 <span class="text-sm text-gray-500 dark:text-gray-400">公尺 (m)</span>
                             </div>
-                            <p v-if="form.errors.allowed_radius" class="text-xs text-rose-600">{{ form.errors.allowed_radius }}</p>
+                            <p v-if="form.errors.allowed_radius" class="text-xs text-red-600">{{ form.errors.allowed_radius }}</p>
 
                             <!-- 快速選取標籤 -->
                             <div class="flex flex-wrap items-center gap-2 pt-1">

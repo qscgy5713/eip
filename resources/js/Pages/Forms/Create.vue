@@ -73,7 +73,7 @@ const submit = () => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex items-center space-x-3">
-                <Link :href="route('forms.index')" class="text-sm text-blue-600 hover:underline">&larr; 返回簽核中心</Link>
+                <Link :href="route('forms.index')" class="text-sm text-indigo-600 hover:underline">&larr; 返回簽核中心</Link>
                 <span class="text-gray-300">/</span>
                 <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100">發起申請：{{ form.name }}</h2>
             </div>
@@ -89,9 +89,9 @@ const submit = () => {
 
                     <form @submit.prevent="submit" class="space-y-6">
                         <!-- 表單錯誤提示區塊 -->
-                        <div v-if="formState.hasErrors" class="p-4 bg-rose-50 border border-rose-200 rounded-lg text-rose-700 text-sm">
+                        <div v-if="formState.hasErrors" class="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
                             <div class="font-bold flex items-center space-x-1.5 mb-1">
-                                <svg class="w-4 h-4 text-rose-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <svg class="w-4 h-4 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span>表單內容有誤，請檢查並修正以下欄位：</span>
                             </div>
                             <ul class="list-disc list-inside text-xs space-y-0.5 pl-1">
@@ -130,7 +130,7 @@ const submit = () => {
                         </div>
 
                         <!-- 額度超額警示 -->
-                        <div v-if="isQuotaExceeded" class="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700 text-xs flex items-center gap-2">
+                        <div v-if="isQuotaExceeded" class="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs flex items-center gap-2">
                             <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
@@ -140,14 +140,14 @@ const submit = () => {
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1 dark:text-gray-300">申請主旨 / 標題 <span class="text-rose-500">*</span></label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1 dark:text-gray-300">申請主旨 / 標題 <span class="text-red-500">*</span></label>
                             <input
                                 v-model="formState.title"
                                 type="text"
                                 required
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
+                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm dark:border-gray-700"
                             />
-                            <p v-if="formState.errors.title" class="text-xs text-rose-600 mt-1">{{ formState.errors.title }}</p>
+                            <p v-if="formState.errors.title" class="text-xs text-red-600 mt-1">{{ formState.errors.title }}</p>
                         </div>
 
                         <!-- 動態欄位 -->
@@ -157,7 +157,7 @@ const submit = () => {
                             <select
                                 v-if="field.type === 'select'"
                                 v-model="formState.fields[field.key]"
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
+                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm dark:border-gray-700"
                             >
                                 <option v-for="opt in field.options" :key="opt" :value="opt">{{ opt }}</option>
                             </select>
@@ -166,17 +166,17 @@ const submit = () => {
                                 v-else-if="field.type === 'textarea'"
                                 v-model="formState.fields[field.key]"
                                 rows="3"
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
+                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm dark:border-gray-700"
                             ></textarea>
 
                             <input
                                 v-else
                                 :type="field.type || 'text'"
                                 v-model="formState.fields[field.key]"
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-sm dark:border-gray-700"
+                                class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm dark:border-gray-700"
                             />
 
-                            <p v-if="formState.errors['data.' + field.key]" class="text-xs text-rose-600 mt-1">{{ formState.errors['data.' + field.key] }}</p>
+                            <p v-if="formState.errors['data.' + field.key]" class="text-xs text-red-600 mt-1">{{ formState.errors['data.' + field.key] }}</p>
                         </div>
 
                         <!-- 證明文件與附件上傳 -->
@@ -188,13 +188,13 @@ const submit = () => {
                                 如請假證明（就醫證明、訃聞、公文）、單據收據或申請相關說明文件。支援 PDF、JPG、PNG、Word、Excel、ZIP，單檔最大 10MB。
                             </p>
 
-                            <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors bg-gray-50/50 dark:bg-gray-800/60 dark:border-gray-700">
+                            <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-indigo-400 transition-colors bg-gray-50/50 dark:bg-gray-800/60 dark:border-gray-700">
                                 <div class="space-y-1 text-center">
                                     <svg class="mx-auto h-10 w-10 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
                                     <div class="flex text-sm text-gray-600 justify-center dark:text-gray-400">
-                                        <label for="file-upload" class="relative cursor-pointer rounded-md font-semibold text-blue-600 hover:text-blue-500 focus-within:outline-none">
+                                        <label for="file-upload" class="relative cursor-pointer rounded-md font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
                                             <span>點擊選擇檔案</span>
                                             <input id="file-upload" name="file-upload" type="file" multiple class="sr-only" @change="handleFileChange" />
                                         </label>
@@ -227,7 +227,7 @@ const submit = () => {
                                 </ul>
                             </div>
 
-                            <div v-if="formState.errors.attachments" class="text-xs text-rose-600 mt-2">
+                            <div v-if="formState.errors.attachments" class="text-xs text-red-600 mt-2">
                                 {{ formState.errors.attachments }}
                             </div>
                         </div>

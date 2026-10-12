@@ -14,10 +14,10 @@ const props = defineProps({
 const statusBadge = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-100 text-emerald-800';
-        case 'rejected': return 'bg-rose-100 text-rose-800';
+        case 'rejected': return 'bg-red-100 text-red-800';
         case 'withdrawn': return 'bg-gray-100 text-gray-700';
         case 'revision_required': return 'bg-amber-100 text-amber-800 border border-amber-300';
-        default: return 'bg-blue-100 text-blue-800';
+        default: return 'bg-indigo-100 text-indigo-800';
     }
 };
 
@@ -148,7 +148,7 @@ const deleteForm = async (formId, formName) => {
                 <div>
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-bold text-gray-900 flex items-center space-x-2 dark:text-gray-100">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             <span>發起新申請單 (共 {{ availableForms.length }} 種表單)</span>
                         </h3>
                     </div>
@@ -156,17 +156,17 @@ const deleteForm = async (formId, formName) => {
                         <div
                             v-for="form in availableForms"
                             :key="form.id"
-                            class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md hover:border-blue-300 transition flex flex-col justify-between group dark:bg-gray-800 dark:border-gray-700"
+                            class="bg-white p-6 rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md hover:border-indigo-300 transition flex flex-col justify-between group dark:bg-gray-800 dark:border-gray-700"
                         >
                             <div>
                                 <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-base font-bold text-gray-900 group-hover:text-blue-600 transition dark:text-gray-100">{{ form.name }}</h4>
+                                    <h4 class="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition dark:text-gray-100">{{ form.name }}</h4>
                                     <div class="flex items-center space-x-2">
                                         <span class="px-2 py-0.5 text-xs font-mono font-semibold bg-gray-100 text-gray-600 rounded dark:bg-gray-700 dark:text-gray-400">{{ form.code }}</span>
                                         <button
                                             v-if="canManageForms"
                                             @click.stop="deleteForm(form.id, form.name)"
-                                            class="text-gray-300 hover:text-rose-500 text-xs"
+                                            class="text-gray-300 hover:text-red-500 text-xs"
                                             title="下架此表單"
                                         >
                                             &times;
@@ -186,7 +186,7 @@ const deleteForm = async (formId, formName) => {
                             </div>
                             <Link
                                 :href="route('forms.create', form.id)"
-                                class="w-full text-center py-2 px-4 bg-blue-50 text-blue-600 font-semibold text-xs rounded-lg hover:bg-blue-600 hover:text-white transition"
+                                class="w-full text-center py-2 px-4 bg-indigo-50 text-indigo-600 font-semibold text-xs rounded-lg hover:bg-indigo-600 hover:text-white transition"
                             >
                                 立即填寫申請 &rarr;
                             </Link>
@@ -205,12 +205,12 @@ const deleteForm = async (formId, formName) => {
                             <div>
                                 <div class="flex items-center space-x-2">
                                     <p class="font-bold text-sm text-gray-900 dark:text-gray-100">{{ item.form_request?.title }}</p>
-                                    <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-blue-100 text-blue-800">
+                                    <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-indigo-100 text-indigo-800">
                                         {{ item.step_title ? item.step_title : ('關卡 ' + item.step) }}
                                     </span>
                                     <span
                                         v-if="item.is_delegated"
-                                        class="px-2 py-0.5 text-[11px] font-bold rounded bg-purple-100 text-purple-700"
+                                        class="px-2 py-0.5 text-[11px] font-bold rounded bg-indigo-100 text-indigo-700"
                                     >
                                         代理代簽 (原主管：{{ item.approver?.name }})
                                     </span>
@@ -240,7 +240,7 @@ const deleteForm = async (formId, formName) => {
                             <div class="space-y-1">
                                 <div class="flex items-center space-x-2">
                                     <span class="text-xs font-mono font-medium text-gray-400">[{{ req.request_no }}]</span>
-                                    <Link :href="route('forms.show', req.id)" class="font-bold text-sm text-gray-900 hover:text-blue-600 dark:text-gray-100">
+                                    <Link :href="route('forms.show', req.id)" class="font-bold text-sm text-gray-900 hover:text-indigo-600 dark:text-gray-100">
                                         {{ req.title }}
                                     </Link>
                                 </div>
@@ -252,7 +252,7 @@ const deleteForm = async (formId, formName) => {
                                 <span :class="['px-3 py-1 text-xs font-semibold rounded-full', statusBadge(req.status)]">
                                     {{ req.status === 'approved' ? '已核准' : (req.status === 'rejected' ? '已駁回' : (req.status === 'withdrawn' ? '已撤回' : (req.status === 'revision_required' ? '退回修改中' : `審批中 (關卡 ${req.current_step}/${req.total_steps || 1})`))) }}
                                 </span>
-                                <Link :href="route('forms.show', req.id)" class="text-xs font-medium text-blue-600 hover:underline">
+                                <Link :href="route('forms.show', req.id)" class="text-xs font-medium text-indigo-600 hover:underline">
                                     查看詳情 &rarr;
                                 </Link>
                             </div>
@@ -282,7 +282,7 @@ const deleteForm = async (formId, formName) => {
                                 type="text"
                                 v-model="newForm.name"
                                 placeholder="如：遠端居家辦公申請單"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 required
                             />
                         </div>
@@ -292,7 +292,7 @@ const deleteForm = async (formId, formName) => {
                                 type="text"
                                 v-model="newForm.code"
                                 placeholder="如：REMOTE_WORK"
-                                class="w-full text-xs font-mono rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                class="w-full text-xs font-mono rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 required
                             />
                         </div>
@@ -303,7 +303,7 @@ const deleteForm = async (formId, formName) => {
                             <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">簽核流程層級架構</label>
                             <select
                                 v-model="newForm.workflow_type"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             >
                                 <option value="single">標準單級流程：部門直屬主管初審 (1 關)</option>
                                 <option value="two_stage">二級流程：直屬主管初審 &rarr; 處長/管理員核定 (2 關)</option>
@@ -316,7 +316,7 @@ const deleteForm = async (formId, formName) => {
                                 type="text"
                                 v-model="newForm.description"
                                 placeholder="如：提供同仁申請遠端辦公..."
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             />
                         </div>
                     </div>
@@ -328,7 +328,7 @@ const deleteForm = async (formId, formName) => {
                             <button
                                 type="button"
                                 @click="addField"
-                                class="px-2.5 py-1 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition"
+                                class="px-2.5 py-1 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition"
                             >
                                 + 增加欄位
                             </button>
@@ -378,7 +378,7 @@ const deleteForm = async (formId, formName) => {
                                         <button
                                             type="button"
                                             @click="removeField(index)"
-                                            class="text-rose-500 hover:text-rose-700 text-base font-bold"
+                                            class="text-red-500 hover:text-red-700 text-base font-bold"
                                             title="移除欄位"
                                         >
                                             &times;
@@ -388,12 +388,12 @@ const deleteForm = async (formId, formName) => {
 
                                 <!-- 下拉選單選項輸入 -->
                                 <div v-if="field.type === 'select'" class="pt-2 border-t border-gray-100 dark:border-gray-700">
-                                    <label class="block text-[11px] text-blue-600 mb-0.5">下拉選單選項 (請以逗點分隔，如：住家, 咖啡廳, 其他)</label>
+                                    <label class="block text-[11px] text-indigo-600 mb-0.5">下拉選單選項 (請以逗點分隔，如：住家, 咖啡廳, 其他)</label>
                                     <input
                                         type="text"
                                         v-model="field.options_str"
                                         placeholder="選項 A, 選項 B, 選項 C"
-                                        class="w-full text-xs rounded border-blue-200 bg-blue-50/30 py-1"
+                                        class="w-full text-xs rounded border-indigo-200 bg-indigo-50/30 py-1"
                                         required
                                     />
                                 </div>

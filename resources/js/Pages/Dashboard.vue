@@ -77,14 +77,14 @@ const priorityBadge = (priority) => {
     switch (priority) {
         case 'urgent': return 'bg-red-100 dark:bg-red-950/40 text-red-800 dark:text-red-300 border-red-200 dark:border-red-800';
         case 'high': return 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800';
-        default: return 'bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+        default: return 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
     }
 };
 
 const statusBadge = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300';
-        case 'rejected': return 'bg-rose-100 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300';
+        case 'rejected': return 'bg-red-100 dark:bg-red-950/40 text-red-800 dark:text-red-300';
         default: return 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300';
     }
 };
@@ -106,12 +106,12 @@ const statusBadge = (status) => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 提示/錯誤訊息 -->
-                <div v-if="$page.props.flash?.error" class="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-xl flex items-center justify-between text-rose-800 dark:text-rose-300 shadow-sm text-sm">
+                <div v-if="$page.props.flash?.error" class="p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl flex items-center justify-between text-red-800 dark:text-red-300 shadow-sm text-sm">
                     <div class="flex items-center space-x-2">
-                        <svg class="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <svg class="w-5 h-5 text-red-600 dark:text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         <span>{{ $page.props.flash.error }}</span>
                     </div>
-                    <Link :href="route('attendance.index')" class="text-xs font-semibold text-rose-700 dark:text-rose-300 underline hover:text-rose-900 dark:hover:text-rose-200 shrink-0 ml-4">
+                    <Link :href="route('attendance.index')" class="text-xs font-semibold text-red-700 dark:text-red-300 underline hover:text-red-900 dark:hover:text-red-200 shrink-0 ml-4">
                         前往考勤頁面填寫事由打卡 →
                     </Link>
                 </div>
@@ -124,14 +124,14 @@ const statusBadge = (status) => {
                 <!-- 今日快捷打卡區 -->
                 <div class="bg-gradient-to-r from-slate-900 to-indigo-950 rounded-xl p-5 text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
                             <p class="text-xs text-indigo-200">今日出勤狀態</p>
                             <p class="text-base font-bold text-white">
                                 <span v-if="!todayAttendance" class="text-amber-400">尚未打卡簽到</span>
-                                <span v-else-if="todayAttendance.clock_in_at && !todayAttendance.clock_out_at" class="text-blue-300">上班簽到：{{ new Date(todayAttendance.clock_in_at).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) }} (工作中)</span>
+                                <span v-else-if="todayAttendance.clock_in_at && !todayAttendance.clock_out_at" class="text-indigo-300">上班簽到：{{ new Date(todayAttendance.clock_in_at).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) }} (工作中)</span>
                                 <span v-else class="text-emerald-300">今日已簽退 (工時 {{ todayAttendance.work_hours }}h)</span>
                             </p>
                         </div>
@@ -160,7 +160,7 @@ const statusBadge = (status) => {
                 </div>
 
                 <!-- 最新薪資通知橫幅 (若有已發布薪資條) -->
-                <div v-if="latestPayslip" class="bg-gradient-to-r from-emerald-900 to-teal-950 rounded-xl p-5 text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 border border-emerald-800/40">
+                <div v-if="latestPayslip" class="bg-gradient-to-r from-indigo-800 to-indigo-950 rounded-xl p-5 text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 border border-emerald-800/40">
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300 shrink-0">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -206,8 +206,8 @@ const statusBadge = (status) => {
 
                 <!-- 常用快捷行動列 (Quick Action Bar) -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                    <Link :href="route('forms.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
+                    <Link :href="route('forms.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h2.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
                         <div>
@@ -215,8 +215,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">請假、加班、簽呈</p>
                         </div>
                     </Link>
-                    <Link :href="route('payslips.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-emerald-400 dark:hover:border-emerald-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition">
+                    <Link :href="route('payslips.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
@@ -224,8 +224,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">個人存摺與單據</p>
                         </div>
                     </Link>
-                    <Link :href="route('weekly-reports.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-cyan-400 dark:hover:border-cyan-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-cyan-50 dark:bg-cyan-950/40 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:bg-cyan-600 group-hover:text-white transition">
+                    <Link :href="route('weekly-reports.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
                         <div>
@@ -233,8 +233,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">每週進度與回報</p>
                         </div>
                     </Link>
-                    <Link :href="route('projects.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-violet-400 dark:hover:border-violet-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 flex items-center justify-center group-hover:bg-violet-600 group-hover:text-white transition">
+                    <Link :href="route('projects.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                         </div>
                         <div>
@@ -242,8 +242,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">任務協同與進度</p>
                         </div>
                     </Link>
-                    <Link :href="route('assets.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-teal-400 dark:hover:border-teal-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition">
+                    <Link :href="route('assets.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         </div>
                         <div>
@@ -260,8 +260,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">設備借用與時段</p>
                         </div>
                     </Link>
-                    <Link :href="route('leave-balances.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-emerald-400 dark:hover:border-emerald-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition">
+                    <Link :href="route('leave-balances.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
@@ -269,8 +269,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">特休與補休明細</p>
                         </div>
                     </Link>
-                    <Link :href="route('org-management.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition">
+                    <Link :href="route('org-management.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                         </div>
                         <div>
@@ -278,8 +278,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">同仁分機與主管</p>
                         </div>
                     </Link>
-                    <Link :href="route('documents.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition">
+                    <Link :href="route('documents.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
                         <div>
@@ -287,8 +287,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">規章辦法與手冊</p>
                         </div>
                     </Link>
-                    <Link :href="route('meal-orders.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-orange-400 dark:hover:border-orange-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition">
+                    <Link :href="route('meal-orders.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                         </div>
                         <div>
@@ -296,8 +296,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">午餐下午茶開團</p>
                         </div>
                     </Link>
-                    <Link :href="route('tickets.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-rose-400 dark:hover:border-rose-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition">
+                    <Link :href="route('tickets.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
                         <div>
@@ -305,8 +305,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">IT總務故障通報</p>
                         </div>
                     </Link>
-                    <Link :href="route('visitor-reservations.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-sky-400 dark:hover:border-sky-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition">
+                    <Link :href="route('visitor-reservations.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
                         </div>
                         <div>
@@ -314,8 +314,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">預約通行與門禁</p>
                         </div>
                     </Link>
-                    <Link :href="route('vehicles.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition">
+                    <Link :href="route('vehicles.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17a2 2 0 100-4 2 2 0 000 4zm8 0a2 2 0 100-4 2 2 0 000 4m-11-7l2.5-5h9L19 10m-14 0h14m-14 0a2 2 0 00-2 2v5a2 2 0 002 2h1m12 0h1a2 2 0 002-2v-5a2 2 0 00-2-2"/></svg>
                         </div>
                         <div>
@@ -332,8 +332,8 @@ const statusBadge = (status) => {
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">課程研習與學分</p>
                         </div>
                     </Link>
-                    <Link :href="route('recognition.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition flex items-center space-x-3 group">
-                        <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition">
+                    <Link :href="route('recognition.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         </div>
                         <div>
@@ -363,9 +363,9 @@ const statusBadge = (status) => {
                             <p class="text-xs text-emerald-700 dark:text-emerald-400 font-medium">今日已打卡出勤</p>
                             <p class="text-xl font-black text-emerald-700 dark:text-emerald-300 mt-1">{{ teamAttendanceSnapshot.clocked_in_count }} <span class="text-xs font-normal text-emerald-600 dark:text-emerald-500">人</span></p>
                         </div>
-                        <div class="bg-blue-50/70 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-100 dark:border-blue-800/60">
-                            <p class="text-xs text-blue-700 dark:text-blue-400 font-medium">今日核准請假中</p>
-                            <p class="text-xl font-black text-blue-700 dark:text-blue-300 mt-1">{{ teamAttendanceSnapshot.on_leave_count }} <span class="text-xs font-normal text-blue-600 dark:text-blue-500">人</span></p>
+                        <div class="bg-indigo-50/70 dark:bg-indigo-950/30 p-3 rounded-lg border border-indigo-100 dark:border-indigo-800/60">
+                            <p class="text-xs text-indigo-700 dark:text-indigo-400 font-medium">今日核准請假中</p>
+                            <p class="text-xl font-black text-indigo-700 dark:text-indigo-300 mt-1">{{ teamAttendanceSnapshot.on_leave_count }} <span class="text-xs font-normal text-indigo-600 dark:text-indigo-500">人</span></p>
                         </div>
                         <div class="bg-amber-50/70 dark:bg-amber-950/30 p-3 rounded-lg border border-amber-100 dark:border-amber-800/60">
                             <p class="text-xs text-amber-700 dark:text-amber-400 font-medium">尚未出勤打卡</p>
@@ -379,47 +379,47 @@ const statusBadge = (status) => {
                     <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">未讀企業公告</p>
-                            <p class="text-2xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">{{ stats.unreadAnnouncementsCount }}</p>
+                            <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">{{ stats.unreadAnnouncementsCount }}</p>
                         </div>
-                        <div class="p-2.5 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-xl">
+                        <div class="p-2.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
                         </div>
                     </div>
                     <Link
                         :href="route('approvals.index')"
-                        class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between hover:border-amber-300 dark:hover:border-amber-500 hover:shadow-md transition cursor-pointer group"
+                        class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-md transition cursor-pointer group"
                     >
                         <div>
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition">待我審批單據</p>
-                            <p class="text-2xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">{{ stats.pendingApprovalsCount }}</p>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition">待我審批單據</p>
+                            <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">{{ stats.pendingApprovalsCount }}</p>
                         </div>
-                        <div class="p-2.5 bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 rounded-xl group-hover:bg-amber-100 dark:group-hover:bg-amber-900/60 transition">
+                        <div class="p-2.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-xl group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/60 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                     </Link>
                     <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">我進行中的申請</p>
-                            <p class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">{{ stats.myPendingRequestsCount }}</p>
+                            <p class="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">{{ stats.myPendingRequestsCount }}</p>
                         </div>
-                        <div class="p-2.5 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 rounded-xl">
+                        <div class="p-2.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                         </div>
                     </div>
                     <!-- 個人休假餘額小卡 -->
                     <Link
                         :href="route('leave-balances.index')"
-                        class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between hover:border-emerald-300 dark:hover:border-emerald-500 hover:shadow-md transition group"
+                        class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between hover:border-indigo-300 dark:hover:border-indigo-500 hover:shadow-md transition group"
                     >
                         <div>
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition">我的可用假額度</p>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition">我的可用假額度</p>
                             <div class="mt-1 flex items-baseline space-x-2">
-                                <span class="text-xs text-gray-500 dark:text-gray-400">特休: <strong class="text-base text-emerald-600 dark:text-emerald-400">{{ myLeaveSummary?.annual_available ?? 0 }}</strong> 天</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">特休: <strong class="text-base text-indigo-600 dark:text-indigo-400">{{ myLeaveSummary?.annual_available ?? 0 }}</strong> 天</span>
                                 <span class="text-xs text-gray-300 dark:text-gray-600">|</span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400">補休: <strong class="text-base text-teal-600 dark:text-teal-400">{{ myLeaveSummary?.compensatory_available ?? 0 }}</strong> 天</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">補休: <strong class="text-base text-indigo-600 dark:text-indigo-400">{{ myLeaveSummary?.compensatory_available ?? 0 }}</strong> 天</span>
                             </div>
                         </div>
-                        <div class="p-2.5 bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400 rounded-xl group-hover:bg-teal-100 dark:group-hover:bg-teal-900/60 transition">
+                        <div class="p-2.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-xl group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/60 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
                     </Link>
@@ -431,18 +431,18 @@ const statusBadge = (status) => {
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col">
                         <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
                             <div class="flex items-center space-x-2">
-                                <span class="w-2.5 h-2.5 bg-blue-600 rounded-full"></span>
+                                <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full"></span>
                                 <h3 class="font-bold text-gray-900 dark:text-gray-100 text-lg">重要企業公告</h3>
                             </div>
-                            <Link :href="route('announcements.index')" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">查看全部 &rarr;</Link>
+                            <Link :href="route('announcements.index')" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">查看全部 &rarr;</Link>
                         </div>
                         <div class="mt-4 divide-y divide-gray-100 dark:divide-gray-700 flex-1">
                             <div v-for="item in announcements" :key="item.id" class="py-3.5 first:pt-0 last:pb-0 flex items-start justify-between gap-3">
                                 <div class="space-y-1">
                                     <div class="flex items-center space-x-2">
-                                        <span v-if="item.is_pinned" class="px-2 py-0.5 text-xs font-semibold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 rounded">置頂</span>
+                                        <span v-if="item.is_pinned" class="px-2 py-0.5 text-xs font-semibold bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded">置頂</span>
                                         <span :class="['px-2 py-0.5 text-xs font-medium border rounded', priorityBadge(item.priority)]">{{ item.priority === 'urgent' ? '緊急' : (item.priority === 'high' ? '重要' : '一般') }}</span>
-                                        <Link :href="route('announcements.show', item.id)" class="text-base font-semibold text-gray-900 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 line-clamp-1">
+                                        <Link :href="route('announcements.show', item.id)" class="text-base font-semibold text-gray-900 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 line-clamp-1">
                                             {{ item.title }}
                                         </Link>
                                     </div>
@@ -504,13 +504,13 @@ const statusBadge = (status) => {
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col">
                         <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                             <div class="flex items-center space-x-2">
-                                <span class="w-2.5 h-2.5 bg-violet-500 rounded-full"></span>
+                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
                                 <h3 class="font-bold text-gray-900 dark:text-gray-100 text-lg">我的專案任務</h3>
-                                <span v-if="stats.myPendingTasksCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300">
+                                <span v-if="stats.myPendingTasksCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
                                     {{ stats.myPendingTasksCount }} 件待辦
                                 </span>
                             </div>
-                            <Link :href="route('projects.index')" class="text-sm text-violet-600 dark:text-violet-400 font-semibold hover:underline">
+                            <Link :href="route('projects.index')" class="text-sm text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
                                 專案看板 &rarr;
                             </Link>
                         </div>
@@ -518,11 +518,11 @@ const statusBadge = (status) => {
                             <div
                                 v-for="task in myTasks"
                                 :key="task.id"
-                                class="p-3 rounded-lg bg-violet-50/40 dark:bg-violet-950/20 border border-violet-100 dark:border-violet-900/50 flex items-center justify-between gap-3 text-xs"
+                                class="p-3 rounded-lg bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between gap-3 text-xs"
                             >
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-1.5">
-                                        <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-violet-100 dark:bg-violet-900/60 text-violet-700 dark:text-violet-300 shrink-0">
+                                        <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 shrink-0">
                                             {{ task.project?.code }}
                                         </span>
                                         <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
@@ -531,14 +531,14 @@ const statusBadge = (status) => {
                                     </div>
                                     <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
                                         <span class="truncate">專案：{{ task.project?.name }}</span>
-                                        <span v-if="task.due_date" :class="task.is_overdue ? 'text-rose-600 dark:text-rose-400 font-bold shrink-0' : 'shrink-0'">
+                                        <span v-if="task.due_date" :class="task.is_overdue ? 'text-red-600 dark:text-red-400 font-bold shrink-0' : 'shrink-0'">
                                             · {{ task.is_overdue ? '已逾期：' : '截止：' }}{{ new Date(task.due_date).toLocaleDateString('sv-SE') }}
                                         </span>
                                     </div>
                                 </div>
                                 <Link
                                     :href="route('projects.show', task.project_id)"
-                                    class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-800 hover:bg-violet-50 dark:hover:bg-gray-600 transition shrink-0"
+                                    class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-gray-600 transition shrink-0"
                                 >
                                     看板
                                 </Link>
@@ -553,13 +553,13 @@ const statusBadge = (status) => {
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                         <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                             <div class="flex items-center space-x-2">
-                                <span class="w-2.5 h-2.5 bg-teal-500 rounded-full"></span>
+                                <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
                                 <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">我借用的公務資產</h3>
-                                <span v-if="stats.myHeldAssetsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300">
+                                <span v-if="stats.myHeldAssetsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
                                     {{ stats.myHeldAssetsCount }} 件在席
                                 </span>
                             </div>
-                            <Link :href="route('assets.index', { my_assets: true })" class="text-sm text-teal-600 dark:text-teal-400 font-semibold hover:underline">
+                            <Link :href="route('assets.index', { my_assets: true })" class="text-sm text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
                                 我的資產清冊 &rarr;
                             </Link>
                         </div>
@@ -567,11 +567,11 @@ const statusBadge = (status) => {
                             <div
                                 v-for="asset in myAssets"
                                 :key="asset.id"
-                                class="p-3 rounded-lg bg-teal-50/40 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/50 flex items-center justify-between gap-3 text-xs"
+                                class="p-3 rounded-lg bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between gap-3 text-xs"
                             >
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-1.5">
-                                        <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-teal-100 dark:bg-teal-900/60 text-teal-700 dark:text-teal-300 shrink-0">
+                                        <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 shrink-0">
                                             {{ asset.asset_tag }}
                                         </span>
                                         <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
@@ -580,14 +580,14 @@ const statusBadge = (status) => {
                                     </div>
                                     <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
                                         <span class="truncate">地點：{{ asset.location || '總部辦公室' }}</span>
-                                        <span v-if="asset.expected_return_date" :class="asset.is_overdue ? 'text-rose-600 dark:text-rose-400 font-bold shrink-0' : 'shrink-0'">
+                                        <span v-if="asset.expected_return_date" :class="asset.is_overdue ? 'text-red-600 dark:text-red-400 font-bold shrink-0' : 'shrink-0'">
                                             · {{ asset.is_overdue ? '已逾期應還：' : '預計歸還：' }}{{ asset.expected_return_date }}
                                         </span>
                                     </div>
                                 </div>
                                 <Link
                                     :href="route('assets.show', asset.id)"
-                                    class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-50 dark:hover:bg-gray-600 transition shrink-0"
+                                    class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-gray-600 transition shrink-0"
                                 >
                                     查看
                                 </Link>
@@ -603,7 +603,7 @@ const statusBadge = (status) => {
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center space-x-2">
-                                    <span class="w-2.5 h-2.5 bg-cyan-500 rounded-full"></span>
+                                    <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
                                     <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">本週工作週報 (第 {{ currentWeekNumber }} 週)</h3>
                                 </div>
                                 <span
@@ -611,13 +611,13 @@ const statusBadge = (status) => {
                                     :class="[
                                         'px-2 py-0.5 rounded-full text-[10px] font-bold',
                                         myWeeklyReport.status === 'reviewed' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' :
-                                        myWeeklyReport.status === 'submitted' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' :
+                                        myWeeklyReport.status === 'submitted' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' :
                                         'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300'
                                     ]"
                                 >
                                     {{ myWeeklyReport.status_label }}
                                 </span>
-                                <span v-else class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300">
+                                <span v-else class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300">
                                     尚未填寫
                                 </span>
                             </div>
@@ -660,10 +660,10 @@ const statusBadge = (status) => {
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center space-x-2">
-                                    <span class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse"></span>
+                                    <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span>
                                     <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">進行中訂餐揪團</h3>
                                 </div>
-                                <Link :href="route('meal-orders.index')" class="text-sm text-orange-600 dark:text-orange-400 font-semibold hover:underline">
+                                <Link :href="route('meal-orders.index')" class="text-sm text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
                                     全部揪團 &rarr;
                                 </Link>
                             </div>
@@ -671,11 +671,11 @@ const statusBadge = (status) => {
                                 <div
                                     v-for="order in activeMealOrders"
                                     :key="order.id"
-                                    class="p-3 rounded-lg bg-orange-50/40 dark:bg-orange-950/20 border border-orange-100 dark:border-orange-900/50 flex items-center justify-between gap-3 text-xs"
+                                    class="p-3 rounded-lg bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between gap-3 text-xs"
                                 >
                                     <div class="min-w-0 flex-1">
                                         <div class="flex items-center gap-1.5">
-                                            <span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-orange-100 dark:bg-orange-900/60 text-orange-700 dark:text-orange-300 shrink-0">
+                                            <span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 shrink-0">
                                                 {{ order.restaurant_name }}
                                             </span>
                                             <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
@@ -685,7 +685,7 @@ const statusBadge = (status) => {
                                         <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
                                             <span>發起人：{{ order.creator_name }}</span>
                                             <span>· 已有 {{ order.participants_count }} 人點餐</span>
-                                            <span v-if="order.cutoff_time" class="text-rose-600 dark:text-rose-400 font-semibold">
+                                            <span v-if="order.cutoff_time" class="text-red-600 dark:text-red-400 font-semibold">
                                                 · 截止：{{ order.cutoff_time }}
                                             </span>
                                         </div>
@@ -717,13 +717,13 @@ const statusBadge = (status) => {
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center space-x-2">
-                                    <span class="w-2.5 h-2.5 bg-rose-500 rounded-full"></span>
+                                    <span class="w-2.5 h-2.5 bg-red-500 rounded-full"></span>
                                     <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">我的服務叫修工單</h3>
-                                    <span v-if="stats.myPendingTicketsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300">
+                                    <span v-if="stats.myPendingTicketsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300">
                                         {{ stats.myPendingTicketsCount }} 件處理中
                                     </span>
                                 </div>
-                                <Link :href="route('tickets.index')" class="text-sm text-rose-600 dark:text-rose-400 font-semibold hover:underline">
+                                <Link :href="route('tickets.index')" class="text-sm text-red-600 dark:text-red-400 font-semibold hover:underline">
                                     叫修中心 &rarr;
                                 </Link>
                             </div>
@@ -731,11 +731,11 @@ const statusBadge = (status) => {
                                 <div
                                     v-for="ticket in myActiveTickets"
                                     :key="ticket.id"
-                                    class="p-3 rounded-lg bg-rose-50/40 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/50 flex items-center justify-between gap-3 text-xs"
+                                    class="p-3 rounded-lg bg-red-50/40 dark:bg-red-950/20 border border-red-100 dark:border-red-900/50 flex items-center justify-between gap-3 text-xs"
                                 >
                                     <div class="min-w-0 flex-1">
                                         <div class="flex items-center gap-1.5">
-                                            <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 shrink-0">
+                                            <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-red-100 dark:bg-red-900/60 text-red-700 dark:text-red-300 shrink-0">
                                                 {{ ticket.ticket_number }}
                                             </span>
                                             <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
@@ -745,12 +745,12 @@ const statusBadge = (status) => {
                                         <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
                                             <span>分類：{{ ticket.category_label }}</span>
                                             <span v-if="ticket.assignee">· 工程師：{{ ticket.assignee.name }}</span>
-                                            <span class="font-semibold text-rose-600 dark:text-rose-400">· {{ ticket.status_label }}</span>
+                                            <span class="font-semibold text-red-600 dark:text-red-400">· {{ ticket.status_label }}</span>
                                         </div>
                                     </div>
                                     <Link
                                         :href="route('tickets.show', ticket.id)"
-                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-50 dark:hover:bg-gray-600 transition shrink-0"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-gray-600 transition shrink-0"
                                     >
                                         進度
                                     </Link>
@@ -763,7 +763,7 @@ const statusBadge = (status) => {
                         <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
                             <Link
                                 :href="route('tickets.create')"
-                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-red-600 hover:bg-red-700 text-white shadow-xs transition"
                             >
                                 我要報修 / 提工單 &rarr;
                             </Link>
@@ -775,13 +775,13 @@ const statusBadge = (status) => {
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center space-x-2">
-                                    <span class="w-2.5 h-2.5 bg-sky-500 rounded-full"></span>
+                                    <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
                                     <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">今日預約來訪貴賓</h3>
-                                    <span v-if="stats.todayVisitorsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300">
+                                    <span v-if="stats.todayVisitorsCount" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
                                         {{ stats.todayVisitorsCount }} 位預約
                                     </span>
                                 </div>
-                                <Link :href="route('visitor-reservations.index')" class="text-sm text-sky-600 dark:text-sky-400 font-semibold hover:underline">
+                                <Link :href="route('visitor-reservations.index')" class="text-sm text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
                                     前台接待大廳 &rarr;
                                 </Link>
                             </div>
@@ -789,11 +789,11 @@ const statusBadge = (status) => {
                                 <div
                                     v-for="visitor in todayVisitors"
                                     :key="visitor.id"
-                                    class="p-3 rounded-lg bg-sky-50/40 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/50 flex items-center justify-between gap-3 text-xs"
+                                    class="p-3 rounded-lg bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between gap-3 text-xs"
                                 >
                                     <div class="min-w-0 flex-1">
                                         <div class="flex items-center gap-1.5">
-                                            <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 shrink-0">
+                                            <span class="px-1.5 py-0.2 text-[10px] font-mono font-bold rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 shrink-0">
                                                 {{ visitor.reservation_code }}
                                             </span>
                                             <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
@@ -804,14 +804,14 @@ const statusBadge = (status) => {
                                         <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
                                             <span>預計：{{ visitor.expected_arrival_time || '全天' }}</span>
                                             <span v-if="visitor.meeting_room">· 會議室：{{ visitor.meeting_room.name }}</span>
-                                            <span :class="['font-semibold', visitor.status === 'checked_in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-sky-600 dark:text-sky-400']">
+                                            <span :class="['font-semibold', visitor.status === 'checked_in' ? 'text-emerald-600 dark:text-emerald-400' : 'text-indigo-600 dark:text-indigo-400']">
                                                 · {{ visitor.status_label }}
                                             </span>
                                         </div>
                                     </div>
                                     <Link
                                         :href="route('visitor-reservations.show', visitor.id)"
-                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 hover:bg-sky-50 dark:hover:bg-gray-600 transition shrink-0"
+                                        class="px-2.5 py-1 text-xs font-semibold rounded bg-white dark:bg-gray-700 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-gray-600 transition shrink-0"
                                     >
                                         通行卡
                                     </Link>
@@ -863,7 +863,7 @@ const statusBadge = (status) => {
                                         </div>
                                         <div class="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
                                             <span>出發：{{ new Date(dispatch.start_time).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}</span>
-                                            <span :class="['font-semibold', dispatch.status === 'active' ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-600 dark:text-blue-400']">
+                                            <span :class="['font-semibold', dispatch.status === 'active' ? 'text-emerald-600 dark:text-emerald-400' : 'text-indigo-600 dark:text-indigo-400']">
                                                 · {{ dispatch.status_label }}
                                             </span>
                                         </div>
@@ -1025,7 +1025,7 @@ const statusBadge = (status) => {
                             <div class="mt-3 divide-y divide-gray-100 dark:divide-gray-700">
                                 <div v-for="req in myRequests" :key="req.id" class="py-2.5 flex items-center justify-between text-sm">
                                     <div class="truncate mr-2">
-                                        <Link :href="route('forms.show', req.id)" class="font-medium text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 truncate block">
+                                        <Link :href="route('forms.show', req.id)" class="font-medium text-gray-800 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 truncate block">
                                             {{ req.title }}
                                         </Link>
                                         <span class="text-xs text-gray-400 dark:text-gray-500">{{ req.request_no }}</span>
@@ -1042,25 +1042,25 @@ const statusBadge = (status) => {
                         <div>
                             <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
                                 <div class="flex items-center space-x-2">
-                                    <span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span>
+                                    <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
                                     <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">即將進行的會議</h3>
                                 </div>
-                                <Link :href="route('meeting-rooms.index')" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">預約與借用 &rarr;</Link>
+                                <Link :href="route('meeting-rooms.index')" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">預約與借用 &rarr;</Link>
                             </div>
                             <div class="mt-3 space-y-2">
-                                <div v-for="b in myUpcomingBookings" :key="b.id" class="p-3 rounded-lg bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/50 flex items-center justify-between text-xs">
+                                <div v-for="b in myUpcomingBookings" :key="b.id" class="p-3 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between text-xs">
                                     <div>
                                         <p class="font-bold text-gray-900 dark:text-gray-100 text-sm">{{ b.title }}</p>
                                         <p class="text-gray-500 dark:text-gray-400 mt-1 flex items-center">
                                             <svg class="w-3.5 h-3.5 mr-1 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                             {{ b.room?.name }} ({{ b.room?.location }})
                                         </p>
-                                        <p class="text-blue-700 dark:text-blue-300 mt-0.5 font-mono flex items-center">
-                                            <svg class="w-3.5 h-3.5 mr-1 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <p class="text-indigo-700 dark:text-indigo-300 mt-0.5 font-mono flex items-center">
+                                            <svg class="w-3.5 h-3.5 mr-1 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                             {{ new Date(b.start_time).toLocaleDateString('sv-SE') }} {{ new Date(b.start_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }} ~ {{ new Date(b.end_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }}
                                         </p>
                                     </div>
-                                    <Link :href="route('meeting-rooms.index')" class="text-xs text-blue-600 dark:text-blue-300 font-medium px-2 py-1 bg-white dark:bg-gray-700 border border-blue-200 dark:border-blue-700/60 rounded hover:bg-blue-50 dark:hover:bg-gray-600">
+                                    <Link :href="route('meeting-rooms.index')" class="text-xs text-indigo-600 dark:text-indigo-300 font-medium px-2 py-1 bg-white dark:bg-gray-700 border border-indigo-200 dark:border-indigo-700/60 rounded hover:bg-indigo-50 dark:hover:bg-gray-600">
                                         檢視
                                     </Link>
                                 </div>

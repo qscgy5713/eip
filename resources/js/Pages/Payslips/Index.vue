@@ -260,7 +260,7 @@ const submitBatchPublish = async () => {
 
                     <div class="p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm">
                         <p class="text-xs text-gray-500 dark:text-gray-400">年度應發總合 (Gross Pay)</p>
-                        <p class="text-2xl font-black text-blue-600 dark:text-blue-400 font-mono mt-1">
+                        <p class="text-2xl font-black text-indigo-600 dark:text-indigo-400 font-mono mt-1">
                             {{ formatCurrency(stats?.total_gross) }}
                         </p>
                         <p class="text-[11px] text-gray-400 mt-1">含本薪、獎金、職務加給</p>
@@ -268,7 +268,7 @@ const submitBatchPublish = async () => {
 
                     <div class="p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm">
                         <p class="text-xs text-gray-500 dark:text-gray-400">法定扣繳總合 (Deductions)</p>
-                        <p class="text-2xl font-black text-rose-600 dark:text-rose-400 font-mono mt-1">
+                        <p class="text-2xl font-black text-red-600 dark:text-red-400 font-mono mt-1">
                             {{ formatCurrency(stats?.total_deductions) }}
                         </p>
                         <p class="text-[11px] text-gray-400 mt-1">勞健保、所得稅代扣、勞退</p>
@@ -276,7 +276,7 @@ const submitBatchPublish = async () => {
 
                     <div class="p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm">
                         <p class="text-xs text-gray-500 dark:text-gray-400">累計發放期數</p>
-                        <p class="text-2xl font-black text-purple-600 dark:text-purple-400 font-mono mt-1">
+                        <p class="text-2xl font-black text-indigo-600 dark:text-indigo-400 font-mono mt-1">
                             {{ stats?.count || 0 }} <span class="text-xs font-normal text-gray-400">期</span>
                         </p>
                         <p class="text-[11px] text-gray-400 mt-1">{{ filterYear }} 年度已核發薪資單</p>
@@ -364,10 +364,10 @@ const submitBatchPublish = async () => {
                                         <div class="font-semibold text-gray-900 dark:text-gray-100">{{ item.user?.name }}</div>
                                         <div class="text-[11px] text-gray-400">{{ item.user?.department?.name || '無部門' }} · {{ item.user?.job_title || '同仁' }}</div>
                                     </td>
-                                    <td class="py-3.5 px-4 font-mono text-blue-600 dark:text-blue-400 font-semibold">
+                                    <td class="py-3.5 px-4 font-mono text-indigo-600 dark:text-indigo-400 font-semibold">
                                         {{ formatCurrency(item.gross_pay) }}
                                     </td>
-                                    <td class="py-3.5 px-4 font-mono text-rose-600 dark:text-rose-400 font-semibold">
+                                    <td class="py-3.5 px-4 font-mono text-red-600 dark:text-red-400 font-semibold">
                                         -{{ formatCurrency(item.total_deductions) }}
                                     </td>
                                     <td class="py-3.5 px-4 font-mono text-emerald-700 dark:text-emerald-400 font-black text-sm">
@@ -401,7 +401,7 @@ const submitBatchPublish = async () => {
                                             <button
                                                 @click="openEditModal(item)"
                                                 type="button"
-                                                class="px-2 py-1 text-gray-500 hover:text-blue-600 transition dark:text-gray-400"
+                                                class="px-2 py-1 text-gray-500 hover:text-indigo-600 transition dark:text-gray-400"
                                                 title="編輯"
                                             >
                                                 編輯
@@ -409,7 +409,7 @@ const submitBatchPublish = async () => {
                                             <button
                                                 @click="deletePayslip(item)"
                                                 type="button"
-                                                class="px-2 py-1 text-gray-500 hover:text-rose-600 transition dark:text-gray-400"
+                                                class="px-2 py-1 text-gray-500 hover:text-red-600 transition dark:text-gray-400"
                                                 title="刪除"
                                             >
                                                 刪除
@@ -508,10 +508,10 @@ const submitBatchPublish = async () => {
                     </div>
 
                     <!-- 應發項目 -->
-                    <div class="p-3.5 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/50 space-y-3">
+                    <div class="p-3.5 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/50 space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-blue-700 dark:text-blue-300">應發項目 (Earnings)</span>
-                            <span class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">小計: ${{ previewGross.toLocaleString() }}</span>
+                            <span class="text-xs font-bold text-indigo-700 dark:text-indigo-300">應發項目 (Earnings)</span>
+                            <span class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">小計: ${{ previewGross.toLocaleString() }}</span>
                         </div>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <div>
@@ -538,10 +538,10 @@ const submitBatchPublish = async () => {
                     </div>
 
                     <!-- 應扣項目 -->
-                    <div class="p-3.5 rounded-xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/50 space-y-3">
+                    <div class="p-3.5 rounded-xl bg-red-50/50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/50 space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-rose-700 dark:text-rose-300">應扣項目 (Deductions)</span>
-                            <span class="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">小計: -${{ previewDeductions.toLocaleString() }}</span>
+                            <span class="text-xs font-bold text-red-700 dark:text-red-300">應扣項目 (Deductions)</span>
+                            <span class="text-xs font-mono font-bold text-red-600 dark:text-red-400">小計: -${{ previewDeductions.toLocaleString() }}</span>
                         </div>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <div>

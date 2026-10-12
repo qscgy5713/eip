@@ -37,10 +37,10 @@ const formatActionBadge = (action) => {
         return { label: '表單簽核', bg: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
     }
     if (action.includes('document')) {
-        return { label: '知識文件', bg: 'bg-blue-50 text-blue-700 border-blue-200' };
+        return { label: '知識文件', bg: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
     }
     if (action.includes('room') || action.includes('booking')) {
-        return { label: '會議借用', bg: 'bg-purple-50 text-purple-700 border-purple-200' };
+        return { label: '會議借用', bg: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
     }
     return { label: action, bg: 'bg-gray-100 text-gray-700 border-gray-200' };
 };

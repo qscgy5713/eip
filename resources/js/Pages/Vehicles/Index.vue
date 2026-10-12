@@ -171,8 +171,8 @@ const handleExport = () => {
                     <p class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-2">{{ metrics.available_vehicles }} <span class="text-xs font-normal text-gray-400">輛</span></p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs">
-                    <p class="text-xs font-medium text-blue-600 dark:text-blue-400">派車出勤行駛中</p>
-                    <p class="text-2xl font-black text-blue-600 dark:text-blue-400 mt-2">{{ metrics.in_use_vehicles }} <span class="text-xs font-normal text-gray-400">輛</span></p>
+                    <p class="text-xs font-medium text-indigo-600 dark:text-indigo-400">派車出勤行駛中</p>
+                    <p class="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-2">{{ metrics.in_use_vehicles }} <span class="text-xs font-normal text-gray-400">輛</span></p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs">
                     <p class="text-xs font-medium text-amber-600 dark:text-amber-400">待審批派車單</p>
@@ -198,7 +198,7 @@ const handleExport = () => {
                                     :class="[
                                         'px-2 py-0.5 rounded-full text-2xs font-bold',
                                         v.status === 'available' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' :
-                                        v.status === 'in_use' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' :
+                                        v.status === 'in_use' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' :
                                         'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
                                     ]"
                                 >
@@ -214,7 +214,7 @@ const handleExport = () => {
                         </div>
 
                         <div class="mt-3 pt-2 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-2xs">
-                            <span v-if="v.needs_maintenance" class="text-rose-600 font-bold flex items-center gap-1">
+                            <span v-if="v.needs_maintenance" class="text-red-600 font-bold flex items-center gap-1">
                                 ⚠ 達 5,000 km 應定期保養
                             </span>
                             <span v-else class="text-gray-400">
@@ -389,10 +389,10 @@ const handleExport = () => {
                                         :class="[
                                             'px-2.5 py-1 rounded-full text-xs font-bold inline-block',
                                             d.status === 'pending' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300' :
-                                            d.status === 'approved' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' :
+                                            d.status === 'approved' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' :
                                             d.status === 'active' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' :
                                             d.status === 'completed' ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300' :
-                                            'bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300'
+                                            'bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300'
                                         ]"
                                     >
                                         {{ d.status_label }}
@@ -409,7 +409,7 @@ const handleExport = () => {
                                         </button>
                                         <button
                                             @click="openRejectModal(d)"
-                                            class="px-2 py-1 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg text-xs font-bold transition"
+                                            class="px-2 py-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg text-xs font-bold transition"
                                         >
                                             駁回
                                         </button>
@@ -494,7 +494,7 @@ const handleExport = () => {
 
                     <div>
                         <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                            歸還時儀表板總里程數 (km) <span class="text-rose-500">*</span>
+                            歸還時儀表板總里程數 (km) <span class="text-red-500">*</span>
                         </label>
                         <input
                             type="number"
@@ -543,7 +543,7 @@ const handleExport = () => {
         <div v-if="showRejectModal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-xs flex items-center justify-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 dark:border-gray-700 text-xs">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
-                    <h3 class="text-base font-bold text-rose-600">駁回派車借調單</h3>
+                    <h3 class="text-base font-bold text-red-600">駁回派車借調單</h3>
                     <button @click="showRejectModal = false" class="text-gray-400 hover:text-gray-600">✕</button>
                 </div>
                 <div class="mt-4 space-y-3">
@@ -555,14 +555,14 @@ const handleExport = () => {
                         rows="3"
                         required
                         placeholder="請詳細填寫退回原因，例如：該時段有緊急高階接待公務、請改搭高鐵出差..."
-                        class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-rose-500"
+                        class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-red-500"
                     ></textarea>
                 </div>
                 <div class="mt-6 flex justify-end gap-2">
                     <button @click="showRejectModal = false" class="px-4 py-2 rounded-xl text-gray-500 font-bold hover:bg-gray-100 dark:text-gray-400">
                         取消
                     </button>
-                    <button @click="submitReject" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold transition">
+                    <button @click="submitReject" class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition">
                         確認駁回
                     </button>
                 </div>

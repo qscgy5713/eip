@@ -104,10 +104,10 @@ const submitReturn = () => {
 
 const categoryBadge = (cat) => {
     switch (cat) {
-        case 'it_hardware': return 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+        case 'it_hardware': return 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
         case 'office_equipment': return 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800';
-        case 'av_media': return 'bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800';
-        case 'vehicles': return 'bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800';
+        case 'av_media': return 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
+        case 'vehicles': return 'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
         case 'peripherals': return 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
         default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700';
     }
@@ -152,7 +152,7 @@ const statusLabel = (status) => {
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <Link :href="route('assets.index')" class="text-xs text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1">
+                        <Link :href="route('assets.index')" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
                             &larr; 返回資產清單
                         </Link>
                         <span class="text-xs text-gray-400">/</span>
@@ -242,7 +242,7 @@ const statusLabel = (status) => {
                             </div>
                             <div class="bg-gray-50/60 dark:bg-gray-900/30 p-3 rounded-lg border border-gray-100 dark:border-gray-700/50">
                                 <span class="text-gray-400 block mb-0.5">歷史累計借出</span>
-                                <span class="font-bold text-teal-600 dark:text-teal-400">{{ asset.loans?.length || 0 }} 次</span>
+                                <span class="font-bold text-indigo-600 dark:text-indigo-400">{{ asset.loans?.length || 0 }} 次</span>
                             </div>
                         </div>
 
@@ -299,7 +299,7 @@ const statusLabel = (status) => {
                 <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6 shadow-sm">
                     <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
                         <div class="flex items-center space-x-2">
-                            <span class="w-2.5 h-2.5 bg-teal-600 rounded-full"></span>
+                            <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full"></span>
                             <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">借調履歷與盤點時間軸 (Loan History)</h3>
                         </div>
                         <span class="text-xs text-gray-400 font-mono">共 {{ asset.loans?.length || 0 }} 筆借還紀錄</span>
@@ -364,7 +364,7 @@ const statusLabel = (status) => {
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <InputLabel for="edit_status" value="資產狀態 *" />
-                            <select id="edit_status" v-model="editForm.status" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <select id="edit_status" v-model="editForm.status" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="available">在庫可借</option>
                                 <option value="in_use">使用中</option>
                                 <option value="maintenance">維護保養中</option>
@@ -373,7 +373,7 @@ const statusLabel = (status) => {
                         </div>
                         <div>
                             <InputLabel for="edit_category" value="資產分類 *" />
-                            <select id="edit_category" v-model="editForm.category" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <select id="edit_category" v-model="editForm.category" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="it_hardware">IT 資訊硬體</option>
                                 <option value="office_equipment">辦公 OA 設備</option>
                                 <option value="av_media">視聽攝影器材</option>
@@ -406,14 +406,14 @@ const statusLabel = (status) => {
                             id="edit_specification"
                             v-model="editForm.specification"
                             rows="2"
-                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                         ></textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <InputLabel for="edit_department_id" value="歸屬部門" />
-                            <select id="edit_department_id" v-model="editForm.department_id" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <select id="edit_department_id" v-model="editForm.department_id" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="">-- 全公司公用 --</option>
                                 <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
                             </select>
@@ -429,7 +429,7 @@ const statusLabel = (status) => {
                             v-if="canManage && asset.status !== 'in_use'"
                             type="button"
                             @click="deleteAsset"
-                            class="text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 font-semibold hover:underline"
+                            class="text-xs text-red-600 hover:text-red-700 dark:text-red-400 font-semibold hover:underline"
                         >
                             刪除此資產
                         </button>
@@ -454,7 +454,7 @@ const statusLabel = (status) => {
                 <form @submit.prevent="submitBorrow" class="mt-4 space-y-4">
                     <div v-if="canManage">
                         <InputLabel for="show_borrower_id" value="借用同仁 (管理員可代為登記)" />
-                        <select id="show_borrower_id" v-model="borrowForm.borrower_id" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        <select id="show_borrower_id" v-model="borrowForm.borrower_id" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             <option value="">-- 由登入者本人領用 --</option>
                             <option v-for="u in users" :key="u.id" :value="u.id">
                                 {{ u.name }} ({{ u.job_title || u.email }})
@@ -474,7 +474,7 @@ const statusLabel = (status) => {
                             v-model="borrowForm.purpose"
                             rows="3"
                             placeholder="請具體說明借用目的、專案名稱或外勤活動..."
-                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                             required
                         ></textarea>
                     </div>
@@ -503,7 +503,7 @@ const statusLabel = (status) => {
                             v-model="returnForm.return_notes"
                             rows="3"
                             placeholder="例：外觀良好、功能正常、充電配件齊全..."
-                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                         ></textarea>
                     </div>
 

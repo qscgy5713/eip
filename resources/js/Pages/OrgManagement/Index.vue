@@ -529,8 +529,8 @@ const changeUserStatus = async (user, newStatus) => {
 
 const roleBadgeClass = (role) => {
     switch (role) {
-        case 'admin': return 'bg-purple-50 text-purple-700 border-purple-200';
-        case 'manager': return 'bg-blue-50 text-blue-700 border-blue-200';
+        case 'admin': return 'bg-indigo-50 text-indigo-700 border-indigo-200';
+        case 'manager': return 'bg-indigo-50 text-indigo-700 border-indigo-200';
         case 'hr': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
         default: return 'bg-gray-100 text-gray-700 border-gray-200';
     }
@@ -549,7 +549,7 @@ const statusBadgeClass = (status) => {
     switch (status) {
         case 'active': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
         case 'suspended': return 'bg-amber-50 text-amber-700 border-amber-200';
-        case 'resigned': return 'bg-rose-50 text-rose-700 border-rose-200';
+        case 'resigned': return 'bg-red-50 text-red-700 border-red-200';
         default: return 'bg-gray-100 text-gray-700 border-gray-200';
     }
 };
@@ -611,8 +611,8 @@ const statusLabel = (status) => {
         <div class="py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 <!-- 提示/錯誤訊息 -->
-                <div v-if="$page.props.errors?.error" class="p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center text-rose-800 text-sm shadow-sm">
-                    <svg class="w-5 h-5 text-rose-600 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div v-if="$page.props.errors?.error" class="p-4 bg-red-50 border border-red-200 rounded-xl flex items-center text-red-800 text-sm shadow-sm">
+                    <svg class="w-5 h-5 text-red-600 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <span>{{ $page.props.errors.error }}</span>
                 </div>
 
@@ -638,7 +638,7 @@ const statusLabel = (status) => {
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">公司全員總數</p>
                             <p class="text-2xl font-black text-gray-900 mt-1 dark:text-gray-100">{{ stats.total_users }}</p>
                         </div>
-                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                         </div>
                     </div>
@@ -656,9 +656,9 @@ const statusLabel = (status) => {
                     <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between dark:bg-gray-800 dark:border-gray-700">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">停權或離職</p>
-                            <p class="text-2xl font-black text-rose-600 mt-1">{{ stats.suspended_or_resigned }}</p>
+                            <p class="text-2xl font-black text-red-600 mt-1">{{ stats.suspended_or_resigned }}</p>
                         </div>
-                        <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
                         </div>
                     </div>
@@ -995,7 +995,7 @@ const statusLabel = (status) => {
                                             </button>
                                             <button
                                                 @click="deleteDept(rootDept)"
-                                                class="px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition"
+                                                class="px-2.5 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 border border-red-200 rounded-lg transition"
                                             >
                                                 刪除
                                             </button>
@@ -1050,7 +1050,7 @@ const statusLabel = (status) => {
                                                 </button>
                                                 <button
                                                     @click="deleteDept(subDept)"
-                                                    class="px-2 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-md transition"
+                                                    class="px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 border border-red-200 rounded-md transition"
                                                 >
                                                     刪除
                                                 </button>
@@ -1101,7 +1101,7 @@ const statusLabel = (status) => {
                                             <td class="px-4 py-3 text-right space-x-2">
                                                 <button @click="openCreateChildDeptModal(dept)" class="text-indigo-600 hover:underline font-semibold">+ 子部門</button>
                                                 <button @click="openEditDeptModal(dept)" class="text-gray-600 hover:underline font-medium dark:text-gray-400">編輯</button>
-                                                <button @click="deleteDept(dept)" class="text-rose-600 hover:underline font-medium">刪除</button>
+                                                <button @click="deleteDept(dept)" class="text-red-600 hover:underline font-medium">刪除</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1241,7 +1241,7 @@ const statusLabel = (status) => {
                                                 <button
                                                     v-if="user.status === 'active'"
                                                     @click="changeUserStatus(user, 'suspended')"
-                                                    class="text-rose-600 hover:text-rose-800 font-medium"
+                                                    class="text-red-600 hover:text-red-800 font-medium"
                                                     title="停用該帳號"
                                                 >
                                                     停權
@@ -1302,7 +1302,7 @@ const statusLabel = (status) => {
 
                 <form @submit.prevent="submitDeptForm" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">部門名稱 <span class="text-rose-500">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">部門名稱 <span class="text-red-500">*</span></label>
                         <input
                             v-model="deptForm.name"
                             type="text"
@@ -1310,12 +1310,12 @@ const statusLabel = (status) => {
                             placeholder="例如：產品研發部、市場行銷處"
                             class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
-                        <p v-if="deptForm.errors.name" class="text-2xs text-rose-600 mt-1">{{ deptForm.errors.name }}</p>
+                        <p v-if="deptForm.errors.name" class="text-2xs text-red-600 mt-1">{{ deptForm.errors.name }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">部門代碼 <span class="text-rose-500">*</span></label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">部門代碼 <span class="text-red-500">*</span></label>
                             <input
                                 v-model="deptForm.code"
                                 type="text"
@@ -1323,7 +1323,7 @@ const statusLabel = (status) => {
                                 placeholder="例如：RD, MKT, SALES"
                                 class="w-full text-xs font-mono rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             />
-                            <p v-if="deptForm.errors.code" class="text-2xs text-rose-600 mt-1">{{ deptForm.errors.code }}</p>
+                            <p v-if="deptForm.errors.code" class="text-2xs text-red-600 mt-1">{{ deptForm.errors.code }}</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">排序權重</label>
@@ -1351,7 +1351,7 @@ const statusLabel = (status) => {
                                 {{ d.name }} ({{ d.code }})
                             </option>
                         </select>
-                        <p v-if="deptForm.errors.parent_id" class="text-2xs text-rose-600 mt-1">{{ deptForm.errors.parent_id }}</p>
+                        <p v-if="deptForm.errors.parent_id" class="text-2xs text-red-600 mt-1">{{ deptForm.errors.parent_id }}</p>
                     </div>
 
                     <div>
@@ -1362,7 +1362,7 @@ const statusLabel = (status) => {
                             placeholder="輸入姓名、帳號 (Email) 或工號搜尋指派主管..."
                             empty-message="查無符合搜尋條件的在職同仁"
                         />
-                        <p v-if="deptForm.errors.leader_id" class="text-2xs text-rose-600 mt-1">{{ deptForm.errors.leader_id }}</p>
+                        <p v-if="deptForm.errors.leader_id" class="text-2xs text-red-600 mt-1">{{ deptForm.errors.leader_id }}</p>
                     </div>
 
                     <div class="flex items-center gap-2 pt-1">
@@ -1408,7 +1408,7 @@ const statusLabel = (status) => {
                 <form @submit.prevent="submitUserForm" class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">同仁姓名 <span class="text-rose-500">*</span></label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">同仁姓名 <span class="text-red-500">*</span></label>
                             <input
                                 v-model="userForm.name"
                                 type="text"
@@ -1416,7 +1416,7 @@ const statusLabel = (status) => {
                                 placeholder="例如：王小明"
                                 class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             />
-                            <p v-if="userForm.errors.name" class="text-2xs text-rose-600 mt-1">{{ userForm.errors.name }}</p>
+                            <p v-if="userForm.errors.name" class="text-2xs text-red-600 mt-1">{{ userForm.errors.name }}</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">員工編號 (工號)</label>
@@ -1426,12 +1426,12 @@ const statusLabel = (status) => {
                                 placeholder="例如：EMP-012"
                                 class="w-full text-xs font-mono rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             />
-                            <p v-if="userForm.errors.employee_no" class="text-2xs text-rose-600 mt-1">{{ userForm.errors.employee_no }}</p>
+                            <p v-if="userForm.errors.employee_no" class="text-2xs text-red-600 mt-1">{{ userForm.errors.employee_no }}</p>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">電子郵件 (登入帳號) <span class="text-rose-500">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">電子郵件 (登入帳號) <span class="text-red-500">*</span></label>
                         <input
                             v-model="userForm.email"
                             type="email"
@@ -1439,7 +1439,7 @@ const statusLabel = (status) => {
                             placeholder="例如：alex@example.com"
                             class="w-full text-xs font-mono rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
-                        <p v-if="userForm.errors.email" class="text-2xs text-rose-600 mt-1">{{ userForm.errors.email }}</p>
+                        <p v-if="userForm.errors.email" class="text-2xs text-red-600 mt-1">{{ userForm.errors.email }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
@@ -1466,7 +1466,7 @@ const statusLabel = (status) => {
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">系統權限角色 <span class="text-rose-500">*</span></label>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">系統權限角色 <span class="text-red-500">*</span></label>
                             <select
                                 v-model="userForm.role"
                                 required
@@ -1477,7 +1477,7 @@ const statusLabel = (status) => {
                                 <option value="hr">人資主管 (HR)</option>
                                 <option value="admin">系統管理員 (Admin)</option>
                             </select>
-                            <p v-if="userForm.errors.role" class="text-2xs text-rose-600 mt-1">{{ userForm.errors.role }}</p>
+                            <p v-if="userForm.errors.role" class="text-2xs text-red-600 mt-1">{{ userForm.errors.role }}</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">聯絡電話</label>
@@ -1491,7 +1491,7 @@ const statusLabel = (status) => {
                     </div>
 
                     <div v-if="!isEditingUser">
-                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">初始登入密碼 <span class="text-rose-500">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">初始登入密碼 <span class="text-red-500">*</span></label>
                         <input
                             v-model="userForm.password"
                             type="password"
@@ -1500,7 +1500,7 @@ const statusLabel = (status) => {
                             class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
                         <p class="text-2xs text-gray-400 mt-1">建立帳號後系統將自動為同仁初始化法定年度休假額度。</p>
-                        <p v-if="userForm.errors.password" class="text-2xs text-rose-600 mt-1">{{ userForm.errors.password }}</p>
+                        <p v-if="userForm.errors.password" class="text-2xs text-red-600 mt-1">{{ userForm.errors.password }}</p>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
@@ -1537,7 +1537,7 @@ const statusLabel = (status) => {
 
                 <form @submit.prevent="submitResetPwd" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">新密碼 <span class="text-rose-500">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">新密碼 <span class="text-red-500">*</span></label>
                         <input
                             v-model="pwdForm.password"
                             type="password"
@@ -1545,11 +1545,11 @@ const statusLabel = (status) => {
                             placeholder="至少 8 位字元"
                             class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
-                        <p v-if="pwdForm.errors.password" class="text-2xs text-rose-600 mt-1">{{ pwdForm.errors.password }}</p>
+                        <p v-if="pwdForm.errors.password" class="text-2xs text-red-600 mt-1">{{ pwdForm.errors.password }}</p>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">確認新密碼 <span class="text-rose-500">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1 dark:text-gray-300">確認新密碼 <span class="text-red-500">*</span></label>
                         <input
                             v-model="pwdForm.password_confirmation"
                             type="password"
@@ -1689,7 +1689,7 @@ const statusLabel = (status) => {
                                         <button
                                             v-else
                                             @click="setDepartmentLeader(activeDrawerDept, null)"
-                                            class="p-1.5 text-amber-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                                            class="p-1.5 text-amber-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                                             title="解除其部門主管職務"
                                         >
                                             <svg class="w-4 h-4 fill-amber-400 text-amber-500" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
@@ -1704,7 +1704,7 @@ const statusLabel = (status) => {
                                         </button>
                                         <button
                                             @click="removeMemberFromDept(activeDrawerDept, member)"
-                                            class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                                            class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                                             title="將同仁移出此部門"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6"/></svg>

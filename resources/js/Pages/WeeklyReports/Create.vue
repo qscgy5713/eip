@@ -56,7 +56,7 @@ const submitReport = (asDraft = false) => {
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
                         <span>撰寫工作週報</span>
-                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300">
                             {{ weekInfo.year }} 年 第 {{ weekInfo.week_number }} 週
                         </span>
                     </h2>

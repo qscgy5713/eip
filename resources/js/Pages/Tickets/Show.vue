@@ -68,9 +68,9 @@ const submitRate = () => {
 
 const getPriorityBadge = (p) => {
     switch (p) {
-        case 'urgent': return { label: '特急件', class: 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border-rose-300 dark:border-rose-800 animate-pulse' };
+        case 'urgent': return { label: '特急件', class: 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border-red-300 dark:border-red-800 animate-pulse' };
         case 'high': return { label: '高優先', class: 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border-amber-300 dark:border-amber-800' };
-        case 'normal': return { label: '一般', class: 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border-blue-200 dark:border-blue-800' };
+        case 'normal': return { label: '一般', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' };
         default: return { label: '低優先', class: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700' };
     }
 };
@@ -78,8 +78,8 @@ const getPriorityBadge = (p) => {
 const getStatusBadge = (s) => {
     switch (s) {
         case 'open': return { label: '待處理', class: 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' };
-        case 'in_progress': return { label: '處理中', class: 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300' };
-        case 'pending_user': return { label: '待同仁確認', class: 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300' };
+        case 'in_progress': return { label: '處理中', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300' };
+        case 'pending_user': return { label: '待同仁確認', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300' };
         case 'resolved': return { label: '已完修', class: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' };
         case 'closed': return { label: '已結案', class: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' };
         default: return { label: s, class: 'bg-gray-100 text-gray-700' };
@@ -139,7 +139,7 @@ const getStatusBadge = (s) => {
                             <p class="text-base mb-1">1</p>
                             <p>待工程師受理</p>
                         </div>
-                        <div :class="['p-3 rounded-xl border transition', ['in_progress', 'pending_user'].includes(ticket.status) ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-300 font-bold text-blue-800' : 'bg-gray-50 dark:bg-gray-700/50 text-gray-400']">
+                        <div :class="['p-3 rounded-xl border transition', ['in_progress', 'pending_user'].includes(ticket.status) ? 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-300 font-bold text-indigo-800' : 'bg-gray-50 dark:bg-gray-700/50 text-gray-400']">
                             <p class="text-base mb-1">2</p>
                             <p>{{ ticket.status === 'pending_user' ? '待同仁確認中' : '工程師處理中' }}</p>
                         </div>
@@ -167,7 +167,7 @@ const getStatusBadge = (s) => {
                                 <p class="text-gray-400 font-medium">承辦工程師</p>
                                 <div class="mt-1 flex items-center justify-between">
                                     <span v-if="ticket.assignee" class="font-bold text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
                                         <span>{{ ticket.assignee.name }}</span>
                                     </span>
                                     <span v-else class="text-amber-600 dark:text-amber-400 font-semibold">
@@ -211,7 +211,7 @@ const getStatusBadge = (s) => {
                                         :key="idx"
                                         :href="`/storage/${att.path}`"
                                         target="_blank"
-                                        class="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-rose-50 text-gray-700 dark:text-gray-300 hover:text-rose-600 transition"
+                                        class="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-red-50 text-gray-700 dark:text-gray-300 hover:text-red-600 transition"
                                     >
                                         <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
                                         <span class="truncate font-medium">{{ att.name }}</span>
@@ -333,13 +333,13 @@ const getStatusBadge = (s) => {
                                             'p-4 rounded-2xl text-xs space-y-2 border transition',
                                             reply.is_internal ? 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900/60' :
                                             reply.user_id === ticket.user_id ? 'bg-gray-50/80 dark:bg-gray-900/50 border-gray-100 dark:border-gray-700' :
-                                            'bg-blue-50/70 dark:bg-blue-950/30 border-blue-100 dark:border-blue-900/60'
+                                            'bg-indigo-50/70 dark:bg-indigo-950/30 border-indigo-100 dark:border-indigo-900/60'
                                         ]"
                                     >
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center gap-2">
                                                 <span class="font-bold text-gray-900 dark:text-gray-100">{{ reply.user?.name }}</span>
-                                                <span v-if="reply.user?.role !== 'employee'" class="px-1.5 py-0.2 rounded text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-semibold">
+                                                <span v-if="reply.user?.role !== 'employee'" class="px-1.5 py-0.2 rounded text-[10px] bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-semibold">
                                                     {{ reply.user?.role === 'admin' ? '系統管理員' : '工程師' }}
                                                 </span>
                                                 <span v-if="reply.is_internal" class="px-1.5 py-0.2 rounded text-[10px] bg-amber-200 text-amber-900 font-bold">
@@ -360,7 +360,7 @@ const getStatusBadge = (s) => {
                                                 :key="aIdx"
                                                 :href="`/storage/${att.path}`"
                                                 target="_blank"
-                                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-medium text-gray-700 dark:text-gray-300 hover:text-rose-600 mr-2"
+                                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 mr-2"
                                             >
                                                 <span>{{ att.name }}</span>
                                             </a>
@@ -381,7 +381,7 @@ const getStatusBadge = (s) => {
                                         rows="3"
                                         required
                                         placeholder="輸入回覆訊息或維修進度說明..."
-                                        class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                        class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                                     ></textarea>
 
                                     <div class="flex flex-wrap items-center justify-between gap-3">

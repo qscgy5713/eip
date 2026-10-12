@@ -41,7 +41,7 @@ const submit = () => {
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 sm:p-8">
                 <div class="pb-6 border-b border-gray-100 dark:border-gray-700">
                     <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                        <span class="p-2 rounded-xl bg-sky-100 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400">
+                        <span class="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                             </svg>
@@ -58,16 +58,16 @@ const submit = () => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                貴賓姓名 <span class="text-rose-500">*</span>
+                                貴賓姓名 <span class="text-red-500">*</span>
                             </label>
                             <input
                                 type="text"
                                 v-model="form.visitor_name"
                                 required
                                 placeholder="例：陳大明 總監"
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             />
-                            <p v-if="form.errors.visitor_name" class="text-rose-500 text-2xs mt-1">{{ form.errors.visitor_name }}</p>
+                            <p v-if="form.errors.visitor_name" class="text-red-500 text-2xs mt-1">{{ form.errors.visitor_name }}</p>
                         </div>
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
@@ -77,7 +77,7 @@ const submit = () => {
                                 type="text"
                                 v-model="form.visitor_company"
                                 placeholder="例：微軟台灣分公司、合作金庫"
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             />
                         </div>
                     </div>
@@ -92,7 +92,7 @@ const submit = () => {
                                 type="text"
                                 v-model="form.visitor_phone"
                                 placeholder="例：0912-345-678"
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             />
                         </div>
                         <div>
@@ -103,7 +103,7 @@ const submit = () => {
                                 type="email"
                                 v-model="form.visitor_email"
                                 placeholder="例：guest@example.com"
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             />
                         </div>
                     </div>
@@ -112,15 +112,15 @@ const submit = () => {
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                來訪日期 <span class="text-rose-500">*</span>
+                                來訪日期 <span class="text-red-500">*</span>
                             </label>
                             <input
                                 type="date"
                                 v-model="form.visit_date"
                                 required
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             />
-                            <p v-if="form.errors.visit_date" class="text-rose-500 text-2xs mt-1">{{ form.errors.visit_date }}</p>
+                            <p v-if="form.errors.visit_date" class="text-red-500 text-2xs mt-1">{{ form.errors.visit_date }}</p>
                         </div>
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
@@ -130,12 +130,12 @@ const submit = () => {
                                 type="text"
                                 v-model="form.expected_arrival_time"
                                 placeholder="例：14:00 或 10:30"
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             />
                         </div>
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                同行總人數 <span class="text-rose-500">*</span>
+                                同行總人數 <span class="text-red-500">*</span>
                             </label>
                             <input
                                 type="number"
@@ -143,7 +143,7 @@ const submit = () => {
                                 min="1"
                                 max="50"
                                 required
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             />
                         </div>
                     </div>
@@ -152,11 +152,11 @@ const submit = () => {
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                來訪事由 <span class="text-rose-500">*</span>
+                                來訪事由 <span class="text-red-500">*</span>
                             </label>
                             <select
                                 v-model="form.purpose"
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             >
                                 <option value="business">商務洽談</option>
                                 <option value="interview">人才面試</option>
@@ -171,7 +171,7 @@ const submit = () => {
                             </label>
                             <select
                                 v-model="form.meeting_room_id"
-                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                                class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                             >
                                 <option value="">無指定 / 大廳會客區</option>
                                 <option v-for="room in meetingRooms" :key="room.id" :value="room.id">
@@ -188,7 +188,7 @@ const submit = () => {
                         </label>
                         <select
                             v-model="form.host_id"
-                            class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                            class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                         >
                             <option value="">由我自己接待 (預設)</option>
                             <option v-for="host in hosts" :key="host.id" :value="host.id">
@@ -206,7 +206,7 @@ const submit = () => {
                             v-model="form.notes"
                             rows="3"
                             placeholder="請提供車牌號碼以便保留停車位、需準備茶水點心或簡報設備..."
-                            class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-sky-500"
+                            class="w-full text-xs rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:ring-indigo-500"
                         ></textarea>
                     </div>
 

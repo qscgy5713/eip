@@ -70,7 +70,7 @@ const getStatusBadge = (delegation) => {
         return { text: '已逾期', class: 'bg-amber-100 text-amber-700' };
     }
     if (delegation.start_date > today) {
-        return { text: '尚未開始', class: 'bg-blue-100 text-blue-700' };
+        return { text: '尚未開始', class: 'bg-indigo-100 text-indigo-700' };
     }
     return { text: '生效代簽中', class: 'bg-emerald-100 text-emerald-800 font-bold' };
 };
@@ -161,7 +161,7 @@ const getStatusBadge = (delegation) => {
                                 </button>
                                 <button
                                     @click="deleteDelegation(item.id, item.delegate?.name)"
-                                    class="px-3 py-1.5 text-xs font-semibold text-rose-600 border border-rose-200 rounded-lg hover:bg-rose-50 transition"
+                                    class="px-3 py-1.5 text-xs font-semibold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition"
                                 >
                                     刪除
                                 </button>
@@ -246,7 +246,7 @@ const getStatusBadge = (delegation) => {
                                 {{ user.name }} ({{ user.department?.name || '無部門' }} · {{ user.job_title || user.role }})
                             </option>
                         </select>
-                        <p v-if="form.errors.delegate_id" class="text-xs text-rose-500 mt-1">{{ form.errors.delegate_id }}</p>
+                        <p v-if="form.errors.delegate_id" class="text-xs text-red-500 mt-1">{{ form.errors.delegate_id }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -258,7 +258,7 @@ const getStatusBadge = (delegation) => {
                                 class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 required
                             />
-                            <p v-if="form.errors.start_date" class="text-xs text-rose-500 mt-1">{{ form.errors.start_date }}</p>
+                            <p v-if="form.errors.start_date" class="text-xs text-red-500 mt-1">{{ form.errors.start_date }}</p>
                         </div>
                         <div>
                             <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">代理結束日期 *</label>
@@ -268,7 +268,7 @@ const getStatusBadge = (delegation) => {
                                 class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 required
                             />
-                            <p v-if="form.errors.end_date" class="text-xs text-rose-500 mt-1">{{ form.errors.end_date }}</p>
+                            <p v-if="form.errors.end_date" class="text-xs text-red-500 mt-1">{{ form.errors.end_date }}</p>
                         </div>
                     </div>
 
@@ -280,7 +280,7 @@ const getStatusBadge = (delegation) => {
                             placeholder="如：出差拜訪客戶、休假出國..."
                             class="w-full text-sm rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         />
-                        <p v-if="form.errors.reason" class="text-xs text-rose-500 mt-1">{{ form.errors.reason }}</p>
+                        <p v-if="form.errors.reason" class="text-xs text-red-500 mt-1">{{ form.errors.reason }}</p>
                     </div>
 
                     <div class="flex items-center justify-end space-x-3 pt-3 border-t">

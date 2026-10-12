@@ -180,10 +180,10 @@ const changeMonth = (e) => {
 const statusBadge = (status) => {
     switch (status) {
         case 'normal': return 'bg-emerald-100 text-emerald-800';
-        case 'late': return 'bg-rose-100 text-rose-800';
+        case 'late': return 'bg-red-100 text-red-800';
         case 'early_leave': return 'bg-amber-100 text-amber-800';
         case 'absent': return 'bg-gray-100 text-gray-500';
-        default: return 'bg-blue-100 text-blue-800';
+        default: return 'bg-indigo-100 text-indigo-800';
     }
 };
 
@@ -200,7 +200,7 @@ const statusLabel = (status) => {
 const typeBadge = (type) => {
     switch (type) {
         case 'office': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        case 'remote': return 'bg-purple-50 text-purple-700 border-purple-200';
+        case 'remote': return 'bg-indigo-50 text-indigo-700 border-indigo-200';
         default: return 'bg-gray-50 text-gray-600 border-gray-200';
     }
 };
@@ -255,18 +255,18 @@ const typeLabel = (type) => {
         <div class="py-8">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6 px-4">
                 <!-- 今日即時打卡卡片 -->
-                <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl shadow-lg p-6 sm:p-8 text-white space-y-5">
+                <div class="bg-gradient-to-r from-indigo-700 to-indigo-800 rounded-2xl shadow-lg p-6 sm:p-8 text-white space-y-5">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div class="space-y-2 text-center md:text-left">
-                            <p class="text-blue-200 text-xs font-semibold">今日工作排程 · 09:00 - 18:00</p>
+                            <p class="text-indigo-200 text-xs font-semibold">今日工作排程 · 09:00 - 18:00</p>
                             <div class="text-4xl sm:text-5xl font-mono font-extrabold tracking-tight">{{ currentTime }}</div>
-                            <p class="text-sm text-blue-100">{{ new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }) }}</p>
+                            <p class="text-sm text-indigo-100">{{ new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }) }}</p>
                         </div>
 
                         <!-- 打卡動作按鈕區 -->
                         <div class="flex flex-col sm:flex-row items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20 dark:bg-gray-800">
                             <div class="text-center sm:text-right px-2">
-                                <p class="text-xs text-blue-200">今日狀態</p>
+                                <p class="text-xs text-indigo-200">今日狀態</p>
                                 <p class="text-sm font-bold text-white mt-0.5">
                                     <span v-if="!todayAttendance">尚未打卡</span>
                                     <span v-else-if="todayAttendance.clock_in_at && !todayAttendance.clock_out_at" class="text-amber-300">上班中 ({{ new Date(todayAttendance.clock_in_at).toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }) }} 簽到)</span>
@@ -305,7 +305,7 @@ const typeLabel = (type) => {
                     <!-- GPS 地理圍欄即時狀態提示條 -->
                     <div class="bg-black/20 rounded-xl p-3 text-xs flex flex-col sm:flex-row items-center justify-between gap-3 border border-white/10">
                         <div class="flex items-center space-x-2">
-                            <span v-if="isLocating" class="flex items-center space-x-1 text-blue-200">
+                            <span v-if="isLocating" class="flex items-center space-x-1 text-indigo-200">
                                 <svg class="animate-spin h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                                 <span>正在獲取 GPS 經緯度定位...</span>
                             </span>
@@ -313,12 +313,12 @@ const typeLabel = (type) => {
                                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span>已定位：位於【{{ geofenceConfig?.name }}】圍欄內（距中心 {{ formatDistance(detectedDistance) }}，半徑 {{ geofenceConfig?.radius }}m）— 辦公室內勤模式</span>
                             </span>
-                            <span v-else-if="locationStatus === 'out_of_fence'" class="flex items-center space-x-1.5 text-purple-200 font-semibold">
-                                <svg class="w-4 h-4 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span v-else-if="locationStatus === 'out_of_fence'" class="flex items-center space-x-1.5 text-indigo-200 font-semibold">
+                                <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 <span>已定位：位於公司圍欄外（距總部 {{ formatDistance(detectedDistance) }}）— 外勤/遠端模式 (需填寫事由)</span>
                             </span>
-                            <span v-else-if="locationStatus === 'all_remote'" class="flex items-center space-x-1.5 text-blue-200 font-semibold">
-                                <svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+                            <span v-else-if="locationStatus === 'all_remote'" class="flex items-center space-x-1.5 text-indigo-200 font-semibold">
+                                <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
                                 <span>已定位：公司採【全遠端/自由地點】模式（未設固定打卡圍欄）— 遠端打卡模式</span>
                             </span>
                             <span v-else class="text-gray-300">
@@ -335,29 +335,29 @@ const typeLabel = (type) => {
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                 <span>重新定位</span>
                             </button>
-                            <span class="text-blue-200 text-[11px] font-mono">
+                            <span class="text-indigo-200 text-[11px] font-mono">
                                 總部基準：{{ geofenceConfig?.has_location ? `${geofenceConfig?.lat}, ${geofenceConfig?.lng}` : '全遠端 (未設座標)' }}
                             </span>
                         </div>
                     </div>
 
                     <!-- 外勤事由輸入 (僅外勤打卡時顯示，強制必填) -->
-                    <div v-if="locationStatus === 'out_of_fence'" class="bg-purple-900/40 border border-purple-400/40 rounded-xl p-3.5 space-y-1.5">
+                    <div v-if="locationStatus === 'out_of_fence'" class="bg-indigo-900/40 border border-indigo-400/40 rounded-xl p-3.5 space-y-1.5">
                         <div class="flex items-center justify-between">
-                            <label class="block text-xs font-bold text-purple-200">
-                                外勤 / 出差遠端事由說明 <span class="text-rose-300 font-bold">(超出範圍必填 *)</span>
+                            <label class="block text-xs font-bold text-indigo-200">
+                                外勤 / 出差遠端事由說明 <span class="text-red-300 font-bold">(超出範圍必填 *)</span>
                             </label>
-                            <span class="text-[11px] text-purple-200/80">未填寫事由將無法打卡</span>
+                            <span class="text-[11px] text-indigo-200/80">未填寫事由將無法打卡</span>
                         </div>
                         <input
                             type="text"
                             v-model="fieldWorkNote"
                             @input="noteError = ''"
                             placeholder="如：拜訪客戶展示產品、外部會議、居家遠端辦公..."
-                            class="w-full text-xs rounded-lg bg-white/10 text-white placeholder-purple-200/60 border-purple-300/40 focus:border-rose-400 focus:ring-rose-400 dark:bg-gray-800"
+                            class="w-full text-xs rounded-lg bg-white/10 text-white placeholder-indigo-200/60 border-indigo-300/40 focus:border-red-400 focus:ring-red-400 dark:bg-gray-800"
                         />
-                        <p v-if="noteError" class="text-xs text-rose-300 font-semibold flex items-center pt-0.5">
-                            <svg class="w-3.5 h-3.5 mr-1 text-rose-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <p v-if="noteError" class="text-xs text-red-300 font-semibold flex items-center pt-0.5">
+                            <svg class="w-3.5 h-3.5 mr-1 text-red-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             {{ noteError }}
                         </p>
                     </div>
@@ -371,11 +371,11 @@ const typeLabel = (type) => {
                     </div>
                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center dark:bg-gray-800 dark:border-gray-700">
                         <p class="text-xs font-semibold text-gray-400">出勤天數</p>
-                        <p class="text-2xl font-bold text-blue-600 mt-1">{{ stats.daysWorked }} <span class="text-xs text-gray-400 font-normal">天</span></p>
+                        <p class="text-2xl font-bold text-indigo-600 mt-1">{{ stats.daysWorked }} <span class="text-xs text-gray-400 font-normal">天</span></p>
                     </div>
                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center dark:bg-gray-800 dark:border-gray-700">
                         <p class="text-xs font-semibold text-gray-400">遲到次數</p>
-                        <p class="text-2xl font-bold text-rose-600 mt-1">{{ stats.lateCount }} <span class="text-xs text-gray-400 font-normal">次</span></p>
+                        <p class="text-2xl font-bold text-red-600 mt-1">{{ stats.lateCount }} <span class="text-xs text-gray-400 font-normal">次</span></p>
                     </div>
                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm text-center dark:bg-gray-800 dark:border-gray-700">
                         <p class="text-xs font-semibold text-gray-400">早退次數</p>
@@ -415,7 +415,7 @@ const typeLabel = (type) => {
                 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4 dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
                         <h3 class="font-bold text-gray-900 text-base dark:text-gray-100">個人出勤明細紀錄</h3>
-                        <input type="month" :value="month" @change="changeMonth" class="text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-1.5 dark:border-gray-700" />
+                        <input type="month" :value="month" @change="changeMonth" class="text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 py-1.5 dark:border-gray-700" />
                     </div>
 
                     <div class="overflow-x-auto">
@@ -447,13 +447,13 @@ const typeLabel = (type) => {
                                                     v-if="att.clock_in_lat && att.clock_in_lng"
                                                     :href="`https://maps.google.com/?q=${att.clock_in_lat},${att.clock_in_lng}`"
                                                     target="_blank"
-                                                    class="text-[10px] text-blue-600 hover:underline flex items-center"
+                                                    class="text-[10px] text-indigo-600 hover:underline flex items-center"
                                                     title="在 Google Maps 查看打卡經緯度"
                                                 >
                                                      地圖
                                                 </a>
                                             </div>
-                                            <p v-if="att.field_work_note" class="text-[10px] text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-100">
+                                            <p v-if="att.field_work_note" class="text-[10px] text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
                                                 事由：{{ att.field_work_note }}
                                             </p>
                                         </div>
@@ -513,7 +513,7 @@ const typeLabel = (type) => {
 
                 <div class="space-y-2">
                     <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        請說明外勤 / 遠端事由 <span class="text-rose-500">*</span>
+                        請說明外勤 / 遠端事由 <span class="text-red-500">*</span>
                     </label>
                     <textarea
                         v-model="fieldWorkNote"
@@ -521,9 +521,9 @@ const typeLabel = (type) => {
                         required
                         autofocus
                         placeholder="請填寫外勤客戶拜訪、公出差旅或居家辦公事由（未填寫將無法完成打卡）..."
-                        class="w-full text-xs rounded-xl border border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm placeholder-gray-400 p-3 dark:border-gray-700"
+                        class="w-full text-xs rounded-xl border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm placeholder-gray-400 p-3 dark:border-gray-700"
                     ></textarea>
-                    <p v-if="noteError" class="text-xs text-rose-600 font-semibold">{{ noteError }}</p>
+                    <p v-if="noteError" class="text-xs text-red-600 font-semibold">{{ noteError }}</p>
                 </div>
 
                 <div class="flex items-center justify-end space-x-3 pt-2">

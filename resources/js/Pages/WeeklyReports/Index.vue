@@ -58,7 +58,7 @@ const getStatusBadge = (status) => {
         case 'draft':
             return { text: '草稿暫存', class: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300' };
         case 'submitted':
-            return { text: '已提交待點評', class: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300' };
+            return { text: '已提交待點評', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300' };
         case 'reviewed':
             return { text: '主管已點評', class: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300' };
         default:
@@ -76,7 +76,7 @@ const getStatusBadge = (status) => {
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
                         <span>工作週報與團隊協同簡報</span>
-                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300">
+                        <span class="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300">
                             {{ currentWeekInfo.year }} 年 第 {{ currentWeekInfo.week_number }} 週
                         </span>
                     </h2>
@@ -115,8 +115,8 @@ const getStatusBadge = (status) => {
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">我本週繳交狀態</p>
                             <p class="text-lg font-bold mt-1 text-gray-900 dark:text-gray-100">
-                                <span v-if="!myCurrentWeekReport" class="text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> 尚未填寫提交
+                                <span v-if="!myCurrentWeekReport" class="text-red-600 dark:text-red-400 flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span> 尚未填寫提交
                                 </span>
                                 <span v-else class="text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> {{ myCurrentWeekReport.status_label }}
@@ -124,7 +124,7 @@ const getStatusBadge = (status) => {
                             </p>
                             <p class="text-[11px] text-gray-400 mt-1">週五下班前請完成總結</p>
                         </div>
-                        <div class="p-3 bg-cyan-50 dark:bg-cyan-950/50 text-cyan-600 dark:text-cyan-400 rounded-xl">
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-xl">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h2.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
                     </div>
@@ -303,7 +303,7 @@ const getStatusBadge = (status) => {
                     >
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 dark:border-gray-700 pb-3">
                             <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-cyan-500 text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-indigo-500 text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0">
                                     {{ rep.user?.name.charAt(0) }}
                                 </div>
                                 <div>
@@ -344,7 +344,7 @@ const getStatusBadge = (status) => {
                                 <p class="text-gray-800 dark:text-gray-200 line-clamp-3 leading-relaxed whitespace-pre-line">{{ rep.achievements }}</p>
                             </div>
                             <div class="md:col-span-1 bg-gray-50 dark:bg-gray-700/40 p-3 rounded-lg">
-                                <p class="font-bold text-blue-700 dark:text-blue-400 mb-1">下週工作計畫：</p>
+                                <p class="font-bold text-indigo-700 dark:text-indigo-400 mb-1">下週工作計畫：</p>
                                 <p class="text-gray-800 dark:text-gray-200 line-clamp-3 leading-relaxed whitespace-pre-line">{{ rep.plans_next_week }}</p>
                             </div>
                         </div>

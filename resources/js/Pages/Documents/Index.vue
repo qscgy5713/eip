@@ -40,10 +40,10 @@ const selectCategory = (catKey) => {
 const getFileInfo = (mimeType, fileName = '') => {
     const ext = fileName.split('.').pop()?.toUpperCase() || 'FILE';
     if (mimeType?.includes('pdf') || ext === 'PDF') {
-        return { tag: 'PDF', color: 'bg-rose-50 text-rose-600 border-rose-200' };
+        return { tag: 'PDF', color: 'bg-red-50 text-red-600 border-red-200' };
     }
     if (mimeType?.includes('word') || ['DOC', 'DOCX'].includes(ext)) {
-        return { tag: 'DOC', color: 'bg-blue-50 text-blue-600 border-blue-200' };
+        return { tag: 'DOC', color: 'bg-indigo-50 text-indigo-600 border-indigo-200' };
     }
     if (mimeType?.includes('sheet') || ['XLS', 'XLSX', 'CSV'].includes(ext)) {
         return { tag: 'XLS', color: 'bg-emerald-50 text-emerald-600 border-emerald-200' };
@@ -278,14 +278,14 @@ const isText = (mimeType, fileName = '') => {
                                 v-model="search"
                                 @keyup.enter="applyFilters"
                                 placeholder="搜尋文件標題或說明內容 (按 Enter 搜尋)..."
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 pl-9 py-2 dark:border-gray-700"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 pl-9 py-2 dark:border-gray-700"
                             />
                             <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         </div>
                         <select
                             v-model="selectedDept"
                             @change="applyFilters"
-                            class="text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-2 w-full sm:w-44 dark:border-gray-700"
+                            class="text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 py-2 w-full sm:w-44 dark:border-gray-700"
                         >
                             <option value="">全公司共用文件</option>
                             <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
@@ -313,7 +313,7 @@ const isText = (mimeType, fileName = '') => {
                                         {{ getFileInfo(doc.latest_version?.mime_type, doc.latest_version?.file_name).tag }}
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-sm text-gray-900 group-hover:text-blue-600 transition line-clamp-1 dark:text-gray-100">
+                                        <h3 class="font-bold text-sm text-gray-900 group-hover:text-indigo-600 transition line-clamp-1 dark:text-gray-100">
                                             {{ doc.title }}
                                         </h3>
                                         <div class="flex items-center space-x-2 mt-0.5">
@@ -360,7 +360,7 @@ const isText = (mimeType, fileName = '') => {
                                 </button>
                                 <a
                                     :href="route('documents.download', doc.id)"
-                                    class="px-2.5 py-1.5 font-semibold text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white rounded-lg transition flex items-center space-x-1"
+                                    class="px-2.5 py-1.5 font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-600 hover:text-white rounded-lg transition flex items-center space-x-1"
                                     title="下載最新版本"
                                 >
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -379,7 +379,7 @@ const isText = (mimeType, fileName = '') => {
                                 <button
                                     v-if="canManage || doc.uploader_id === $page.props.auth.user.id"
                                     @click="openNewVersionModal(doc)"
-                                    class="text-gray-500 hover:text-blue-600 dark:text-gray-400"
+                                    class="text-gray-500 hover:text-indigo-600 dark:text-gray-400"
                                     title="發布新版本"
                                 >
                                     +新版
@@ -395,7 +395,7 @@ const isText = (mimeType, fileName = '') => {
                                 <button
                                     v-if="$page.props.auth.user.role === 'admin' || doc.uploader_id === $page.props.auth.user.id"
                                     @click="deleteDoc(doc.id)"
-                                    class="text-gray-400 hover:text-rose-600"
+                                    class="text-gray-400 hover:text-red-600"
                                     title="刪除文件"
                                 >
                                     刪除
@@ -431,10 +431,10 @@ const isText = (mimeType, fileName = '') => {
                             type="text"
                             v-model="uploadForm.title"
                             placeholder="如：2026 年度員工出勤及加班管理要點"
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                            class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             required
                         />
-                        <p v-if="uploadForm.errors.title" class="text-xs text-rose-500 mt-1">{{ uploadForm.errors.title }}</p>
+                        <p v-if="uploadForm.errors.title" class="text-xs text-red-500 mt-1">{{ uploadForm.errors.title }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
@@ -442,7 +442,7 @@ const isText = (mimeType, fileName = '') => {
                             <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">文件分類</label>
                             <select
                                 v-model="uploadForm.category"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                                 required
                             >
                                 <option value="policy">公司規章制度</option>
@@ -455,7 +455,7 @@ const isText = (mimeType, fileName = '') => {
                             <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">所屬部門</label>
                             <select
                                 v-model="uploadForm.department_id"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             >
                                 <option value="">全公司共用</option>
                                 <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
@@ -470,7 +470,7 @@ const isText = (mimeType, fileName = '') => {
                                 type="text"
                                 v-model="uploadForm.version_label"
                                 placeholder="如：v1.0"
-                                class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                                class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             />
                         </div>
                         <div>
@@ -481,7 +481,7 @@ const isText = (mimeType, fileName = '') => {
                                         type="checkbox"
                                         :checked="uploadForm.restricted_roles.length > 0"
                                         @change="uploadForm.restricted_roles = $event.target.checked ? ['admin', 'manager'] : []"
-                                        class="rounded text-blue-600 focus:ring-blue-500"
+                                        class="rounded text-indigo-600 focus:ring-indigo-500"
                                     />
                                     <span>僅主管以上可見</span>
                                 </label>
@@ -495,7 +495,7 @@ const isText = (mimeType, fileName = '') => {
                             v-model="uploadForm.description"
                             rows="2"
                             placeholder="簡述此份文件的主要內容與適用範圍..."
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                            class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 
@@ -504,10 +504,10 @@ const isText = (mimeType, fileName = '') => {
                         <input
                             type="file"
                             @change="handleFileChange"
-                            class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:border-gray-700"
+                            class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:border-gray-700"
                             required
                         />
-                        <p v-if="uploadForm.errors.file" class="text-xs text-rose-500 mt-1">{{ uploadForm.errors.file }}</p>
+                        <p v-if="uploadForm.errors.file" class="text-xs text-red-500 mt-1">{{ uploadForm.errors.file }}</p>
                     </div>
 
                     <div class="flex items-center justify-end space-x-3 pt-3 border-t">
@@ -547,7 +547,7 @@ const isText = (mimeType, fileName = '') => {
                             type="text"
                             v-model="newVersionForm.version_label"
                             placeholder="如：v1.1, v2.0"
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                            class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                             required
                         />
                     </div>
@@ -558,7 +558,7 @@ const isText = (mimeType, fileName = '') => {
                             v-model="newVersionForm.changelog"
                             rows="2"
                             placeholder="如：依據最新法令修正第 3 條津貼計算公式..."
-                            class="w-full text-xs rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700"
+                            class="w-full text-xs rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 
@@ -567,7 +567,7 @@ const isText = (mimeType, fileName = '') => {
                         <input
                             type="file"
                             @change="handleNewVersionFileChange"
-                            class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:border-gray-700"
+                            class="w-full text-xs border border-gray-300 rounded-lg p-2 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:border-gray-700"
                             required
                         />
                     </div>
@@ -614,7 +614,7 @@ const isText = (mimeType, fileName = '') => {
                     >
                         <div>
                             <div class="flex items-center space-x-2">
-                                <span class="px-2 py-0.5 bg-blue-100 text-blue-800 font-mono font-bold text-xs rounded">
+                                <span class="px-2 py-0.5 bg-indigo-100 text-indigo-800 font-mono font-bold text-xs rounded">
                                     {{ ver.version_label }}
                                 </span>
                                 <span class="text-xs font-medium text-gray-900 dark:text-gray-100">{{ ver.file_name }}</span>
@@ -637,7 +637,7 @@ const isText = (mimeType, fileName = '') => {
                             </button>
                             <a
                                 :href="route('documents.download', { document: historyDoc.id, version: ver.id })"
-                                class="px-2.5 py-1.5 text-xs font-semibold text-blue-600 bg-white border border-blue-200 hover:bg-blue-50 rounded-lg transition dark:bg-gray-800"
+                                class="px-2.5 py-1.5 text-xs font-semibold text-indigo-600 bg-white border border-indigo-200 hover:bg-indigo-50 rounded-lg transition dark:bg-gray-800"
                                 title="下載此歷史版本"
                             >
                                 下載此版
@@ -662,7 +662,7 @@ const isText = (mimeType, fileName = '') => {
                                 <h3 class="text-sm font-bold text-gray-900 truncate dark:text-gray-100" :title="previewDoc?.title">
                                     {{ previewDoc?.title }}
                                 </h3>
-                                <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-100 text-blue-700 rounded">
+                                <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-indigo-100 text-indigo-700 rounded">
                                     {{ previewVersion?.version_label }}
                                 </span>
                             </div>
@@ -777,10 +777,10 @@ const isText = (mimeType, fileName = '') => {
                         <input
                             type="text"
                             v-model="editForm.title"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                             required
                         />
-                        <p v-if="editForm.errors.title" class="text-rose-500 mt-1">{{ editForm.errors.title }}</p>
+                        <p v-if="editForm.errors.title" class="text-red-500 mt-1">{{ editForm.errors.title }}</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
@@ -788,7 +788,7 @@ const isText = (mimeType, fileName = '') => {
                             <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">所屬分類 *</label>
                             <select
                                 v-model="editForm.category"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                                 required
                             >
                                 <option value="policy">公司規章</option>
@@ -801,7 +801,7 @@ const isText = (mimeType, fileName = '') => {
                             <label class="block font-medium text-gray-700 mb-1 dark:text-gray-300">指定歸屬部門 (選填)</label>
                             <select
                                 v-model="editForm.department_id"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                             >
                                 <option value="">全公司共用文件</option>
                                 <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
@@ -814,7 +814,7 @@ const isText = (mimeType, fileName = '') => {
                         <textarea
                             v-model="editForm.description"
                             rows="2"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-blue-500 focus:border-blue-500 dark:border-gray-700"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-xs focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-700"
                         ></textarea>
                     </div>
 

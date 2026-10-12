@@ -1,12 +1,12 @@
 <script setup>
 import { ref, watch, computed, onBeforeUnmount } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import CommandPalette from '@/Components/CommandPalette.vue';
 import DialogHost from '@/Components/DialogHost.vue';
+import BrandMark from '@/Components/BrandMark.vue';
 import ThemeToggle from '@/Components/ThemeToggle.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 
@@ -104,11 +104,9 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                         <div class="flex items-center min-w-0">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center mr-2 lg:mr-4">
-                                <Link :href="route('dashboard')" class="flex items-center gap-2" aria-label="EIP 企業入口網">
-                                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 shadow-sm">
-                                        <ApplicationLogo class="block h-5 w-5 fill-current text-white" />
-                                    </span>
-                                    <span class="hidden 2xl:block text-base font-semibold tracking-tight text-gray-900 dark:text-gray-50">EIP</span>
+                                <Link :href="route('dashboard')" class="flex items-center gap-2" :aria-label="$page.props.branding.name">
+                                    <BrandMark />
+                                    <span class="hidden 2xl:block max-w-40 truncate text-base font-semibold tracking-tight text-gray-900 dark:text-gray-50">{{ $page.props.branding.name }}</span>
                                 </Link>
                             </div>
 
@@ -188,6 +186,9 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                                             <DropdownLink v-if="$page.props.auth.user.role === 'admin'" :href="route('webhooks.index')">
                                                 整合設定 (Webhook)
                                             </DropdownLink>
+                                            <DropdownLink v-if="$page.props.auth.user.role === 'admin'" :href="route('branding.edit')">
+                                                品牌設定
+                                            </DropdownLink>
                                         </template>
                                     </Dropdown>
                                 </div>
@@ -214,7 +215,7 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
 
                             <!-- Notification Bell Dropdown -->
                             <div class="relative">
-                                <Dropdown align="right" width="60">
+                                <Dropdown align="right" width="80">
                                     <template #trigger>
                                         <button
                                             type="button"
@@ -250,9 +251,9 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                                                 :key="item.id"
                                                 class="p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition text-left"
                                             >
-                                                <div class="flex items-center justify-between mb-1">
-                                                    <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 truncate max-w-44">{{ item.title }}</span>
-                                                    <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ item.created_at }}</span>
+                                                <div class="flex items-start justify-between gap-2 mb-1">
+                                                    <span class="min-w-0 text-xs font-semibold text-gray-900 dark:text-gray-100 leading-snug line-clamp-2">{{ item.title }}</span>
+                                                    <span class="shrink-0 whitespace-nowrap text-[10px] text-gray-400 dark:text-gray-500">{{ item.created_at }}</span>
                                                 </div>
                                                 <p class="text-xs text-gray-600 dark:text-gray-300 line-clamp-2">{{ item.message }}</p>
                                                 <div class="mt-2 flex items-center gap-2">
@@ -567,6 +568,13 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
                         >
                             考勤圍欄設定
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.role === 'admin'"
+                            :href="route('branding.edit')"
+                            :active="route().current('branding.edit')"
+                        >
+                            品牌設定
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -651,11 +659,11 @@ const isMoreActive = () => moreNav.some((g) => g.items.some((i) => isActive(i.pa
         <div
             v-if="hasErrorToast"
             role="alert"
-            class="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-96 z-[60] rounded-xl border border-rose-200 bg-white p-4 shadow-lg dark:border-rose-900/60 dark:bg-gray-800"
+            class="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-96 z-[60] rounded-xl border border-red-200 bg-white p-4 shadow-lg dark:border-red-900/60 dark:bg-gray-800"
         >
             <div class="flex items-start gap-3">
                 <div class="min-w-0 flex-1">
-                    <p class="text-sm font-semibold text-rose-700 dark:text-rose-400">操作未完成,請修正以下問題</p>
+                    <p class="text-sm font-semibold text-red-700 dark:text-red-400">操作未完成,請修正以下問題</p>
                     <ul class="mt-1 list-disc space-y-0.5 pl-4 text-xs text-gray-700 dark:text-gray-300">
                         <li v-for="m in errorToast" :key="m">{{ m }}</li>
                     </ul>

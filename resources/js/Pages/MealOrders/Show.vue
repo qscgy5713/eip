@@ -86,12 +86,12 @@ const getStatusBadge = (order) => {
         return { label: '進行中開團', class: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 animate-pulse' };
     }
     if (order.status === 'closed') {
-        return { label: '已結單處理中', class: 'bg-blue-100 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300 border-blue-200 dark:border-blue-800' };
+        return { label: '已結單處理中', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/50 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' };
     }
     if (order.status === 'completed') {
         return { label: '已送達發送', class: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700' };
     }
-    return { label: '已取消', class: 'bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border-rose-200 dark:border-rose-800' };
+    return { label: '已取消', class: 'bg-red-100 text-red-800 dark:bg-red-950/50 dark:text-red-300 border-red-200 dark:border-red-800' };
 };
 </script>
 
@@ -147,7 +147,7 @@ const getStatusBadge = (order) => {
                     <button
                         v-if="order.status !== 'cancelled'"
                         @click="cancelOrder"
-                        class="px-3 py-2 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 rounded-xl transition"
+                        class="px-3 py-2 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:text-red-400 rounded-xl transition"
                     >
                         取消開團
                     </button>
@@ -167,7 +167,7 @@ const getStatusBadge = (order) => {
                                     {{ new Date(order.cutoff_time).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
                                 </span>
                                 <span v-else>無特定截止時間</span>
-                                <span v-if="order.is_expired && order.status === 'open'" class="text-rose-600 font-bold text-xs">
+                                <span v-if="order.is_expired && order.status === 'open'" class="text-red-600 font-bold text-xs">
                                     (已逾期截止)
                                 </span>
                             </p>
@@ -426,7 +426,7 @@ const getStatusBadge = (order) => {
                                             <span
                                                 :class="[
                                                     'px-2 py-0.5 rounded text-[11px] font-bold',
-                                                    user.is_fully_paid ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
+                                                    user.is_fully_paid ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300'
                                                 ]"
                                             >
                                                 {{ user.is_fully_paid ? '已結清付訖' : '待繳費' }}
@@ -489,7 +489,7 @@ const getStatusBadge = (order) => {
                                         <td v-if="canManage" class="py-3 text-right">
                                             <button
                                                 @click="removeItem(item.id)"
-                                                class="text-rose-600 hover:text-rose-800 text-xs font-semibold"
+                                                class="text-red-600 hover:text-red-800 text-xs font-semibold"
                                             >
                                                 刪除
                                             </button>
@@ -538,7 +538,7 @@ const getStatusBadge = (order) => {
                                         <td v-if="isOrderingAllowed" class="py-3 text-right">
                                             <button
                                                 @click="removeItem(item.id)"
-                                                class="text-rose-600 hover:text-rose-800 text-xs font-semibold"
+                                                class="text-red-600 hover:text-red-800 text-xs font-semibold"
                                             >
                                                 取消此項
                                             </button>

@@ -132,10 +132,10 @@ const submitReturn = () => {
 
 const categoryBadge = (cat) => {
     switch (cat) {
-        case 'it_hardware': return 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+        case 'it_hardware': return 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
         case 'office_equipment': return 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800';
-        case 'av_media': return 'bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800';
-        case 'vehicles': return 'bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800';
+        case 'av_media': return 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
+        case 'vehicles': return 'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
         case 'peripherals': return 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
         default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700';
     }
@@ -181,7 +181,7 @@ const statusLabel = (status) => {
                 <div>
                     <h2 class="text-xl font-bold leading-tight text-gray-800 dark:text-gray-100 flex items-center gap-2">
                         <span>企業固定資產與設備借調</span>
-                        <span class="text-xs px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300 font-semibold">Asset Hub</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-semibold">Asset Hub</span>
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">公務設備在席狀態、線上領用借調、保管歷程與盤點驗收管理</p>
                 </div>
@@ -229,9 +229,9 @@ const statusLabel = (status) => {
                         <p class="text-xs text-amber-700 dark:text-amber-400 font-medium">維修保養中</p>
                         <p class="text-2xl font-black text-amber-700 dark:text-amber-300 mt-1">{{ stats.maintenance }} <span class="text-xs font-normal text-amber-600/70">件</span></p>
                     </div>
-                    <div class="bg-teal-50/60 dark:bg-teal-950/20 p-4 rounded-xl border border-teal-100 dark:border-teal-900/40 shadow-xs">
-                        <p class="text-xs text-teal-700 dark:text-teal-400 font-medium">我目前保管</p>
-                        <p class="text-2xl font-black text-teal-700 dark:text-teal-300 mt-1">{{ stats.my_held_count }} <span class="text-xs font-normal text-teal-600/70">件</span></p>
+                    <div class="bg-indigo-50/60 dark:bg-indigo-950/20 p-4 rounded-xl border border-indigo-100 dark:border-indigo-900/40 shadow-xs">
+                        <p class="text-xs text-indigo-700 dark:text-indigo-400 font-medium">我目前保管</p>
+                        <p class="text-2xl font-black text-indigo-700 dark:text-indigo-300 mt-1">{{ stats.my_held_count }} <span class="text-xs font-normal text-indigo-600/70">件</span></p>
                     </div>
                 </div>
 
@@ -269,7 +269,7 @@ const statusLabel = (status) => {
                                     v-model="searchQuery"
                                     @keyup.enter="handleSearch"
                                     placeholder="搜尋編號、名稱、序號、地點..."
-                                    class="w-64 pl-8 pr-3 py-1.5 text-xs rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 focus:border-teal-500 focus:ring-teal-500"
+                                    class="w-64 pl-8 pr-3 py-1.5 text-xs rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <svg class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                             </div>
@@ -299,7 +299,7 @@ const statusLabel = (status) => {
                             :class="[
                                 'px-2.5 py-1 rounded-md text-[11px] font-medium whitespace-nowrap transition',
                                 currentCategory === cat.key
-                                    ? 'bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-200 font-bold'
+                                    ? 'bg-indigo-100 dark:bg-indigo-900/60 text-indigo-800 dark:text-indigo-200 font-bold'
                                     : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/60'
                             ]"
                         >
@@ -333,7 +333,7 @@ const statusLabel = (status) => {
 
                             <!-- 資產名稱與規格 -->
                             <div class="mt-3 space-y-1.5">
-                                <Link :href="route('assets.show', asset.id)" class="text-base font-bold text-gray-900 dark:text-gray-100 hover:text-teal-600 dark:hover:text-teal-400 transition block truncate">
+                                <Link :href="route('assets.show', asset.id)" class="text-base font-bold text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition block truncate">
                                     {{ asset.name }}
                                 </Link>
                                 <p v-if="asset.specification" class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
@@ -378,7 +378,7 @@ const statusLabel = (status) => {
                                 <button
                                     v-if="asset.status === 'available'"
                                     @click="openBorrowModal(asset)"
-                                    class="px-2.5 py-1 text-xs font-semibold rounded bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-100 dark:hover:bg-teal-900/60 transition"
+                                    class="px-2.5 py-1 text-xs font-semibold rounded bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition"
                                 >
                                     借用登記
                                 </button>
@@ -402,7 +402,7 @@ const statusLabel = (status) => {
 
                 <!-- 空狀態提示 -->
                 <div v-else class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-12 text-center shadow-sm">
-                    <div class="w-16 h-16 rounded-full bg-teal-50 dark:bg-teal-950/40 text-teal-500 flex items-center justify-center mx-auto mb-4">
+                    <div class="w-16 h-16 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     </div>
                     <h4 class="text-base font-bold text-gray-800 dark:text-gray-200">目前尚無符合條件的公務資產</h4>
@@ -430,7 +430,7 @@ const statusLabel = (status) => {
                         </div>
                         <div>
                             <InputLabel for="category" value="資產分類 *" />
-                            <select id="category" v-model="createForm.category" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <select id="category" v-model="createForm.category" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="it_hardware">IT 資訊硬體 (筆電/桌機/伺服器)</option>
                                 <option value="office_equipment">辦公 OA 設備 (印表機/碎紙機)</option>
                                 <option value="av_media">視聽攝影器材 (相機/投影機)</option>
@@ -465,14 +465,14 @@ const statusLabel = (status) => {
                             v-model="createForm.specification"
                             rows="2"
                             placeholder="例：Apple M3 Max 晶片, 64GB 記憶體, 1TB SSD..."
-                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                         ></textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <InputLabel for="department_id" value="歸屬部門" />
-                            <select id="department_id" v-model="createForm.department_id" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            <select id="department_id" v-model="createForm.department_id" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="">-- 全公司公用 --</option>
                                 <option v-for="d in departments" :key="d.id" :value="d.id">{{ d.name }}</option>
                             </select>
@@ -499,15 +499,15 @@ const statusLabel = (status) => {
                     <button @click="showBorrowModal = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg">&times;</button>
                 </div>
 
-                <div v-if="targetAsset" class="mt-3 p-3 bg-teal-50/50 dark:bg-teal-950/20 rounded-lg border border-teal-100 dark:border-teal-900/40 text-xs">
-                    <span class="font-mono font-bold text-teal-700 dark:text-teal-300">[{{ targetAsset.asset_tag }}]</span>
+                <div v-if="targetAsset" class="mt-3 p-3 bg-indigo-50/50 dark:bg-indigo-950/20 rounded-lg border border-indigo-100 dark:border-indigo-900/40 text-xs">
+                    <span class="font-mono font-bold text-indigo-700 dark:text-indigo-300">[{{ targetAsset.asset_tag }}]</span>
                     <span class="ml-1.5 font-bold text-gray-800 dark:text-gray-200">{{ targetAsset.name }}</span>
                 </div>
 
                 <form @submit.prevent="submitBorrow" class="mt-4 space-y-4">
                     <div v-if="canManage">
                         <InputLabel for="borrower_id" value="借用同仁 (管理員可代為登記)" />
-                        <select id="borrower_id" v-model="borrowForm.borrower_id" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                        <select id="borrower_id" v-model="borrowForm.borrower_id" class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             <option value="">-- 由登入者本人領用 --</option>
                             <option v-for="u in users" :key="u.id" :value="u.id">
                                 {{ u.name }} ({{ u.job_title || u.email }})
@@ -527,7 +527,7 @@ const statusLabel = (status) => {
                             v-model="borrowForm.purpose"
                             rows="3"
                             placeholder="請具體說明借用目的、專案名稱或外勤活動..."
-                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                             required
                         ></textarea>
                     </div>
@@ -562,7 +562,7 @@ const statusLabel = (status) => {
                             v-model="returnForm.return_notes"
                             rows="3"
                             placeholder="例：外觀良好、功能正常、充電配件齊全..."
-                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                            class="mt-1 w-full text-xs rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                         ></textarea>
                     </div>
 

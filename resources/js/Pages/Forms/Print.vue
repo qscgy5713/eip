@@ -121,7 +121,7 @@ const formatSize = (bytes) => {
                             :class="[
                                 'inline-block px-2.5 py-1 text-xs font-bold rounded',
                                 formRequest.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
-                                formRequest.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-300' : 'bg-amber-100 text-amber-800 border border-amber-300'
+                                formRequest.status === 'rejected' ? 'bg-red-100 text-red-800 border border-red-300' : 'bg-amber-100 text-amber-800 border border-amber-300'
                             ]"
                         >
                             {{ formRequest.status === 'approved' ? '審核通過 (APPROVED)' : (formRequest.status === 'rejected' ? '已駁回 (REJECTED)' : '簽核中 (PENDING)') }}
@@ -224,7 +224,7 @@ const formatSize = (bytes) => {
                             </td>
                             <td class="p-2 border-r border-gray-300">
                                 <div class="font-bold text-gray-900">{{ record.approver?.name || '系統主管' }}</div>
-                                <div v-if="record.delegated_from" class="text-[10px] text-purple-700 font-semibold">
+                                <div v-if="record.delegated_from" class="text-[10px] text-indigo-700 font-semibold">
                                     (由 {{ record.delegated_from?.name }} 授權代理簽核)
                                 </div>
                                 <!-- 主管手寫簽名壓印 -->
@@ -234,7 +234,7 @@ const formatSize = (bytes) => {
                             </td>
                             <td class="p-2 border-r border-gray-300 font-bold">
                                 <span v-if="record.status === 'approved'" class="text-emerald-700">核准通過</span>
-                                <span v-else-if="record.status === 'rejected'" class="text-rose-700">審批駁回</span>
+                                <span v-else-if="record.status === 'rejected'" class="text-red-700">審批駁回</span>
                                 <span v-else class="text-amber-600">等待審核</span>
                             </td>
                             <td class="p-2 border-r border-gray-300 font-mono text-gray-600">
@@ -251,10 +251,10 @@ const formatSize = (bytes) => {
             <!-- 電子核准防偽印章 (若已核准時印出) -->
             <div
                 v-if="formRequest.status === 'approved'"
-                class="absolute right-12 bottom-20 w-32 h-32 rounded-full border-4 border-rose-600 border-dashed text-rose-600 flex flex-col items-center justify-center -rotate-12 select-none opacity-85 pointer-events-none"
+                class="absolute right-12 bottom-20 w-32 h-32 rounded-full border-4 border-red-600 border-dashed text-red-600 flex flex-col items-center justify-center -rotate-12 select-none opacity-85 pointer-events-none"
             >
                 <div class="text-[10px] font-bold">EIP PORTAL</div>
-                <div class="text-base font-extrabold my-0.5 border-y border-rose-500 py-0.5 px-2">
+                <div class="text-base font-extrabold my-0.5 border-y border-red-500 py-0.5 px-2">
                     電子核准章
                 </div>
                 <div class="text-[9px] font-mono font-bold tracking-tight">

@@ -118,7 +118,7 @@ const toggleVotersList = (optionId) => {
                     </button>
                     <button
                         @click="showDeleteConfirmModal = true"
-                        class="px-3 py-1.5 text-xs font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg transition-colors"
+                        class="px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-colors"
                     >
                         刪除投票
                     </button>
@@ -147,13 +147,13 @@ const toggleVotersList = (optionId) => {
                             </span>
 
                             <span
-                                :class="poll.is_anonymous ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-blue-50 text-blue-700 border-blue-200'"
+                                :class="poll.is_anonymous ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-indigo-50 text-indigo-700 border-indigo-200'"
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
                             >
                                 {{ poll.is_anonymous ? '匿名投票（徹底隱密）' : '具名投票（留名）' }}
                             </span>
 
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">
                                 {{ poll.is_multiple_choice ? '複選題' : '單選題' }}
                             </span>
                         </div>
@@ -251,7 +251,7 @@ const toggleVotersList = (optionId) => {
                             </div>
                         </div>
 
-                        <div v-if="voteForm.errors.vote" class="mt-3 text-sm text-rose-600 font-medium">
+                        <div v-if="voteForm.errors.vote" class="mt-3 text-sm text-red-600 font-medium">
                             {{ voteForm.errors.vote }}
                         </div>
 

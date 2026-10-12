@@ -90,7 +90,7 @@ const handleExport = () => {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                        <span class="p-2 rounded-xl bg-sky-100 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400">
+                        <span class="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                             </svg>
@@ -131,8 +131,8 @@ const handleExport = () => {
                     <p class="text-2xl font-black text-gray-900 dark:text-gray-100 mt-2">{{ metrics.total_today }} <span class="text-xs font-normal text-gray-400">位</span></p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs">
-                    <p class="text-xs font-medium text-blue-600 dark:text-blue-400">待抵達報到</p>
-                    <p class="text-2xl font-black text-blue-600 dark:text-blue-400 mt-2">{{ metrics.expected_today }} <span class="text-xs font-normal text-gray-400">位</span></p>
+                    <p class="text-xs font-medium text-indigo-600 dark:text-indigo-400">待抵達報到</p>
+                    <p class="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-2">{{ metrics.expected_today }} <span class="text-xs font-normal text-gray-400">位</span></p>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs">
                     <p class="text-xs font-medium text-emerald-600 dark:text-emerald-400">已簽到會談中</p>
@@ -154,7 +154,7 @@ const handleExport = () => {
                             @click="scope = 'mine'; applyFilters()"
                             :class="[
                                 'px-3 py-1.5 rounded-lg text-xs font-bold transition',
-                                scope === 'mine' ? 'bg-white dark:bg-gray-800 text-sky-600 dark:text-sky-400 shadow-xs' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'
+                                scope === 'mine' ? 'bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 shadow-xs' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'
                             ]"
                         >
                             我接待的
@@ -164,7 +164,7 @@ const handleExport = () => {
                             @click="scope = 'all'; applyFilters()"
                             :class="[
                                 'px-3 py-1.5 rounded-lg text-xs font-bold transition',
-                                scope === 'all' ? 'bg-white dark:bg-gray-800 text-sky-600 dark:text-sky-400 shadow-xs' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'
+                                scope === 'all' ? 'bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 shadow-xs' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'
                             ]"
                         >
                             全廠預約大廳
@@ -175,7 +175,7 @@ const handleExport = () => {
                     <select
                         v-model="status"
                         @change="applyFilters"
-                        class="rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs text-gray-700 dark:text-gray-200 py-1.5 px-3 focus:ring-sky-500"
+                        class="rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs text-gray-700 dark:text-gray-200 py-1.5 px-3 focus:ring-indigo-500"
                     >
                         <option value="">所有狀態</option>
                         <option value="expected">預約來訪中</option>
@@ -189,7 +189,7 @@ const handleExport = () => {
                         type="date"
                         v-model="visit_date"
                         @change="applyFilters"
-                        class="rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs text-gray-700 dark:text-gray-200 py-1.5 px-3 focus:ring-sky-500"
+                        class="rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs text-gray-700 dark:text-gray-200 py-1.5 px-3 focus:ring-indigo-500"
                     />
                 </div>
 
@@ -201,7 +201,7 @@ const handleExport = () => {
                             v-model="search"
                             @keydown.enter="applyFilters"
                             placeholder="搜尋姓名、公司、通行代碼、卡號..."
-                            class="w-full pl-9 pr-3 py-1.5 rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs text-gray-700 dark:text-gray-200 focus:ring-sky-500"
+                            class="w-full pl-9 pr-3 py-1.5 rounded-xl border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-xs text-gray-700 dark:text-gray-200 focus:ring-indigo-500"
                         />
                         <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -245,7 +245,7 @@ const handleExport = () => {
                                 class="hover:bg-gray-50/60 dark:hover:bg-gray-700/40 transition"
                             >
                                 <td class="px-5 py-4 whitespace-nowrap">
-                                    <span class="font-mono font-bold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 px-2 py-0.5 rounded-md">
+                                    <span class="font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded-md">
                                         {{ reservation.reservation_code }}
                                     </span>
                                     <div v-if="reservation.badge_number" class="text-2xs text-gray-400 mt-1">
@@ -292,10 +292,10 @@ const handleExport = () => {
                                     <span
                                         :class="[
                                             'px-2.5 py-1 rounded-full text-xs font-bold inline-block',
-                                            reservation.status === 'expected' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' :
+                                            reservation.status === 'expected' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300' :
                                             reservation.status === 'checked_in' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' :
                                             reservation.status === 'checked_out' ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300' :
-                                            'bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300'
+                                            'bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300'
                                         ]"
                                     >
                                         {{ reservation.status_label }}
@@ -383,12 +383,12 @@ const handleExport = () => {
                 </div>
 
                 <div class="mt-4 space-y-4">
-                    <div class="bg-sky-50 dark:bg-sky-950/40 p-3.5 rounded-xl border border-sky-100 dark:border-sky-900/60 text-xs">
-                        <p class="font-bold text-sky-900 dark:text-sky-200">
+                    <div class="bg-indigo-50 dark:bg-indigo-950/40 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-900/60 text-xs">
+                        <p class="font-bold text-indigo-900 dark:text-indigo-200">
                             {{ activeReservation?.visitor_name }}
                             <span v-if="activeReservation?.visitor_company">({{ activeReservation?.visitor_company }})</span>
                         </p>
-                        <p class="text-sky-700 dark:text-sky-400 mt-1">
+                        <p class="text-indigo-700 dark:text-indigo-400 mt-1">
                             通行碼：{{ activeReservation?.reservation_code }} · 接待員工：{{ activeReservation?.host?.name }}
                         </p>
                     </div>

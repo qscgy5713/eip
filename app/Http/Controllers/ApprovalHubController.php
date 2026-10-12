@@ -31,7 +31,9 @@ class ApprovalHubController extends Controller
         $viewAllCompany = $user->isAdmin() && $request->boolean('all_company', false);
 
         // 統計指標 (專屬個人與代理待辦)
-        $baseStatQuery = ApprovalRecord::where('status', 'pending');
+        // 自己提出的申請單不列入待審(不可自審)
+        $notOwn = fn ($q) => $q->where('user_id', '!=', $user->id);
+        $baseStatQuery = ApprovalRecord::where('status', 'pending')->whereHas('formRequest', $notOwn);
         if (!$viewAllCompany) {
             $baseStatQuery->whereIn('approver_id', $validApproverIds);
         }
@@ -49,7 +51,8 @@ class ApprovalHubController extends Controller
             'formRequest.form',
             'approver.department',
         ])
-            ->where('status', 'pending');
+            ->where('status', 'pending')
+            ->whereHas('formRequest', $notOwn);
 
         if (!$viewAllCompany) {
             $query->whereIn('approver_id', $validApproverIds);

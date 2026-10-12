@@ -256,6 +256,15 @@ class WorkflowService
         ?string $comment,
         ?string $signature = null
     ): array {
+        // 不可審核自己提出的申請單;僅在系統內沒有其他可審核者(其他在職主管/管理員)時才放行,避免單據卡死
+        if ($formRequest->user_id === $actionUser->id) {
+            $hasOtherApprover = User::whereIn('role', ['admin', 'manager'])
+                ->where('id', '!=', $actionUser->id)
+                ->where('status', 'active')
+                ->exists();
+            abort_if($hasOtherApprover, 403, '不可審核自己提出的申請單,請由其他主管或管理員處理。');
+        }
+
         $delegatedFromId = null;
         if ($record->approver_id !== $actionUser->id) {
             $delegatedFromId = $record->approver_id;

@@ -1,5 +1,5 @@
 <script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import BrandMark from '@/Components/BrandMark.vue';
 import ThemeToggle from '@/Components/ThemeToggle.vue';
 import { Link } from '@inertiajs/vue3';
 </script>
@@ -13,10 +13,8 @@ import { Link } from '@inertiajs/vue3';
         </div>
 
         <Link href="/" class="flex flex-col items-center gap-3">
-            <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600 shadow-md">
-                <ApplicationLogo class="h-8 w-8 fill-current text-white" />
-            </span>
-            <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-50">EIP 企業入口網</span>
+            <BrandMark size="lg" />
+            <span class="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-50">{{ $page.props.branding.name }}</span>
         </Link>
 
         <div

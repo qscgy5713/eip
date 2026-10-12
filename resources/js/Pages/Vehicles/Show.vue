@@ -144,7 +144,7 @@ const printDispatchOrder = () => {
             </div>
 
             <!-- 主管/總務 審核與作業快捷操作列 -->
-            <div v-if="canManage && (isApprover || dispatch.status !== 'pending')" class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 dark:from-amber-900/30 dark:to-orange-900/30 border border-amber-300/60 dark:border-amber-700/60 rounded-xl p-5 print:hidden shadow-sm">
+            <div v-if="canManage && (isApprover || dispatch.status !== 'pending')" class="bg-gradient-to-r from-amber-500/10 via-indigo-500/10 to-amber-500/10 dark:from-amber-900/30 dark:to-indigo-900/30 border border-amber-300/60 dark:border-amber-700/60 rounded-xl p-5 print:hidden shadow-sm">
                 <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
                         <h3 class="text-base font-bold text-amber-900 dark:text-amber-200 flex items-center gap-2">
@@ -321,7 +321,7 @@ const printDispatchOrder = () => {
 
                         <div class="space-y-3 text-xs">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center font-bold">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 flex items-center justify-center font-bold">
                                     申
                                 </div>
                                 <div>
@@ -360,7 +360,7 @@ const printDispatchOrder = () => {
                             placeholder="例如：當日時段已有高階主管公務出差需求、請改搭乘高鐵或改選其他車種..."
                             class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                         ></textarea>
-                        <p v-if="rejectForm.errors.rejection_reason" class="text-xs text-rose-600 dark:text-rose-400 mt-1">{{ rejectForm.errors.rejection_reason }}</p>
+                        <p v-if="rejectForm.errors.rejection_reason" class="text-xs text-red-600 dark:text-red-400 mt-1">{{ rejectForm.errors.rejection_reason }}</p>
                     </div>
                     <div class="flex justify-end gap-2 pt-2">
                         <button
@@ -397,7 +397,7 @@ const printDispatchOrder = () => {
                             min="0"
                             class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono"
                         />
-                        <p v-if="startForm.errors.start_mileage" class="text-xs text-rose-600 dark:text-rose-400 mt-1">{{ startForm.errors.start_mileage }}</p>
+                        <p v-if="startForm.errors.start_mileage" class="text-xs text-red-600 dark:text-red-400 mt-1">{{ startForm.errors.start_mileage }}</p>
                     </div>
                     <div class="flex justify-end gap-2 pt-2">
                         <button
@@ -435,7 +435,7 @@ const printDispatchOrder = () => {
                             class="w-full text-sm rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white font-mono"
                         />
                         <p class="text-xs text-gray-400 mt-1">出發里程：{{ dispatch.start_mileage || dispatch.vehicle.current_mileage }} km</p>
-                        <p v-if="returnForm.errors.end_mileage" class="text-xs text-rose-600 dark:text-rose-400 mt-1">{{ returnForm.errors.end_mileage }}</p>
+                        <p v-if="returnForm.errors.end_mileage" class="text-xs text-red-600 dark:text-red-400 mt-1">{{ returnForm.errors.end_mileage }}</p>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">車況檢查與油料備註</label>

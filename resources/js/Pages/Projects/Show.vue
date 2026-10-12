@@ -96,16 +96,16 @@ const deleteTask = async (task) => {
 
 const columns = [
     { key: 'todo', label: '待處理', color: 'border-slate-400 text-slate-700 dark:text-slate-300', bg: 'bg-slate-50/80 dark:bg-slate-900/40' },
-    { key: 'in_progress', label: '進行中', color: 'border-blue-500 text-blue-700 dark:text-blue-300', bg: 'bg-blue-50/50 dark:bg-blue-950/20' },
+    { key: 'in_progress', label: '進行中', color: 'border-indigo-500 text-indigo-700 dark:text-indigo-300', bg: 'bg-indigo-50/50 dark:bg-indigo-950/20' },
     { key: 'review', label: '待審查', color: 'border-amber-500 text-amber-700 dark:text-amber-300', bg: 'bg-amber-50/50 dark:bg-amber-950/20' },
     { key: 'done', label: '已完成', color: 'border-emerald-500 text-emerald-700 dark:text-emerald-300', bg: 'bg-emerald-50/50 dark:bg-emerald-950/20' },
 ];
 
 const priorityBadge = (priority) => {
     switch (priority) {
-        case 'urgent': return 'bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800';
+        case 'urgent': return 'bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
         case 'high': return 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800';
-        case 'medium': return 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+        case 'medium': return 'bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
         default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700';
     }
 };
@@ -300,7 +300,7 @@ const submitEditProject = () => {
                                         </div>
 
                                         <div v-if="task.due_date" class="text-[10px] font-mono">
-                                            <span v-if="isOverdue(task)" class="px-1 py-0.5 rounded bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-bold">
+                                            <span v-if="isOverdue(task)" class="px-1 py-0.5 rounded bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-bold">
                                                 逾期 {{ new Date(task.due_date).toLocaleDateString([], { month: '2-digit', day: '2-digit' }) }}
                                             </span>
                                             <span v-else class="text-gray-400">
@@ -342,7 +342,7 @@ const submitEditProject = () => {
                                             </button>
                                             <button
                                                 @click="deleteTask(task)"
-                                                class="text-gray-400 hover:text-rose-600 dark:hover:text-rose-400 transition"
+                                                class="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition"
                                                 title="刪除任務"
                                             >
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -354,7 +354,7 @@ const submitEditProject = () => {
                                             <button
                                                 v-if="col.key === 'todo'"
                                                 @click="updateStatus(task, 'in_progress')"
-                                                class="px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-100 transition"
+                                                class="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-semibold hover:bg-indigo-100 transition"
                                                 title="開始進行"
                                             >
                                                 進行 &rarr;

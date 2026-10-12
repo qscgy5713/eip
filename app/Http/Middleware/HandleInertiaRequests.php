@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
                     ];
                 }) : [],
             ],
+            'branding' => fn () => \App\Services\Branding::get(),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),

@@ -36,6 +36,9 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+// 品牌 Logo / Favicon 檔案 (登入頁也會用到,不需登入)
+Route::get('/branding/{kind}', [\App\Http\Controllers\BrandingController::class, 'asset'])->where('kind', 'logo|favicon')->name('branding.asset');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/global-search', [GlobalSearchController::class, 'search'])->name('global-search');
@@ -229,6 +232,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
+    // 品牌設定:網站名稱 / Logo / Favicon (管理員專屬)
+    Route::get('/branding', [\App\Http\Controllers\BrandingController::class, 'edit'])->name('branding.edit');
+    Route::post('/branding', [\App\Http\Controllers\BrandingController::class, 'update'])->name('branding.update');
 
     // 系統審計稽核日誌 (管理員專屬)
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');

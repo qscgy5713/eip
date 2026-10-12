@@ -41,9 +41,9 @@ const resetFilters = () => {
 
 const getPriorityBadge = (p) => {
     switch (p) {
-        case 'urgent': return { label: '特急件', class: 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border-rose-300 dark:border-rose-800 animate-pulse' };
+        case 'urgent': return { label: '特急件', class: 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border-red-300 dark:border-red-800 animate-pulse' };
         case 'high': return { label: '高優先', class: 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border-amber-300 dark:border-amber-800' };
-        case 'normal': return { label: '一般', class: 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border-blue-200 dark:border-blue-800' };
+        case 'normal': return { label: '一般', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' };
         default: return { label: '低優先', class: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700' };
     }
 };
@@ -51,8 +51,8 @@ const getPriorityBadge = (p) => {
 const getStatusBadge = (s) => {
     switch (s) {
         case 'open': return { label: '待處理', class: 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' };
-        case 'in_progress': return { label: '處理中', class: 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300' };
-        case 'pending_user': return { label: '待同仁確認', class: 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300' };
+        case 'in_progress': return { label: '處理中', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300' };
+        case 'pending_user': return { label: '待同仁確認', class: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300' };
         case 'resolved': return { label: '已完修', class: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' };
         case 'closed': return { label: '已結案', class: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' };
         default: return { label: s, class: 'bg-gray-100 text-gray-700' };
@@ -101,9 +101,9 @@ const getStatusBadge = (s) => {
                     <div class="p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">工程師處理中</p>
-                            <p class="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1">{{ stats.inProgressCount }} <span class="text-xs font-normal text-gray-400">件</span></p>
+                            <p class="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">{{ stats.inProgressCount }} <span class="text-xs font-normal text-gray-400">件</span></p>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
                     </div>
@@ -111,9 +111,9 @@ const getStatusBadge = (s) => {
                     <div class="p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-xs flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400">我提報處理中</p>
-                            <p class="text-2xl font-black text-rose-600 dark:text-rose-400 mt-1">{{ stats.myPendingCount }} <span class="text-xs font-normal text-gray-400">件</span></p>
+                            <p class="text-2xl font-black text-red-600 dark:text-red-400 mt-1">{{ stats.myPendingCount }} <span class="text-xs font-normal text-gray-400">件</span></p>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 flex items-center justify-center">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
                     </div>
@@ -178,7 +178,7 @@ const getStatusBadge = (s) => {
                                 @keyup.enter="applyFilters(tab)"
                                 type="text"
                                 placeholder="搜尋工單號 (TK-...)、問題主旨或地點..."
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                             />
                         </div>
 
@@ -186,7 +186,7 @@ const getStatusBadge = (s) => {
                             <select
                                 v-model="category"
                                 @change="applyFilters(tab)"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                             >
                                 <option value="">全部分類</option>
                                 <option value="it_hardware">電腦硬體</option>
@@ -202,7 +202,7 @@ const getStatusBadge = (s) => {
                             <select
                                 v-model="priority"
                                 @change="applyFilters(tab)"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                             >
                                 <option value="">全部優先級</option>
                                 <option value="urgent">特急件</option>
@@ -253,12 +253,12 @@ const getStatusBadge = (s) => {
                                     class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition"
                                 >
                                     <td class="py-3 px-4 font-mono font-bold text-gray-900 dark:text-gray-100 whitespace-nowrap">
-                                        <Link :href="route('tickets.show', ticket.id)" class="hover:text-rose-600 hover:underline">
+                                        <Link :href="route('tickets.show', ticket.id)" class="hover:text-red-600 hover:underline">
                                             {{ ticket.ticket_number }}
                                         </Link>
                                     </td>
                                     <td class="py-3 px-4 max-w-xs">
-                                        <Link :href="route('tickets.show', ticket.id)" class="font-bold text-gray-800 dark:text-gray-200 hover:text-rose-600 line-clamp-1">
+                                        <Link :href="route('tickets.show', ticket.id)" class="font-bold text-gray-800 dark:text-gray-200 hover:text-red-600 line-clamp-1">
                                             {{ ticket.title }}
                                         </Link>
                                         <p v-if="ticket.location" class="text-[11px] text-gray-400 mt-0.5 truncate flex items-center gap-1">
@@ -281,7 +281,7 @@ const getStatusBadge = (s) => {
                                     </td>
                                     <td class="py-3 px-4 whitespace-nowrap">
                                         <span v-if="ticket.assignee" class="inline-flex items-center gap-1.5 font-medium text-gray-700 dark:text-gray-300">
-                                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                                             <span>{{ ticket.assignee.name }}</span>
                                         </span>
                                         <span v-else class="text-amber-600 dark:text-amber-400 font-medium text-[11px]">
@@ -312,7 +312,7 @@ const getStatusBadge = (s) => {
 
                     <!-- 空狀態 -->
                     <div v-else class="py-16 text-center">
-                        <div class="w-16 h-16 mx-auto rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center text-3xl">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 flex items-center justify-center text-3xl">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
                         <h3 class="text-base font-bold text-gray-800 dark:text-gray-200 mt-4">查無符合條件的叫修工單</h3>

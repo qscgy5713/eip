@@ -237,21 +237,21 @@ defineExpose({
                                     :class="[
                                         'p-2 rounded-lg shrink-0 transition',
                                         item.type === 'shortcut' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
-                                        item.type === 'employee' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400' :
+                                        item.type === 'employee' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
                                         item.type === 'form' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400' :
-                                        item.type === 'announcement' ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400' :
+                                        item.type === 'announcement' ? 'bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400' :
                                         item.type === 'meeting_room' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' :
-                                        item.type === 'project' ? 'bg-violet-100 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400' :
-                                        item.type === 'asset' ? 'bg-teal-100 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400' :
-                                        item.type === 'weekly_report' ? 'bg-cyan-100 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400' :
+                                        item.type === 'project' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
+                                        item.type === 'asset' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
+                                        item.type === 'weekly_report' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
                                         item.type === 'payslip' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' :
-                                        item.type === 'meal_order' ? 'bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400' :
-                                        item.type === 'ticket' ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400' :
-                                        item.type === 'visitor_reservation' ? 'bg-sky-100 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400' :
+                                        item.type === 'meal_order' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
+                                        item.type === 'ticket' ? 'bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400' :
+                                        item.type === 'visitor_reservation' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
                                         item.type === 'vehicle_dispatch' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400' :
                                         item.type === 'training_course' ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400' :
                                         item.type === 'welfare_reward' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400' :
-                                        'bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400'
+                                        'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
                                     ]"
                                 >
                                     <!-- 捷徑圖示 -->

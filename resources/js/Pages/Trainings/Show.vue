@@ -129,7 +129,7 @@ const updateCourseStatus = async (newStatus) => {
                 :class="[
                     'p-4 rounded-xl border flex items-center justify-between',
                     myRegistration.status === 'attended'
-                        ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 text-blue-900 dark:text-blue-200'
+                        ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 text-indigo-900 dark:text-indigo-200'
                         : myRegistration.status === 'waitlist'
                         ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 text-amber-900 dark:text-amber-200'
                         : 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-900 dark:text-emerald-200'
@@ -161,7 +161,7 @@ const updateCourseStatus = async (newStatus) => {
             </div>
 
             <!-- 主管/人資/開課者 管理控制台 -->
-            <div v-if="canManage" class="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-indigo-500/10 dark:from-indigo-900/30 dark:to-purple-900/30 border border-indigo-200 dark:border-indigo-800 rounded-xl p-5 shadow-sm">
+            <div v-if="canManage" class="bg-gradient-to-r from-indigo-500/10 via-indigo-500/10 to-indigo-500/10 dark:from-indigo-900/30 dark:to-indigo-900/30 border border-indigo-200 dark:border-indigo-800 rounded-xl p-5 shadow-sm">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
                         <h3 class="text-base font-bold text-indigo-950 dark:text-indigo-200 flex items-center gap-2">
@@ -249,7 +249,7 @@ const updateCourseStatus = async (newStatus) => {
                                         </div>
                                         <p class="text-2xs text-gray-400 mt-0.5">
                                             登記於 {{ new Date(reg.registered_at).toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
-                                            <span v-if="reg.attended_at" class="text-blue-500">
+                                            <span v-if="reg.attended_at" class="text-indigo-500">
                                                 · 完訓核發於 {{ new Date(reg.attended_at).toLocaleTimeString() }}
                                             </span>
                                         </p>

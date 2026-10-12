@@ -97,7 +97,7 @@ const resetFilter = () => {
                 </div>
 
                 <div class="bg-white dark:bg-gray-800 p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl shrink-0">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     </div>
                     <div>
@@ -315,7 +315,7 @@ const resetFilter = () => {
                             </span>
                             <span
                                 v-else-if="course.my_registration_status === 'attended'"
-                                class="px-2.5 py-1 text-2xs font-bold rounded-lg bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300"
+                                class="px-2.5 py-1 text-2xs font-bold rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300"
                             >
                                  完訓合格
                             </span>

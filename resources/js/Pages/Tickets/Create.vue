@@ -69,9 +69,9 @@ const submit = () => {
                                 type="text"
                                 required
                                 placeholder="例：辦公室 Wi-Fi 頻繁斷線、筆記型電腦無法開機、7F 會議室投影機訊號異常"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                             />
-                            <p v-if="form.errors.title" class="text-rose-600 mt-1 font-semibold">{{ form.errors.title }}</p>
+                            <p v-if="form.errors.title" class="text-red-600 mt-1 font-semibold">{{ form.errors.title }}</p>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -82,7 +82,7 @@ const submit = () => {
                                 <select
                                     v-model="form.category"
                                     required
-                                    class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                                 >
                                     <option value="it_hardware">電腦與硬體周邊 (螢幕、鍵盤、筆電)</option>
                                     <option value="it_software">軟體安裝與帳號權限 (VPN、Email、系統)</option>
@@ -100,7 +100,7 @@ const submit = () => {
                                 <select
                                     v-model="form.priority"
                                     required
-                                    class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                    class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                                 >
                                     <option value="low">低優先 (不影響正常工作進度)</option>
                                     <option value="normal">一般 (日常叫修，正常工作日排程)</option>
@@ -118,7 +118,7 @@ const submit = () => {
                                 v-model="form.location"
                                 type="text"
                                 placeholder="例：8F 研發部座位 A-12、5F 大會議室、茶水間旁影印機"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                             />
                         </div>
 
@@ -131,9 +131,9 @@ const submit = () => {
                                 rows="4"
                                 required
                                 placeholder="請具體說明：何時開始發生？是否有出現錯誤代碼？已經嘗試過哪些重開機或排除步驟？以便工程師準備工具即時排除。"
-                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-rose-500 focus:border-rose-500"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-xs focus:ring-red-500 focus:border-red-500"
                             ></textarea>
-                            <p v-if="form.errors.description" class="text-rose-600 mt-1 font-semibold">{{ form.errors.description }}</p>
+                            <p v-if="form.errors.description" class="text-red-600 mt-1 font-semibold">{{ form.errors.description }}</p>
                         </div>
 
                         <!-- 故障截圖或照片上傳 -->
@@ -141,7 +141,7 @@ const submit = () => {
                             <label class="block font-bold text-gray-700 dark:text-gray-300 mb-1">
                                 上傳故障照片或畫面截圖 (選填，最多 10MB)
                             </label>
-                            <div class="p-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl hover:border-rose-400 dark:hover:border-rose-500 transition text-center">
+                            <div class="p-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl hover:border-red-400 dark:hover:border-red-500 transition text-center">
                                 <input
                                     ref="fileInput"
                                     type="file"
@@ -153,7 +153,7 @@ const submit = () => {
                                 />
                                 <label for="ticket-file-input" class="cursor-pointer block">
                                     <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                                    <p class="font-bold text-rose-600 dark:text-rose-400 hover:underline">點擊選取檔案或截圖照片</p>
+                                    <p class="font-bold text-red-600 dark:text-red-400 hover:underline">點擊選取檔案或截圖照片</p>
                                     <p class="text-[11px] text-gray-400 mt-0.5">支援 PNG, JPG, GIF, PDF，單檔上限 10MB</p>
                                 </label>
                             </div>
@@ -168,7 +168,7 @@ const submit = () => {
                                     <button
                                         type="button"
                                         @click="removeFile(idx)"
-                                        class="text-rose-600 hover:text-rose-800 text-xs font-bold"
+                                        class="text-red-600 hover:text-red-800 text-xs font-bold"
                                     >
                                         移除
                                     </button>

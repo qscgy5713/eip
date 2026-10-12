@@ -242,9 +242,9 @@ const extractDataSummary = (data, formCode) => {
                     <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex items-center justify-between text-xs text-gray-500 font-semibold dark:text-gray-400">
                             <span>今日新送審</span>
-                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                         </div>
-                        <div class="mt-2 text-3xl font-extrabold text-blue-600">
+                        <div class="mt-2 text-3xl font-extrabold text-indigo-600">
                             {{ stats.today_new }}
                         </div>
                         <div class="mt-1 text-[11px] text-gray-400">本日新增待審件</div>
@@ -299,7 +299,7 @@ const extractDataSummary = (data, formCode) => {
                         <button
                             type="button"
                             @click="openBatchModal('rejected')"
-                            class="inline-flex items-center px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition"
+                            class="inline-flex items-center px-4 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg shadow-sm transition"
                         >
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -439,7 +439,7 @@ const extractDataSummary = (data, formCode) => {
                                     <!-- 表單名稱 & 單號 -->
                                     <td class="py-3.5 px-4">
                                         <div class="flex items-center gap-1.5">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
                                                 {{ record.form_request?.form?.name }}
                                             </span>
                                             <span
@@ -496,7 +496,7 @@ const extractDataSummary = (data, formCode) => {
                                                 type="button"
                                                 @click="quickReject(record)"
                                                 :disabled="singleActionForm.processing"
-                                                class="px-2 py-1 text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 rounded transition disabled:opacity-50"
+                                                class="px-2 py-1 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 rounded transition disabled:opacity-50"
                                             >
                                                 駁回
                                             </button>
@@ -561,7 +561,7 @@ const extractDataSummary = (data, formCode) => {
                             <span
                                 :class="[
                                     'w-2.5 h-2.5 rounded-full',
-                                    batchActionType === 'approved' ? 'bg-emerald-500' : 'bg-rose-500'
+                                    batchActionType === 'approved' ? 'bg-emerald-500' : 'bg-red-500'
                                 ]"
                             ></span>
                             確認批次{{ batchActionType === 'approved' ? '核准' : '駁回' }} ({{ selectedIds.length }} 筆)
@@ -579,7 +579,7 @@ const extractDataSummary = (data, formCode) => {
                                 'p-3 rounded-lg text-xs border',
                                 batchActionType === 'approved'
                                     ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                                    : 'bg-rose-50 text-rose-800 border-rose-200'
+                                    : 'bg-red-50 text-red-800 border-red-200'
                             ]"
                         >
                             <p class="font-semibold">
@@ -619,7 +619,7 @@ const extractDataSummary = (data, formCode) => {
                                 'px-4 py-2 text-xs font-bold text-white rounded-lg shadow-sm transition disabled:opacity-50',
                                 batchActionType === 'approved'
                                     ? 'bg-emerald-600 hover:bg-emerald-700'
-                                    : 'bg-rose-600 hover:bg-rose-700'
+                                    : 'bg-red-600 hover:bg-red-700'
                             ]"
                         >
                             {{ batchForm.processing ? '正在批次處理中...' : `確認批次${batchActionType === 'approved' ? '核准' : '駁回'}` }}

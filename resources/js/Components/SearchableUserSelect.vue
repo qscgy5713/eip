@@ -181,7 +181,7 @@ onUnmounted(() => {
                     v-if="selectedUser && !disabled"
                     type="button"
                     @click="clearSelection"
-                    class="p-0.5 text-gray-400 hover:text-rose-600 rounded-full hover:bg-rose-50 transition"
+                    class="p-0.5 text-gray-400 hover:text-red-600 rounded-full hover:bg-red-50 transition"
                     title="清除選取"
                 >
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

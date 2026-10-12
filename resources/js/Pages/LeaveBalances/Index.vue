@@ -150,7 +150,7 @@ const activeLedgerTab = ref('leave'); // 'leave' | 'overtime'
 const leaveStatusBadgeClass = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        case 'rejected': return 'bg-rose-50 text-rose-700 border-rose-200';
+        case 'rejected': return 'bg-red-50 text-red-700 border-red-200';
         default: return 'bg-amber-50 text-amber-700 border-amber-200';
     }
 };
@@ -166,7 +166,7 @@ const leaveStatusLabel = (status) => {
 const overtimeStatusBadgeClass = (status) => {
     switch (status) {
         case 'approved': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        case 'rejected': return 'bg-rose-50 text-rose-700 border-rose-200';
+        case 'rejected': return 'bg-red-50 text-red-700 border-red-200';
         default: return 'bg-amber-50 text-amber-700 border-amber-200';
     }
 };
@@ -302,7 +302,7 @@ const overtimeStatusLabel = (status, isComp) => {
                                 <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden dark:bg-gray-700">
                                     <div
                                         class="h-2 rounded-full transition-all duration-300"
-                                        :class="b.is_hard_quota ? 'bg-indigo-600' : 'bg-blue-500'"
+                                        :class="b.is_hard_quota ? 'bg-indigo-600' : 'bg-indigo-500'"
                                         :style="{
                                             width: `${(b.allocated_days || 0) > 0 ? Math.min(100, Math.round(((parseFloat(b.used_days || 0) + parseFloat(b.pending_days || 0)) / parseFloat(b.allocated_days || 1)) * 100)) : 0}%`
                                         }"
