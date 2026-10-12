@@ -14,6 +14,8 @@ defineProps({
     activePolls: Array,
     myTasks: Array,
     myAssets: Array,
+    myWeeklyReport: Object,
+    currentWeekNumber: Number,
 });
 
 const clockInForm = useForm({
@@ -148,14 +150,23 @@ const statusBadge = (status) => {
                 </div>
 
                 <!-- 常用快捷行動列 (Quick Action Bar) -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
                     <Link :href="route('forms.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition flex items-center space-x-3 group">
                         <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h2.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
                         <div>
                             <p class="text-xs font-bold text-gray-800 dark:text-gray-200">表單申辦</p>
                             <p class="text-[11px] text-gray-400 dark:text-gray-500">請假、加班、簽呈</p>
+                        </div>
+                    </Link>
+                    <Link :href="route('weekly-reports.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-cyan-400 dark:hover:border-cyan-500 hover:shadow-md transition flex items-center space-x-3 group">
+                        <div class="w-9 h-9 rounded-lg bg-cyan-50 dark:bg-cyan-950/40 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:bg-cyan-600 group-hover:text-white transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800 dark:text-gray-200">工作週報</p>
+                            <p class="text-[11px] text-gray-400 dark:text-gray-500">每週進度與回報</p>
                         </div>
                     </Link>
                     <Link :href="route('projects.index')" class="p-3.5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-violet-400 dark:hover:border-violet-500 hover:shadow-md transition flex items-center space-x-3 group">
@@ -466,6 +477,63 @@ const statusBadge = (status) => {
                             <div v-if="!myAssets || myAssets.length === 0" class="py-6 text-center text-xs text-gray-400 dark:text-gray-500">
                                 目前無由您名下保管借調之公務資產
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- 本週工作週報專區 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 bg-cyan-500 rounded-full"></span>
+                                    <h3 class="font-bold text-gray-900 dark:text-gray-100 text-base">本週工作週報 (第 {{ currentWeekNumber }} 週)</h3>
+                                </div>
+                                <span
+                                    v-if="myWeeklyReport"
+                                    :class="[
+                                        'px-2 py-0.5 rounded-full text-[10px] font-bold',
+                                        myWeeklyReport.status === 'reviewed' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' :
+                                        myWeeklyReport.status === 'submitted' ? 'bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300' :
+                                        'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300'
+                                    ]"
+                                >
+                                    {{ myWeeklyReport.status_label }}
+                                </span>
+                                <span v-else class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300">
+                                    尚未填寫
+                                </span>
+                            </div>
+                            <div class="mt-4">
+                                <template v-if="myWeeklyReport">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">工作重點摘要：</p>
+                                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 mt-1 line-clamp-2">{{ myWeeklyReport.summary }}</p>
+                                    <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-2">
+                                        提交時間：{{ new Date(myWeeklyReport.submitted_at || myWeeklyReport.created_at).toLocaleString() }}
+                                    </p>
+                                </template>
+                                <template v-else>
+                                    <div class="p-3 bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40 rounded-lg text-xs text-amber-800 dark:text-amber-300">
+                                        <p class="font-semibold">⚠️ 提醒您本週尚未提交工作週報</p>
+                                        <p class="text-[11px] mt-1 text-amber-700 dark:text-amber-400">總結本週完成任務與跨部門成果，方便主管點評與團隊同步。</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+                            <Link
+                                v-if="myWeeklyReport"
+                                :href="route('weekly-reports.show', myWeeklyReport.id)"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white shadow-xs transition"
+                            >
+                                檢視我的週報 &rarr;
+                            </Link>
+                            <Link
+                                v-else
+                                :href="route('weekly-reports.create')"
+                                class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition"
+                            >
+                                立即撰寫本週週報 &rarr;
+                            </Link>
                         </div>
                     </div>
 

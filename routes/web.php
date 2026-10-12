@@ -22,6 +22,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\WeeklyReportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -129,6 +130,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
     Route::post('/assets/{asset}/borrow', [AssetController::class, 'borrow'])->name('assets.borrow');
     Route::post('/assets/{asset}/return', [AssetController::class, 'returnAsset'])->name('assets.return');
+
+    // 企業工作週報與主管點評系統
+    Route::get('/weekly-reports', [WeeklyReportController::class, 'index'])->name('weekly-reports.index');
+    Route::get('/weekly-reports/create', [WeeklyReportController::class, 'create'])->name('weekly-reports.create');
+    Route::post('/weekly-reports', [WeeklyReportController::class, 'store'])->name('weekly-reports.store');
+    Route::get('/weekly-reports/{weeklyReport}', [WeeklyReportController::class, 'show'])->name('weekly-reports.show');
+    Route::get('/weekly-reports/{weeklyReport}/edit', [WeeklyReportController::class, 'edit'])->name('weekly-reports.edit');
+    Route::put('/weekly-reports/{weeklyReport}', [WeeklyReportController::class, 'update'])->name('weekly-reports.update');
+    Route::delete('/weekly-reports/{weeklyReport}', [WeeklyReportController::class, 'destroy'])->name('weekly-reports.destroy');
+    Route::post('/weekly-reports/{weeklyReport}/comment', [WeeklyReportController::class, 'comment'])->name('weekly-reports.comment');
+    Route::post('/weekly-reports/remind', [WeeklyReportController::class, 'remind'])->name('weekly-reports.remind');
 
     // 站內通知中心
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

@@ -127,6 +127,13 @@ const commandPaletteRef = ref(null);
                                 >
                                     資產設備
                                 </NavLink>
+                                <NavLink
+                                    :href="route('weekly-reports.index')"
+                                    :active="route().current('weekly-reports.*')"
+                                    class="whitespace-nowrap"
+                                >
+                                    工作週報
+                                </NavLink>
 
                                 <!-- 系統管理 Dropdown (限管理者與人資) -->
                                 <div
@@ -465,6 +472,12 @@ const commandPaletteRef = ref(null);
                             :active="route().current('assets.*')"
                         >
                             資產設備
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('weekly-reports.index')"
+                            :active="route().current('weekly-reports.*')"
+                        >
+                            工作週報
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.role === 'admin'"

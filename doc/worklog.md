@@ -2,6 +2,31 @@
 
 ## 2026-10-12
 ### 做了什麼
+- 實作**企業工作週報與團隊協同簡報系統 (Weekly Digest & Team Briefing Hub)**：
+  - **資料架構與資料表設計 (`WeeklyReport`, `WeeklyReportComment` 模型與 migration)**：
+    - `weekly_reports`：紀錄所屬同仁 (`user_id`)、所屬部門 (`department_id`)、年度 (`year`)、ISO 週次 (`week_number`)、起訖日期 (`start_date`, `end_date`)、本週重點概述 (`summary`)、具體完成事項 (`achievements`)、下週工作計畫 (`plans_next_week`)、遭遇阻礙或支援需求 (`challenges_or_support`)、生命週期狀態 (`status`: draft, submitted, reviewed)、正式提交時間戳記 (`submitted_at`)，設定 `unique(user_id, year, week_number)` 嚴格防呆防重複建立。
+    - `weekly_report_comments`：主管點評與團隊交流表，紀錄週報關聯 (`weekly_report_id`)、點評者 (`user_id`)、點評內容 (`comment`)。
+    - `User` 模型擴充：加入 `weeklyReports()` 與 `weeklyReportComments()` 關聯。
+  - **後端業務邏輯、權限保護與智慧連鎖 (`WeeklyReportController`)**：
+    - **智慧任務帶入**：整合專案看板 `Task` 模型，動態載入同仁當週標記為 `done` 之任務清單與實際工時，支援前端一鍵條列注入完成事項。
+    - **主管提交通知**：正式提交時自動查找所屬部門主管 (`department->leader_id`) 並連鎖發送 `EipSystemNotification` 站內通知。
+    - **IDOR 越權調閱防護**：非作者本人、非同部門主管或非管理員禁止查閱，嚴密保護部門內部工作簡報機密。
+    - **主管批閱點評閉環**：主管或管理員留言後，自動將週報更新為 `reviewed` 狀態，並即時通知作者同仁。已批閱週報鎖定禁止擅自竄改。
+    - **一鍵催繳提醒**：主管看板統計當週未繳交同仁名冊，支援一鍵發送催繳提醒通知。
+    - **完整審計**：提交、更新、刪除、點評與催繳提醒皆留存 `AuditLog`。
+  - **前端視圖與互動元件 (`WeeklyReports/Index.vue`, `Create.vue`, `Show.vue`, `Edit.vue`)**：
+    - **週報存摺與部門看板 (`WeeklyReports/Index.vue`)**：當週週次徽章、我的提交狀態、主管部門已交率與未繳交人數卡片；未交同仁名冊與一鍵催繳按鈕；「我的週報」與「部門同仁週報」雙向 Tabs 切換；年度、週次、狀態與關鍵字搜尋；深色模式全面適配。
+    - **撰寫週報與智慧帶入 (`WeeklyReports/Create.vue`)**：四大核心欄位結構化填寫；「✨ 一鍵帶入看板完成任務」智慧連鎖功能；暫存草稿與正式送出雙重模式。
+    - **詳情與點評互動專區 (`WeeklyReports/Show.vue`)**：清晰條列工作成果與阻礙；主管指導評語時間軸 (Comments Timeline)；主管線上點評表單；草稿提示橫幅。
+    - **修訂更新 (`WeeklyReports/Edit.vue`)**：草稿或點評前彈性調整內容。
+  - **生態整合與個人工作台全景深化**：
+    - **個人工作台 Dashboard (`Dashboard.vue`, `DashboardController`)**：主體區塊整合「本週工作週報 (第 W 週)」卡片，顯示本週撰寫進度與未交警示；快捷行動列擴充為 8 欄捷徑。
+    - **全站指揮中心 (`GlobalSearchController`, `CommandPalette.vue`)**：`Cmd+K` 支援週報摘要與週次模糊檢索；新增週報專屬青色圖示與捷徑導航。
+    - **主導覽列 (`AuthenticatedLayout.vue`)**：桌機與手機導覽列全面納入「工作週報」入口。
+  - **品質驗證與自動化測試**：
+    - 新增 `tests/Feature/WeeklyReportTest.php` 涵蓋 11 項測試（58 assertions），覆蓋清單檢視、提交通知、草稿隔離、重複防呆、IDOR 權限隔離、審閱後鎖定、主管點評流轉、催繳通知、Dashboard 整合與全站搜尋。
+    - 全系統自動化測試累積達到 **267 項 Feature / Unit 測試 100% 全數通過 (1,548 assertions)**。
+    - 前端 Vite 打包成功完成。
 - 實作**企業固定資產與公務設備借調管理系統 (Corporate Asset & Equipment Management Hub)**：
   - **資料架構與資料表設計 (`Asset`, `AssetLoan` 模型與 migration)**：
     - `assets`：資產唯一標籤編號 (`asset_tag` 如 `AST-2026-0001`)、名稱 (`name`)、五大分類 (`category`: `it_hardware`, `office_equipment`, `av_media`, `vehicles`, `peripherals`)、原廠序號 (`serial_number`)、規格說明 (`specification`)、存放地點 (`location`)、四態生命週期 (`status`: `available`, `in_use`, `maintenance`, `retired`)、目前保管人 (`current_holder_id`)、歸屬部門 (`department_id`)、採購日期 (`purchase_date`)、採購金額 (`purchase_cost`)、備註 (`notes`)。

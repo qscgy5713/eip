@@ -145,6 +145,16 @@ class User extends Authenticatable
         return $this->hasMany(AssetLoan::class);
     }
 
+    public function weeklyReports(): HasMany
+    {
+        return $this->hasMany(WeeklyReport::class);
+    }
+
+    public function weeklyReportComments(): HasMany
+    {
+        return $this->hasMany(WeeklyReportComment::class);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

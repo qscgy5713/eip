@@ -304,6 +304,44 @@ class GlobalSearchController extends Controller
             ];
         }
 
+        // 10. 檢索工作週報 (具備權限隔離)
+        $reportsQuery = \App\Models\WeeklyReport::with('user')
+            ->where(function ($q) use ($query) {
+                $q->where('summary', 'like', "%{$query}%")
+                  ->orWhere('achievements', 'like', "%{$query}%")
+                  ->orWhere('plans_next_week', 'like', "%{$query}%");
+            });
+
+        if (! $user->isAdmin() && ! $user->isHr()) {
+            $reportsQuery->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+                if ($user->isManager() && $user->department_id) {
+                    $q->orWhere('department_id', $user->department_id);
+                }
+            });
+        }
+
+        $reports = $reportsQuery->latest('id')
+            ->limit(5)
+            ->get()
+            ->map(function ($r) {
+                return [
+                    'id' => $r->id,
+                    'title' => "{$r->user?->name} 的週報 ({$r->year} W{$r->week_number})",
+                    'subtitle' => "重點: " . \Illuminate\Support\Str::limit($r->summary, 45) . " · 狀態: {$r->status_label}",
+                    'url' => route('weekly-reports.show', $r->id),
+                    'badge' => '週報',
+                    'type' => 'weekly_report',
+                ];
+            });
+
+        if ($reports->isNotEmpty()) {
+            $results['weekly_reports'] = [
+                'title' => '工作週報與簡報',
+                'items' => $reports,
+            ];
+        }
+
         return response()->json([
             'query' => $query,
             'results' => $results,
@@ -316,6 +354,14 @@ class GlobalSearchController extends Controller
     private function getQuickShortcuts(User $user): array
     {
         $shortcuts = [
+            [
+                'id' => 'quick-weekly-reports',
+                'title' => '工作週報與協同簡報',
+                'subtitle' => '撰寫本週工作進度、查閱部門週報與主管點評',
+                'url' => route('weekly-reports.index'),
+                'badge' => '週報',
+                'type' => 'shortcut',
+            ],
             [
                 'id' => 'quick-assets',
                 'title' => '固定資產與公務設備借調',

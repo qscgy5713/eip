@@ -175,6 +175,15 @@ class DashboardController extends Controller
                 return $asset;
             });
 
+        // 11. 本週工作週報狀態
+        $now = \Carbon\Carbon::now();
+        $currentYear = $now->year;
+        $currentWeek = $now->isoWeek();
+        $myWeeklyReport = \App\Models\WeeklyReport::where('user_id', $user->id)
+            ->where('year', $currentYear)
+            ->where('week_number', $currentWeek)
+            ->first();
+
         return Inertia::render('Dashboard', [
             'announcements' => $announcements,
             'pendingApprovals' => $pendingApprovals,
@@ -186,12 +195,15 @@ class DashboardController extends Controller
             'activePolls' => $activePolls,
             'myTasks' => $myTasks,
             'myAssets' => $myAssets,
+            'myWeeklyReport' => $myWeeklyReport,
+            'currentWeekNumber' => $currentWeek,
             'stats' => [
                 'unreadAnnouncementsCount' => Announcement::where('status', 'published')->whereDoesntHave('reads', fn($q) => $q->where('user_id', $user->id))->count(),
                 'pendingApprovalsCount' => $totalPendingApprovalsCount,
                 'myPendingRequestsCount' => FormRequest::where('user_id', $user->id)->where('status', 'pending')->count(),
                 'myPendingTasksCount' => \App\Models\Task::where('assignee_id', $user->id)->whereIn('status', ['todo', 'in_progress', 'review'])->count(),
                 'myHeldAssetsCount' => \App\Models\Asset::where('current_holder_id', $user->id)->count(),
+                'isWeeklyReportSubmitted' => $myWeeklyReport && $myWeeklyReport->status !== 'draft',
             ],
         ]);
     }
