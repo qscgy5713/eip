@@ -21,7 +21,7 @@ class SecuritySweepTest extends TestCase
 
     /** 不需要登入的公開路由(白名單,新增要審慎) */
     private const PUBLIC = [
-        'login', 'password.request', 'password.email', 'password.reset', 'password.store',
+        'login', 'passkey.login-options', 'passkey.login', 'password.request', 'password.email', 'password.reset', 'password.store',
         'pwa.manifest', 'branding.asset', 'two-factor.challenge', 'two-factor.challenge.store',
     ];
 
@@ -60,7 +60,7 @@ class SecuritySweepTest extends TestCase
             return true;
         }
 
-        return in_array($uri, ['/', '/login', '/manifest.webmanifest', '/forgot-password', '/two-factor-challenge'], true)
+        return in_array($uri, ['/', '/login', '/manifest.webmanifest', '/forgot-password', '/two-factor-challenge', '/passkeys/login/options', '/passkeys/login'], true)
             || str_starts_with($uri, '/reset-password');
     }
 

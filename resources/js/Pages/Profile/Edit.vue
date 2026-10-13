@@ -3,6 +3,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import LoginActivityForm from './Partials/LoginActivityForm.vue';
 import NotificationPreferencesForm from './Partials/NotificationPreferencesForm.vue';
+import PushNotificationsForm from './Partials/PushNotificationsForm.vue';
+import PasskeysForm from './Partials/PasskeysForm.vue';
 import TwoFactorForm from './Partials/TwoFactorForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
@@ -29,6 +31,14 @@ defineProps({
     mailNotificationsAvailable: {
         type: Boolean,
         default: true,
+    },
+    push: {
+        type: Object,
+        default: () => ({ publicKey: null, devices: [] }),
+    },
+    passkeys: {
+        type: Array,
+        default: () => [],
     },
 });
 </script>
@@ -72,6 +82,12 @@ defineProps({
                 <div
                     class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
                 >
+                    <PasskeysForm :passkeys="passkeys" />
+                </div>
+
+                <div
+                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+                >
                     <LoginActivityForm :events="loginEvents" />
                 </div>
 
@@ -79,6 +95,12 @@ defineProps({
                     class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
                 >
                     <NotificationPreferencesForm :enabled="mailNotifications" :available="mailNotificationsAvailable" />
+                </div>
+
+                <div
+                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-800"
+                >
+                    <PushNotificationsForm :push="push" />
                 </div>
             </div>
         </div>

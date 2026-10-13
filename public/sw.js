@@ -34,3 +34,38 @@ self.addEventListener('fetch', (event) => {
         fetch(req).catch(() => caches.match(OFFLINE_URL)),
     );
 });
+
+// ---- 手機推播(Web Push)----
+// 推播內容只有標題與一行摘要(由伺服器精簡過),點開後仍需登入才看得到完整資料。
+self.addEventListener('push', (event) => {
+    let data = {};
+    try {
+        data = event.data ? event.data.json() : {};
+    } catch (e) {
+        data = {};
+    }
+    event.waitUntil(
+        self.registration.showNotification(data.title || 'EIP 通知', {
+            body: data.body || '',
+            icon: '/pwa/icon-192.png',
+            badge: '/pwa/icon-192.png',
+            data: { url: data.url || '/dashboard' },
+        }),
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const url = (event.notification.data && event.notification.data.url) || '/dashboard';
+    event.waitUntil(
+        self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+            for (const c of list) {
+                if ('focus' in c) {
+                    c.navigate(url).catch(() => {});
+                    return c.focus();
+                }
+            }
+            return self.clients.openWindow(url);
+        }),
+    );
+});

@@ -6,6 +6,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { Passkeys } from '@laravel/passkeys';
 
 defineProps({
     canResetPassword: {
@@ -21,6 +23,23 @@ const form = useForm({
     password: '',
     remember: false,
 });
+
+const passkeySupported = Passkeys.isSupported();
+const passkeyBusy = ref(false);
+const passkeyError = ref('');
+
+const passkeyLogin = async () => {
+    passkeyBusy.value = true;
+    passkeyError.value = '';
+    try {
+        const res = await Passkeys.verify({ remember: form.remember });
+        window.location.href = res.redirect || route('dashboard');
+    } catch (e) {
+        passkeyError.value = e?.name === 'NotAllowedError' ? '' : 'Passkey 登入失敗,請改用密碼登入,或確認這台裝置已新增過 Passkey。';
+    } finally {
+        passkeyBusy.value = false;
+    }
+};
 
 const submit = () => {
     form.post(route('login'), {
@@ -96,5 +115,13 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
+
+        <div v-if="passkeySupported" class="mt-6 border-t border-gray-200 pt-4 dark:border-gray-700">
+            <button type="button" :disabled="passkeyBusy" @click="passkeyLogin"
+                class="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700">
+                用 Passkey 登入(指紋 / 臉部)
+            </button>
+            <p v-if="passkeyError" class="mt-2 text-sm text-red-600" role="alert">{{ passkeyError }}</p>
+        </div>
     </GuestLayout>
 </template>

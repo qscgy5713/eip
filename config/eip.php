@@ -30,6 +30,13 @@ return [
     // 注意:要透過 config 讀取,因為 config:cache 之後 bootstrap 階段的 env() 會是 null。
     'trusted_proxies' => env('TRUSTED_PROXIES'),
 
+    // 手機推播(Web Push)金鑰:php artisan eip:vapid-generate 產生;兩個都留空代表不啟用推播
+    'webpush' => [
+        'public_key' => env('VAPID_PUBLIC_KEY'),
+        'private_key' => env('VAPID_PRIVATE_KEY'),
+        'subject' => env('VAPID_SUBJECT', 'mailto:' . env('MAIL_FROM_ADDRESS', 'admin@example.com')),
+    ],
+
     'password_max_age_days' => (int) env('EIP_PASSWORD_MAX_AGE_DAYS', 0),
     'password_history' => (int) env('EIP_PASSWORD_HISTORY', 5),
 

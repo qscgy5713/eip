@@ -119,3 +119,6 @@
 - [x] 資安測試與修正(N-01 工單附件、N-02 忘記密碼列舉、N-03 CSV 公式),見 doc/security-test-report.md
 - [ ] 部署資安修正到 beta
 - [x] SSH 已確認只允許金鑰登入、禁止 root 登入
+- [x] 手機推播(Web Push)
+- [x] Passkey 指紋/臉部登入
+- [ ] 部署推播與 Passkey 到 beta(server .env 加 VAPID 金鑰、migrate)並用手機實測

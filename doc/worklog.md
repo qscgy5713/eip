@@ -1,5 +1,10 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-13 手機推播(Web Push)與 Passkey 登入
+- **Web Push**:`minishlink/web-push`;`push_subscriptions` 表、`WebPushService`、`WebPushChannel`(站內通知同步推播,失敗只記 log,失效訂閱自動移除)、`sw.js` 加 push/notificationclick、個人帳號設定頁「手機推播通知」(開啟/關閉/測試)。金鑰用 `php artisan eip:vapid-generate` 產生,放 `.env` 的 `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY`(留空=不啟用)。訂閱 endpoint 只接受 Google/Mozilla/Apple/Windows 推播網域(防 SSRF)。推播內容只有標題與摘要。iPhone 需 iOS 16.4+ 且加入主畫面。
+- **Passkey**:`laravel/passkeys` + `@laravel/passkeys`;登入頁「用 Passkey 登入」、個人設定頁新增/移除(需再輸入密碼)。登入成功寫入登入紀錄(新裝置提醒照舊),停用帳號不能用 Passkey 登入;Passkey 本身是多因素,登入時不再要求 TOTP。Passkey 綁網域(`APP_URL` 的 host),換網域需重新註冊。
+- 新增測試 `PushAndPasskeyTest`,全套 555 項通過。**尚未部署**:部署時 server `.env` 需加 VAPID 金鑰並跑 migrate。
+
 ## 2026-10-13 資安測試
 - 完整報告:`doc/security-test-report.md`。發現並修正 3 個問題:**N-01(高)工單附件無型別限制且存公開磁碟,可上傳 php/html/svg**(儲存型 XSS、理論上 RCE),已改私有儲存 + 授權下載 + nginx 只執行 `/index.php`;N-02(中)忘記密碼帳號列舉與未節流;N-03(低)CSV 公式注入漏網欄位。
 - 新增 4 組安全回歸測試:`SecuritySweepTest`(全路由認證/授權掃描)、`IdorTest`、`AuthSecurityTest`、`UploadSecurityTest`、`CsvInjectionExportTest`。

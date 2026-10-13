@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(\Laravel\Passkeys\Contracts\PasskeyLoginResponse::class, \App\Passkeys\EipPasskeyLoginResponse::class);
     }
 
     /**
@@ -27,6 +27,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
+
+        // Passkey 登入:停用/離職帳號即使持有有效的 Passkey 也不能登入
+        \Laravel\Passkeys\Passkeys::authorizeLoginUsing(function ($request, $user) {
+            if ($user->status !== 'active') {
+                throw \Illuminate\Validation\ValidationException::withMessages(['credential' => ['此帳號已停用,無法登入。']]);
+            }
+
+            return true;
+        });
 
         if ($proxies = config('eip.trusted_proxies')) {
             \Illuminate\Http\Middleware\TrustProxies::at($proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)));

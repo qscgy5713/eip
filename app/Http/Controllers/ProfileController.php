@@ -30,6 +30,16 @@ class ProfileController extends Controller
                 ])->values(),
             'mailNotifications' => (bool) $request->user()->mail_notifications,
             'mailNotificationsAvailable' => (bool) config('eip.mail_notifications'),
+            'push' => [
+                'publicKey' => config('eip.webpush.public_key'),
+                'devices' => $request->user()->pushSubscriptions()->latest('id')->get(['id', 'endpoint', 'user_agent', 'last_used_at'])
+                    ->map(fn ($s) => [
+                        'id' => $s->id, 'endpoint' => $s->endpoint,
+                        'device' => \App\Models\LoginEvent::describeAgent($s->user_agent),
+                        'last_used_at' => $s->last_used_at,
+                    ])->values(),
+            ],
+            'passkeys' => $request->user()->passkeys()->latest('id')->get(['id', 'name', 'last_used_at', 'created_at']),
         ]);
     }
 

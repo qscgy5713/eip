@@ -27,6 +27,11 @@ class EipSystemNotification extends Notification
             $channels[] = Channels\QueuedMailChannel::class;
         }
 
+        // 手機推播:全域已設定 VAPID 金鑰、同仁沒關、且至少有一台裝置訂閱
+        if (app(\App\Services\WebPushService::class)->shouldPush($notifiable)) {
+            $channels[] = Channels\WebPushChannel::class;
+        }
+
         return $channels;
     }
 
