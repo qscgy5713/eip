@@ -64,11 +64,11 @@ class Attendance extends Model
             $minutes = $this->clock_in_at->diffInMinutes($this->clock_out_at);
             $this->work_hours = round($minutes / 60, 2);
 
-            // 判定異常：早上超過 09:30 視為遲到
-            $inTime = Carbon::parse($this->clock_in_at)->format('H:i');
-            if ($inTime > '09:30') {
+            // 判定異常:超過公司設定的上班時間 + 寬限(預設 09:30)視為遲到;工時不足視為早退
+            $schedule = app(\App\Services\WorkSchedule::class);
+            if ($schedule->isLate(Carbon::parse($this->clock_in_at))) {
                 $this->status = 'late';
-            } elseif ($this->work_hours < 8.0) {
+            } elseif ($this->work_hours < $schedule->get()['required_hours']) {
                 $this->status = 'early_leave';
             } else {
                 $this->status = 'normal';

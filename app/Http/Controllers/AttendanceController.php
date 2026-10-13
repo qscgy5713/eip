@@ -127,7 +127,7 @@ class AttendanceController extends Controller
                 'clock_in_accuracy' => $accuracy,
                 'clock_in_type' => $eval['type'],
                 'field_work_note' => $fieldNote,
-                'status' => now()->format('H:i') > '09:30' ? 'late' : 'normal',
+                'status' => app(\App\Services\WorkSchedule::class)->isLate(now()) ? 'late' : 'normal',
             ]);
         } else {
             $existing->update([
@@ -140,7 +140,7 @@ class AttendanceController extends Controller
                 'clock_in_accuracy' => $accuracy,
                 'clock_in_type' => $eval['type'],
                 'field_work_note' => $fieldNote,
-                'status' => now()->format('H:i') > '09:30' ? 'late' : 'normal',
+                'status' => app(\App\Services\WorkSchedule::class)->isLate(now()) ? 'late' : 'normal',
             ]);
             $attendance = $existing;
         }
@@ -241,6 +241,7 @@ class AttendanceController extends Controller
 
         return Inertia::render('Attendance/Settings', [
             'config' => $this->geofenceService->getOfficeConfig(),
+            'schedule' => app(\App\Services\WorkSchedule::class)->get(),
         ]);
     }
 
@@ -260,13 +261,27 @@ class AttendanceController extends Controller
             'office_lat' => 'nullable|numeric|between:-90,90',
             'office_lng' => 'nullable|numeric|between:-180,180',
             'allowed_radius' => 'nullable|integer|min:10|max:50000',
+            'work_start' => 'nullable|date_format:H:i',
+            'work_end' => 'nullable|date_format:H:i|after:work_start',
+            'work_late_grace_minutes' => 'nullable|integer|min:0|max:240',
+            'work_required_hours' => 'nullable|numeric|min:1|max:24',
         ]);
 
         $newConfig = $this->geofenceService->updateOfficeConfig($validated);
 
+        $schedule = app(\App\Services\WorkSchedule::class);
+        if (isset($validated['work_start'], $validated['work_end'])) {
+            $schedule->update([
+                'work_start' => $validated['work_start'],
+                'work_end' => $validated['work_end'],
+                'work_late_grace_minutes' => $validated['work_late_grace_minutes'] ?? 30,
+                'work_required_hours' => $validated['work_required_hours'] ?? 8,
+            ]);
+        }
+
         AuditLog::log(
             action: 'update_geofence_setting',
-            description: "管理同仁 {$user->name} 更新了考勤打卡設定（公司名稱：{$newConfig['name']}，半徑：{$newConfig['radius']}公尺，經緯度：{$newConfig['lat']}, {$newConfig['lng']}）",
+            description: "管理同仁 {$user->name} 更新了考勤打卡設定（公司名稱：{$newConfig['name']}，半徑：{$newConfig['radius']}公尺，經緯度：{$newConfig['lat']}, {$newConfig['lng']}，上班 {$schedule->get()['start']}、下班 {$schedule->get()['end']}、寬限 {$schedule->get()['grace']} 分）",
             details: $newConfig
         );
 

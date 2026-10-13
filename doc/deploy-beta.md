@@ -4,6 +4,7 @@
 - HTTPS:共用的 Caddy(`shop-caddy-1`,設定在本機 `~/www/Caddy`,站台檔 `sites/eip.caddy`)自動簽憑證並轉給 `eip-web:80`。
 - 程式位置:`~/eip`(以 tar 從本機傳上去,不含 `.git`、`vendor`、`.env`、`node_modules`;前端在本機 `npm run build` 後一起傳)。
 - 啟動:`sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.caddy.yml up -d`
+- 監控:root crontab 每 5 分鐘 `docker exec eip-app php artisan eip:health-alert`(異常寄信給管理員,紀錄在 `~/eip/backups/health-alert.log`)。
 - 備份:root crontab 每天 03:00 執行 `scripts/backup.sh`(保留 14 份,放 `~/eip/backups/`,權限 600)。
 
 ## 更新程式的步驟

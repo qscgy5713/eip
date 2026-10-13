@@ -795,20 +795,24 @@ class WorkflowService
             }
         };
 
+        $workSchedule = app(\App\Services\WorkSchedule::class)->get();
+        $defaultIn = $workSchedule['start'] . ':00';
+        $defaultOut = $workSchedule['end'] . ':00';
+
         $isClockInOnly = str_contains($adjustType, '上班') && !str_contains($adjustType, '全日');
         $isClockOutOnly = str_contains($adjustType, '下班') && !str_contains($adjustType, '全日');
 
         if ($isClockInOnly) {
-            $attendance->clock_in_at = $parseDateTime($adjustDate, $time1, '09:00:00');
+            $attendance->clock_in_at = $parseDateTime($adjustDate, $time1, $defaultIn);
             $attendance->clock_in_type = $attendance->clock_in_type ?: 'office';
         } elseif ($isClockOutOnly) {
-            $attendance->clock_out_at = $parseDateTime($adjustDate, $time1, '18:00:00');
+            $attendance->clock_out_at = $parseDateTime($adjustDate, $time1, $defaultOut);
             $attendance->clock_out_type = $attendance->clock_out_type ?: 'office';
         } else {
             // 全日未打卡補登
-            $attendance->clock_in_at = $parseDateTime($adjustDate, $time1, '09:00:00');
+            $attendance->clock_in_at = $parseDateTime($adjustDate, $time1, $defaultIn);
             $attendance->clock_in_type = $attendance->clock_in_type ?: 'office';
-            $attendance->clock_out_at = $parseDateTime($adjustDate, $time2 ?: '18:00:00', '18:00:00');
+            $attendance->clock_out_at = $parseDateTime($adjustDate, $time2 ?: $defaultOut, $defaultOut);
             $attendance->clock_out_type = $attendance->clock_out_type ?: 'office';
         }
 

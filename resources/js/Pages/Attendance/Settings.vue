@@ -1,10 +1,14 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const props = defineProps({
     config: {
+        type: Object,
+        required: true,
+    },
+    schedule: {
         type: Object,
         required: true,
     },
@@ -16,6 +20,10 @@ const form = useForm({
     office_lat: props.config.lat || 25.033964,
     office_lng: props.config.lng || 121.564468,
     allowed_radius: props.config.radius || 500,
+    work_start: props.schedule.start,
+    work_end: props.schedule.end,
+    work_late_grace_minutes: props.schedule.grace,
+    work_required_hours: props.schedule.required_hours,
 });
 
 const isLocating = ref(false);
@@ -45,6 +53,12 @@ const getCurrentLocation = () => {
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
 };
+
+const lateAfterText = computed(() => {
+    const [h, m] = (form.work_start || '09:00').split(':').map(Number);
+    const t = h * 60 + m + (Number(form.work_late_grace_minutes) || 0);
+    return `${String(Math.floor(t / 60) % 24).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`;
+});
 
 const submit = () => {
     form.post(route('attendance.settings.update'), {
@@ -277,6 +291,31 @@ const submit = () => {
                                     {{ preset }}m
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- 上下班時間 -->
+                        <div class="space-y-3 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+                            <div>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">上下班時間與遲到規則</h3>
+                                <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                                    上班打卡晚於 <strong class="text-indigo-600">{{ lateAfterText }}</strong> 會記為「遲到」;下班後工時不足 {{ form.work_required_hours }} 小時會記為「早退」。補打卡單核准後也以此為預設時間。
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                                <label class="text-xs text-gray-600 dark:text-gray-400">上班時間
+                                    <input v-model="form.work_start" type="time" required class="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:text-gray-100" />
+                                </label>
+                                <label class="text-xs text-gray-600 dark:text-gray-400">下班時間
+                                    <input v-model="form.work_end" type="time" required class="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:text-gray-100" />
+                                </label>
+                                <label class="text-xs text-gray-600 dark:text-gray-400">遲到寬限(分鐘)
+                                    <input v-model.number="form.work_late_grace_minutes" type="number" min="0" max="240" class="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:text-gray-100" />
+                                </label>
+                                <label class="text-xs text-gray-600 dark:text-gray-400">每日應工作(小時)
+                                    <input v-model.number="form.work_required_hours" type="number" min="1" max="24" step="0.5" class="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:text-gray-100" />
+                                </label>
+                            </div>
+                            <p v-for="field in ['work_start', 'work_end', 'work_late_grace_minutes', 'work_required_hours']" :key="field" v-show="form.errors[field]" class="text-xs text-red-600">{{ form.errors[field] }}</p>
                         </div>
 
                         <!-- 規範說明卡片 -->

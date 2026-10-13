@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditLog;
+use App\Services\SystemHealth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -16,8 +17,9 @@ use Inertia\Response;
 /** 系統健康狀態與失敗任務(含寄信失敗)管理,僅系統管理員 */
 class SystemHealthController extends Controller
 {
-    /** worker / scheduler 超過這個秒數沒有心跳就視為停擺 */
-    private const STALE_SECONDS = 180;
+    public function __construct(private readonly SystemHealth $health)
+    {
+    }
 
     private function authorizeAdmin(Request $request): void
     {
@@ -42,15 +44,15 @@ class SystemHealthController extends Controller
 
         return Inertia::render('SystemHealth/Index', [
             'checks' => [
-                'database' => $this->checkDatabase(),
-                'queue' => $this->heartbeat('eip:queue_heartbeat'),
-                'scheduler' => $this->heartbeat('eip:scheduler_heartbeat'),
-                'backup' => $this->latestBackup(),
-                'disk' => $this->disk(),
+                'database' => $this->health->database(),
+                'queue' => $this->health->heartbeat('eip:queue_heartbeat'),
+                'scheduler' => $this->health->heartbeat('eip:scheduler_heartbeat'),
+                'backup' => $this->health->latestBackup(),
+                'disk' => $this->health->disk(),
             ],
             'queue' => [
                 'connection' => config('queue.default'),
-                'pending' => $this->pendingCount(),
+                'pending' => $this->health->pendingCount(),
                 'failed_total' => DB::table(config('queue.failed.table', 'failed_jobs'))->count(),
             ],
             'mail' => [
@@ -105,68 +107,5 @@ class SystemHealthController extends Controller
         AuditLog::log(action: 'delete_failed_job', description: "{$request->user()->name} 刪除了失敗任務 {$id}");
 
         return back()->with('success', '已刪除。');
-    }
-
-    private function checkDatabase(): array
-    {
-        try {
-            DB::select('select 1');
-
-            return ['ok' => true, 'detail' => config('database.default')];
-        } catch (\Throwable $e) {
-            return ['ok' => false, 'detail' => '無法連線'];
-        }
-    }
-
-    /** @return array{ok: bool, last_seen: ?string, seconds_ago: ?int} */
-    private function heartbeat(string $key): array
-    {
-        $ts = Cache::get($key);
-        if (! $ts) {
-            return ['ok' => false, 'last_seen' => null, 'seconds_ago' => null];
-        }
-        $ago = max(0, now()->timestamp - (int) $ts);
-
-        return ['ok' => $ago <= self::STALE_SECONDS, 'last_seen' => date('Y-m-d H:i:s', (int) $ts), 'seconds_ago' => $ago];
-    }
-
-    private function pendingCount(): ?int
-    {
-        try {
-            return Queue::size();
-        } catch (\Throwable) {
-            return null;
-        }
-    }
-
-    /** @return array{found: bool, file: ?string, at: ?string, hours_ago: ?int} */
-    private function latestBackup(): array
-    {
-        $files = glob(base_path('backups/eip_db_*.sql.gz')) ?: [];
-        if (! $files) {
-            return ['found' => false, 'file' => null, 'at' => null, 'hours_ago' => null];
-        }
-        usort($files, fn ($a, $b) => filemtime($b) <=> filemtime($a));
-        $mtime = filemtime($files[0]);
-
-        return [
-            'found' => true,
-            'file' => basename($files[0]),
-            'at' => date('Y-m-d H:i:s', $mtime),
-            'hours_ago' => (int) floor((time() - $mtime) / 3600),
-        ];
-    }
-
-    /** @return array{free_gb: float, total_gb: float, used_percent: int} */
-    private function disk(): array
-    {
-        $free = (float) @disk_free_space(base_path());
-        $total = (float) @disk_total_space(base_path());
-
-        return [
-            'free_gb' => round($free / 1073741824, 1),
-            'total_gb' => round($total / 1073741824, 1),
-            'used_percent' => $total > 0 ? (int) round((1 - $free / $total) * 100) : 0,
-        ];
     }
 }
