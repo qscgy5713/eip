@@ -94,8 +94,13 @@
 4. **壓力測試與安全檢查**：權限越權檢查 (IDOR)、高併發打卡壓測。
 
 ## 正式環境部署清單
-1. 複製 `.env.production.example` 為 `.env`,填入 `APP_KEY`、資料庫、SMTP;確認 `APP_DEBUG=false`、`APP_ENV=production`、`SESSION_SECURE_COOKIE=true`。
-2. 複製 `docker/nginx/production.conf.example` 為 `docker/nginx/default.conf`,換成實際網域與憑證路徑(HTTPS、HSTS、CSP)。
-3. 啟動 `docker compose up -d`(含 `queue` 容器);首次執行 `php artisan migrate --force`、`php artisan config:cache route:cache view:cache`。
-4. 以 `EIP_REQUIRE_2FA_ROLES=admin,hr` 強制高權限角色啟用雙因素驗證;預設測試帳號(密碼 `password`)正式上線前必須刪除或改密碼。
-5. 定期備份 PostgreSQL 與 `storage/app`。
+1. 複製 `.env.production.example` 為 `.env`,填入 `APP_KEY`、`APP_URL`(https)、資料庫強密碼、`REDIS_PASSWORD`、SMTP;確認 `APP_DEBUG=false`、`APP_ENV=production`、`SESSION_SECURE_COOKIE=true`。放在反向代理/Cloudflare 後面時設定 `TRUSTED_PROXIES`。
+2. 複製 `docker/nginx/production.conf.example` 為 `docker/nginx/default.conf`,換成實際網域;憑證放 `docker/certs/fullchain.pem`、`privkey.pem`(該資料夾不進版控)。
+3. 以正式覆蓋檔啟動:`docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build`(資料庫與 Redis 不對外開放、Redis 有密碼、nginx 開 80/443、含 queue 與 scheduler 容器)。
+4. 依賴與前端:`composer install --no-dev --optimize-autoloader`、`npm ci && npm run build`、`php artisan storage:link`。
+5. 首次:`php artisan migrate --force`(**不要**執行 seed,示範資料含預設帳號);用 `php artisan eip:create-admin` 建立第一位管理員(首次登入強制改密碼);登入後到「考勤圍欄設定」設公司座標、「品牌設定」設名稱與 Logo、「假日日曆」登錄當年度假日。
+6. 快取:`php artisan config:cache route:cache view:cache`;之後每次更新程式要 `docker compose restart queue scheduler`(讓背景程式載入新版)。
+7. 管理員與人資強制雙因素驗證:`EIP_REQUIRE_2FA_ROLES=admin,hr`。
+8. 備份:cron 定時執行 `make backup`(PostgreSQL 與上傳檔),並**實際演練過一次** `make db-restore`;備份檔另存到不同主機。
+9. 最後執行 `php artisan eip:preflight`,**全部通過(無「失敗」)再開放使用者**;「警告」逐項確認是否可接受。
+10. 上線後:用實體手機(iOS Safari / Android Chrome)驗證 PWA「加入主畫面」。

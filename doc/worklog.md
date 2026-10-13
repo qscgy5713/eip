@@ -1,5 +1,15 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-13 正式上線前檢查
+- 逐項檢視部署相關設定,找到的實際缺口與處理:
+  - **資料庫(5432)與 Redis(6379)的埠口直接對外開放,且 Redis 無密碼** → 新增 `docker-compose.prod.yml`(`!reset` 移除埠口、Redis `requirepass`、nginx 開 80/443 並掛 `docker/certs`)。
+  - **nginx 範本有 443,但 compose 沒開 443、沒掛憑證** → 同上。
+  - **沒有不灌示範資料就能建立第一位管理員的方式** → 新增 `php artisan eip:create-admin`(密碼強度檢查、首次登入強制改密碼)。
+  - **放在反向代理後會誤判成 http、登入紀錄記到代理 IP** → `bootstrap/app.php` 支援 `TRUSTED_PROXIES`。
+  - **沒有可自動化的上線檢查** → 新增 `php artisan eip:preflight`:檢查 APP_ENV/DEBUG/HTTPS/Session Cookie、前端已建置、DB 與 Redis 密碼、寄信、queue/scheduler 心跳、預設測試帳號與「password」弱密碼、備份是否在 3 天內等;有「失敗」時結束碼為 1,可放進部署腳本。
+- 部署清單(doc/plan.md)重寫為 10 步;`.env.production.example` 補 `REDIS_PASSWORD`、`TRUSTED_PROXIES`。測試 `ProductionToolsTest`(5 項)。
+- 在本機開發環境執行 preflight 的結果符合預期(失敗項皆為開發環境本來就不同的設定:APP_ENV、DEBUG、http、預設帳號)。**尚未在真實正式主機執行**。
+
 ## 2026-10-14 功能擴充(假日、健康頁、登入安全、密碼政策、公告、PWA)
 - **假日日曆** `/holidays`:放假日 / 補班日,人資與管理員維護、所有人可看;可一鍵載入「日期固定」的國定假日(元旦、和平紀念日、兒童節、勞動節、國慶),春節/清明/端午/中秋與補假補班因每年不同需人工登錄(程式內不寫死,避免錯誤)。請假單選好起訖日後自動帶入工作日數(`WorkdayService`,補班日算工作日、放假日與週末不算),行事曆月格顯示假日。順手修正行事曆用 `toISOString()` 轉 UTC 造成台北早上 8 點前差一天的問題。`Route::pattern` 補上 `holiday`。測試 `HolidayTest`(9 項)。
 - **系統健康頁** `/system-health`(僅管理員):資料庫、queue worker 與 scheduler 心跳(寫入快取,逾 180 秒視為停擺)、最近備份、磁碟、寄信設定(不外洩密碼)、失敗任務清單可單筆重送/刪除/全部重送;損毀任務回報錯誤而非 500。測試 `SystemHealthTest`(9 項)。

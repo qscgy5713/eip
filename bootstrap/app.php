@@ -14,6 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // 放在反向代理/負載平衡器/Cloudflare 後面時,用 TRUSTED_PROXIES 指定代理 IP(逗號分隔,或 * 代表全部),
+        // 才能正確判斷 HTTPS 與使用者真實 IP(登入紀錄、失敗鎖定都依賴它)。
+        if ($proxies = env('TRUSTED_PROXIES')) {
+            $middleware->trustProxies(at: $proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)));
+        }
+
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
         $middleware->web(prepend: [
