@@ -1,5 +1,10 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-13 資安測試
+- 完整報告:`doc/security-test-report.md`。發現並修正 3 個問題:**N-01(高)工單附件無型別限制且存公開磁碟,可上傳 php/html/svg**(儲存型 XSS、理論上 RCE),已改私有儲存 + 授權下載 + nginx 只執行 `/index.php`;N-02(中)忘記密碼帳號列舉與未節流;N-03(低)CSV 公式注入漏網欄位。
+- 新增 4 組安全回歸測試:`SecuritySweepTest`(全路由認證/授權掃描)、`IdorTest`、`AuthSecurityTest`、`UploadSecurityTest`、`CsvInjectionExportTest`。
+- **beta 站尚未套用這些修正**(beta 目前只有管理員一個帳號,實際可被利用的風險低),待部署。
+
 ## 2026-10-13 上下班時間可設定
 - 原本遲到(09:30)、早退(工時 < 8 小時)與補打卡預設時間(09:00 / 18:00)都寫死在程式裡。新增 `App\Services\WorkSchedule`,設定存在 `system_settings`:上班時間、下班時間、遲到寬限分鐘、每日應工作小時;預設值與舊行為完全相同(9:00、寬限 30 分 = 9:30、18:00、8 小時),所以升級後不設定也不影響現有判定。
 - 設定位置:**系統管理 → 考勤圍欄設定**頁新增「上下班時間與遲到規則」區塊(僅管理員/人資),即時顯示「晚於 HH:MM 算遲到」。`Attendance::calculateWorkHours()`、上班打卡、補打卡回寫預設時間都改讀這份設定。

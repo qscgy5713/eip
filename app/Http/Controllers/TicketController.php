@@ -8,6 +8,7 @@ use App\Models\TicketReply;
 use App\Models\User;
 use App\Notifications\EipSystemNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class TicketController extends Controller
@@ -117,13 +118,13 @@ class TicketController extends Controller
             'title' => ['required', 'string', 'max:200'],
             'description' => ['required', 'string'],
             'location' => ['nullable', 'string', 'max:100'],
-            'attachments.*' => ['nullable', 'file', 'max:10240'], // 10MB
+            'attachments.*' => ['nullable', 'file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,pdf,doc,docx,xls,xlsx,csv,txt,zip'], // 10MB;依檔案內容判斷型別,不收 html/svg/php 等可被瀏覽器或伺服器執行的檔案
         ]);
 
         $storedAttachments = [];
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $path = $file->store('tickets', 'public');
+                $path = $file->store('private_ticket_attachments', 'local');
                 $storedAttachments[] = [
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,
@@ -199,6 +200,44 @@ class TicketController extends Controller
             'replies' => $replies,
             'canManage' => $canManage,
             'staffList' => $staffList,
+        ]);
+    }
+
+    /** 下載工單附件(需有權檢視該工單;內部備註的附件只有處理人員能下載) */
+    public function attachment(Request $request, Ticket $ticket, int $index)
+    {
+        return $this->sendAttachment($request, $ticket, null, $index);
+    }
+
+    public function replyAttachment(Request $request, Ticket $ticket, TicketReply $reply, int $index)
+    {
+        return $this->sendAttachment($request, $ticket, $reply, $index);
+    }
+
+    private function sendAttachment(Request $request, Ticket $ticket, ?TicketReply $reply, int $index)
+    {
+        $user = $request->user();
+        abort_unless($ticket->canView($user), 403, '您沒有權限檢視此工單');
+
+        if ($reply) {
+            abort_unless($reply->ticket_id === $ticket->id, 404);
+            abort_if($reply->is_internal && ! $ticket->canManage($user), 403, '您沒有權限檢視此附件');
+            $list = $reply->attachments ?? [];
+        } else {
+            $list = $ticket->attachments ?? [];
+        }
+
+        $att = $list[$index] ?? null;
+        abort_unless($att && ! empty($att['path']), 404);
+
+        // 舊資料(改版前)放在 public disk,新資料放在私有 local disk
+        $disk = Storage::disk('local')->exists($att['path']) ? Storage::disk('local') : Storage::disk('public');
+        abort_unless($disk->exists($att['path']), 404);
+
+        // 一律以下載方式輸出並禁止瀏覽器猜型別,避免上傳的內容在本站網域被渲染執行
+        return $disk->download($att['path'], $att['name'] ?? basename($att['path']), [
+            'X-Content-Type-Options' => 'nosniff',
+            'Content-Security-Policy' => 'sandbox',
         ]);
     }
 
@@ -303,7 +342,7 @@ class TicketController extends Controller
         $validated = $request->validate([
             'message' => ['required', 'string'],
             'is_internal' => ['nullable', 'boolean'],
-            'attachments.*' => ['nullable', 'file', 'max:10240'],
+            'attachments.*' => ['nullable', 'file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,pdf,doc,docx,xls,xlsx,csv,txt,zip'],
         ]);
 
         $isInternal = $request->boolean('is_internal') && $ticket->canManage($user);
@@ -311,7 +350,7 @@ class TicketController extends Controller
         $storedAttachments = [];
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $path = $file->store('tickets', 'public');
+                $path = $file->store('private_ticket_attachments', 'local');
                 $storedAttachments[] = [
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,

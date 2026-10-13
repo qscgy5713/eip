@@ -178,7 +178,7 @@ EIP 旨在打破企業內部資訊孤島，提供一站式的行政與協作入�
   - **雙因素驗證 (TOTP 2FA)**：相容 Google / Microsoft Authenticator,登入多一道驗證碼;一次性復原碼、防重放、嘗試次數鎖定;可用 `EIP_REQUIRE_2FA_ROLES=admin,hr` 強制指定角色啟用;手機遺失時管理員/人資可協助重設。
   - **強制首次改密碼**：管理員建立帳號、代為重設密碼或 CSV 批次匯入的帳號,首次登入必須先自行更換密碼。
   - **應用層安全標頭**：Referrer-Policy、Permissions-Policy、nosniff、CSP(每次請求 nonce,無 unsafe-inline 腳本),HTTPS 時加 HSTS。
-  - **全面測試覆蓋**：累積 **511 項自動化 Feature / Unit 測試 100% 覆蓋通過 (3,047 assertions)**，並配置 GitHub Actions 持續整合流程。
+  - **全面測試覆蓋**：累積 **544 項自動化 Feature / Unit 測試 100% 覆蓋通過 (3,149 assertions)**，並配置 GitHub Actions 持續整合流程。
 
 ### 近期新增(營運與帳號管理)
 - **假日日曆** (`/holidays`)：國定假日與補班日,請假單自動計算工作日數、行事曆顯示假日;人資維護,可一鍵載入日期固定的國定假日。
@@ -303,13 +303,14 @@ php artisan eip:preflight         # 上線前自我檢查(有「失敗」時結�
 ```bash
 docker compose exec app php artisan test
 ```
-*目前全系統 511 項 Feature / Unit 測試 100% 全數通過 (3,047 assertions)*。
+*目前全系統 544 項 Feature / Unit 測試 100% 全數通過 (3,149 assertions)*。
 
 ## 文檔索引
 - [系統架構與實施規劃 (Plan)](file:///Users/yujuchen/www/eip/doc/plan.md)
 - [專案待辦清單 (Todo)](file:///Users/yujuchen/www/eip/doc/todo.md)
 - [開發工作日誌 (Worklog)](file:///Users/yujuchen/www/eip/doc/worklog.md)
 - [Beta 環境部署紀錄與更新步驟](doc/deploy-beta.md)
+- [資安測試報告](doc/security-test-report.md)
 
 ---
 

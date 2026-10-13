@@ -377,8 +377,8 @@ class VehicleDispatchController extends Controller
 
                 fputcsv($output, [
                     $sanitize($item->dispatch_number),
-                    $item->user?->name ?? '未知',
-                    $item->user?->department?->name ?? '',
+                    $sanitize($item->user?->name ?? '未知'),
+                    $sanitize($item->user?->department?->name ?? ''),
                     $sanitize($item->vehicle?->plate_number),
                     $sanitize($item->vehicle?->name),
                     $item->start_time ? $item->start_time->format('Y-m-d H:i') : '',
@@ -390,7 +390,7 @@ class VehicleDispatchController extends Controller
                     $item->end_mileage ?? '',
                     $item->mileage_traveled ?? '',
                     $item->status_label,
-                    $item->approver?->name ?? '系統自動核准',
+                    $sanitize($item->approver?->name ?? '系統自動核准'),
                     $sanitize($item->return_notes),
                 ]);
             }

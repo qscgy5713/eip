@@ -35,11 +35,25 @@ server {
         try_files $uri $uri/ /index.php?$query_string;
     }
 
-    location ~ \.php$ {
+    # 只有 /index.php 會交給 PHP 執行;其他任何 .php(例如被塞進上傳目錄的檔案)一律 404,
+    # 即使程式漏掉某處的上傳檢查,也不會變成遠端程式執行 (RCE)。
+    location = /index.php {
         fastcgi_pass app:9000;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
         fastcgi_hide_header X-Powered-By;
+    }
+
+    location ~ \.php$ {
+        return 404;
+    }
+
+    # 公開磁碟(/storage/*)的檔案一律沙箱化、禁止猜型別,避免上傳的 HTML/SVG 在本站網域執行
+    location ^~ /storage/ {
+        add_header Content-Security-Policy "sandbox" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        try_files $uri =404;
     }
 
     location ~ /\.(?!well-known).* {

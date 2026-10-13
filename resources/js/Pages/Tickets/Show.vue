@@ -209,7 +209,7 @@ const getStatusBadge = (s) => {
                                     <a
                                         v-for="(att, idx) in ticket.attachments"
                                         :key="idx"
-                                        :href="`/storage/${att.path}`"
+                                        :href="route('tickets.attachment', [ticket.id, idx])"
                                         target="_blank"
                                         class="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-red-50 text-gray-700 dark:text-gray-300 hover:text-red-600 transition"
                                     >
@@ -358,7 +358,7 @@ const getStatusBadge = (s) => {
                                             <a
                                                 v-for="(att, aIdx) in reply.attachments"
                                                 :key="aIdx"
-                                                :href="`/storage/${att.path}`"
+                                                :href="route('tickets.reply-attachment', [ticket.id, reply.id, aIdx])"
                                                 target="_blank"
                                                 class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[11px] font-medium text-gray-700 dark:text-gray-300 hover:text-red-600 mr-2"
                                             >

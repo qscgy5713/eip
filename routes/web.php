@@ -189,6 +189,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
     Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+    Route::get('/tickets/{ticket}/attachments/{index}', [TicketController::class, 'attachment'])->where('index', '[0-9]+')->name('tickets.attachment');
+    Route::get('/tickets/{ticket}/replies/{reply}/attachments/{index}', [TicketController::class, 'replyAttachment'])->where(['reply' => '[0-9]+', 'index' => '[0-9]+'])->name('tickets.reply-attachment');
     Route::patch('/tickets/{ticket}/assign', [TicketController::class, 'assign'])->name('tickets.assign');
     Route::patch('/tickets/{ticket}/status', [TicketController::class, 'updateStatus'])->name('tickets.update-status');
     Route::post('/tickets/{ticket}/reply', [TicketController::class, 'reply'])->name('tickets.reply');
