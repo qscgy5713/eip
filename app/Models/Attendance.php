@@ -21,6 +21,8 @@ class Attendance extends Model
         'clock_in_lat',
         'clock_in_lng',
         'clock_in_distance',
+        'clock_in_accuracy',
+        'clock_out_accuracy',
         'clock_in_type',
         'clock_out_at',
         'clock_out_ip',

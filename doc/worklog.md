@@ -1,5 +1,12 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-13 打卡定位精度防呆
+- 問題:室內定位只靠 Wi-Fi/基地台時誤差可達數百公尺,同仁人在公司卻被判成圍欄外(外勤)。
+- 前端(`Attendance/Index.vue`):改用 `watchPosition` 持續監聽、保留精度最好的一筆(精度 ≤ 50m 立刻採用,最久等 15 秒),`maximumAge: 0` 避免吃到舊位置;精度 > 100m 且公司有設座標時,顯示琥珀色警示與「重新定位」鈕,並說明可能因此被判成圍欄外。**只提示不阻擋**:遠端工作者用電腦(精度本來就差)仍可打外勤卡。
+- 後端:`attendances` 新增 `clock_in_accuracy` / `clock_out_accuracy`(公尺),打卡時記錄手機回報的精度,事後釐清「為什麼被判成外勤」時可查;非數字或離譜的值一律當作沒有,不影響打卡。
+- 瀏覽器實測(模擬定位):精度 800m → 等 14 秒後顯示警示;精度 20m → 0.5 秒完成、無警示;精度 15m 且在遠處 → 正確判成圍欄外。測試 `AttendanceAccuracyTest`(4 項)。
+- **尚未部署到 beta**,也未在實體手機驗證。
+
 ## 2026-10-13 部署到 beta 環境(eip-beta.duckdns.org)
 - 部署到 GCP VM(與 shop、motion-trace 共用),由既有 Caddy 處理 HTTPS,EIP 以 `docker-compose.caddy.yml` 加入 `shop_internal` 網路;細節與更新步驟見 `doc/deploy-beta.md`。
 - 實測發現並修正 3 個只有正式環境才會出現的問題:storage 權限(`/up` 500)、`.env` 權限(config:cache 變 sqlite)、`TRUSTED_PROXIES` 在 `config:cache` 後讀不到(資源變 http 白屏)。後者已改走 config 並補回歸測試。

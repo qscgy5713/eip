@@ -80,6 +80,14 @@ class AttendanceController extends Controller
         ]);
     }
 
+    /** 手機回報的定位精度(公尺);非數字或離譜的值一律視為沒有 */
+    private function accuracy(Request $request): ?int
+    {
+        $v = $request->input('accuracy');
+
+        return is_numeric($v) && $v >= 0 && $v <= 1000000 ? (int) round((float) $v) : null;
+    }
+
     public function clockIn(Request $request): RedirectResponse
     {
         $user = $request->user();
@@ -93,6 +101,7 @@ class AttendanceController extends Controller
         $lat = $request->input('latitude') !== null ? (float) $request->input('latitude') : null;
         $lng = $request->input('longitude') !== null ? (float) $request->input('longitude') : null;
         $fieldNote = $request->input('field_work_note');
+        $accuracy = $this->accuracy($request);
 
         $eval = $this->geofenceService->evaluateLocation($lat, $lng);
 
@@ -115,6 +124,7 @@ class AttendanceController extends Controller
                 'clock_in_lat' => $lat,
                 'clock_in_lng' => $lng,
                 'clock_in_distance' => $eval['distance'],
+                'clock_in_accuracy' => $accuracy,
                 'clock_in_type' => $eval['type'],
                 'field_work_note' => $fieldNote,
                 'status' => now()->format('H:i') > '09:30' ? 'late' : 'normal',
@@ -127,6 +137,7 @@ class AttendanceController extends Controller
                 'clock_in_lat' => $lat,
                 'clock_in_lng' => $lng,
                 'clock_in_distance' => $eval['distance'],
+                'clock_in_accuracy' => $accuracy,
                 'clock_in_type' => $eval['type'],
                 'field_work_note' => $fieldNote,
                 'status' => now()->format('H:i') > '09:30' ? 'late' : 'normal',
@@ -174,6 +185,7 @@ class AttendanceController extends Controller
         $lat = $request->input('latitude') !== null ? (float) $request->input('latitude') : null;
         $lng = $request->input('longitude') !== null ? (float) $request->input('longitude') : null;
         $fieldNote = $request->input('field_work_note');
+        $accuracy = $this->accuracy($request);
 
         $eval = $this->geofenceService->evaluateLocation($lat, $lng);
 
@@ -192,6 +204,7 @@ class AttendanceController extends Controller
         $attendance->clock_out_lat = $lat;
         $attendance->clock_out_lng = $lng;
         $attendance->clock_out_distance = $eval['distance'];
+        $attendance->clock_out_accuracy = $accuracy;
         $attendance->clock_out_type = $eval['type'];
 
         if (!empty($fieldNote)) {

@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, useForm, Link } from '@inertiajs/vue3';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 const props = defineProps({
     attendances: Array,
@@ -47,44 +47,80 @@ const formatDistance = (meters) => {
     return `${(meters / 1000).toFixed(1)}km`;
 };
 
+// 定位精度超過這個值(公尺)就提示使用者重新定位;室內只靠 Wi-Fi/基地台時常見數百公尺誤差
+const POOR_ACCURACY_M = 100;
+// 等待更準確定位的上限時間與目標精度:拿到 <= TARGET 的結果就立刻採用,否則取時限內最好的一筆
+const LOCATE_MAX_WAIT_MS = 15000;
+const LOCATE_TARGET_M = 50;
+
+const poorAccuracy = computed(
+    () => !!props.geofenceConfig?.has_location && (currentCoords.value?.accuracy ?? 0) > POOR_ACCURACY_M,
+);
+
+let watchId = null;
+let watchTimer = null;
+const stopWatching = () => {
+    if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+    if (watchTimer) clearTimeout(watchTimer);
+    watchId = null;
+    watchTimer = null;
+};
+
+const applyPosition = (coords) => {
+    currentCoords.value = {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        accuracy: Math.round(coords.accuracy),
+    };
+
+    if (props.geofenceConfig?.has_location) {
+        const dist = calcDistance(coords.latitude, coords.longitude, props.geofenceConfig.lat, props.geofenceConfig.lng);
+        detectedDistance.value = dist;
+        locationStatus.value = dist <= (props.geofenceConfig.radius || 500) ? 'in_fence' : 'out_of_fence';
+    } else {
+        locationStatus.value = 'all_remote';
+        detectedDistance.value = null;
+    }
+};
+
 const requestGeolocation = () => {
     if (!navigator.geolocation) {
         locationStatus.value = 'unsupported';
         return;
     }
 
+    stopWatching();
     isLocating.value = true;
     locationStatus.value = 'locating';
+    let best = null;
 
-    navigator.geolocation.getCurrentPosition(
+    const finish = () => {
+        stopWatching();
+        isLocating.value = false;
+        if (best) applyPosition(best);
+        else locationStatus.value = 'denied';
+    };
+
+    // 持續監聽,保留精度最好的一筆(GPS 剛啟動時前幾筆通常是粗略的網路定位)
+    watchId = navigator.geolocation.watchPosition(
         (position) => {
-            isLocating.value = false;
-            currentCoords.value = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                accuracy: Math.round(position.coords.accuracy),
-            };
-
-            if (props.geofenceConfig?.has_location) {
-                const dist = calcDistance(
-                    position.coords.latitude,
-                    position.coords.longitude,
-                    props.geofenceConfig.lat,
-                    props.geofenceConfig.lng
-                );
-                detectedDistance.value = dist;
-                locationStatus.value = dist <= (props.geofenceConfig.radius || 500) ? 'in_fence' : 'out_of_fence';
-            } else {
-                locationStatus.value = 'all_remote';
-                detectedDistance.value = null;
+            if (!best || position.coords.accuracy < best.accuracy) {
+                best = position.coords;
+                applyPosition(best);
+            }
+            if (position.coords.accuracy <= LOCATE_TARGET_M) finish();
+        },
+        () => {
+            if (best) finish();
+            else {
+                stopWatching();
+                isLocating.value = false;
+                locationStatus.value = 'denied';
             }
         },
-        (error) => {
-            isLocating.value = false;
-            locationStatus.value = 'denied';
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+        { enableHighAccuracy: true, timeout: LOCATE_MAX_WAIT_MS, maximumAge: 0 },
     );
+    watchTimer = setTimeout(finish, LOCATE_MAX_WAIT_MS);
 };
 
 onMounted(() => {
@@ -95,18 +131,21 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+    stopWatching();
     if (timer) clearInterval(timer);
 });
 
 const clockInForm = useForm({
     latitude: null,
     longitude: null,
+    accuracy: null,
     field_work_note: '',
 });
 
 const clockOutForm = useForm({
     latitude: null,
     longitude: null,
+    accuracy: null,
     field_work_note: '',
 });
 
@@ -125,6 +164,7 @@ const handleClockIn = () => {
 const executeClockIn = () => {
     clockInForm.latitude = currentCoords.value?.latitude ?? null;
     clockInForm.longitude = currentCoords.value?.longitude ?? null;
+    clockInForm.accuracy = currentCoords.value?.accuracy ?? null;
     clockInForm.field_work_note = fieldWorkNote.value.trim();
     clockInForm.post(route('attendance.clockIn'), {
         preserveScroll: true,
@@ -150,6 +190,7 @@ const handleClockOut = () => {
 const executeClockOut = () => {
     clockOutForm.latitude = currentCoords.value?.latitude ?? null;
     clockOutForm.longitude = currentCoords.value?.longitude ?? null;
+    clockOutForm.accuracy = currentCoords.value?.accuracy ?? null;
     clockOutForm.field_work_note = fieldWorkNote.value.trim();
     clockOutForm.post(route('attendance.clockOut'), {
         preserveScroll: true,
@@ -300,6 +341,20 @@ const typeLabel = (type) => {
                                 </button>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- 定位精度太差:先提醒重新定位,避免被誤判成外勤 -->
+                    <div
+                        v-if="poorAccuracy && !isLocating"
+                        role="alert"
+                        class="mb-3 flex flex-col gap-2 rounded-xl border border-amber-300/60 bg-amber-100 p-3 text-xs text-amber-900 sm:flex-row sm:items-center sm:justify-between dark:border-amber-500/40 dark:bg-amber-900/30 dark:text-amber-100"
+                    >
+                        <span>
+                            目前手機定位精度只有 ±{{ formatDistance(currentCoords?.accuracy) }},位置可能不準
+                            <template v-if="locationStatus === 'out_of_fence'">,可能因此被判成圍欄外</template>。
+                            請移到窗邊或戶外、確認已開啟 GPS 與「精確位置」後重新定位。
+                        </span>
+                        <button type="button" class="shrink-0 rounded-lg bg-amber-600 px-3 py-1.5 font-semibold text-white hover:bg-amber-700" @click="requestGeolocation">重新定位</button>
                     </div>
 
                     <!-- GPS 地理圍欄即時狀態提示條 -->

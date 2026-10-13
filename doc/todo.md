@@ -109,4 +109,5 @@
 - [ ] 每年依人事行政總處公告登錄春節、清明、端午、中秋與補假/補班日
 - [x] PWA 在本機 Chrome 驗證(Service Worker、manifest、離線)
 - [ ] 上 HTTPS 後在實體手機(iOS Safari / Android Chrome)驗證加入主畫面
-
+- [x] 打卡定位精度防呆(持續取最佳定位、精度差時提示重新定位、記錄精度)
+- [ ] 部署定位防呆到 beta 並用實體手機驗證
