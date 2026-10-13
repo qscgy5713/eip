@@ -95,7 +95,8 @@
 - [x] 待簽核逾期提醒(排程指令 + scheduler 容器)
 - [x] 備份/還原指令 `make backup` / `make db-restore`
 - [x] 上線前檢查工具:`eip:preflight`、`eip:create-admin`、`docker-compose.prod.yml`、TRUSTED_PROXIES
-- [ ] 實際部署時:換成真實網域/憑證、不要 seed 並用 `eip:create-admin` 建管理員、cron 定時 `make backup` 並演練還原、跑 `eip:preflight` 全數通過
+- [x] 部署 beta 環境(eip-beta.duckdns.org,見 doc/deploy-beta.md)
+- [ ] 正式部署時:換成真實網域/憑證、不要 seed 並用 `eip:create-admin` 建管理員、cron 定時 `make backup` 並演練還原、跑 `eip:preflight` 全數通過
 - [x] CSP 改用 nonce,移除腳本的 unsafe-inline
 - [x] 國定假日 / 補班日曆與請假工作日數自動計算
 - [x] 系統健康頁與失敗任務重送

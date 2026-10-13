@@ -28,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
 
+        if ($proxies = config('eip.trusted_proxies')) {
+            \Illuminate\Http\Middleware\TrustProxies::at($proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)));
+        }
+
         // Queue worker 心跳:每次輪詢更新(最多每 20 秒寫一次快取),供「系統健康」頁判斷 worker 是否還活著
         $lastBeat = 0;
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Queue\Events\Looping::class, function () use (&$lastBeat) {

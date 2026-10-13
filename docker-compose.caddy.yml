@@ -1,0 +1,15 @@
+# 放在既有的共用 Caddy(負責 HTTPS)後面時,疊加在 prod 覆蓋檔之上:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.caddy.yml up -d --build
+#
+# nginx 不對主機開任何埠口,只加入 Caddy 所在的 shop_internal 網路(Caddy 以 eip-web:80 轉發);
+# TLS 由 Caddy 處理,因此 .env 需設定 TRUSTED_PROXIES=*(容器內網路只有 Caddy 能連到 nginx)。
+services:
+  web:
+    ports: !reset []
+    networks:
+      - eip-network
+      - shop_internal
+
+networks:
+  shop_internal:
+    external: true

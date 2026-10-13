@@ -57,4 +57,21 @@ class ProductionToolsTest extends TestCase
 
         $this->artisan('eip:preflight')->expectsOutputToContain('APP_DEBUG=false')->assertFailed();
     }
+
+    public function test_behind_trusted_proxy_assets_and_urls_use_https(): void
+    {
+        config(['eip.trusted_proxies' => '*']);
+        (new \App\Providers\AppServiceProvider($this->app))->boot();
+
+        $html = $this->get('/login', ['X-Forwarded-Proto' => 'https', 'X-Forwarded-Host' => 'eip.example.com'])->getContent();
+
+        $this->assertStringNotContainsString('http://', preg_replace('#http://www\.w3\.org[^"\']*#', '', $html), '代理後的資源網址不應是 http');
+        $this->assertStringContainsString('https://', $html);
+    }
+
+    protected function tearDown(): void
+    {
+        \Illuminate\Http\Middleware\TrustProxies::flushState();
+        parent::tearDown();
+    }
 }

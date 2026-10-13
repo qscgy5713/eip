@@ -25,6 +25,11 @@ return [
     | password_history:新密碼不可與目前及最近幾組用過的密碼相同;0 = 不檢查。
     |
     */
+    // 放在反向代理/負載平衡器/Cloudflare 後面時,指定代理 IP(逗號分隔,或 * 代表全部),
+    // 才能正確判斷 HTTPS 與使用者真實 IP(登入紀錄、失敗鎖定都依賴它)。
+    // 注意:要透過 config 讀取,因為 config:cache 之後 bootstrap 階段的 env() 會是 null。
+    'trusted_proxies' => env('TRUSTED_PROXIES'),
+
     'password_max_age_days' => (int) env('EIP_PASSWORD_MAX_AGE_DAYS', 0),
     'password_history' => (int) env('EIP_PASSWORD_HISTORY', 5),
 

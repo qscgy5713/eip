@@ -1,5 +1,12 @@
 # 工作日誌 (Worklog)
 
+## 2026-10-13 部署到 beta 環境(eip-beta.duckdns.org)
+- 部署到 GCP VM(與 shop、motion-trace 共用),由既有 Caddy 處理 HTTPS,EIP 以 `docker-compose.caddy.yml` 加入 `shop_internal` 網路;細節與更新步驟見 `doc/deploy-beta.md`。
+- 實測發現並修正 3 個只有正式環境才會出現的問題:storage 權限(`/up` 500)、`.env` 權限(config:cache 變 sqlite)、`TRUSTED_PROXIES` 在 `config:cache` 後讀不到(資源變 http 白屏)。後者已改走 config 並補回歸測試。
+- 新增 `scripts/backup.sh`(不依賴 make),已設 root cron 每日 03:00;`eip:preflight` 在正式站 24 通過 / 0 警告 / 0 失敗。
+- 真實瀏覽器驗證:HTTPS 憑證有效、Service Worker 註冊成功、無 CSP 違規、管理員登入後導向強制更換密碼頁。寄信測試已寄出一封到管理員信箱。
+- 管理員以 `eip:create-admin` 建立(未灌示範資料),首次登入強制改密碼。
+
 ## 2026-10-13 正式上線前檢查
 - 逐項檢視部署相關設定,找到的實際缺口與處理:
   - **資料庫(5432)與 Redis(6379)的埠口直接對外開放,且 Redis 無密碼** → 新增 `docker-compose.prod.yml`(`!reset` 移除埠口、Redis `requirepass`、nginx 開 80/443 並掛 `docker/certs`)。
